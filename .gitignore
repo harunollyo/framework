@@ -5,3 +5,9 @@
 /.idea/
 /composer.lock
 .DS_Store
+
+# Local WordPress playground
+.env
+/example/vendor/
+/example/composer.lock
+/example/libraries/

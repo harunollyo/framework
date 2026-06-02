@@ -1,0 +1,151 @@
+x-wordpress-volumes: &wordpress-volumes
+  - wordpress_data:/var/www/html
+  - ./example:/var/www/html/wp-content/plugins/framework:cached
+  - .:/var/www/html/framework-library:cached
+  - ./docker/wp-config.php:/var/www/html/wp-config.php:ro
+
+x-wordpress-cli-volumes: &wordpress-cli-volumes
+  - wordpress_data:/var/www/html
+  - ./example:/var/www/html/wp-content/plugins/framework:cached
+  - .:/var/www/html/framework-library:cached
+  - ./docker/wp-config.php:/var/www/html/wp-config.php:ro
+  - ./docker/php/php.ini:/usr/local/etc/php/conf.d/zz-php.ini:ro
+
+services:
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "${NGINX_HTTP_PORT:-20200}:80"
+    volumes:
+      - wordpress_data:/var/www/html:ro
+      - ./example:/var/www/html/wp-content/plugins/framework:cached
+      - .:/var/www/html/framework-library:cached
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+    networks:
+      - framework
+
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./example:/var/www/html/wp-content/plugins/framework:cached
+      - .:/var/www/html/framework-library:cached
+      - ./docker/wp-config.php:/var/www/html/wp-config.php:ro
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/zz-php.ini:ro
+      - ./docker/php/conf.d:/usr/local/etc/php/conf.d/local:ro
+    environment:
+      DB_NAME: ${DB_NAME:-framework_dev}
+      DB_USER: ${DB_USER:-wordpress}
+      DB_PASSWORD: ${DB_PASSWORD:-wordpress}
+      DB_HOST: mariadb
+      WP_URL: ${WP_URL:-http://localhost:20200}
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+      XDEBUG_CLIENT_HOST: ${XDEBUG_CLIENT_HOST:-host.docker.internal}
+      XDEBUG_CLIENT_PORT: ${XDEBUG_CLIENT_PORT:-9003}
+      XDEBUG_IDEKEY: ${XDEBUG_IDEKEY:-PHPSTORM}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - framework
+
+  mariadb:
+    image: mariadb:latest
+    restart: unless-stopped
+    ports:
+      - "${MARIADB_PORT:-20201}:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MARIADB_DATABASE: ${DB_NAME:-framework_dev}
+      MARIADB_USER: ${DB_USER:-wordpress}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-wordpress}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - framework
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    ports:
+      - "${PHPMYADMIN_PORT:-20202}:80"
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: ${DB_USER:-wordpress}
+      PMA_PASSWORD: ${DB_PASSWORD:-wordpress}
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - framework
+
+  wpcli:
+    image: wordpress:cli-php8.2
+    user: "0:0"
+    working_dir: /var/www/html
+    volumes: *wordpress-cli-volumes
+    environment:
+      DB_NAME: ${DB_NAME:-framework_dev}
+      DB_USER: ${DB_USER:-wordpress}
+      DB_PASSWORD: ${DB_PASSWORD:-wordpress}
+      DB_HOST: mariadb
+      WP_URL: ${WP_URL:-http://localhost:20200}
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - framework
+    profiles:
+      - tools
+    entrypoint: ["wp", "--allow-root"]
+    command: ["--info"]
+
+  wordpress-init:
+    image: wordpress:cli-php8.2
+    user: "0:0"
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./example:/var/www/html/wp-content/plugins/framework:cached
+      - .:/var/www/html/framework-library:cached
+      - ./docker/wp-config.php:/var/www/html/wp-config.php:ro
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/zz-php.ini:ro
+      - ./docker/scripts/install-wordpress.sh:/usr/local/bin/install-wordpress.sh:ro
+    environment:
+      DB_NAME: ${DB_NAME:-framework_dev}
+      DB_USER: ${DB_USER:-wordpress}
+      DB_PASSWORD: ${DB_PASSWORD:-wordpress}
+      DB_HOST: mariadb
+      WP_URL: ${WP_URL:-http://localhost:20200}
+      WP_TITLE: ${WP_TITLE:-Framework Dev}
+      WP_ADMIN_USER: ${WP_ADMIN_USER:-admin}
+      WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD:-demo}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL:-admin@example.com}
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - framework
+    entrypoint: ["/bin/sh", "/usr/local/bin/install-wordpress.sh"]
+    restart: "no"
+
+volumes:
+  wordpress_data:
+  mariadb_data:
+
+networks:
+  framework:
+    driver: bridge

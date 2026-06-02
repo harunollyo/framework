@@ -1,0 +1,49 @@
+{
+    "name": "themeum/framework-example",
+    "description": "Sample plugin that exercises themeum/framework in a real WordPress runtime.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Themeum",
+            "email": "support@themeum.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/var/www/html/framework-library",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "themeum/framework": "*"
+    },
+    "require-dev": {
+        "humbug/php-scoper": "^0.18.18"
+    },
+    "autoload": {
+        "psr-4": {
+            "Example\\": "src/",
+            "Themeum\\Framework\\": "libraries/themeum/framework/"
+        },
+        "files": [
+            "libraries/themeum/framework/helpers.php"
+        ]
+    },
+    "scripts": {
+        "scope": [
+            "@php vendor/bin/php-scoper add-prefix --config=scoper.config.php --force"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
+}
