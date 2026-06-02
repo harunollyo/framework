@@ -1,0 +1,13 @@
+<?php
+
+namespace Framework\Exceptions;
+
+/**
+ * Exception thrown when a query fails.
+ *
+ * @since 1.0.0
+ */
+class UniqueConstraintViolationException extends QueryException
+{
+    //
+}

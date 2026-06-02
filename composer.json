@@ -1,0 +1,36 @@
+{
+	"name": "themeum/framework",
+	"type": "library",
+	"description": "Laravel-inspired PHP framework for WordPress plugins",
+	"license": "GPL-2.0-or-later",
+	"version": "1.0.0",
+	"keywords": [
+		"wordpress",
+		"framework",
+		"themeum"
+	],
+	"authors": [
+		{
+			"name": "Themeum",
+			"email": "support@themeum.com"
+		}
+	],
+	"homepage": "https://github.com/themeum/framework",
+	"require": {
+		"php": ">=7.0",
+		"fakerphp/faker": "^1.23"
+	},
+	"require-dev": {
+		"php-stubs/wordpress-stubs": "^6.0",
+		"php-stubs/wp-cli-stubs": "^2.12"
+	},
+	"autoload": {
+		"psr-4": {
+			"Framework\\": "src/"
+		},
+		"files": [
+			"src/helpers.php"
+		]
+	},
+	"minimum-stability": "stable"
+}
