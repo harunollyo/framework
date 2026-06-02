@@ -93,7 +93,17 @@ composer install
 
 `composer require themeum/framework` does **not** work on its own: the package is not on Packagist, so Composer must already know the private VCS repository from `composer.json`.
 
-Composer clones over SSH into `vendor/themeum/framework/`, maps `Framework\` to `src/`, and autoloads `src/helpers.php`.
+Composer installs into `vendor/themeum/framework/`, maps `Framework\` to `src/`, and autoloads `src/helpers.php`.
+
+Dev-only paths (`.vscode/`, `scripts/`, `stubs/`, `phpstan.neon.dist`, etc.) are excluded from **dist** installs via [`.gitattributes`](.gitattributes). In your plugin’s `composer.json`, prefer dist so Composer downloads the archive instead of cloning the full repo:
+
+```json
+"config": {
+  "preferred-install": "dist"
+}
+```
+
+If you still see extra files after an update, remove `vendor/themeum/framework` and run `composer update themeum/framework --prefer-dist`.
 
 ### 4. Verify the install
 

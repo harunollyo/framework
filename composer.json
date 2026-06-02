@@ -33,6 +33,17 @@
 		]
 	},
 	"minimum-stability": "stable",
+	"archive": {
+		"exclude": [
+			".vscode",
+			"scripts",
+			"stubs",
+			"phpstan.neon.dist",
+			"README.md",
+			".gitignore",
+			".gitattributes"
+		]
+	},
 	"scripts": {
 		"post-install-cmd": "@link-ide-stubs",
 		"post-update-cmd": "@link-ide-stubs",
