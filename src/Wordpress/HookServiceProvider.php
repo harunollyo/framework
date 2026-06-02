@@ -22,6 +22,10 @@ class HookServiceProvider extends ServiceProvider
 
         $hooks = include $hooks_path;
 
+        if (!in_array(RegisterRestApi::class, $hooks['actions'], true)) {
+            array_unshift($hooks['actions'], RegisterRestApi::class);
+        }
+
         $this->app->tag($hooks['actions'], 'hook.actions');
         $this->app->tag($hooks['filters'], 'hook.filters');
     }
@@ -35,10 +39,6 @@ class HookServiceProvider extends ServiceProvider
     {
         $actions = $this->app->tagged('hook.actions');
 
-        if (!in_array(RegisterRestApi::class, $actions, true)) {
-            array_unshift($actions, RegisterRestApi::class);
-        }
-
         foreach ($actions as $action) {
             add_action(
                 $action->get_name(),
@@ -50,15 +50,13 @@ class HookServiceProvider extends ServiceProvider
 
         $filters = $this->app->tagged('hook.filters');
 
-        if (!empty($filters)) {
-            foreach ($filters as $filter) {
-                add_filter(
-                    $filter->get_name(),
-                    [$filter, 'handle'],
-                    $filter->get_priority(),
-                    $filter->get_args_count(),
-                );
-            }
+        foreach ($filters as $filter) {
+            add_filter(
+                $filter->get_name(),
+                [$filter, 'handle'],
+                $filter->get_priority(),
+                $filter->get_args_count(),
+            );
         }
     }
 }
