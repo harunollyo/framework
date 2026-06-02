@@ -3,6 +3,7 @@
 namespace Framework\Wordpress;
 
 use Framework\ServiceProvider;
+use Framework\Wordpress\Hooks\Actions\RegisterRestApi;
 
 class HookServiceProvider extends ServiceProvider
 {
@@ -34,15 +35,17 @@ class HookServiceProvider extends ServiceProvider
     {
         $actions = $this->app->tagged('hook.actions');
 
-        if (!empty($actions)) {
-            foreach ($actions as $action) {
-                add_action(
-                    $action->get_name(),
-                    [$action, 'handle'],
-                    $action->get_priority(),
-                    $action->get_args_count(),
-                );
-            }
+        if (!in_array(RegisterRestApi::class, $actions, true)) {
+            array_unshift($actions, RegisterRestApi::class);
+        }
+
+        foreach ($actions as $action) {
+            add_action(
+                $action->get_name(),
+                [$action, 'handle'],
+                $action->get_priority(),
+                $action->get_args_count(),
+            );
         }
 
         $filters = $this->app->tagged('hook.filters');
