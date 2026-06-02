@@ -665,3 +665,7 @@ This library is licensed under the **GNU General Public License v2.0 or later**.
 Issues and pull requests: https://github.com/themeum/framework
 
 When contributing to the library itself, use the `Framework\` namespace and standard Composer autoloading from this repository. Consumer plugins follow the [PHP-Scoper](#namespace-prefixing-with-php-scoper) workflow above.
+
+### IDE support (WordPress stubs)
+
+Run `composer install` (or `composer link-ide-stubs`) so dev dependencies install and symlinks are created at `stubs/wordpress-stubs.php` and `stubs/wp-cli-stubs.php`. Intelephense indexes those files from the workspace (not from `vendor/`, which is excluded). VS Code settings live in [`.vscode/settings.json`](.vscode/settings.json). [`stubs/globals.php`](stubs/globals.php) adds `ABSPATH`, `WP_CLI`, and `$wpdb`. PHPStan uses [`phpstan.neon.dist`](phpstan.neon.dist). After install, reload the editor window so `add_action`, `get_option`, and other WordPress APIs are recognized. Stubs are dev-only and must not be bundled into scoped production builds.

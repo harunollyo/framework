@@ -32,5 +32,10 @@
 			"src/helpers.php"
 		]
 	},
-	"minimum-stability": "stable"
+	"minimum-stability": "stable",
+	"scripts": {
+		"post-install-cmd": "@link-ide-stubs",
+		"post-update-cmd": "@link-ide-stubs",
+		"link-ide-stubs": "php scripts/link-ide-stubs.php"
+	}
 }

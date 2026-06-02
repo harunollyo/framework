@@ -1,6 +1,7 @@
 /vendor/
+/stubs/wordpress-stubs.php
+/stubs/wp-cli-stubs.php
 /.DS_Store
 /.idea/
-/.vscode/
 /composer.lock
 .DS_Store
