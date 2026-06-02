@@ -57,13 +57,17 @@ In your plugin’s `composer.json`, point Composer at the private repo using the
       "url": "git@github.com:themeum/framework.git"
     }
   ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "require": {
-    "themeum/framework": "^1.0"
+    "themeum/framework": "dev-main"
   }
 }
 ```
 
-Pin a specific release with tags on the framework repo (recommended for production):
+`dev-main` tracks the latest commit on the `main` branch. Run `composer update themeum/framework` to pull new changes.
+
+Pin a tagged release for production (remove or relax `minimum-stability` if everything else is stable):
 
 ```json
 "require": {
@@ -71,11 +75,11 @@ Pin a specific release with tags on the framework repo (recommended for producti
 }
 ```
 
-Or track a branch during development (may require `"minimum-stability": "dev"` and `"prefer-stable": true`):
+Or allow compatible releases from tags:
 
 ```json
 "require": {
-  "themeum/framework": "dev-main"
+  "themeum/framework": "^1.0"
 }
 ```
 
