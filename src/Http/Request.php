@@ -710,20 +710,6 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
-     * Get a money for storage.
-     *
-     * @since 1.0.0
-     *
-     * @param string $key The key to retrieve.
-     * @param float $default Default value if the key doesn't exist.
-     * @return float
-     */
-    public function get_money(string $key, $default = 0)
-    {
-        return $this->get($key, $default, Sanitizer::MONEY);
-    }
-
-    /**
      * Get an array value.
      *
      * @since 1.0.0

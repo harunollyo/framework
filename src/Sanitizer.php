@@ -3,7 +3,6 @@
 namespace Framework;
 
 use Framework\Supports\Facades\Date;
-use Framework\Supports\Facades\Money;
 
 use function Framework\is_valid_json;
 
@@ -119,13 +118,6 @@ class Sanitizer
      * @var string
      */
     const DOUBLE = 'double';
-
-    /**
-     * Sanitize the value as money prepared for storage.
-     *
-     * @var string
-     */
-    const MONEY = 'money';
 
     /**
      * Sanitize the value as boolean.

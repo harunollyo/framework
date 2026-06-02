@@ -303,18 +303,6 @@ interface Request
      */
     public function get_float(string $key, $default = null);
 
-
-    /**
-     * Get a money for storage.
-     *
-     * @since 1.0.0
-     *
-     * @param string $key The key to retrieve.
-     * @param float $default Default value if the key doesn't exist.
-     * @return float
-     */
-    public function get_money(string $key, $default = 0);
-
     /**
      * Get an array value.
      *
