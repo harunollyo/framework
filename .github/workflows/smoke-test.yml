@@ -41,4 +41,4 @@ jobs:
       - name: Verify prefixed namespace in scoped output
         run: |
           grep -rq 'namespace Themeum\\Framework' libraries/themeum/framework/Application.php
-          grep -rq 'function Themeum\\Framework\\app' libraries/themeum/framework/helpers.php
+          grep -rq 'function Themeum\\Framework\\app' libraries/themeum/framework/Facade.php
