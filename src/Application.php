@@ -128,6 +128,12 @@ class Application extends Container
     protected string $prefix = '';
 
     /**
+     * The application is in development mode
+     * @var string
+     */
+    protected string $mode = 'production';
+
+    /**
      * Create a new application instance
      *
      * @return void
@@ -789,5 +795,29 @@ class Application extends Container
         }
 
         throw new RuntimeException(sprintf('Unable to detect namespace for path [%s].', $relative_path));
+    }
+
+    /**
+     * Set the application mode.
+     *
+     * @param string $mode
+     * 
+     * @return static
+     */
+    public function app_mode($mode = 'production')
+    {
+        $this->mode = in_array(strtolower($mode), ['dev', 'development'], true) ? 'development' : 'production';
+
+        return $this;
+    }
+
+    /**
+     * Check if the application is in development mode.
+     *
+     * @return bool
+     */
+    public function is_dev_mode()
+    {
+        return $this->mode === 'development';
     }
 }
