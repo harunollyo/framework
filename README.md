@@ -192,13 +192,10 @@ Configure and boot the application on the `init` hook so WordPress is fully load
 
 use Kirki\Framework\Application;
 
-Application::macro('is_dev_mode', function () {
-    return defined('WP_DEBUG') && WP_DEBUG;
-});
-
 return Application::configure(KIRKI_PATH)
     ->use_routing(KIRKI_PATH . 'routes/api.php')
     ->use_prefix(KIRKI_PREFIX)
+    ->app_mode('development')
     ->boot();
 ```
 
@@ -227,13 +224,16 @@ Register hook handler classes:
 ```php
 <?php
 
-use Kirki\Framework\Wordpress\Hooks\Actions\RegisterRestApi;
+use Kirki\Framework\Wordpress\Hooks\Actions\SampleActionHook;
+use Kirki\Framework\Wordpress\Hooks\Filters\SampleFilterHook;
 
 return [
     'actions' => [
-        RegisterRestApi::class,
+        SampleActionHook::class,
     ],
-    'filters' => [],
+    'filters' => [
+        SampleFilterHook::class,
+    ],
 ];
 ```
 
