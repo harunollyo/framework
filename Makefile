@@ -33,6 +33,9 @@ init:
 example-install:
 	docker compose run --rm php composer install --working-dir=$(PLUGIN_DIR)
 
+example-update:
+	docker compose run --rm php composer update --working-dir=$(PLUGIN_DIR)
+
 library-install:
 	docker compose run --rm php composer install --working-dir=$(LIBRARY_DIR)
 
