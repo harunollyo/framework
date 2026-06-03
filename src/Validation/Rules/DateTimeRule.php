@@ -2,7 +2,7 @@
 
 namespace Framework\Validation\Rules;
 
-use Kirki\App\Constants\DateTimeFormats;
+use Framework\Constants\DateTimeFormats;
 use DateTime;
 
 /**

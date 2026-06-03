@@ -16,6 +16,7 @@ use Framework\ServiceProvider;
 use Framework\Managers\DateManager;
 use Framework\Scheduler\Scheduler;
 use Framework\Http\Response;
+use Framework\Supports\Carbon;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,7 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->register_carbon();
         $this->register_database_services();
         $this->register_discoveries();
         $this->register_managers();
@@ -33,7 +35,9 @@ class CoreServiceProvider extends ServiceProvider
 
         $this->app->singleton(Response::class);
 
-        $this->app->singleton(\Faker\Factory::class, fn() => \Faker\Factory::create());
+        if (class_exists(\Faker\Factory::class)) {
+            $this->app->singleton(\Faker\Factory::class, fn() => \Faker\Factory::create());
+        }
     }
 
     /**
@@ -52,6 +56,18 @@ class CoreServiceProvider extends ServiceProvider
             ->cache();
 
         Scheduler::boot();
+    }
+
+    /**
+     * Register the framework Carbon subclass for date operations.
+     *
+     * @return void
+     */
+    protected function register_carbon()
+    {
+        if (method_exists(Carbon::class, 'use')) {
+            Carbon::use(Carbon::class);
+        }
     }
 
     /**

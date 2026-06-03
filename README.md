@@ -80,6 +80,7 @@ return [
     'exclude-files' => [],
     'exclude-namespaces' => [
         '~^$~',
+        '/^(?!Framework($|\\\\))/',
     ],
     'expose-global-classes' => true,
     'expose-global-functions' => true,
@@ -87,7 +88,7 @@ return [
 ];
 ```
 
-PHP-Scoper rewrites `Framework\` to `Kirki\Framework\` and writes the result to `libraries/kirki/framework/`.
+PHP-Scoper rewrites `Framework\` to `Kirki\Framework\` and writes the result to `libraries/kirki/framework/`. The `exclude-namespaces` regex keeps every namespace except `Framework\` unprefixed (Composer vendor code stays on its original PSR-4 paths).
 
 ### 3. Autoload the scoped copy only
 
@@ -104,6 +105,8 @@ PHP-Scoper rewrites `Framework\` to `Kirki\Framework\` and writes the result to 
 ```
 
 Never register PSR-4 autoload for `vendor/themeum/framework` alongside the scoped tree.
+
+`composer install` in the plugin also installs every package `themeum/framework` requires (for example `nesbot/carbon`) into the plugin’s `vendor/`. Those stay **unprefixed** at runtime; only the scoped tree under `libraries/` uses your prefix. You do not need to list Carbon separately in the plugin’s `composer.json`.
 
 ### 4. Generate the scoped tree
 

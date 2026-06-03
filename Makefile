@@ -1,14 +1,17 @@
-.PHONY: help up down restart init composer-install scope wp-cli logs shell psql clean
+.PHONY: help up down restart init example-install library-install scope wp-cli logs shell psql clean test\:unit
 
 PLUGIN_DIR := /var/www/html/wp-content/plugins/framework
+LIBRARY_DIR := /var/www/html/framework-library
 SCOPED_DIR := $(PLUGIN_DIR)/libraries/themeum/framework
 
 help:
 	@echo "Framework playground commands:"
 	@echo "  make up               Start all services in the background"
 	@echo "  make init             Run the one-shot WordPress installer (first run)"
-	@echo "  make composer-install Install the example plugin dependencies inside the container"
+	@echo "  make example-install  Composer install for the example plugin (example/composer.json)"
+	@echo "  make library-install  Composer install for the framework library (repo root composer.json)"
 	@echo "  make scope            Generate the prefixed Themeum\\\\Framework\\\\ tree with php-scoper"
+	@echo "  make test:unit        Run library unit tests inside the php container"
 	@echo "  make wp-cli CMD=\"...\"  Run a WP-CLI command (e.g. CMD=\"plugin list\")"
 	@echo "  make logs             Tail php and nginx logs"
 	@echo "  make shell            Open a bash shell in the php container"
@@ -27,11 +30,11 @@ restart:
 init:
 	docker compose run --rm wordpress-init
 
-composer:
-	docker compose run --rm php composer $(CMD) --working-dir=$(PLUGIN_DIR)
-
-composer-install:
+example-install:
 	docker compose run --rm php composer install --working-dir=$(PLUGIN_DIR)
+
+library-install:
+	docker compose run --rm php composer install --working-dir=$(LIBRARY_DIR)
 
 scope:
 	docker compose run --rm php sh -c 'set -e; \
@@ -48,6 +51,10 @@ logs:
 
 shell:
 	docker compose exec php bash
+
+test\:unit:
+	docker compose exec php bash -lc \
+	  'cd $(LIBRARY_DIR) && composer install --no-interaction && vendor/bin/phpunit --testsuite Unit --testdox'
 
 clean:
 	docker compose down -v

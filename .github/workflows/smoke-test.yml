@@ -42,3 +42,5 @@ jobs:
         run: |
           grep -rq 'namespace Themeum\\Framework' libraries/themeum/framework/Application.php
           grep -rq 'function Themeum\\Framework\\app' libraries/themeum/framework/Facade.php
+          grep -q 'use Carbon\\Carbon as BaseCarbon' libraries/themeum/framework/Supports/Carbon.php
+          ! grep -rq 'Themeum\\Carbon\\' libraries/themeum/framework/

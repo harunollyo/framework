@@ -24,7 +24,7 @@ Run all commands from the repository root (`..`), where the `Makefile` lives.
 ```bash
 cp .env.example .env          # adjust ports if needed
 make up                       # start nginx, php, mariadb, phpmyadmin
-make composer-install         # install the plugin deps INSIDE the container
+make example-install          # example/composer.json — plugin + php-scoper deps (in container)
 make scope                    # generate the prefixed Themeum\Framework\ tree
 make init                     # one-shot: download + install WP, activate the plugin
 ```
@@ -42,7 +42,7 @@ Expected response:
 { "status": "ok", "dev_mode": true, "prefix": "framework" }
 ```
 
-> Always run `make composer-install` rather than running Composer on the host. The path repository URL (`/var/www/html/framework-library`) is a **container** path; the symlink only resolves inside Docker.
+> Always run `make example-install` (not host Composer) for the example plugin. The path repository URL (`/var/www/html/framework-library`) is a **container** path; the symlink only resolves inside Docker. Use `make library-install` for the repo-root `composer.json` (PHPUnit, PHPCS, etc.).
 
 > `make scope` is **required before first activation**. The plugin authors against the prefixed `Themeum\Framework\` namespace, which only exists after php-scoper generates `libraries/themeum/framework/`. Activating the plugin before scoping will fatal on the missing scoped tree.
 
@@ -54,7 +54,7 @@ The library is symlinked into `vendor/themeum/framework` (unscoped `Framework\`)
 make scope
 ```
 
-This re-runs php-scoper and refreshes `libraries/themeum/framework/`. No container restart is needed; the next request picks up the change. Re-run `make composer-install` only when you change the example plugin's own `composer.json`.
+This re-runs php-scoper and refreshes `libraries/themeum/framework/`. No container restart is needed; the next request picks up the change. Re-run `make example-install` only when you change the example plugin's own `composer.json`.
 
 ## WP-CLI
 
@@ -83,6 +83,7 @@ This playground runs the library exactly as a shipped plugin would: prefixed wit
 
 - The path repository symlinks the **unscoped** library into `vendor/themeum/framework` (this is only php-scoper's *input*).
 - `make scope` rewrites every `Framework\` namespace to `Themeum\Framework\` (and `Framework\app()` to `Themeum\Framework\app()`) into `libraries/themeum/framework/`.
+- `scoper.config.php` uses a negative-lookahead in `exclude-namespaces` so only `Framework\` is prefixed; all other namespaces (e.g. `Carbon\`) stay unchanged and load from `vendor/` via Composer (Carbon is a transitive dependency of `themeum/framework`, not a separate plugin requirement).
 - `example/composer.json` autoloads **only** the scoped copy:
 
 ```jsonc
@@ -115,12 +116,13 @@ The plugin code references the prefixed namespace throughout: `Themeum\Framework
 
 | Symptom | Likely cause / fix |
 |---------|--------------------|
-| `Class Themeum\Framework\... not found` | `make scope` was not run, so `libraries/themeum/framework/` is missing. Run `make composer-install` then `make scope`. |
+| `Class Themeum\Framework\... not found` | `make scope` was not run, so `libraries/themeum/framework/` is missing. Run `make example-install` then `make scope`. |
 | `Failed opening required '.../libraries/themeum/framework/helpers.php'` on activation | The scoped tree has not been generated yet. Run `make scope` before activating the plugin. |
-| `vendor/themeum/framework` is empty or not a symlink | Composer ran outside Docker; the path URL only resolves in the container. Remove `example/vendor` and re-run `make composer-install`. |
+| `vendor/themeum/framework` is empty or not a symlink | Composer ran outside Docker; the path URL only resolves in the container. Remove `example/vendor` and re-run `make example-install`. |
 | `port is already allocated` | Another stack uses the `20200` block. Change `NGINX_HTTP_PORT` / `MARIADB_PORT` / `PHPMYADMIN_PORT` in `.env`. |
 | `make init` hangs on "Database not ready" | MariaDB still starting; the script retries automatically. If it persists, check `docker compose logs mariadb`. |
 | REST route returns 404 | Permalinks not flushed. Re-run `make init`, or `make wp-cli CMD="rewrite flush"`. |
 | Library edits under `../src/` not reflected | The plugin runs the scoped copy. Re-run `make scope` after editing the library. |
 | `Cannot redeclare class Themeum\Framework\...` | Both unscoped `vendor/themeum/framework` and the scoped `libraries/` tree are autoloaded. Only the scoped tree should be in `autoload`. |
+| `Class "Carbon\Carbon" not found` | Scoped code references unprefixed `Carbon\`, but `vendor/nesbot/carbon` is missing. Run `make example-install` so Composer installs `themeum/framework` and its transitive deps (including Carbon) into `vendor/`. |
 | Xdebug not connecting | Confirm `XDEBUG_MODE=debug` in `.env` and `docker compose restart php`; IDE must listen on `9003`. |

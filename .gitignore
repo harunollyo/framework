@@ -1,10 +1,11 @@
 /vendor/
 /stubs/wordpress-stubs.php
 /stubs/wp-cli-stubs.php
+/stubs/carbon
 /.DS_Store
 /.idea/
-/composer.lock
 .DS_Store
+.phpunit.result.cache
 
 # Local WordPress playground
 .env

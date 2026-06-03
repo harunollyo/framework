@@ -1,4 +1,7 @@
 {
+    "intelephense.environment.includePaths": [
+        "stubs/symfony-finder"
+    ],
     "intelephense.files.maxSize": 10000000,
     "intelephense.files.exclude": [
         "**/.git/**",

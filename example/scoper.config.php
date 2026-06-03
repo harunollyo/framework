@@ -18,6 +18,7 @@ return [
 
     'exclude-namespaces' => [
         '~^$~',
+        '/^(?!Framework($|\\\\))/',
     ],
 
     'expose-global-classes' => true,
