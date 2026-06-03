@@ -804,7 +804,7 @@ class Application extends Container
      * 
      * @return static
      */
-    public function app_mode($mode = 'production')
+    public function use_app_mode($mode = 'production')
     {
         $this->mode = in_array(strtolower($mode), ['dev', 'development'], true) ? 'development' : 'production';
 

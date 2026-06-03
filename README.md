@@ -195,7 +195,7 @@ use Kirki\Framework\Application;
 return Application::configure(KIRKI_PATH)
     ->use_routing(KIRKI_PATH . 'routes/api.php')
     ->use_prefix(KIRKI_PREFIX)
-    ->app_mode('development')
+    ->use_app_mode('development')
     ->boot();
 ```
 
