@@ -110,7 +110,7 @@ class Application extends Container
      * The application namespace
      * @var string
      */
-    protected string $namespace;
+    protected string $namespace = '';
 
     /**
      * Cached namespaces resolved from composer PSR-4 paths.
@@ -698,7 +698,7 @@ class Application extends Container
      */
     public function get_namespace()
     {
-        if (!is_null($this->namespace)) {
+        if (!empty($this->namespace)) {
             return $this->namespace;
         }
 
