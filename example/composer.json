@@ -37,7 +37,8 @@
     },
     "scripts": {
         "scope": [
-            "@php vendor/bin/php-scoper add-prefix --config=scoper.config.php --force"
+            "@php vendor/bin/php-scoper add-prefix --config=scoper.config.php --force",
+            "@php scripts/post-scope-console-stubs.php"
         ]
     },
     "minimum-stability": "dev",

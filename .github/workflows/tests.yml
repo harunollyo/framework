@@ -70,3 +70,8 @@ jobs:
           grep -rq 'function Themeum\\Framework\\app' libraries/themeum/framework/Facade.php
           grep -q 'use Carbon\\Carbon as BaseCarbon' libraries/themeum/framework/Supports/Carbon.php
           ! grep -rq 'Themeum\\Carbon\\' libraries/themeum/framework/
+
+      - name: Verify console stubs are present and prefixed
+        run: |
+          test -f libraries/themeum/framework/Console/stubs/provider.stub
+          grep -q 'use Themeum\\Framework\\ServiceProvider' libraries/themeum/framework/Console/stubs/provider.stub

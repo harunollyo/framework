@@ -12,7 +12,7 @@ return [
             ->files()
             ->in(__DIR__ . '/vendor/themeum/framework/src')
             ->exclude(['test', 'tests', 'Tests'])
-            ->name('*.php')
+            ->name(['*.php', '*.stub'])
     ],
     'exclude-files' => [],
 

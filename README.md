@@ -75,7 +75,7 @@ return [
             ->files()
             ->in(__DIR__ . '/vendor/themeum/framework/src')
             ->exclude(['test', 'tests', 'Tests'])
-            ->name('*.php'),
+            ->name(['*.php', '*.stub']),
     ],
     'exclude-files' => [],
     'exclude-namespaces' => [
@@ -89,6 +89,8 @@ return [
 ```
 
 PHP-Scoper rewrites `Framework\` to `Kirki\Framework\` and writes the result to `libraries/kirki/framework/`. The `exclude-namespaces` regex keeps every namespace except `Framework\` unprefixed (Composer vendor code stays on its original PSR-4 paths).
+
+WP-CLI generator stubs live under `src/Console/stubs/` as `*.stub` files. Include them in the finder (`->name(['*.php', '*.stub'])`) so they are copied into the scoped tree. Stub templates use placeholders such as `{{namespace}}`, which PHP-Scoper cannot parse; after scoping, run `scripts/prefix-scoped-console-stubs.php` on `libraries/<vendor>/framework/Console/stubs` with your prefix (the example plugin does this via `scripts/post-scope-console-stubs.php` in its `scope` Composer script).
 
 ### 3. Autoload the scoped copy only
 
