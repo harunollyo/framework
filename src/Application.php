@@ -40,8 +40,6 @@ use RuntimeException;
 /**
  * The main application class.
  * This class is responsible for bootstrapping the plugin and managing the plugin lifecycle.
- * 
- * @method bool is_dev_mode()
  */
 class Application extends Container
 {

@@ -30,14 +30,17 @@ restart:
 init:
 	docker compose run --rm wordpress-init
 
-example-install:
+example-composer-install:
 	docker compose run --rm php composer install --working-dir=$(PLUGIN_DIR)
 
-example-update:
+example-composer-update:
 	docker compose run --rm php composer update --working-dir=$(PLUGIN_DIR)
 
-library-install:
+library-composer-install:
 	docker compose run --rm php composer install --working-dir=$(LIBRARY_DIR)
+
+library-composer-update:
+	docker compose run --rm php composer update --working-dir=$(LIBRARY_DIR)
 
 scope:
 	docker compose run --rm php sh -c 'set -e; \
