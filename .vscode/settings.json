@@ -1,4 +1,11 @@
 {
+    "php.debug.port": 9003,
+    "php.debug.ideKey": "PHPSTORM",
+    "php.debug.pathMappings": {
+        "/var/www/html/framework-library": "${workspaceFolder}",
+        "/var/www/html/wp-content/plugins/framework": "${workspaceFolder}/example",
+        "/var/www/html/wp-content/plugins/framework/vendor/themeum/framework": "${workspaceFolder}"
+    },
     "intelephense.environment.includePaths": [
         "stubs/symfony-finder"
     ],

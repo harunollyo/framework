@@ -10,6 +10,10 @@ namespace {
     if (!defined('WP_CLI')) {
         define('WP_CLI', false);
     }
+
+    if (!defined('FS_CHMOD_FILE')) {
+        define('FS_CHMOD_FILE', 0644);
+    }
 }
 
 namespace {

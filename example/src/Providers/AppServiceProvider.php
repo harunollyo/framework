@@ -2,7 +2,7 @@
 
 namespace Example\Providers;
 
-use Themeum\Framework\ServiceProvider;
+use Framework\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

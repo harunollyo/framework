@@ -1,6 +1,6 @@
 <?php
 
-use Themeum\Framework\Application;
+use Framework\Application;
 
 return Application::configure(FRAMEWORK_EXAMPLE_PATH)
     ->use_routing(FRAMEWORK_EXAMPLE_PATH . 'routes/api.php')

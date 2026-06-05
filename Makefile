@@ -1,4 +1,4 @@
-.PHONY: help up down restart init example-install library-install scope wp-cli logs shell psql clean test\:unit
+.PHONY: help up down restart init example-install library-install scope xdebug-log wp-cli logs shell psql clean test\:unit
 
 PLUGIN_DIR := /var/www/html/wp-content/plugins/framework
 LIBRARY_DIR := /var/www/html/framework-library
@@ -10,9 +10,10 @@ help:
 	@echo "  make init             Run the one-shot WordPress installer (first run)"
 	@echo "  make example-install  Composer install for the example plugin (example/composer.json)"
 	@echo "  make library-install  Composer install for the framework library (repo root composer.json)"
-	@echo "  make scope            Generate the prefixed Themeum\\\\Framework\\\\ tree with php-scoper"
+	@echo "  make scope            Generate the prefixed Themeum\\\\Framework\\\\ tree (CI/release only)"
+	@echo "  make xdebug-log       Tail the Xdebug connection log inside the php container"
 	@echo "  make test:unit        Run library unit tests inside the php container"
-	@echo "  make wp-cli CMD=\"...\"  Run a WP-CLI command (e.g. CMD=\"plugin list\")"
+	@echo "  make wp CMD=\"...\"  Run a WP-CLI command (e.g. CMD=\"plugin list\")"
 	@echo "  make logs             Tail php and nginx logs"
 	@echo "  make shell            Open a bash shell in the php container"
 	@echo "  make down             Stop all services"
@@ -30,11 +31,15 @@ restart:
 init:
 	docker compose run --rm wordpress-init
 
+example-install: example-composer-install
+
 example-composer-install:
 	docker compose run --rm php composer install --working-dir=$(PLUGIN_DIR)
 
 example-composer-update:
 	docker compose run --rm php composer update --working-dir=$(PLUGIN_DIR)
+
+library-install: library-composer-install
 
 library-composer-install:
 	docker compose run --rm php composer install --working-dir=$(LIBRARY_DIR)
@@ -49,8 +54,14 @@ scope:
 	  composer run scope --working-dir=$(PLUGIN_DIR); \
 	  composer dump-autoload --working-dir=$(PLUGIN_DIR)'
 
+xdebug-log:
+	docker compose exec php sh -c '\
+	  echo "Tailing /tmp/xdebug.log — start Listen for Xdebug, then run a web or wp-cli request"; \
+	  touch /tmp/xdebug.log; \
+	  tail -F /tmp/xdebug.log'
+
 wp:
-	docker compose run --rm wpcli $(CMD)
+	docker compose run --rm php wp --allow-root $(CMD)
 
 logs:
 	docker compose logs -f php nginx

@@ -771,14 +771,16 @@ class Application extends Container
         }
 
         $composer = File::json(
-            File::get($this->base_path('composer.json'))
+            $this->base_path('composer.json')
         );
 
         if (empty($composer['autoload']['psr-4'])) {
             throw new RuntimeException('The composer must have a PSR-4 autoload configuration.');
         }
 
-        $target = realpath($this->base_path($relative_path));
+        $path = $this->base_path($relative_path);
+
+        $target = realpath($path);
 
         if ($target === false) {
             throw new RuntimeException(sprintf('Unable to detect namespace for path [%s].', $relative_path));

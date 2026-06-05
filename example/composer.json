@@ -28,12 +28,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Example\\": "src/",
-            "Themeum\\Framework\\": "libraries/themeum/framework/"
-        },
-        "files": [
-            "libraries/themeum/framework/helpers.php"
-        ]
+            "Example\\": "src/"
+        }
     },
     "scripts": {
         "scope": [

@@ -94,16 +94,30 @@ services:
       - framework
 
   wpcli:
-    image: wordpress:cli-php8.2
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
     user: "0:0"
     working_dir: /var/www/html
-    volumes: *wordpress-cli-volumes
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./example:/var/www/html/wp-content/plugins/framework:cached
+      - .:/var/www/html/framework-library:cached
+      - ./docker/wp-config.php:/var/www/html/wp-config.php:ro
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/zz-php.ini:ro
+      - ./docker/php/conf.d:/usr/local/etc/php/conf.d/local:ro
     environment:
       DB_NAME: ${DB_NAME:-framework_dev}
       DB_USER: ${DB_USER:-wordpress}
       DB_PASSWORD: ${DB_PASSWORD:-wordpress}
       DB_HOST: mariadb
       WP_URL: ${WP_URL:-http://localhost:20200}
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+      XDEBUG_CLIENT_HOST: ${XDEBUG_CLIENT_HOST:-host.docker.internal}
+      XDEBUG_CLIENT_PORT: ${XDEBUG_CLIENT_PORT:-9003}
+      XDEBUG_IDEKEY: ${XDEBUG_IDEKEY:-PHPSTORM}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       mariadb:
         condition: service_healthy
@@ -111,7 +125,7 @@ services:
       - framework
     profiles:
       - tools
-    entrypoint: ["wp", "--allow-root"]
+    entrypoint: ["docker-entrypoint.sh", "wp", "--allow-root"]
     command: ["--info"]
 
   wordpress-init:

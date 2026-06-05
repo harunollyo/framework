@@ -1,6 +1,6 @@
 <?php
 
-use Themeum\Framework\Wordpress\Hooks\Actions\RegisterRestApi;
+use Framework\Wordpress\Hooks\Actions\RegisterRestApi;
 
 return [
     'actions' => [

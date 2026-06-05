@@ -1,10 +1,10 @@
 <?php
 
-use Themeum\Framework\Http\Request;
-use Themeum\Framework\Route;
+use Framework\Http\Request;
+use Framework\Route;
 
-use function Themeum\Framework\app;
-use function Themeum\Framework\response;
+use function Framework\app;
+use function Framework\response;
 
 Route::set_namespace('framework/v1');
 
