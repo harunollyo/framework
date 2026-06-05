@@ -242,7 +242,7 @@ class Container implements ContainerContract
         $instance = $binding['resolver']($this, $parameters);
 
         // Store singleton instances
-        if ($binding['singleton']) {
+        if (!empty($binding['singleton'])) {
             $this->instances[$name] = $instance;
         }
 

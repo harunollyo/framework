@@ -778,12 +778,12 @@ class Application extends Container
             throw new RuntimeException('The composer must have a PSR-4 autoload configuration.');
         }
 
-        $path = $this->base_path($relative_path);
-
-        $target = realpath($path);
+        $resolved_path = $this->base_path($relative_path);
+        $target = realpath($resolved_path);
 
         if ($target === false) {
-            throw new RuntimeException(sprintf('Unable to detect namespace for path [%s].', $relative_path));
+            File::make_dir($this->base_path($relative_path));
+            $target = realpath($resolved_path);
         }
 
         foreach ($composer['autoload']['psr-4'] as $namespace => $path) {

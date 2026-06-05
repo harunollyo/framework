@@ -30,6 +30,8 @@ use Framework\Facade;
  * @method static bool is_readable(string $path)
  * @method static bool is_writable(string $path)
  * @method static int|false last_modified(string $path)
+ * @method static bool make(string $path)
+ * @method static bool make_dir(string $path)
  *
  * @see \Framework\Filesystem\Filesystem
  */

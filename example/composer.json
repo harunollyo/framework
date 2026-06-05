@@ -28,7 +28,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Example\\": "src/"
+            "Example\\": "src/",
+            "Example\\App\\": "app/"
         }
     },
     "scripts": {

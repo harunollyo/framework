@@ -17,6 +17,11 @@ class Filesystem
      */
     protected $filesystem;
 
+    /**
+     * Create a new filesystem instance.
+     *
+     * @return void
+     */
     public function __construct()
     {
         if (!function_exists('WP_Filesystem')) {
@@ -359,11 +364,9 @@ class Filesystem
      * Make a directory.
      *
      * @param string $path
-     * @param int $mode
-     * @param bool $recursive
      * @return bool
      */
-    public function make_dir($path, $mode = 0777, $recursive = true)
+    public function make_dir($path)
     {
         $path = pathinfo($path, PATHINFO_EXTENSION) !== ''
             ? $this->dirname($path)
@@ -374,5 +377,25 @@ class Filesystem
         }
 
         return wp_mkdir_p($path);
+    }
+
+    /**
+     * Make a file or directory.
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function make(string $path)
+    {
+        if ($this->exists($path)) {
+            return;
+        }
+
+        if ($this->is_directory($path)) {
+            $this->make_dir($path);
+            return;
+        }
+
+        return $this->filesystem->touch($path);
     }
 }

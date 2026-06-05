@@ -24,7 +24,7 @@ class MakeControllerCommand extends CommandBase
      *
      * @var array
      */
-    protected $assoc;
+    protected $assoc = [];
 
     /**
      * The base path for the controller
@@ -121,7 +121,7 @@ class MakeControllerCommand extends CommandBase
             ),
         ];
 
-        if ($this->assoc['api']) {
+        if (!empty($this->assoc['api'])) {
             $data['namespace'] = app()->qualify_app_namespace('Http/Controllers/Api');
             $data['output_file'] = sprintf(
                 '%s/API/%s.php',

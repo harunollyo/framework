@@ -133,9 +133,14 @@ class MakeClassCommand extends CommandBase
             : $this->output_dir;
     }
 
+    /**
+     * Get the namespace for the class
+     *
+     * @return string
+     */
     protected function namespace()
     {
-        if ($this->assoc['folder']) {
+        if (!empty($this->assoc['folder'])) {
             $folder = Str::split('/', $this->assoc['folder']);
             $folder = array_map(function ($segment) {
                 return Str::pascal($segment);
