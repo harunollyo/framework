@@ -34,6 +34,7 @@ use Framework\Supports\Facades\File;
 use Framework\Supports\Str;
 use Framework\Supports\Traits\Macroable;
 use Exception;
+use Framework\Supports\Arr;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -786,11 +787,15 @@ class Application extends Container
             $target = realpath($resolved_path);
         }
 
-        foreach ($composer['autoload']['psr-4'] as $namespace => $path) {
-            $resolved = realpath($this->base_path($path));
+        foreach ($composer['autoload']['psr-4'] as $namespace => $paths) {
+            $paths = Arr::wrap($paths);
 
-            if ($resolved !== false && $resolved === $target) {
-                return $this->namespace_paths[$relative_path] = $namespace;
+            foreach ($paths as $path) {
+                $resolved = realpath($this->base_path($path));
+
+                if ($resolved !== false && $resolved === $target) {
+                    return $this->namespace_paths[$relative_path] = $namespace;
+                }
             }
         }
 
