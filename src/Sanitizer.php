@@ -148,6 +148,20 @@ class Sanitizer
     const DATETIME = 'datetime';
 
     /**
+     * Sanitize the value as serialized.
+     *
+     * @var string
+     */
+    const SERIALIZED = 'serialized';
+
+    /**
+     * Sanitize the value as unserialized.
+     *
+     * @var string
+     */
+    const UNSERIALIZED = 'unserialized';
+
+    /**
      * Input data.
      * 
      * @var array<key:int,value:mixed>
@@ -391,6 +405,12 @@ class Sanitizer
                 }
 
                 $value = Date::parse($value);
+                break;
+            case static::SERIALIZED:
+                $value = maybe_serialize($value);
+                break;
+            case static::UNSERIALIZED:
+                $value = maybe_unserialize($value);
                 break;
             default:
                 if (is_callable($type)) {

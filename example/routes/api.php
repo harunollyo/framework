@@ -1,5 +1,6 @@
 <?php
 
+use Example\App\Http\Controllers\ExampleController;
 use Framework\Http\Request;
 use Framework\Route;
 
@@ -15,3 +16,5 @@ Route::get('/ping', function (Request $request) {
         'prefix'   => app()->prefix(),
     ]);
 });
+
+Route::get('/example', [ExampleController::class, 'index']);

@@ -48,16 +48,6 @@ interface Request
     public function all();
 
     /**
-     * Validate the request data against the given rules.
-     *
-     * @since 1.0.0
-     *
-     * @param array $rules The validation rules.
-     * @return array|null
-     */
-    public function validate(array $rules);
-
-    /**
      * Get the validated data from the request.
      *
      * @since 1.0.0
@@ -65,16 +55,6 @@ interface Request
      * @return array|null
      */
     public function validated();
-
-    /**
-     * Sanitize the request data.
-     *
-     * @since 1.0.0
-     *
-     * @param array $filters The filters to apply.
-     * @return array
-     */
-    public function sanitize(array $filters = []);
 
     /**
      * Get the sanitized data from the request.

@@ -51,6 +51,22 @@ class Request implements RequestContract, Arrayable
     protected $headers;
 
     /**
+     * The sanitized data.
+     *
+     * @since 1.0.0
+     * @var array
+     */ 
+    protected array $sanitized = [];
+
+    /**
+     * The validated data.
+     *
+     * @since 1.0.0
+     * @var array
+     */
+    protected array $validated = [];
+
+    /**
      * Magic getter to retrieve request attributes.
      *
      * @since 1.0.0
@@ -109,6 +125,8 @@ class Request implements RequestContract, Arrayable
         $this->route = $request->get_route();
         $this->headers = $request->get_headers();
 
+        $this->resolve_validation_and_sanitization();
+
         return $this;
     }
 
@@ -125,56 +143,22 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
-     * Validate the request data against the given rules.
-     *
-     * @since 1.0.0
-     *
-     * @param array $rules The validation rules.
-     * @return array|null
-     */
-    public function validate(array $rules)
-    {
-        return $this->run_validation($rules);
-    }
-
-    /**
-     * Get the validated data from the request.
-     *
-     * @since 1.0.0
-     *
-     * @thorws \Framework\Exceptions\ValidationException
-     *
-     * @return array|null
-     */
-    public function validated()
-    {
-        return $this->run_validation(
-            $this->rules()
-        );
-    }
-
-    /**
      * Run the validation on the request data.
      *
      * @since 1.0.0
      *
-     * @param array $rules The validation rules.
+     * @param array $data The data to validate.
      * @thorws \Framework\Exceptions\ValidationException
      *
-     * @return array|null
+     * @return array
      */
-    protected function run_validation(array $rules)
+    protected function run_validation(array $data, array $rules)
     {
-        $validator = Validator::make(
-            $this->attributes(),
-            $rules
-        );
+        $validator = Validator::make($data, $rules);
 
         if ($validator->validate()) {
             return $validator->validated();
         }
-
-        return null;
     }
 
     /**
@@ -191,43 +175,18 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
-     * Sanitize the data.
-     *
-     * @since 1.0.0
-     *
-     * @param array $data The data to sanitize.
-     * @param array $filters The filters to apply.
-     * @return array
-     */
-    public function sanitize(array $filters = [])
-    {
-        return $this->run_sanitization($filters);
-    }
-
-    /**
-     * Get the sanitized data.
-     *
-     * @since 1.0.0
-     *
-     * @param array $data The data to sanitize.
-     * @return array
-     */
-    public function sanitized()
-    {
-        return $this->run_sanitization($this->filters());
-    }
-
-    /**
      * Run the sanitization on the data.
      *
-     * @since 1.0.0
      *
+     * @param array $data The data to sanitize.
      * @param array $filters The filters to apply.
      * @return array
+     *
+     * @since 1.0.0
      */
-    protected function run_sanitization(array $filters)
+    protected function run_sanitization(array $data, array $filters)
     {
-        return Sanitizer::make($this->attributes(), $filters)->get_sanitized_data();
+        return Sanitizer::make($data, $filters)->get_sanitized_data();
     }
 
     /**
@@ -311,9 +270,31 @@ class Request implements RequestContract, Arrayable
      */
     public function all()
     {
-        $this->resolve_validation_and_sanitization();
-
         return $this->attributes;
+    }
+
+    /**
+     * Get the sanitized data.
+     *
+     * @since 1.0.0
+     *
+     * @return array
+     */
+    public function sanitized()
+    {
+        return $this->sanitized;
+    }
+
+    /**
+     * Get the validated data.
+     *
+     * @since 1.0.0
+     *
+     * @return array
+     */
+    public function validated()
+    {
+        return $this->validated;
     }
 
     /**
@@ -347,8 +328,12 @@ class Request implements RequestContract, Arrayable
 
         $this->prepare_for_validation();
 
-        $this->run_validation($this->rules());
-        $this->merge($this->sanitized());
+        $sanitized = $this->run_sanitization($this->attributes(), $this->filters());
+        $this->sanitized = $sanitized;
+        $this->merge($sanitized);
+
+        $validated = $this->run_validation($this->attributes(), $this->rules());
+        $this->validated = $validated;
 
         $this->passed_validation();
     }
