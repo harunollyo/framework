@@ -13,7 +13,7 @@ class LogManager
 
     public function __construct(?string $path = null)
     {
-        $this->path = $path ?? base_path('kirki.log');
+        $this->path = $path ?? base_path('themeum-framework.log');
     }
 
     /**

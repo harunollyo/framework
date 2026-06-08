@@ -347,7 +347,7 @@ abstract class Relation
      */
     public function get_relation_count_hash($increment_join_count = false)
     {
-        return 'kirki_reserved_' . ($increment_join_count ? static::$self_join_count++ : static::$self_join_count);
+        return 'themeum_framework_reserved_' . ($increment_join_count ? static::$self_join_count++ : static::$self_join_count);
     }
 
     /**

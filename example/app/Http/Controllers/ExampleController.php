@@ -7,7 +7,9 @@ use Example\App\Models\Event;
 use Framework\Http\Request;
 use Example\App\Models\Post;
 use Framework\Supports\Facades\Guard;
+use Framework\Supports\Facades\Option;
 
+use function Framework\app;
 use function Framework\collection;
 use function Framework\response;
 
@@ -21,22 +23,13 @@ class ExampleController
 	public function index(Request $request)
 	{
 		// Guard::authorize('view', Event::class);
-
 		// $event = Event::query()->get();
+		$base_url = app()->base_url();
 
-		$collection = collection([
-			['id' => 1, 'product' => 'Laptop'],
-			['id' => 2, 'product' => 'Phone'],
-		]);
+		$option = Option::get('option_3', ['option_4' => 'option 4 default', 'option_3' => 'option 3 default']);
 		
-		$customArray = $collection->pluck(
-			fn ($item) => strtoupper($item['product']), // Value
-			fn ($item) => 'sku-' . $item['id']          // Key
-		);
-		
-
 		return response()->json([
-			'data' => $customArray
+			'data' => $option
 		]);
 	}
 

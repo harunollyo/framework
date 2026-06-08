@@ -5,7 +5,7 @@ namespace Framework\Supports\Facades;
 use Framework\Facade;
 
 /**
- * @method static bool set(string $name, $value)
+ * @method static bool set(string $name, $value, $autoload = null)
  * @method static mixed get(string $name, $default = null)
  * @method static bool delete(string $name)
  * 

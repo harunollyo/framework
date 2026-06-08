@@ -21,7 +21,7 @@ class Scheduler
      * and registers the primary cron schedule to handle background tasks.
      * 
      * Note: This method is intended to be called once during the plugin activation or initialization phase.
-     * For kirki app we can call this at app installation or activation hooks.
+     * For themeum/framework app we can call this at app installation or activation hooks.
      *
      * @return void
      */

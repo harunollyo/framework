@@ -17,12 +17,12 @@ final class Config
     /**
      * The name of the cron event for the scheduler.
      */
-    public const SCHEDULER_CRON_EVENT_NAME = 'kirki_scheduler_cron_event';
+    public const SCHEDULER_CRON_EVENT_NAME = 'themeum_framework_scheduler_cron_event';
 
     /**
      * The name of the cron event for the cleanup.
      */
-    public const SCHEDULER_CRON_CLEANUP_EVENT_NAME = 'kirki_scheduler_cleanup_event';
+    public const SCHEDULER_CRON_CLEANUP_EVENT_NAME = 'themeum_framework_scheduler_cleanup_event';
 
     /**
      * The maximum number of retries for a job.

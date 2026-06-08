@@ -2,8 +2,6 @@
 
 namespace Framework\Wordpress;
 
-use Kirki\App\Constants\Capabilities;
-use Kirki\App\Constants\UserRoles;
 use Framework\Supports\Facades\Guard;
 use Framework\Wordpress\UserMeta;
 use Exception;
@@ -263,44 +261,6 @@ class User
     }
 
     /**
-     * Check if the current user is an admin
-     *
-     * @return bool
-     */
-    public function is_admin()
-    {
-        return $this->has_role(UserRoles::ADMIN);
-    }
-
-    /**
-     * Check if the current user is a fundraiser
-     *
-     * @return bool
-     */
-    public function is_customer()
-    {
-        return $this->has_role(UserRoles::CUSTOMER);
-    }
-
-    /**
-     * Get the current user role
-     *
-     * @return string|null
-     */
-    public function get_active_role()
-    {
-        if ($this->is_admin()) {
-            return UserRoles::ADMIN;
-        }
-
-        if ($this->is_customer()) {
-            return UserRoles::CUSTOMER;
-        }
-
-        return null;
-    }
-
-    /**
      * Check if the current user is logged in
      *
      * @return bool
@@ -363,10 +323,6 @@ class User
         }
 
         $action = preg_replace('/^can_/', '', $name);
-
-        if (!in_array($action, Capabilities::get_constant_values(), true)) {
-            throw new Exception(sprintf('Capability %s does not exist', $action));
-        }
 
         return $this->can($action, $arguments);
     }

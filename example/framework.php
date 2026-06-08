@@ -29,7 +29,7 @@ if (!defined('FRAMEWORK_EXAMPLE_URL')) {
 }
 
 if (!defined('FRAMEWORK_EXAMPLE_PREFIX')) {
-    define('FRAMEWORK_EXAMPLE_PREFIX', 'framework');
+    define('FRAMEWORK_EXAMPLE_PREFIX', 'framework_');
 }
 
 require_once __DIR__ . '/vendor/autoload.php';

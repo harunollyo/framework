@@ -6,7 +6,7 @@ use Framework\Database\Query\Model;
 
 class SchedulerQueue extends Model
 {
-    protected $table = 'kirki_scheduler_jobs';
+    protected $table = 'themeum_framework_scheduler_jobs';
     protected $primary_key = 'id';
 
     protected $fillable = [

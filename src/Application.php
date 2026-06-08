@@ -552,7 +552,11 @@ class Application extends Container
      */
     public function base_url($path = '')
     {
-        return site_url('wp-content/plugins/kirki/' . $path); // @todo: remove this hardcoded path
+        $base_path = $this->base_path();
+        $last_segment = basename($base_path);
+        $site_base_path = 'wp-content/plugins/' . $last_segment;
+
+        return site_url($site_base_path . $path);
     }
 
     /**
