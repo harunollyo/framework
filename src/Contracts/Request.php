@@ -39,6 +39,17 @@ interface Request
     public function get_headers();
 
     /**
+     * Get a single HTTP header from the request.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    public function get_header(string $name, $default = null);
+
+    /**
      * Get all request input attributes.
      *
      * @since 1.0.0

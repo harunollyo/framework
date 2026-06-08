@@ -249,10 +249,18 @@ class Request implements RequestContract, Arrayable
         return $this->headers;
     }
 
+    /**
+     * Get a single HTTP header from the request.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
     public function get_header(string $name, $default = null)
     {
-        $key = strtolower(str_replace('-', '_', $name));
-        $value = $this->headers[$key] ?? $default;
+        $value = $this->headers[$name] ?? $default;
 
         if (is_array($value)) {
             return $value[0] ?? $default;
