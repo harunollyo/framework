@@ -2,7 +2,14 @@
 
 namespace Framework\Managers;
 
+use Exception;
+use Framework\Concerns\DependencyResolvable;
 use Framework\Exceptions\AuthorizationException;
+use Framework\Supports\Arr;
+use InvalidArgumentException;
+use ReflectionMethod;
+use ReflectionNamedType;
+use ReflectionParameter;
 
 use function Framework\app;
 use function Framework\config_path;
@@ -15,6 +22,8 @@ use function Framework\user;
  */
 class PolicyManager
 {
+    use DependencyResolvable;
+
     /**
      * The array of registered policies or the policies data from cache.
      *
@@ -131,7 +140,7 @@ class PolicyManager
      * @return bool|mixed
      * @throws AuthorizationException
      */
-    public function authorize(string $ability, $model = null)
+    public function authorize(string $ability, $model = null, array $arguments = [])
     {
         $user = $this->get_current_user();
 
@@ -146,7 +155,7 @@ class PolicyManager
         }
 
         if (method_exists($policy, 'before')) {
-            if (($result = $policy->before($user, $ability)) !== null) {
+            if (($result = $policy->before($user, $ability)) === false) {
                 return $result;
             }
         }
@@ -160,9 +169,13 @@ class PolicyManager
             );
         }
 
-        $can_perform = $model
-            ? $policy->$ability($user, $model)
-            : $policy->$ability($user);
+        if (!empty($arguments) && !Arr::is_associative($arguments)) {
+            throw new InvalidArgumentException('The 3rd parameter must be an associative array.');
+        }
+
+        $dependencies = $this->resolve_method_dependencies($policy, $ability, $arguments);
+
+        $can_perform = $policy->$ability(...$dependencies);
 
         if (!$can_perform) {
             throw new AuthorizationException(
@@ -180,10 +193,10 @@ class PolicyManager
      * @param mixed $model
      * @return bool
      */
-    public function allows(string $ability, $model = null)
+    public function allows(string $ability, $model = null, array $arguments = [])
     {
         try {
-            return $this->authorize($ability, $model);
+            return $this->authorize($ability, $model, $arguments);
         } catch (AuthorizationException $exception) {
             return false;
         }
@@ -196,9 +209,9 @@ class PolicyManager
      * @param mixed $model
      * @return bool
      */
-    public function denies(string $ability, $model = null)
+    public function denies(string $ability, $model = null, array $arguments = [])
     {
-        return !$this->allows($ability, $model);
+        return !$this->allows($ability, $model, $arguments);
     }
 
     /**

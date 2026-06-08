@@ -1,4 +1,4 @@
-.PHONY: help up down restart init example-install library-install scope xdebug-log xdebug-wp wp-cli logs shell psql clean test\:unit
+.PHONY: help up down restart init ssl-cert example-install library-install scope xdebug-log xdebug-wp wp-cli logs shell psql clean test\:unit
 
 PLUGIN_DIR := /var/www/html/wp-content/plugins/framework
 LIBRARY_DIR := /var/www/html/framework-library
@@ -6,7 +6,8 @@ SCOPED_DIR := $(PLUGIN_DIR)/libraries/themeum/framework
 
 help:
 	@echo "Framework playground commands:"
-	@echo "  make up               Start all services in the background"
+	@echo "  make up               Start all services in the background (generates SSL cert if needed)"
+	@echo "  make ssl-cert         Generate the local self-signed HTTPS certificate"
 	@echo "  make init             Run the one-shot WordPress installer (first run)"
 	@echo "  make example-install  Composer install for the example plugin (example/composer.json)"
 	@echo "  make library-install  Composer install for the framework library (repo root composer.json)"
@@ -20,7 +21,11 @@ help:
 	@echo "  make down             Stop all services"
 	@echo "  make clean            Stop all services and remove volumes"
 
-up:
+ssl-cert:
+	chmod +x docker/scripts/generate-ssl-cert.sh
+	./docker/scripts/generate-ssl-cert.sh
+
+up: ssl-cert
 	docker compose up -d
 
 down:

@@ -9,6 +9,8 @@
 
 # Local WordPress playground
 .env
+/docker/nginx/certs/*.crt
+/docker/nginx/certs/*.key
 /example/vendor/
 /example/composer.lock
 /example/libraries/

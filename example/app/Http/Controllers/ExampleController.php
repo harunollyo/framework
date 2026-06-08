@@ -6,6 +6,7 @@ use Example\App\Http\Requests\ExampleRequest;
 use Example\App\Models\Event;
 use Framework\Http\Request;
 use Example\App\Models\Post;
+use Framework\Supports\Facades\Guard;
 
 use function Framework\response;
 
@@ -16,8 +17,10 @@ class ExampleController
 		//
 	}
 
-	public function index(ExampleRequest $request)
+	public function index(Request $request)
 	{
+		Guard::authorize('view', Event::class);
+
 		$event = Event::query()->get();
 
 		return response()->json([

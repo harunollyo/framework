@@ -5,9 +5,9 @@ namespace Framework\Supports\Facades;
 use Framework\Facade;
 
 /**
- * @method static mixed authorize(string $ability, $model = null)
- * @method static bool allows(string $ability, $model = null)
- * @method static bool denies(string $ability, $model = null)
+ * @method static mixed authorize(string $ability, $model = null, ...$arguments)
+ * @method static bool allows(string $ability, $model = null, ...$arguments)
+ * @method static bool denies(string $ability, $model = null, ...$arguments)
  * 
  * @see \Framework\Core\Managers\PolicyManager
  */

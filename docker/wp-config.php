@@ -16,6 +16,8 @@ define( 'SECURE_AUTH_SALT', 'dev-docker-secure-auth-salt-change-me' );
 define( 'LOGGED_IN_SALT',   'dev-docker-logged-in-salt-change-me' );
 define( 'NONCE_SALT',       'dev-docker-nonce-salt-change-me' );
 
+define( 'WP_ENVIRONMENT_TYPE', 'development' );
+
 $table_prefix = 'wp_';
 
 define( 'WP_DEBUG', true );
@@ -23,7 +25,7 @@ define( 'WP_DEBUG_LOG', true );
 define( 'WP_DEBUG_DISPLAY', true );
 define( 'SCRIPT_DEBUG', true );
 
-$wp_url = getenv( 'WP_URL' ) ?: 'http://localhost:20200';
+$wp_url = getenv( 'WP_URL' ) ?: 'https://localhost:20200';
 define( 'WP_HOME', $wp_url );
 define( 'WP_SITEURL', $wp_url );
 
