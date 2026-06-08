@@ -3059,6 +3059,25 @@ class QueryBuilder
     }
 
     /**
+     * Update a record or create a new record.
+     *
+     * @param array $attributes
+     * @param array $values
+     *
+     * @return Model
+     *
+     * @since 1.0.0
+     */
+    public function update_or_create(array $attributes, array $values = [])
+    {
+        return tap($this->first_or_create($attributes, $values), function ($instance) use ($values) {
+            if (!$instance->was_recently_created) {
+                $instance->fill(value($values))->save();
+            }
+        });
+    }
+
+    /**
      * Get the first record or create a new record.
      * 
      * @param array $attributes

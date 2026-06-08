@@ -95,6 +95,13 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     protected bool $exists = false;
 
     /**
+     * Indicates if the model was recently created.
+     *
+     * @var bool
+     */
+    protected bool $was_recently_created = false;
+
+    /**
      * Construct a new model instance optionally seeded with attributes.
      *
      * Fills the model using mass assignment rules and snapshots the original
@@ -484,6 +491,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
         $this->original = $this->attributes;
 
         $this->exists = true;
+        $this->was_recently_created = true;
 
         return true;
     }

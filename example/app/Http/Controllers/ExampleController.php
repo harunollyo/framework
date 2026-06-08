@@ -31,12 +31,12 @@ class ExampleController
 
 	public function create(Request $request)
 	{
-		$event = Event::query()->first_or_create([
-			'name' => 'Test Event',
+		$event = Event::query()->update_or_create([
+			'name' => 'Test Event 2',
 		], [
 			'description' => 'Test Description',
 			'date' => '2026-01-01',
-			'time' => '10:00:00',
+			'time' => '10:00:45',
 			'location' => 'Test Location',
 			'organizer' => 'Test Organizer',
 		]);
