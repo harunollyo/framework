@@ -1,4 +1,4 @@
-.PHONY: help up down restart init example-install library-install scope xdebug-log wp-cli logs shell psql clean test\:unit
+.PHONY: help up down restart init example-install library-install scope xdebug-log xdebug-wp wp-cli logs shell psql clean test\:unit
 
 PLUGIN_DIR := /var/www/html/wp-content/plugins/framework
 LIBRARY_DIR := /var/www/html/framework-library
@@ -12,6 +12,7 @@ help:
 	@echo "  make library-install  Composer install for the framework library (repo root composer.json)"
 	@echo "  make scope            Generate the prefixed Themeum\\\\Framework\\\\ tree (CI/release only)"
 	@echo "  make xdebug-log       Tail the Xdebug connection log inside the php container"
+	@echo "  make xdebug-wp CMD=\"...\"  Run WP-CLI with Xdebug trigger (IDE must be listening)"
 	@echo "  make test:unit        Run library unit tests inside the php container"
 	@echo "  make wp CMD=\"...\"  Run a WP-CLI command (e.g. CMD=\"plugin list\")"
 	@echo "  make logs             Tail php and nginx logs"
@@ -39,6 +40,9 @@ example-composer-install:
 example-composer-update:
 	docker compose run --rm php composer update --working-dir=$(PLUGIN_DIR)
 
+example-dump-autoload:
+	docker compose run --rm php composer dump-autoload --working-dir=$(PLUGIN_DIR)
+
 library-install: library-composer-install
 
 library-composer-install:
@@ -62,6 +66,9 @@ xdebug-log:
 
 wp:
 	docker compose run --rm php wp --allow-root $(CMD)
+
+xdebug-wp:
+	docker compose run --rm -e XDEBUG_TRIGGER=PHPSTORM php wp --allow-root $(CMD)
 
 logs:
 	docker compose logs -f php nginx

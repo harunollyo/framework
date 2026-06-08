@@ -71,7 +71,12 @@ Xdebug is installed but disabled by default. To enable step debugging:
 
 1. Set `XDEBUG_MODE=debug` in `.env`.
 2. `docker compose restart php`.
-3. Point your IDE listener at port `9003` (key `PHPSTORM`).
+3. Start **Listen for Xdebug** in the IDE (port `9003`, key `PHPSTORM`).
+4. Trigger a session explicitly:
+   - **Web:** use an Xdebug browser extension, or append `?XDEBUG_TRIGGER=PHPSTORM` to the URL.
+   - **WP-CLI:** `make xdebug-wp CMD="kirki migrate"` (or `XDEBUG_TRIGGER=PHPSTORM make wp CMD="..."`).
+
+> If the IDE pauses on `Symfony\Component\Console\Exception\RuntimeException` (e.g. `The "--once" option does not exist`), that is Symfony Console probing argv during WP-CLI/Composer bootstrap—not your app failing. Press **Continue** (F5), or rely on the `ignoreExceptions` entries in `.vscode/launch.json`.
 
 ## PHP version note
 
@@ -125,4 +130,5 @@ The plugin code references the prefixed namespace throughout: `Themeum\Framework
 | Library edits under `../src/` not reflected | The plugin runs the scoped copy. Re-run `make scope` after editing the library. |
 | `Cannot redeclare class Themeum\Framework\...` | Both unscoped `vendor/themeum/framework` and the scoped `libraries/` tree are autoloaded. Only the scoped tree should be in `autoload`. |
 | `Class "Carbon\Carbon" not found` | Scoped code references unprefixed `Carbon\`, but `vendor/nesbot/carbon` is missing. Run `make example-install` so Composer installs `themeum/framework` and its transitive deps (including Carbon) into `vendor/`. |
-| Xdebug not connecting | Confirm `XDEBUG_MODE=debug` in `.env` and `docker compose restart php`; IDE must listen on `9003`. |
+| Xdebug not connecting | Confirm `XDEBUG_MODE=debug` in `.env` and `docker compose restart php`; IDE must listen on `9003`. Use `?XDEBUG_TRIGGER=PHPSTORM` (web) or `make xdebug-wp` (CLI). |
+| IDE stops on Symfony `--once` / `RuntimeException` | Harmless Symfony Console noise while debugging CLI; press Continue, or use **Listen for Xdebug** (has `ignoreExceptions` configured). |

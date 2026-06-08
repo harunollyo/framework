@@ -4,7 +4,7 @@ namespace Framework\Wordpress\Hooks\Actions;
 
 use Framework\Wordpress\Constants\HookNames;
 use Framework\Wordpress\Constants\HookTypes;
-use Kirki\App\Constants\OptionKeys;
+use Framework\Constants\OptionKeys;
 use Framework\Wordpress\BaseHook;
 use Framework\Supports\Facades\Settings;
 use PHPMailer\PHPMailer\PHPMailer;

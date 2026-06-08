@@ -2,7 +2,7 @@
 
 namespace Framework\Database\Migrations;
 
-use Kirki\App\Constants\OptionKeys;
+use Framework\Constants\OptionKeys;
 use Framework\Supports\Facades\Option;
 
 use function Framework\app;

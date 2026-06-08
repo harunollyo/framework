@@ -18,3 +18,4 @@ Route::get('/ping', function (Request $request) {
 });
 
 Route::get('/example', [ExampleController::class, 'index']);
+Route::post('/example', [ExampleController::class, 'create']);

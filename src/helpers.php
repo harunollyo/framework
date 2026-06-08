@@ -2,6 +2,7 @@
 
 namespace Framework;
 
+use Closure;
 use Framework\Application;
 use Framework\AppSettings;
 use Framework\Collections\Collection;
@@ -516,5 +517,18 @@ if (!function_exists('Framework\json_decoded_data')) {
         $content = file_get_contents($file_path);
 
         return json_decode($content, $associative);
+    }
+}
+
+if (!function_exists('Framework\value')) {
+    /**
+     * Get the value of a variable.
+     * 
+     * @param mixed $value
+     * @param mixed ...$args
+     * @return mixed
+     */
+    function value($value, ...$args) {
+        return $value instanceof Closure ? $value(...$args) : $value;
     }
 }

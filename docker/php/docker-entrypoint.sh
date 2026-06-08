@@ -28,7 +28,8 @@ else
 
     cat > /usr/local/etc/php/conf.d/zz-xdebug.ini <<EOF
 xdebug.mode=${XDEBUG_MODE}
-xdebug.start_with_request=yes
+xdebug.start_with_request=trigger
+xdebug.trigger_value=${XDEBUG_IDEKEY}
 xdebug.client_host=${XDEBUG_CLIENT_HOST}
 xdebug.client_port=${XDEBUG_CLIENT_PORT}
 xdebug.idekey=${XDEBUG_IDEKEY}

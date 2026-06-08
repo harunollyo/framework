@@ -5,7 +5,6 @@ namespace Framework\Database\Query;
 use BadMethodCallException;
 use Closure;
 use DateTimeInterface;
-use Kirki\App\Constants\Pagination;
 use Framework\Collections\Collection;
 use Framework\Database\Concerns\ExecuteQueries;
 use Framework\Database\Concerns\RelationshipQueries;
@@ -15,6 +14,7 @@ use Framework\Database\Query\Relations\Relation;
 use Framework\Exceptions\ModelNotFoundException;
 use Framework\Exceptions\MultipleRecordsFoundException;
 use Framework\Exceptions\RecordNotFoundException;
+use Framework\Exceptions\UniqueConstraintViolationException;
 use Framework\Supports\Arr;
 use Framework\Supports\Str;
 use Framework\Supports\Traits\Conditionable;
@@ -22,6 +22,8 @@ use Framework\Supports\Traits\Macroable;
 use InvalidArgumentException;
 
 use function Framework\collection;
+use function Framework\tap;
+use function Framework\value;
 
 /**
  * The QueryBuilder class provides a fluent interface for building SQL queries.
@@ -2998,6 +3000,21 @@ class QueryBuilder
     }
 
     /**
+     * Create a new model instance and save it to the database
+     *
+     * @param array $attributes The attributes to set
+     * @return Model The new model instance
+     *
+     * @since 1.0.0
+     */
+    public function create(array $attributes = [])
+    {
+        return tap($this->new_model_instance($attributes), function ($instance) {
+            $instance->save();
+        });
+    }
+
+    /**
      * Update the records that match the query conditions with new data.
      *
      * @param array $values The values to update.
@@ -3039,6 +3056,40 @@ class QueryBuilder
         );
 
         return $this->connection->update($sql, $bindings);
+    }
+
+    /**
+     * Get the first record or create a new record.
+     * 
+     * @param array $attributes
+     * @param Closure|array $values
+     * @return mixed
+     */
+    public function first_or_create(array $attributes, $values = [])
+    {
+        $instance = (clone $this)->where($attributes)->first();
+
+        if (!is_null($instance)) {
+            return $instance;
+        }
+
+        return $this->create_or_first($attributes, $values);
+    }
+
+    /**
+     * Create a new record or get the first record.
+     * 
+     * @param array $attributes
+     * @param Closure|array $values
+     * @return mixed
+     */
+    public function create_or_first(array $attributes, $values = [])
+    {
+        try {
+            return $this->create(array_merge($attributes,  value($values)));
+        } catch (UniqueConstraintViolationException $exception) {
+            return $this->where($attributes)->first() ?? throw $exception;
+        }
     }
 
     /**
@@ -3631,6 +3682,19 @@ class QueryBuilder
     public function new_query()
     {
         return new static($this->connection, $this->compiler, $this->model);
+    }
+
+    /**
+     * Create a new model instance
+     *
+     * @param array $attributes The attributes to set
+     * @return Model The new model instance
+     *
+     * @since 1.0.0
+     */
+    public function new_model_instance(array $attributes = [])
+    {
+        return $this->model->new_instance($attributes);
     }
 
     /**

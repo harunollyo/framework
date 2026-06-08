@@ -29,7 +29,8 @@
     "autoload": {
         "psr-4": {
             "Example\\": "src/",
-            "Example\\App\\": "app/"
+            "Example\\App\\": "app/",
+            "Example\\Database\\Migrations\\": "database/migrations/"
         }
     },
     "scripts": {

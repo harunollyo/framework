@@ -13,6 +13,11 @@
           "/var/www/html/wp-content/plugins/framework": "${workspaceFolder}/example",
           "/var/www/html/wp-content/plugins/framework/vendor/themeum/framework": "${workspaceFolder}"
         },
+        "ignoreExceptions": [
+          "Symfony\\Component\\Console\\Exception\\RuntimeException",
+          "Symfony\\Component\\Console\\Exception\\CommandNotFoundException",
+          "Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException"
+        ],
         "xdebugSettings": {
           "max_children": 128,
           "max_data": 512,
@@ -31,7 +36,12 @@
           "/var/www/html/framework-library": "${workspaceFolder}",
           "/var/www/html/wp-content/plugins/framework": "${workspaceFolder}/example",
           "/var/www/html/wp-content/plugins/framework/vendor/themeum/framework": "${workspaceFolder}"
-        }
+        },
+        "ignoreExceptions": [
+          "Symfony\\Component\\Console\\Exception\\RuntimeException",
+          "Symfony\\Component\\Console\\Exception\\CommandNotFoundException",
+          "Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException"
+        ]
       },
       {
         "name": "Launch currently open script",
