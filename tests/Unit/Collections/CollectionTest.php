@@ -62,7 +62,45 @@ class CollectionTest extends TestCase
             ['name' => null],
         ]);
 
-        $this->assertSame(['Jane', 'John', null], $collection->pluck('name')->all());
+        $result = $collection->pluck('name');
+
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertSame(['Jane', 'John', null], $result->all());
+    }
+
+    public function test_pluck_returns_collection_with_associative_array_when_keyed(): void
+    {
+        $collection = new Collection([
+            ['id' => 1, 'name' => 'Jane'],
+            ['id' => 2, 'name' => 'John'],
+        ]);
+
+        $result = $collection->pluck('name', 'id');
+
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertSame([
+            1 => 'Jane',
+            2 => 'John',
+        ], $result->all());
+    }
+
+    public function test_pluck_supports_closure_value_and_key(): void
+    {
+        $collection = new Collection([
+            ['id' => 1, 'product' => 'Laptop'],
+            ['id' => 2, 'product' => 'Phone'],
+        ]);
+
+        $result = $collection->pluck(
+            fn($item) => strtoupper($item['product']),
+            fn($item) => 'sku-' . $item['id']
+        );
+
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertSame([
+            'sku-1' => 'LAPTOP',
+            'sku-2' => 'PHONE',
+        ], $result->all());
     }
 
     public function test_only_requires_at_least_one_key(): void

@@ -9,6 +9,6 @@ class EventPolicy
 {
     public function view(User $user, Event $event)
     {
-        return false;
+        return true;
     }
 }

@@ -8,6 +8,7 @@ use Framework\Http\Request;
 use Example\App\Models\Post;
 use Framework\Supports\Facades\Guard;
 
+use function Framework\collection;
 use function Framework\response;
 
 class ExampleController
@@ -19,13 +20,23 @@ class ExampleController
 
 	public function index(Request $request)
 	{
-		Guard::authorize('view', Event::class);
+		// Guard::authorize('view', Event::class);
 
-		$event = Event::query()->get();
+		// $event = Event::query()->get();
+
+		$collection = collection([
+			['id' => 1, 'product' => 'Laptop'],
+			['id' => 2, 'product' => 'Phone'],
+		]);
+		
+		$customArray = $collection->pluck(
+			fn ($item) => strtoupper($item['product']), // Value
+			fn ($item) => 'sku-' . $item['id']          // Key
+		);
+		
 
 		return response()->json([
-			'message' => 'Hello World',
-			'data' => $event
+			'data' => $customArray
 		]);
 	}
 

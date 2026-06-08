@@ -469,21 +469,27 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * key. Missing properties or keys are represented as null. A new collection
      * of the extracted values is returned for additional transformations.
      *
-     * @param mixed $column The property or key to extract from each item
-     * @return static A new collection of extracted column values
+     * @param string|array|int|Closure|null $value The value to pluck
+     * @param string|Closure|null $key The key to pluck by
+     * @return static A new collection of extracted values
+     *
      * @since 1.0.0
      */
-    public function pluck($column)
+    public function pluck($value, $key = null)
     {
-        $results = [];
-        foreach ($this->items as $item) {
-            if (is_object($item)) {
-                $results[] = $item->$column ?? null;
-            } elseif (is_array($item)) {
-                $results[] = $item[$column] ?? null;
-            }
-        }
-        return new static($results);
+        return $this->new_instance(Arr::pluck($this->items, $value, $key));
+    }
+
+    /**
+     * Create a new collection instance.
+     *
+     * @param array $items The items to seed the collection
+     * @return static A new collection instance
+     * @since 1.0.0
+     */
+    protected function new_instance($items = [])
+    {
+        return new static($items);
     }
 
     /**

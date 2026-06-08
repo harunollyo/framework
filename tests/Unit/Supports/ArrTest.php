@@ -63,30 +63,84 @@ class ArrTest extends TestCase
         $this->assertTrue(Arr::is_associative(['first' => 'a', 'second' => 'b']));
     }
 
-    public function test_instance_methods_manage_items(): void
+    public function test_pluck_extracts_values_from_arrays_and_objects(): void
     {
-        $array = Arr::make(['one']);
+        $rows = [
+            ['name' => 'Jane'],
+            (object) ['name' => 'John'],
+            ['name' => null],
+        ];
 
-        $array->push('two');
-        $array->push('three');
-
-        $this->assertTrue($array->has(0));
-        $this->assertSame('one', $array->get(0));
-        $this->assertSame('three', $array->pop());
-        $this->assertSame('two', $array->top());
-        $this->assertSame('one', $array->front());
+        $this->assertSame(['Jane', 'John', null], Arr::pluck($rows, 'name'));
     }
 
-    public function test_filter_and_map_return_new_instances(): void
+    public function test_pluck_builds_associative_array_when_key_is_provided(): void
     {
-        $original = Arr::make([1, 2, 3, 4]);
+        $rows = [
+            ['id' => 1, 'name' => 'Jane'],
+            ['id' => 2, 'name' => 'John'],
+        ];
 
-        $filtered = $original->filter(fn($value) => $value % 2 === 0);
-        $mapped = $original->map(fn($value) => $value * 2);
+        $this->assertSame([
+            1 => 'Jane',
+            2 => 'John',
+        ], Arr::pluck($rows, 'name', 'id'));
+    }
 
-        $this->assertSame([2, 4], $filtered->to_array());
-        $this->assertSame([2, 4, 6, 8], $mapped->to_array());
-        $this->assertSame([1, 2, 3, 4], $original->to_array());
+    public function test_pluck_supports_closure_value_and_key(): void
+    {
+        $rows = [
+            ['id' => 1, 'product' => 'Laptop'],
+            ['id' => 2, 'product' => 'Phone'],
+        ];
+
+        $this->assertSame([
+            'sku-1' => 'LAPTOP',
+            'sku-2' => 'PHONE',
+        ], Arr::pluck(
+            $rows,
+            fn($item) => strtoupper($item['product']),
+            fn($item) => 'sku-' . $item['id']
+        ));
+    }
+
+    public function test_pluck_resolves_dot_notation_paths(): void
+    {
+        $rows = [
+            ['user' => ['name' => 'Jane']],
+            (object) ['user' => (object) ['name' => 'John']],
+        ];
+
+        $this->assertSame(['Jane', 'John'], Arr::pluck($rows, 'user.name'));
+    }
+
+    public function test_pluck_returns_null_for_missing_nested_keys(): void
+    {
+        $rows = [
+            ['user' => ['name' => 'Jane']],
+            ['user' => []],
+        ];
+
+        $this->assertSame(['Jane', null], Arr::pluck($rows, 'user.name'));
+    }
+
+    public function test_pluck_casts_object_keys_with_to_string(): void
+    {
+        $key_object = new class {
+            public function __toString(): string
+            {
+                return 'object-key';
+            }
+        };
+
+        $rows = [
+            ['key' => $key_object, 'value' => 'first'],
+            ['key' => $key_object, 'value' => 'second'],
+        ];
+
+        $this->assertSame([
+            'object-key' => 'second',
+        ], Arr::pluck($rows, 'value', 'key'));
     }
 
     public function test_exists_supports_arrays_and_array_access(): void

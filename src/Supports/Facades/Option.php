@@ -9,7 +9,7 @@ use Framework\Facade;
  * @method static mixed get(string $name, $default = null)
  * @method static bool delete(string $name)
  * 
- * @see \Framework\Core\Managers\OptionManager
+ * @see \Framework\Managers\OptionManager
  */
 class Option extends Facade
 {
