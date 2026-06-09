@@ -3100,7 +3100,10 @@ class QueryBuilder
      * 
      * @param array $attributes
      * @param Closure|array $values
+     * 
      * @return mixed
+     *
+     * @since 1.0.0
      */
     public function create_or_first(array $attributes, $values = [])
     {
@@ -3109,6 +3112,127 @@ class QueryBuilder
         } catch (UniqueConstraintViolationException $exception) {
             return $this->where($attributes)->first() ?? throw $exception;
         }
+    }
+
+    /**
+     * Upsert the values into the database.
+     *
+     * @param array $values The values to upsert.
+     * @param array $update The columns to update.
+     *
+     * @return int The number of rows affected by the upsert operation.
+     *
+     * @since 1.0.0
+     */
+    public function upsert(array $values, $update = null)
+    {
+        if (empty($values)) {
+            return 0;
+        }
+
+        if (!is_array(reset($values))) {
+            $values = [$values];
+        }
+
+        if (is_null($update)) {
+            $update = array_keys(reset($values));
+        }
+
+        return $this->perform_upsert(
+            $this->add_timestamps_to_upsert_values($values),
+            $this->add_updated_at_to_upsert_columns($update),
+        );
+    }
+
+    /**
+     * Add the timestamps to the upsert values.
+     *
+     * @param array $values The values to add the timestamps to.
+     * 
+     * @return array The values with the timestamps added.
+     *
+     * @since 1.0.0
+     */
+    protected function add_timestamps_to_upsert_values(array $values)
+    {
+        if (!$this->model->uses_timestamps()) {
+            return $values;
+        }
+
+        $timestamp = $this->model->fresh_timestamp_string();
+
+        $columns = array_filter([
+            $this->model->get_created_at_column(),
+            $this->model->get_updated_at_column(),
+        ]);
+
+        foreach ($columns as $column) {
+            foreach ($values as &$row) {
+                $row = array_merge([$column => $timestamp], $row);
+            }
+        }
+
+        return $values;
+    }
+
+    /**
+     * Add the updated at column to the upsert columns.
+     *
+     * @param array $update The columns to update.
+     * 
+     * @return array The columns to update.
+     *
+     * @since 1.0.0
+     */
+    protected function add_updated_at_to_upsert_columns(array $update)
+    {
+        if (!$this->model->uses_timestamps()) {
+            return $update;
+        }
+
+        $column = $this->model->get_updated_at_column();
+
+        if (!is_null($column) && !array_key_exists($column, $update) && !in_array($column, $update)) {
+            $update[] = $column;
+        }
+
+        return $update;
+    }
+
+    /**
+     * Perform the upsert operation.
+     *
+     * @param array $values The values to upsert.
+     * @param array $update The columns to update.
+     * 
+     * @return int The number of rows affected by the upsert operation.
+     * 
+     * @since 1.0.0
+     */
+    protected function perform_upsert(array $values, array $update)
+    {
+        if ($update === []) {
+            return (int) $this->insert($values);
+        }
+
+        foreach ($values as $key => $value) {
+            ksort($value);
+            $values[$key] = $value;
+        }
+
+        $bindings = $this->clean_bindings(
+            array_merge(
+                Arr::flatten($values, 1),
+                (new Collection($update))->reject(function ($value, $key) {
+                    return is_int($key);
+                })->all()
+            )
+        );
+
+        return $this->connection->affecting_statement(
+            $this->compiler->compile_upsert($this, $values, $update),
+            $bindings
+        );
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Framework\Database\Query;
 
+use Framework\Collections\Collection;
 use Framework\Database\Connection\Connection;
 use Framework\Supports\Arr;
 
@@ -697,6 +698,31 @@ class QueryCompiler
             'truncate table %s',
             $this->wrap_table($query->from)
         );
+    }
+
+    /**
+     * Compile the upsert query.
+     *
+     * @param QueryBuilder $query The query builder instance.
+     * @param array $values The values to upsert.
+     * @param array $update The columns to update.
+     *
+     * @return string The compiled upsert query.
+     */
+    public function compile_upsert(QueryBuilder $query, array $values, array $update)
+    {
+        $sql = $this->compile_insert($query, $values);
+        $sql .= ' on duplicate key update ';
+
+        $columns = (new Collection($update))->map(function ($value, $key) {
+            if (!is_numeric($key)) {
+                return $this->wrap($key) . ' = ' . $this->parameter($value);
+            }
+
+            return $this->wrap($value) . ' = values(' . $this->wrap($value) . ')';
+        })->join(', ');
+
+        return $sql . $columns;
     }
 
     /**

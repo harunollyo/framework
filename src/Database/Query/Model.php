@@ -15,6 +15,7 @@ use Framework\Collections\Collection;
 use Framework\Database\Concerns\GuardAttributes;
 use Framework\Supports\Facades\Date;
 use Exception;
+use Framework\Database\Concerns\HasTimestamps;
 use JsonSerializable;
 use ReflectionClass;
 
@@ -36,7 +37,8 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     use Macroable,
         HasAttributes,
         GuardAttributes,
-        HasRelationships;
+        HasRelationships,
+        HasTimestamps;
 
     /**
      * The shared database connection instance for all models.
@@ -58,13 +60,6 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * @var string
      */
     protected $primary_key = 'id';
-
-    /**
-     * Indicates if the model should automatically manage created_at and updated_at timestamps.
-     *
-     * @var bool
-     */
-    protected $timestamps = true;
 
     /**
      * The model's loaded relationship instances.
@@ -100,6 +95,20 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * @var bool
      */
     protected bool $was_recently_created = false;
+
+    /**
+     * The name of the "created at" column.
+     *
+     * @var string|null
+     */
+    const CREATED_AT = 'created_at';
+
+    /**
+     * The name of the "updated at" column.
+     *
+     * @var string|null
+     */
+    const UPDATED_AT = 'updated_at';
 
     /**
      * Construct a new model instance optionally seeded with attributes.

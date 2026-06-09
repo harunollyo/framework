@@ -232,7 +232,7 @@ class Connection
      *
      * @return int The number of affected rows.
      */
-    protected function affecting_statement($query, $bindings = [])
+    public function affecting_statement($query, $bindings = [])
     {
         return $this->run($query, $bindings, function ($query, $bindings) {
             $sql = $this->prepare_query($query, $bindings);
