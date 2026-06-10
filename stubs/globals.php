@@ -129,4 +129,26 @@ namespace {
             return true;
         }
     }
+
+    if (!function_exists('maybe_serialize')) {
+        /**
+         * @param mixed $data
+         * @return string
+         */
+        function maybe_serialize($data)
+        {
+            return '';
+        }
+    }
+
+    if (!function_exists('maybe_unserialize')) {
+        /**
+         * @param string $data
+         * @return mixed
+         */
+        function maybe_unserialize($data)
+        {
+            return '';
+        }
+    }
 }

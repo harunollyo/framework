@@ -183,11 +183,11 @@ class HasMany extends Relation
      * Collects parent local keys and scopes the query using where_in to fetch
      * all required children in a single query.
      *
-     * @param array $models The parent models
+     * @param Collection $models The parent models
      * @return void No return value
      * @since 1.0.0
      */
-    public function add_eager_constraints(array $models)
+    public function add_eager_constraints(Collection $models)
     {
         $keys = [];
         foreach ($models as $model) {
@@ -209,26 +209,29 @@ class HasMany extends Relation
      * parent under the relation name, defaulting to an empty collection when
      * none are present.
      *
-     * @param array $models The parent models to receive results
+     * @param Collection $models The parent models to receive results
      * @param mixed $results The related results to match
      * @param string $relation The relation name on the parent
      * @return array The array of parent models with relations set
      * @since 1.0.0
      */
-    public function match(array $models, $results, $relation)
+    public function match(Collection $models, $results, $relation)
     {
         $dictionary = [];
 
         foreach ($results as $result) {
             $key = $result->get_attribute($this->foreign_key);
+
             if (!isset($dictionary[$key])) {
                 $dictionary[$key] = [];
             }
+
             $dictionary[$key][] = $result;
         }
 
         foreach ($models as $model) {
             $key = $model->get_attribute($this->local_key);
+
             if (isset($dictionary[$key])) {
                 $model->relations[$relation] = collection($dictionary[$key]);
             } else {

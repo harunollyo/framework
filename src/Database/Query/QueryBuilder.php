@@ -2547,16 +2547,16 @@ class QueryBuilder
     {
         $columns = is_array($columns) ? $columns : func_get_args();
 
-        $results = $this->once_with_columns(
+        $items = $this->once_with_columns(
             Arr::wrap($columns),
             fn() => $this->run_select()
-        );
+        ) ?? [];
 
         if (!$this->model) {
-            return collection($results);
+            return new Collection($items);
         }
 
-        $models = array_map(fn($item) => $this->model->hydrate($item), $results);
+        $models = $this->model->hydrate($items);
 
         return $this->eager_load_relations($models);
     }
@@ -2564,11 +2564,11 @@ class QueryBuilder
     /**
      * Eager load the relationships for the collection.
      *
-     * @param array $models The models to eager load
+     * @param Collection $models The models to eager load
      * @return Collection A new collection containing the eager loaded items
      * @since 1.0.0
      */
-    public function eager_load_relations(array $models)
+    public function eager_load_relations(Collection $models)
     {
         if (!empty($this->relations) && !empty($models) && static::$should_resolve_relations) {
             $models = Relation::without_constraints(
@@ -2576,7 +2576,7 @@ class QueryBuilder
             );
         }
 
-        return collection($models);
+        return $models;
     }
 
     /**
@@ -3023,7 +3023,7 @@ class QueryBuilder
      */
     public function update(array $values)
     {
-        $values = collection($values)->map(function ($value) {
+        $values = (new Collection($values))->map(function ($value) {
             if (!$value instanceof QueryBuilder) {
                 return [
                     'value' => $value,

@@ -375,8 +375,7 @@ class Sanitizer
                 }
 
                 if (empty($value)) {
-                    $value = [];
-                    break;
+                    return null;
                 }
 
                 if (is_valid_json($value)) {
@@ -389,9 +388,7 @@ class Sanitizer
                     break;
                 }
 
-                // For anything else (int, bool, object, etc.) cast to array directly
-                $value = [$value];
-                break;
+                return null;
             case static::DATE:
                 if (!Date::is_valid_date($value)) {
                     return null;

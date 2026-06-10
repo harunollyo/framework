@@ -289,11 +289,11 @@ class BelongsToMany extends Relation
      * Scopes the query by collecting parent keys and applying a where_in on the
      * foreign pivot key so all related models can be fetched at once.
      *
-     * @param array $models The parent models to constrain by
+     * @param Collection $models The parent models to constrain by
      * @return void No return value
      * @since 1.0.0
      */
-    public function add_eager_constraints(array $models)
+    public function add_eager_constraints(Collection $models)
     {
         $keys = [];
         foreach ($models as $model) {
@@ -319,31 +319,38 @@ class BelongsToMany extends Relation
      * collection to each parent under the relation name, defaulting to an
      * empty collection when none exist.
      *
-     * @param array $models The parent models receiving results
+     * @param Collection $models The parent models receiving results
      * @param mixed $results The related results including pivot aliases
      * @param string $relation The relation name on the parent
      * @return array The parent models with relations populated
      * @since 1.0.0
      */
-    public function match(array $models, $results, $relation)
+    public function match(Collection $models, $results, $relation)
     {
         $dictionary = [];
 
         foreach ($results as $result) {
             $pivot_key_name = "pivot_{$this->foreign_pivot_key}";
-            $key = $result->get_attribute($pivot_key_name);
+            $value = $result->get_attribute($pivot_key_name);
+            $key = $this->get_dictionary_key($value);
+
             if ($key === null) {
-                $key = $result->get_attribute($this->foreign_pivot_key);
+                // $key = $result->get_attribute($this->foreign_pivot_key);
+                continue;
             }
+
             if (!isset($dictionary[$key])) {
                 $dictionary[$key] = [];
             }
+
             $dictionary[$key][] = $this->migrate_pivot_attributes($result);
         }
 
         foreach ($models as $model) {
-            $key = $model->get_attribute($this->parent_key);
-            if (isset($dictionary[$key])) {
+            $value = $model->get_attribute($this->parent_key);
+            $key = $this->get_dictionary_key($value);
+
+            if ($key !== null && isset($dictionary[$key])) {
                 $model->relations[$relation] = collection($dictionary[$key]);
             } else {
                 $model->relations[$relation] = collection();

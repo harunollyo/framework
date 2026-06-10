@@ -2,6 +2,7 @@
 
 namespace Framework\Database\Query\Relations;
 
+use Framework\Collections\Collection;
 use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;
 
@@ -156,11 +157,11 @@ class BelongsTo extends Relation
      * Collects foreign key values from parents and scopes the query using a
      * where_in on the owner's key to fetch all owners in one query.
      *
-     * @param array $models The parent models to derive keys from
+     * @param Collection $models The parent models to derive keys from
      * @return void No return value
      * @since 1.0.0
      */
-    public function add_eager_constraints(array $models)
+    public function add_eager_constraints(Collection $models)
     {
         $keys = [];
         foreach ($models as $model) {
@@ -181,13 +182,13 @@ class BelongsTo extends Relation
      * Builds a dictionary by owner key and assigns the corresponding owner
      * model to each parent under the relation name.
      *
-     * @param array $models The parent models receiving owners
+     * @param Collection $models The parent models receiving owners
      * @param mixed $results The owner results fetched by the query
      * @param string $relation The relation name on the parent
      * @return array The parent models with owners assigned
      * @since 1.0.0
      */
-    public function match(array $models, $results, $relation)
+    public function match(Collection $models, $results, $relation)
     {
         $dictionary = [];
 

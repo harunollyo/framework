@@ -62,6 +62,13 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     protected $primary_key = 'id';
 
     /**
+     * The type of the primary key.
+     *
+     * @var string
+     */
+    protected $key_type = 'int';
+
+    /**
      * The model's loaded relationship instances.
      *
      * @var array
@@ -126,7 +133,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
         $this->boot_if_not_booted();
 
         $this->fill($attributes);
-        $this->original = $this->attributes;
+        $this->sync_original();
     }
 
     /**
@@ -278,6 +285,17 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     }
 
     /**
+     * Get the type of the primary key.
+     *
+     * @return string The type of the primary key
+     * @since 1.0.0
+     */
+    public function get_key_type()
+    {
+        return $this->key_type;
+    }
+
+    /**
      * Get the fillable attributes for the model.
      *
      * @return array The fillable attributes
@@ -341,13 +359,13 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      */
     public function new_instance($attributes = [], $exists = false)
     {
-        $model = new static;
+        $model = new static();
 
         $model->exists = $exists;
 
         $model->set_table($this->get_table());
         $model->merge_casts($this->casts);
-        $model->set_raw_attributes($attributes, true);
+        $model->fill($attributes);
 
         return $model;
     }
@@ -467,17 +485,21 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      */
     public function save()
     {
-        if ($this->timestamps) {
-            $this->update_timestamps();
-        }
+        $this->merge_attributes_from_cached_class_casts();
 
         if ($this->exists) {
-            return $this->is_dirty()
+            $saved = $this->is_dirty()
                 ? $this->perform_update()
                 : true;
         }
 
-        return $this->perform_insert();
+        $saved = $this->perform_insert();
+
+        if ($saved) {
+            $this->sync_original();
+        }
+
+        return $saved;
     }
 
     /**
@@ -493,11 +515,20 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      */
     protected function perform_insert()
     {
-        $query = static::query();
-        $id = $query->insert_get_id($this->attributes);
+        if ($this->uses_timestamps()) {
+            $this->update_timestamps();
+        }
 
-        $this->set_attribute($this->primary_key, $id);
-        $this->original = $this->attributes;
+        $query = static::query();
+
+        $attributes = $this->get_attributes_for_insert();
+
+        if (empty($attributes)) {
+            return true;
+        }
+
+        $newly_created_key_value = $query->insert_get_id($attributes);
+        $this->set_attribute($this->get_primary_key(), $newly_created_key_value);
 
         $this->exists = true;
         $this->was_recently_created = true;
@@ -517,18 +548,28 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      */
     protected function perform_update()
     {
+        if ($this->uses_timestamps()) {
+            $this->update_timestamps();
+        }
+
         $dirty = $this->get_dirty();
 
         if (empty($dirty)) {
             return true;
         }
 
-        $query = static::query()->where($this->primary_key, '=', $this->get_attribute($this->primary_key));
-        $result = $query->update($dirty);
+        static::query()
+            ->where($this->get_primary_key(), '=', $this->get_key_for_save_query())
+            ->update($dirty);
 
-        $this->original = $this->attributes;
+        $this->sync_changes();
 
-        return $result;
+        return true;
+    }
+
+    protected function get_key_for_save_query()
+    {
+        return $this->original[$this->get_primary_key()] ?? $this->get_primary_key_value();
     }
 
     /**
@@ -666,19 +707,44 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * sets both current and original states. Used by query results to produce
      * model instances.
      *
-     * @param mixed $data The source attributes as object or array
-     * @return static The hydrated model instance
+     * @param array $items The source attributes as object or array
+     * @return Collection The hydrated model instance
      * @since 1.0.0
      */
-    public function hydrate($attributes)
+    public function hydrate(array $items)
     {
-        if (is_object($attributes)) {
-            $attributes = get_object_vars($attributes);
-        }
+        $instance = $this->new_instance();
 
-        $instance = $this->new_instance($attributes, true);
+        return $instance->new_collection(array_map(function ($item) use ($instance) {
+            return $instance->new_for_hydration($item);
+        }, $items));
+    }
 
-        return $instance;
+    /**
+     * Create a new collection instance.
+     *
+     * @param array $items The items to seed the collection
+     * @return Collection The new collection instance
+     * @since 1.0.0
+     */ 
+    public function new_collection(array $items = [])
+    {
+        return new Collection($items);
+    }
+
+    /**
+     * Create a new model instance from a builder.
+     *
+     * @param array $attributes The item to create the model from
+     * @return Model The new model instance
+     * @since 1.0.0
+     */
+    public function new_for_hydration($attributes = [])
+    {
+        $model = $this->new_instance([], true);
+        $model->set_raw_attributes((array) $attributes, true);
+
+        return $model;
     }
 
 
@@ -702,7 +768,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
             is_string($relations) ? func_get_args() : $relations
         );
 
-        $query->eager_load_relations([$this]);
+        $query->eager_load_relations(new Collection([$this]));
 
         return $this;
     }
@@ -825,7 +891,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      */
     protected function get_primary_key_value()
     {
-        return $this->original[$this->get_primary_key()] ?? $this->get_attribute($this->get_primary_key());
+        return $this->get_attribute($this->get_primary_key());
     }
 
     /**
@@ -844,7 +910,6 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
             $this->relations_to_array()
         );
     }
-
 
     /**
      * Determine if the model has a named scope.
@@ -1012,45 +1077,6 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
         $this->offsetUnset($key);
     }
 
-    /**
-     * Resolve a relation value from a method when available.
-     *
-     * Attempts to call the relation method and retrieve its results if the
-     * method exists, returning null when it does not.
-     *
-     * @param string $key The relation method name
-     * @return mixed The relation results or null
-     * @since 1.0.0
-     */
-    protected function get_relation_value($key)
-    {
-        if (method_exists($this, $key)) {
-            return $this->get_relationship_from_method($key);
-        }
-
-        return null;
-    }
-
-    /**
-     * Invoke a relation method and store its results on the model.
-     *
-     * Ensures the returned value is a valid Relation instance, then queries
-     * and assigns the results to the relations array under the method name.
-     *
-     * @param string $method The relation method name to invoke
-     * @return mixed The loaded relation results or null when not a relation
-     * @since 1.0.0
-     */
-    protected function get_relationship_from_method($method)
-    {
-        $relation = $this->$method();
-
-        if (!$relation instanceof Relation) {
-            return null;
-        }
-
-        return $this->relations[$method] = $relation->get_results();
-    }
 
     /**
      * Dynamically call a method on the query builder.

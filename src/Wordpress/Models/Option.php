@@ -6,6 +6,8 @@ use Framework\Database\Query\Model;
 
 class Option extends Model
 {
+    protected $timestamps = false;
+
     protected $table = 'options';
 
     protected $primary_key = 'option_id';

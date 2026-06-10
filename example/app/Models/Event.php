@@ -2,6 +2,7 @@
 
 namespace Example\App\Models;
 
+use Example\App\Casts\AsSerialize;
 use Framework\Database\Query\Model;
 
 class Event extends Model
@@ -11,7 +12,7 @@ class Event extends Model
     protected $primary_key = 'id';
 
     protected $casts = [
-        'id' => 'integer',
+        'description' => AsSerialize::class,
     ];
 
     protected $fillable = [
@@ -24,4 +25,9 @@ class Event extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function speakers()
+    {
+        return $this->belongs_to_many(Speaker::class, 'framework_event_speaker');
+    }
 }

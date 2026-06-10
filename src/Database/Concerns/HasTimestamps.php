@@ -19,7 +19,7 @@ trait HasTimestamps
      *
      * @var bool
      */
-    public $timestamps = true;
+    protected $timestamps = true;
 
     /**
      * Determine if the model uses timestamps.

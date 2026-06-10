@@ -2,6 +2,7 @@
 
 namespace Framework\Database\Query\Relations;
 
+use Framework\Collections\Collection;
 use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;
 
@@ -166,11 +167,11 @@ class HasOne extends Relation
      * Collects parent local keys and scopes the query using a where_in to fetch
      * all related records in a single query.
      *
-     * @param array $models The array of parent models
+     * @param Collection $models The array of parent models
      * @return void No return value
      * @since 1.0.0
      */
-    public function add_eager_constraints(array $models)
+    public function add_eager_constraints(Collection $models)
     {
         $keys = [];
         foreach ($models as $model) {
@@ -191,13 +192,13 @@ class HasOne extends Relation
      * Builds a dictionary keyed by the foreign key so that each parent can be
      * assigned its corresponding related model instance.
      *
-     * @param array $models The parent models to receive results
+     * @param Collection $models The parent models to receive results
      * @param mixed $results The related results to match
      * @param string $relation The relation name on the parent
      * @return array The array of parent models with relations set
      * @since 1.0.0
      */
-    public function match(array $models, $results, $relation)
+    public function match(Collection $models, $results, $relation)
     {
         $dictionary = [];
 

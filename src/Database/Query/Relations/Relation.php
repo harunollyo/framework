@@ -8,6 +8,7 @@ use Framework\Collections\Collection;
 use Framework\Database\Query\Expression;
 use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;
+use InvalidArgumentException;
 
 /**
  * Base class for ORM relationship implementations.
@@ -104,11 +105,11 @@ abstract class Relation
      * Accepts the array of parent models and scopes the query to fetch all
      * related records needed in a single query using where-in style logic.
      *
-     * @param array $models The parent models to constrain by
+     * @param Collection $models The parent models to constrain by
      * @return void No return value
      * @since 1.0.0
      */
-    abstract public function add_eager_constraints(array $models);
+    abstract public function add_eager_constraints(Collection $models);
 
     /**
      * Get the aggregate query for the relation.
@@ -164,13 +165,13 @@ abstract class Relation
      * Builds a dictionary keyed by relation keys and assigns the results to
      * the appropriate relation property on each model.
      *
-     * @param array $models The parent models receiving results
+     * @param Collection $models The parent models receiving results
      * @param mixed $results The retrieved related results
      * @param string $relation The relation name on the parent
      * @return array The parent models with relations populated
      * @since 1.0.0
      */
-    abstract public function match(array $models, $results, $relation);
+    abstract public function match(Collection $models, $results, $relation);
 
     /**
      * Execute the relation query and return a collection.
@@ -381,6 +382,41 @@ abstract class Relation
         }
     }
 
+    /**
+     * Get the dictionary key for the attribute.
+     *
+     * @param mixed $attribute The attribute to get the key for
+     * @return string The dictionary key
+     * @since 1.0.0
+     */
+    protected function get_dictionary_key($attribute)
+    {
+        if (is_null($attribute) || is_string($attribute) || is_int($attribute)) {
+            return $attribute;
+        }
+
+        if (is_object($attribute)) {
+            if (method_exists($attribute, '__toString')) {
+                return $attribute->__toString();
+            }
+
+            throw new InvalidArgumentException('Attribute must be a string, integer, or object with a __toString method.');
+        }
+
+        return (string) $attribute;
+    }
+
+
+    /**
+     * Handle dynamic method calls into the query builder.
+     *
+     * @param string $method The method name
+     * @param array $parameters The method parameters
+     * 
+     * @return mixed The result of the method call
+     * 
+     * @since 1.0.0
+     */
     public function __call($method, $parameters)
     {
         if (!method_exists($this->query, $method)) {

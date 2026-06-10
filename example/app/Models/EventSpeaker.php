@@ -24,4 +24,14 @@ class EventSpeaker extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function event()
+    {
+        return $this->belongs_to(Event::class);
+    }
+
+    public function speaker()
+    {
+        return $this->belongs_to(Speaker::class);
+    }
 }

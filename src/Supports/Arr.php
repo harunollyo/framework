@@ -10,6 +10,7 @@ use Framework\Collections\Collection;
 use InvalidArgumentException;
 
 use function Framework\deep_get;
+use function Framework\value;
 
 /**
  * The array helper class.
@@ -126,6 +127,46 @@ class Arr
     public static function is_associative(array $array): bool
     {
         return array_keys($array) !== range(0, count($array) - 1);
+    }
+
+    /**
+     * Get a value from an array using a dot notation key.
+     *
+     * @param array $array The array to get the value from
+     * @param string $key The key to get the value from
+     * @param mixed $default The default value if the key does not exist
+     *
+     * @return mixed
+     * 
+     * @since 1.0.0
+     */
+    public static function get($array, $key, $default = null)
+    {
+        if (!static::accessible($array)) {
+            return value($default);
+        }
+
+        if (is_null($key)) {
+            return $array;
+        }
+
+        if (static::exists($array, $key)) {
+            return $array[$key];
+        }
+
+        if (!str_contains($key, '.')) {
+            return value($default);
+        }
+
+        foreach (explode('.', $key) as $segment) {
+            if (static::accessible($array) && static::exists($array, $segment)) {
+                $array = $array[$segment];
+            } else {
+                return value($default);
+            }
+        }
+
+        return $array;
     }
 
     /**

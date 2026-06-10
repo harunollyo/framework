@@ -19,12 +19,12 @@ class OptionManager
      * @param string $name The option key to set.
      * @param mixed $value The value to store for the option.
      * @param bool|null $autoload Whether to autoload the option.
-     * 
+     *
      * @return bool True if the value was updated, false otherwise.
      */
-    public function set(string $name, $value, $autoload = null)
+    public function set(string $name, $value, $autoload = null, $with_prefix = true)
     {
-        return \update_option($this->get_option_name($name), $value, $autoload);
+        return \update_option($this->get_option_name($name, $with_prefix), $value, $autoload);
     }
 
     /**
@@ -37,17 +37,23 @@ class OptionManager
      * @param mixed|null $default The default value to return if the option does not exist.
      * @return mixed The value of the option or the default value.
      */
-    public function get($name, $default = null)
+    public function get($name, $default = null, $with_prefix = true)
     {
-        $names = $this->get_option_name($name);
+        $must_be_array = is_array($name);
+
+        $names = $this->get_option_name($name, $with_prefix);
 
         $options = Option::query()->where_in('option_name', $names)->get();
 
         if ($options->is_empty()) {
-            return $this->refill_missing_keys_with_defaults([], $names, $default);
+            if (!$must_be_array) {
+                return $default;
+            }
+
+            return $this->refill_missing_keys_with_defaults([], $names, $default, $with_prefix);
         }
 
-        if ($options->count() === 1) {
+        if (!$must_be_array) {
             return $options->first()->option_value ?? $default;
         }
 
@@ -59,9 +65,9 @@ class OptionManager
             return is_null($value) ? $default : $value;
         })->all();
 
-        $results = $this->refill_missing_keys_with_defaults($results, $names, $default);
+        $results = $this->refill_missing_keys_with_defaults($results, $names, $default, $with_prefix);
 
-        return $this->rebase_keys($results);
+        return $this->rebase_keys($results, $with_prefix);
     }
 
     /**
@@ -70,14 +76,15 @@ class OptionManager
      * @param array $results The results to refill.
      * @param array $names The names to refill.
      * @param mixed $default The default value to refill.
+     * @param bool $with_prefix
      *
      * @return array The refilled results.
      */
-    protected function refill_missing_keys_with_defaults(array $results, array $names, $default)
+    protected function refill_missing_keys_with_defaults(array $results, array $names, $default, $with_prefix)
     {
         foreach ($names as $key) {
             if (!isset($results[$key])) {
-                $key_without_prefix = without_prefix($key);
+                $key_without_prefix = $with_prefix ? without_prefix($key) : $key;
                 $results[$key] = is_array($default) ? ($default[$key_without_prefix] ?? null) : $default;
             }
         }
@@ -89,12 +96,13 @@ class OptionManager
      * Rebase the keys of the results.
      *
      * @param array $results The results to rebase.
+     * @param bool $with_prefix
      * @return array The rebased results.
      */
-    protected function rebase_keys(array $results)
+    protected function rebase_keys(array $results, $with_prefix)
     {
-        return collection($results)->map(function($value, $key) {
-            $key_without_prefix = without_prefix($key);
+        return collection($results)->map(function($value, $key) use ($with_prefix) {
+            $key_without_prefix = $with_prefix ? without_prefix($key) : $key;
             return [$key_without_prefix => $value];
         })->collapse()->all();
     }
@@ -107,9 +115,9 @@ class OptionManager
      * @param string $name The option key to delete.
      * @return bool True if the option was deleted, false otherwise.
      */
-    public function delete(string $name)
+    public function delete(string $name, $with_prefix = true)
     {
-        return \delete_option($this->get_option_name($name));
+        return \delete_option($this->get_option_name($name, $with_prefix));
     }
 
     /**
@@ -120,10 +128,10 @@ class OptionManager
      * @param string|array $name The base option key.
      * @return array The namespaced option key.
      */
-    protected function get_option_name($name)
+    protected function get_option_name($name, $with_prefix = true)
     {
         $name = Arr::wrap($name);
 
-        return collection($name)->map(fn($name) => with_prefix($name))->all();
+        return collection($name)->map(fn($name) => $with_prefix ? with_prefix($name) : $name)->all();
     }
 }

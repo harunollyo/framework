@@ -10,9 +10,7 @@ class Speaker extends Model
 
     protected $primary_key = 'id';
 
-    protected $casts = [
-        'id' => 'integer',
-    ];
+    protected $casts = [];
 
     protected $fillable = [
         'name',
@@ -22,4 +20,9 @@ class Speaker extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function events()
+    {
+        return $this->belongs_to_many(Event::class, 'framework_event_speaker');
+    }
 }

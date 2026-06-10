@@ -21,7 +21,7 @@ class EagerLoader
     /**
      * The array of model instances that will have their relations eagerly loaded.
      *
-     * @var array $models
+     * @var Collection $models
      */
     protected $models;
 
@@ -39,12 +39,12 @@ class EagerLoader
      * Instances are typically constructed by the query builder when handling
      * with() calls to prefetch related data efficiently.
      *
-     * @param array $models The models that will receive related data
+     * @param Collection $models The models that will receive related data
      * @param array $relations The relation method names to eager load
      * @return void No return value
      * @since 1.0.0
      */
-    public function __construct(array $models, array $relations)
+    public function __construct(Collection $models, array $relations)
     {
         $this->models = $models;
         $this->relations = $relations;
@@ -84,11 +84,11 @@ class EagerLoader
      */
     protected function load_relation($relation_name, $nested_relations = null)
     {
-        if (empty($this->models)) {
+        if ($this->models->is_empty()) {
             return;
         }
 
-        $first_model = $this->models[0];
+        $first_model = $this->models->first();
 
         if (!method_exists($first_model, $relation_name)) {
             return;
@@ -126,7 +126,7 @@ class EagerLoader
      */
     protected function load_nested_relations($relation_name, $nested_relations)
     {
-        $related_models = [];
+        $related_models = new Collection();
 
         foreach ($this->models as $model) {
             if (!isset($model->relations[$relation_name])) {
@@ -136,14 +136,19 @@ class EagerLoader
             $related = $model->relations[$relation_name];
 
             if ($related instanceof Collection) {
-                $related = $related->all();
+                $related_models = $related_models->merge($related);
+                // $related = $related->all();
             }
 
-            if (is_array($related)) {
-                $related_models = array_merge($related_models, $related);
-            } elseif (is_object($related)) {
-                $related_models[] = $related;
+            if (is_object($related)) {
+                $related_models->push($related);
             }
+
+            // if (is_array($related)) {
+            //     $related_models = array_merge($related_models, $related);
+            // } elseif (is_object($related)) {
+            //     $related_models[] = $related;
+            // }
         }
 
         if (!empty($related_models)) {

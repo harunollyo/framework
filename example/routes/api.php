@@ -1,6 +1,7 @@
 <?php
 
-use Example\App\Http\Controllers\ExampleController;
+use Example\App\Http\Controllers\EventsController;
+use Example\App\Http\Controllers\SpeakersController;
 use Framework\Http\Request;
 use Framework\Route;
 
@@ -17,5 +18,10 @@ Route::get('/ping', function (Request $request) {
     ]);
 });
 
-Route::get('/example', [ExampleController::class, 'index']);
-Route::post('/example', [ExampleController::class, 'create']);
+Route::get('/events', [EventsController::class, 'index']);
+Route::post('/events', [EventsController::class, 'create']);
+
+Route::get('/speakers', [SpeakersController::class, 'index']);
+Route::get('/speakers/{speaker}', [SpeakersController::class, 'show']);
+Route::post('/speakers', [SpeakersController::class, 'create']);
+Route::put('/speakers/{speaker}', [SpeakersController::class, 'update']);
