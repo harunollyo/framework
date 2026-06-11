@@ -16,6 +16,10 @@ use Framework\Supports\Str;
 use Framework\Supports\Url;
 use Framework\Supports\Utils;
 
+use function Framework\Polyfill\array_key_first;
+use function Framework\Polyfill\array_key_last;
+use function Framework\Polyfill\is_iterable;
+
 if (!function_exists('Framework\app')) {
     /**
      * Get the container instance.

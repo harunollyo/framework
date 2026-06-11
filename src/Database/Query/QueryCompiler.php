@@ -81,7 +81,9 @@ class QueryCompiler
         $columns = $this->columnize(array_keys(reset($values)));
 
         $parameters = collection($values)
-            ->map(fn($record) => sprintf('(%s)', $this->parameterize($record)))
+            ->map(function ($record) {
+                return sprintf('(%s)', $this->parameterize($record));
+            })
             ->join(', ');
 
         return sprintf('insert into %s (%s) values %s', $table, $columns, $parameters);
@@ -119,7 +121,9 @@ class QueryCompiler
     protected function compile_update_columns(QueryBuilder $query, array $values)
     {
         return collection($values)
-            ->map(fn($value, $key) => $this->wrap($key) . ' = ' . $this->parameter($value))
+            ->map(function ($value, $key) {
+                return $this->wrap($key) . ' = ' . $this->parameter($value);
+            })
             ->join(', ');
     }
 
@@ -485,7 +489,9 @@ class QueryCompiler
     {
         $sql = $this->remove_leading_boolean(
             collection($query->havings)
-                ->map(fn($having) => $having['boolean'] . ' ' . $this->compile_having($having))
+                ->map(function ($having) {
+                    return $having['boolean'] . ' ' . $this->compile_having($having);
+                })
                 ->join(' ')
         );
 
@@ -830,9 +836,11 @@ class QueryCompiler
     protected function wrap_segments($segments)
     {
         return collection($segments)->map(
-            fn($segment, $key) => $key == 0 && count($segments) > 1
-                ? $this->wrap_table($segment)
-                : $this->wrap_value($segment)
+            function ($segment, $key) use ($segments) {
+                return $key == 0 && count($segments) > 1
+                    ? $this->wrap_table($segment)
+                    : $this->wrap_value($segment);
+            }
         )->join('.');
     }
 
@@ -1215,7 +1223,9 @@ class QueryCompiler
      */
     public function prepare_bindings_for_update($bindings, $values)
     {
-        $clean_bindings = collection($bindings)->filter(fn($_, $key) => !in_array($key, ['select', 'join'], true));
+        $clean_bindings = collection($bindings)->filter(function ($value, $key) {
+            return !in_array($key, ['select', 'join'], true);
+        });
 
         $values = Arr::flatten($values);
 
@@ -1237,7 +1247,9 @@ class QueryCompiler
      */
     public function prepare_bindings_for_delete($bindings)
     {
-        $clean_bindings = collection($bindings)->filter(fn($_, $key) => !in_array($key, ['select'], true));
+        $clean_bindings = collection($bindings)->filter(function ($value, $key) {
+            return !in_array($key, ['select'], true);
+        });
 
         return Arr::flatten($clean_bindings->all());
     }

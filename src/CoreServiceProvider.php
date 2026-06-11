@@ -36,7 +36,9 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(Response::class);
 
         if (class_exists(\Faker\Factory::class)) {
-            $this->app->singleton(\Faker\Factory::class, fn() => \Faker\Factory::create());
+            $this->app->singleton(\Faker\Factory::class, function () {
+                return \Faker\Factory::create();
+            });
         }
     }
 

@@ -177,7 +177,9 @@ abstract class CommandBase
 
         if (!$this->synopsis->is_empty()) {
             $args['synopsis'] = $this->synopsis->map(
-                fn(Synopsis $synopsis) => $synopsis->to_array()
+                function (Synopsis $synopsis) {
+                    return $synopsis->to_array();
+                }
             )->all();
         }
 

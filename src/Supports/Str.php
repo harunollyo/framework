@@ -6,6 +6,8 @@ use Framework\Sanitizer;
 use Framework\Supports\Traits\Macroable;
 use Traversable;
 
+use function Framework\Polyfill\str_starts_with;
+
 /**
  * A utility class for string manipulation and formatting.
  *
@@ -339,7 +341,9 @@ class Str
     {
         $pattern = '/(^|[' . preg_quote($separators, '/') . '])(\p{Ll})/u';
 
-        return preg_replace_callback($pattern, fn($matches) => $matches[1] . mb_strtoupper($matches[2]), $value);
+        return preg_replace_callback($pattern, function ($matches) {
+            return $matches[1] . mb_strtoupper($matches[2]);
+        }, $value);
     }
 
     /**
@@ -355,7 +359,9 @@ class Str
     {
         $words = mb_split('\s+', static::replace(['-', '_'], ' ', $value));
 
-        return implode(array_map(fn($word) => static::ucfirst($word), $words));
+        return implode(array_map(function ($word) {
+            return static::ucfirst($word);
+        }, $words));
     }
 
     /**

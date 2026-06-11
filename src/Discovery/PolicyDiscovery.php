@@ -9,6 +9,7 @@ use Framework\Supports\Facades\File;
 use function Framework\app;
 use function Framework\app_path;
 use function Framework\config_path;
+use function Framework\Polyfill\str_ends_with;
 
 class PolicyDiscovery implements Discoverable, Cacheable
 {

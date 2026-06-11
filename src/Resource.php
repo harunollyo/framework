@@ -10,8 +10,18 @@ use Framework\Supports\Arr;
 
 abstract class Resource implements Arrayable, Jsonable
 {
+    /**
+     * The resource instance.
+     *
+     * @var object|array
+     */
     protected $resource;
 
+    /**
+     * Create a new resource instance.
+     *
+     * @param object|array $resource The resource to create a new instance of.
+     */
     public function __construct($resource)
     {
         if (is_array($resource)) {
@@ -21,6 +31,11 @@ abstract class Resource implements Arrayable, Jsonable
         }
     }
 
+    /**
+     * Convert the resource to an array.
+     *
+     * @return array
+     */
     abstract public function to_array();
 
     /**
@@ -146,6 +161,8 @@ abstract class Resource implements Arrayable, Jsonable
      * way of accessing resource properties without having to explicitly call a method.
      *
      * @param string $name The name of the property to access.
+     * @param mixed $value The value to set.
+     *
      *
      * @return $this The current instance.
      */

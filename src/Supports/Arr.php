@@ -7,9 +7,12 @@ use Closure;
 use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;
 use Framework\Collections\Collection;
+use Framework\Polyfill\ArgumentCountError;
 use InvalidArgumentException;
 
 use function Framework\deep_get;
+use function Framework\Polyfill\array_first;
+use function Framework\Polyfill\str_contains;
 use function Framework\value;
 
 /**
@@ -45,6 +48,29 @@ class Arr
             default:
                 throw new InvalidArgumentException('Items cannot be represented by a scalar value.');
         }
+    }
+
+    /**
+     * Map the array by a callable function.
+     *
+     * @param array $array The array to map
+     * @param callable $callback The callable function for mapping
+     *
+     * @return array The mapped array
+     *
+     * @since 1.0.0
+     */
+    public static function map(array $array, callable $callback)
+    {
+        $keys = array_keys($array);
+
+        try {
+            $items = array_map($callback, $array, $keys);
+        } catch (ArgumentCountError $error) {
+            $items = array_map($callback, $array);
+        }
+
+        return array_combine($keys, $items);
     }
 
     /**
@@ -95,6 +121,44 @@ class Arr
     public static function where($array, callable $callback)
     {
         return array_filter($array, $callback, ARRAY_FILTER_USE_BOTH);
+    }
+
+    /**
+     * Reject the array by a callable function.
+     * The function will return a true/false value and the return value is false then the value will be rejected,
+     * otherwise kept.
+     *
+     * @param array $array The array to reject
+     * @param callable $callback The callable function for rejecting
+     *
+     * @return array The rejected array
+     * 
+     * @since 1.0.0
+     */
+    public static function reject($array, callable $callback)
+    {
+        return static::where($array, function ($value, $key) use ($callback) {
+            return !$callback($value, $key);
+        });
+    }
+
+    /**
+     * Accept the array by a callable function.
+     * The function will return a true/false value and the return value is true then the value will be accepted,
+     * otherwise rejected.
+     *
+     * @param array $array The array to accept
+     * @param callable $callback The callable function for accepting
+     *
+     * @return array The accepted array
+     * 
+     * @since 1.0.0
+     */
+    public static function accept($array, callable $callback)
+    {
+        return static::where($array, function ($value, $key) use ($callback) {
+            return $callback($value, $key);
+        });
     }
 
     /**
@@ -300,7 +364,7 @@ class Arr
             }
 
             if (is_array($array)) {
-                return reset($array);
+                return array_first($array);
             }
 
             foreach ($array as $item) {

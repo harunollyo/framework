@@ -4,6 +4,7 @@ namespace Framework\Validation\Rules;
 
 use Framework\Constants\DateTimeFormats;
 use DateTime;
+use Framework\Supports\Facades\Date;
 
 /**
  * Validates that the given value matches db date time format.
@@ -19,8 +20,9 @@ class DateTimeRule extends BaseRule
      */
     public function validate_rule()
     {
-        $date = DateTime::createFromFormat(DateTimeFormats::DB_DATETIME, $this->value);
-        return $date && $date->format(DateTimeFormats::DB_DATETIME) === $this->value;
+        $date = Date::createFromFormat(DateTimeFormats::DB_DATETIME, $this->value);
+
+        return $date && $date->isValid();
     }
 
     /**

@@ -6,6 +6,7 @@ use Framework\Supports\Facades\Guard;
 use Framework\Wordpress\UserMeta;
 use Exception;
 
+use function Framework\Polyfill\str_starts_with;
 use function Framework\with_prefix;
 
 /**

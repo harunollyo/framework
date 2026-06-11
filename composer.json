@@ -33,7 +33,8 @@
 			"Framework\\": "src/"
 		},
 		"files": [
-			"src/helpers.php"
+			"src/helpers.php",
+			"src/Polyfill/polyfill.php"
 		]
 	},
 	"autoload-dev": {
@@ -43,7 +44,7 @@
 	},
 	"config": {
 		"platform": {
-			"php": "7.4.33"
+			"php": "7.0.33"
 		}
 	},
 	"minimum-stability": "stable",

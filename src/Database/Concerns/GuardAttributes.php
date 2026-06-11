@@ -2,6 +2,8 @@
 
 namespace Framework\Database\Concerns;
 
+use function Framework\Polyfill\str_contains;
+
 trait GuardAttributes
 {
     /**

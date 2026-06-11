@@ -10,6 +10,7 @@ use Framework\Supports\Arr;
 use Framework\Supports\Str;
 
 use function Framework\collection;
+use function Framework\Polyfill\str_starts_with;
 
 trait RelationshipQueries
 {
@@ -126,7 +127,9 @@ trait RelationshipQueries
     public function with_where_has($relation, ?Closure $callback = null, $operator = '>=', $count = 1)
     {
         return $this->where_has($relation, $callback, $operator, $count)
-            ->with($callback ? [$relation => fn($query) => $callback($query)] : $relation);
+            ->with($callback ? [$relation => function ($query) use ($callback) {
+                return $callback($query);
+            }] : $relation);
     }
 
     /**
@@ -238,9 +241,11 @@ trait RelationshipQueries
     {
         return $this->where_relation($relation, $column, $operator, $value)
             ->with([
-                $relation => fn($query) => $column instanceof Closure
-                    ? $column($query)
-                    : $query->where($column, $operator, $value)
+                $relation => function ($query) use ($column, $operator, $value) {
+                    return $column instanceof Closure
+                        ? $column($query)
+                        : $query->where($column, $operator, $value);
+                }
             ]);
     }
 
@@ -372,7 +377,9 @@ trait RelationshipQueries
                 $function ? $function : null,
                 $column === '*' ? null : $this->get_compiler()->get_value($column),
             ])
-                ->filter(fn($value) => $value !== null)
+                ->filter(function ($value) {
+                    return $value !== null;
+                })
                 ->join('_');
 
             if ($function === 'exists') {

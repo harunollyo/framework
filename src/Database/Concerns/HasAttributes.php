@@ -1097,7 +1097,9 @@ trait HasAttributes
         }
 
         return collection(Arr::wrap($attributes))
-            ->some(fn($attribute) => array_key_exists($attribute, $changes));
+            ->some(function ($attribute) use ($changes) {
+                return array_key_exists($attribute, $changes);
+            });
     }
 
     /**

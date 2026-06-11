@@ -21,6 +21,7 @@ use ReflectionClass;
 
 use function Framework\app;
 use function Framework\collection;
+use function Framework\Polyfill\str_contains;
 
 /**
  * Provide an active record style base model for the Query Builder.
@@ -345,7 +346,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
         $columns = Arr::wrap($columns);
 
         return collection($columns)
-            ->map(fn($column) => $this->prepare_column($column))
+            ->map(function ($column) {
+                return $this->prepare_column($column);
+            })
             ->all();
     }
 

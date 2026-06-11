@@ -90,7 +90,9 @@ class Menu
             $properties[] = $this->parent_slug;
         }
 
-        return collection($properties)->every(fn($property) => !empty($property));
+        return collection($properties)->every(function ($property) {
+            return !empty($property);
+        });
     }
 
     /**

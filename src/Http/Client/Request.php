@@ -10,6 +10,7 @@ use Framework\Supports\Traits\Macroable;
 use RuntimeException;
 
 use function Framework\collection;
+use function Framework\Polyfill\str_contains;
 
 class Request
 {
@@ -666,10 +667,12 @@ class Request
                     return $item;
                 }
 
-                return collection($item)->map(fn($value) => [
-                    'name' => $key . '[]',
-                    'contents' => $value,
-                ])->all();
+                return collection($item)->map(function ($value) use ($key) {
+                    return [
+                        'name' => $key . '[]',
+                        'contents' => $value,
+                    ];
+                })->all();
             }
 
             return [

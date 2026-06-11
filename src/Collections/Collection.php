@@ -359,11 +359,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      */
     public function map(callable $callback)
     {
-        $results = [];
-        foreach ($this->items as $key => $item) {
-            $results[$key] = $callback($item, $key);
-        }
-        return new static($results);
+        return $this->new_instance(Arr::map($this->items, $callback));
     }
 
     /**
@@ -374,7 +370,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      */
     public function collapse()
     {
-        return new static(Arr::collapse($this->items));
+        return $this->new_instance(Arr::collapse($this->items));
     }
 
     /**
@@ -426,13 +422,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * 
      * @since 1.0.0
      */
-    public function reject($callback = true)
+    public function reject(callable $callback)
     {
-        return $this->filter(function ($value, $key) use ($callback) {
-            return is_callable($callback)
-                ? !$callback($value, $key)
-                : $value != $callback;
-        });
+        return $this->new_instance(Arr::reject($this->items, $callback));
     }
     
     /**
@@ -448,13 +440,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * 
      * @since 1.0.0
      */
-    public function accept($callback = true)
+    public function accept(callable $callback)
     {
-        return $this->filter(function ($value, $key) use ($callback) {
-            return is_callable($callback)
-                ? $callback($value, $key)
-                : $value == $callback;
-        });
+        return $this->new_instance(Arr::accept($this->items, $callback));
     }
 
     /**
@@ -632,9 +620,21 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      */
     public function merge($items)
     {
-        return new static(
-            array_merge($this->items, $this->get_arrayable_items($items))
-        );
+        return $this->new_instance(array_merge($this->items, $this->get_arrayable_items($items)));
+    }
+
+    /**
+     * Merge the collection with the given items recursively.
+     *
+     * @param mixed $items The items to merge with the collection
+     * 
+     * @return static A new collection containing the merged items
+     * 
+     * @since 1.0.0
+     */
+    public function merge_recursive($items)
+    {
+        return $this->new_instance(array_merge_recursive($this->items, $this->get_arrayable_items($items)));
     }
 
     /**
@@ -820,7 +820,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      */
     public function to_array()
     {
-        return $this->map(fn($item) => $item instanceof Arrayable ? $item->to_array() : $item)->all();
+        return $this->map(function ($item) {
+            return $item instanceof Arrayable ? $item->to_array() : $item;
+        })->all();
     }
 
     /**

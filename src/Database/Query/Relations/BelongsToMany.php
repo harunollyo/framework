@@ -8,6 +8,8 @@ use Framework\Database\Concerns\HasDictionary;
 use Framework\Database\Query\QueryBuilder;
 
 use function Framework\collection;
+use function Framework\Polyfill\str_contains;
+use function Framework\Polyfill\str_starts_with;
 
 /**
  * Define a many-to-many relation using a pivot table.
@@ -248,7 +250,9 @@ class BelongsToMany extends Relation
     protected function related_columns()
     {
         return collection($this->query->columns ? $this->query->columns : ['*'])
-            ->map(fn($column) => $this->prepare_related_column($column))
+            ->map(function ($column) {
+                return $this->prepare_related_column($column);
+            })
             ->all();
     }
 
@@ -287,8 +291,12 @@ class BelongsToMany extends Relation
             $this->foreign_pivot_key,
             $this->related_pivot_key,
             ...$this->pivot_columns
-        ], fn($column) => $column !== null))
-            ->map(fn($column) => $this->qualify_pivot_column($column) . ' as pivot_' . $column)
+        ], function ($column) {
+            return $column !== null;
+        }))
+            ->map(function ($column) {
+                return $this->qualify_pivot_column($column) . ' as pivot_' . $column;
+            })
             ->all();
     }
 

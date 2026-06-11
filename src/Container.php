@@ -83,7 +83,9 @@ class Container implements ContainerContract
     public function bind(string $name, ?Closure $resolver = null)
     {
         if (is_null($resolver)) {
-            $resolver = fn(Container $app, $params) => $app->autowire($name, $params);
+            $resolver = function (Container $app, $params) use ($name) {
+                return $app->autowire($name, $params);
+            };
         }
 
         $this->bindings[$name] = [
@@ -102,7 +104,9 @@ class Container implements ContainerContract
     public function singleton(string $name, ?Closure $resolver = null)
     {
         if (is_null($resolver)) {
-            $resolver = fn(Container $app, $params) => $app->autowire($name, $params);
+            $resolver = function (Container $app, $params) use ($name) {
+                return $app->autowire($name, $params);
+            };
         }
 
         $this->bindings[$name] = [

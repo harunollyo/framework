@@ -22,6 +22,7 @@ use Framework\Supports\Traits\Macroable;
 use InvalidArgumentException;
 
 use function Framework\collection;
+use function Framework\Polyfill\str_contains;
 use function Framework\tap;
 use function Framework\value;
 
@@ -2455,7 +2456,9 @@ class QueryBuilder
     {
         $where_booleans = collection($where_slice)->pluck('boolean');
 
-        if ($where_booleans->contains(fn($operator) => str_contains($operator, 'or'))) {
+        if ($where_booleans->contains(function ($operator) {
+            return str_contains($operator, 'or');
+        })) {
             $query->wheres[] = $this->create_nested_where(
                 $where_slice,
                 str_replace(' not', '', $where_booleans->first())
@@ -2549,7 +2552,9 @@ class QueryBuilder
 
         $items = $this->once_with_columns(
             Arr::wrap($columns),
-            fn() => $this->run_select()
+            function () {
+                return $this->run_select();
+            }
         ) ?? [];
 
         if (!$this->model) {
@@ -2572,7 +2577,9 @@ class QueryBuilder
     {
         if (!empty($this->relations) && !empty($models) && static::$should_resolve_relations) {
             $models = Relation::without_constraints(
-                fn() => (new EagerLoader($models, $this->relations))->load()
+                function () use ($models) {
+                    return (new EagerLoader($models, $this->relations))->load();
+                }
             );
         }
 
@@ -3484,7 +3491,9 @@ class QueryBuilder
         }
 
         return collection($this->orders)
-            ->filter(fn($order) => $order['column'] !== $column)
+            ->filter(function ($order) use ($column) {
+                return $order['column'] !== $column;
+            })
             ->values()
             ->all();
     }
@@ -3782,7 +3791,9 @@ class QueryBuilder
     public function clean_bindings(array $bindings)
     {
         return collection($bindings)
-            ->filter(fn($binding) => !$binding instanceof Expression)
+            ->filter(function ($binding) {
+                return !$binding instanceof Expression;
+            })
             ->values()
             ->all();
     }

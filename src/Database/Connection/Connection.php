@@ -15,6 +15,7 @@ use Exception;
 use RuntimeException;
 
 use function Framework\collection;
+use function Framework\Polyfill\str_contains;
 
 /**
  * Manage a shared PDO database connection.
