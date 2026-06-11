@@ -8,7 +8,6 @@ use Framework\Collections\Collection;
 use Framework\Database\Query\Expression;
 use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;
-use InvalidArgumentException;
 
 /**
  * Base class for ORM relationship implementations.
@@ -171,7 +170,7 @@ abstract class Relation
      * @return array The parent models with relations populated
      * @since 1.0.0
      */
-    abstract public function match(Collection $models, $results, $relation);
+    abstract public function match(Collection $models, Collection $results, $relation);
 
     /**
      * Execute the relation query and return a collection.
@@ -194,6 +193,7 @@ abstract class Relation
      * return a single related model instance.
      *
      * @return mixed The first related model or null when none
+     * 
      * @since 1.0.0
      */
     public function first($columns = ['*'])
@@ -211,7 +211,9 @@ abstract class Relation
      * @param mixed $operator The comparison operator or value when two args
      * @param mixed $value The value to compare against when operator provided
      * @param string $boolean The boolean operator to use
+     * 
      * @return $this The relation instance for method chaining
+     * 
      * @since 1.0.0
      */
     public function where($column, $operator = null, $value = null, $boolean = 'and')
@@ -228,7 +230,9 @@ abstract class Relation
      *
      * @param string $column The column to filter
      * @param array $values The list of allowed values
+     * 
      * @return $this The relation instance for method chaining
+     * 
      * @since 1.0.0
      */
     public function where_in($column, array $values, $boolean = 'and', $not = false)
@@ -245,7 +249,9 @@ abstract class Relation
      *
      * @param string $column The column to sort by
      * @param string $direction The direction, ASC or DESC
+     * 
      * @return $this The relation instance for method chaining
+     * 
      * @since 1.0.0
      */
     public function order_by($column, $direction = 'ASC')
@@ -261,7 +267,9 @@ abstract class Relation
      * fluent chaining behavior.
      *
      * @param int $limit The maximum number of records to return
+     * 
      * @return $this The relation instance for method chaining
+     * 
      * @since 1.0.0
      */
     public function limit($limit)
@@ -277,7 +285,9 @@ abstract class Relation
      * the relation instance to continue chaining.
      *
      * @param int $offset The number of records to skip
+     * 
      * @return $this The relation instance for method chaining
+     * 
      * @since 1.0.0
      */
     public function offset($offset)
@@ -293,6 +303,7 @@ abstract class Relation
      * cases beyond the convenience methods provided on the relation.
      *
      * @return QueryBuilder The relation's query builder instance
+     * 
      * @since 1.0.0
      */
     public function get_query()
@@ -307,6 +318,7 @@ abstract class Relation
      * constructing queries and hydrating results.
      *
      * @return Model The related model instance
+     * 
      * @since 1.0.0
      */
     public function get_related()
@@ -321,6 +333,7 @@ abstract class Relation
      * constructing custom constraints or accessing parent keys.
      *
      * @return Model The parent model instance
+     * 
      * @since 1.0.0
      */
     public function get_parent()
@@ -335,6 +348,7 @@ abstract class Relation
      * This is used by with_count() to match count results back to parent models.
      *
      * @return string The local key name
+     * 
      * @since 1.0.0
      */
     abstract public function get_local_key();
@@ -343,7 +357,9 @@ abstract class Relation
      * Get a hash for the relation count query.
      *
      * @param bool $increment_join_count Whether to increment the join count
+     * 
      * @return string The hash for the relation count query
+     * 
      * @since 1.0.0
      */
     public function get_relation_count_hash($increment_join_count = false)
@@ -355,7 +371,9 @@ abstract class Relation
      * Qualify a column name with the related table name.
      *
      * @param string $key The column name to qualify
+     * 
      * @return string The qualified column name
+     * 
      * @since 1.0.0
      */
     public function qualify_column(string $key)
@@ -367,7 +385,9 @@ abstract class Relation
      * Temporarily disable constraints for the duration of the callback.
      *
      * @param Closure $callback The callback to execute with constraints disabled
+     * 
      * @return mixed The return value of the callback
+     * 
      * @since 1.0.0
      */
     public static function without_constraints(Closure $callback)
@@ -380,30 +400,6 @@ abstract class Relation
         } finally {
             static::$constraints = $previous;
         }
-    }
-
-    /**
-     * Get the dictionary key for the attribute.
-     *
-     * @param mixed $attribute The attribute to get the key for
-     * @return string The dictionary key
-     * @since 1.0.0
-     */
-    protected function get_dictionary_key($attribute)
-    {
-        if (is_null($attribute) || is_string($attribute) || is_int($attribute)) {
-            return $attribute;
-        }
-
-        if (is_object($attribute)) {
-            if (method_exists($attribute, '__toString')) {
-                return $attribute->__toString();
-            }
-
-            throw new InvalidArgumentException('Attribute must be a string, integer, or object with a __toString method.');
-        }
-
-        return (string) $attribute;
     }
 
 

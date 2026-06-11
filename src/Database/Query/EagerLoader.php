@@ -94,9 +94,7 @@ class EagerLoader
             return;
         }
 
-        /**
-         * @var  Relation
-         */
+        /** @var  Relation */
         $relation = $first_model->$relation_name();
 
         $relation->add_eager_constraints($this->models);
@@ -109,7 +107,7 @@ class EagerLoader
 
         $results = $relation->get();
 
-        $this->models = $relation->match($this->models, $results->all(), $relation_name);
+        $this->models = $relation->match($this->models, $results, $relation_name);
 
         if (!empty($nested_relations) && !$results->is_empty() && !$callback instanceof Closure) {
             $this->load_nested_relations($relation_name, $nested_relations);

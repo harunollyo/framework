@@ -3,6 +3,7 @@
 namespace Framework\Database\Query\Relations;
 
 use Framework\Collections\Collection;
+use Framework\Database\Concerns\HasDictionary;
 use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;
 
@@ -17,6 +18,8 @@ use Framework\Database\Query\QueryBuilder;
  */
 class BelongsTo extends Relation
 {
+    use HasDictionary;
+
     /**
      * The foreign key on the parent model that references the owner model.
      *
@@ -183,28 +186,50 @@ class BelongsTo extends Relation
      * model to each parent under the relation name.
      *
      * @param Collection $models The parent models receiving owners
-     * @param mixed $results The owner results fetched by the query
+     * @param Collection<string, Model> $results The owner results fetched by the query
      * @param string $relation The relation name on the parent
-     * @return array The parent models with owners assigned
+     * 
+     * @return Collection The parent models with owners assigned
+     * 
      * @since 1.0.0
      */
-    public function match(Collection $models, $results, $relation)
+    public function match(Collection $models, Collection $results, $relation)
     {
-        $dictionary = [];
-
-        foreach ($results as $result) {
-            $key = $result->get_attribute($this->owner_key);
-            $dictionary[$key] = $result;
-        }
+        $dictionary = $this->build_dictionary($results);
 
         foreach ($models as $model) {
-            $key = $model->get_attribute($this->foreign_key);
-            if (isset($dictionary[$key])) {
-                $model->relations[$relation] = $dictionary[$key];
+            $attribute = $this->get_dictionary_key($model->get_attribute($this->foreign_key));
+
+            if ($attribute !== null && isset($dictionary[$attribute])) {
+                $model->set_relation($relation, $dictionary[$attribute]);
             }
         }
 
         return $models;
+    }
+
+    /**
+     * Build the dictionary for the relation from the results.
+     *
+     * @param Collection<string, Model> $results The related results
+     * 
+     * @return array The dictionary
+     * 
+     * @since 1.0.0
+     */
+    protected function build_dictionary(Collection $results)
+    {
+        $dictionary = [];
+
+        foreach ($results as $result) {
+            $attribute = $this->get_dictionary_key($result->get_attribute($this->owner_key));
+            
+            if ($attribute !== null) {
+                $dictionary[$attribute] = $result;
+            }
+        }
+
+        return $dictionary;
     }
 
     /**

@@ -18,7 +18,9 @@ trait HasRelationships
      * @param string $related The related model class name
      * @param mixed $foreign_key The foreign key name on the related model
      * @param mixed $local_key The local key name on the parent model
+     * 
      * @return HasOne The relation instance
+     * 
      * @since 1.0.0
      */
     protected function has_one($related, $foreign_key = null, $local_key = null)
@@ -39,7 +41,9 @@ trait HasRelationships
      * @param string $related The related model class name
      * @param mixed $foreign_key The foreign key name on the related model
      * @param mixed $local_key The local key name on the parent model
+     * 
      * @return HasMany The relation instance
+     * 
      * @since 1.0.0
      */
     protected function has_many($related, $foreign_key = null, $local_key = null)
@@ -60,7 +64,9 @@ trait HasRelationships
      * @param string $related The related model class name
      * @param mixed $foreign_key The foreign key name on this model
      * @param mixed $owner_key The referenced key name on the related model
+     * 
      * @return BelongsTo The relation instance
+     * 
      * @since 1.0.0
      */
     protected function belongs_to($related, $foreign_key = null, $owner_key = null)
@@ -85,7 +91,9 @@ trait HasRelationships
      * @param mixed $related_pivot_key The foreign key for related on pivot
      * @param mixed $parent_key The local key on this model
      * @param mixed $related_key The key on the related model
+     * 
      * @return BelongsToMany The relation instance
+     * 
      * @since 1.0.0
      */
     protected function belongs_to_many($related, $pivot_table = null, $foreign_pivot_key = null, $related_pivot_key = null, $parent_key = null, $related_key = null)
@@ -111,5 +119,22 @@ trait HasRelationships
             $parent_key,
             $related_key
         );
+    }
+
+    /**
+     * Set a relation on the model.
+     *
+     * @param string $relation The relation name
+     * @param mixed $value The value to set
+     * 
+     * @return $this The model instance
+     * 
+     * @since 1.0.0
+     */
+    public function set_relation($relation, $value)
+    {
+        $this->relations[$relation] = $value;
+
+        return $this;
     }
 }

@@ -3,6 +3,7 @@
 namespace Framework\Database\Query\Relations;
 
 use Framework\Collections\Collection;
+use Framework\Database\Concerns\HasDictionary;
 use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;
 
@@ -17,6 +18,8 @@ use Framework\Database\Query\QueryBuilder;
  */
 class HasOne extends Relation
 {
+    use HasDictionary;
+
     /**
      * The foreign key on the related model that references the parent model.
      *
@@ -41,7 +44,9 @@ class HasOne extends Relation
      * @param Model $parent The parent model instance
      * @param mixed $foreign_key The related table's foreign key
      * @param mixed $local_key The parent's local key
+     * 
      * @return void No return value
+     * 
      * @since 1.0.0
      */
     public function __construct(Model $related, Model $parent, $foreign_key, $local_key)
@@ -60,6 +65,7 @@ class HasOne extends Relation
      * is retrieved.
      *
      * @return void No return value
+     * 
      * @since 1.0.0
      */
     public function add_constraints()
@@ -78,7 +84,9 @@ class HasOne extends Relation
      * @param QueryBuilder $query The query builder instance
      * @param QueryBuilder $parent The parent query builder instance
      * @param array $columns The columns to select
+     * 
      * @return QueryBuilder The aggregate query builder
+     * 
      * @since 1.0.0
      */
     public function get_relation_existence_query(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
@@ -96,7 +104,9 @@ class HasOne extends Relation
      * @param QueryBuilder $query The query builder instance
      * @param QueryBuilder $parent The parent query builder instance
      * @param array $columns The columns to select
+     * 
      * @return QueryBuilder The aggregate query builder
+     * 
      * @since 1.0.0
      */
     public function get_relation_existence_query_for_self_relation(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
@@ -116,6 +126,7 @@ class HasOne extends Relation
      * Get the existence compare key for the relation.
      *
      * @return string The existence compare key
+     * 
      * @since 1.0.0
      */
     public function get_existence_compare_key()
@@ -127,6 +138,7 @@ class HasOne extends Relation
      * Get the qualified parent key name.
      *
      * @return string The qualified parent key name
+     * 
      * @since 1.0.0
      */
     public function get_qualified_parent_key_name()
@@ -138,6 +150,7 @@ class HasOne extends Relation
      * Get the foreign key name.
      *
      * @return string The foreign key name
+     * 
      * @since 1.0.0
      */
     public function get_foreign_key_name()
@@ -154,6 +167,7 @@ class HasOne extends Relation
      * correspond to the one related record for the parent.
      *
      * @return mixed The related model instance or null if not found
+     * 
      * @since 1.0.0
      */
     public function get_results()
@@ -169,6 +183,7 @@ class HasOne extends Relation
      *
      * @param Collection $models The array of parent models
      * @return void No return value
+     * 
      * @since 1.0.0
      */
     public function add_eager_constraints(Collection $models)
@@ -195,26 +210,48 @@ class HasOne extends Relation
      * @param Collection $models The parent models to receive results
      * @param mixed $results The related results to match
      * @param string $relation The relation name on the parent
+     * 
      * @return array The array of parent models with relations set
+     * 
      * @since 1.0.0
      */
     public function match(Collection $models, $results, $relation)
     {
-        $dictionary = [];
-
-        foreach ($results as $result) {
-            $key = $result->get_attribute($this->foreign_key);
-            $dictionary[$key] = $result;
-        }
+        $dictionary = $this->build_dictionary($results);
 
         foreach ($models as $model) {
-            $key = $model->get_attribute($this->local_key);
-            if (isset($dictionary[$key])) {
-                $model->relations[$relation] = $dictionary[$key];
+            $attribute = $this->get_dictionary_key($model->get_attribute($this->local_key));
+
+            if ($attribute !== null && isset($dictionary[$attribute])) {
+                $model->set_relation($relation, $dictionary[$attribute]);
             }
         }
 
         return $models;
+    }
+
+    /**
+     * Build the dictionary for the relation from the results.
+     *
+     * @param Collection<string, Model> $results The related results
+     * 
+     * @return array The dictionary
+     * 
+     * @since 1.0.0
+     */
+    protected function build_dictionary(Collection $results)
+    {
+        $dictionary = [];
+
+        foreach ($results as $result) {
+            $attribute = $this->get_dictionary_key($result->get_attribute($this->foreign_key));
+
+            if ($attribute !== null) {
+                $dictionary[$attribute] = $result;
+            }
+        }
+
+        return $dictionary;
     }
 
     /**
@@ -223,6 +260,7 @@ class HasOne extends Relation
      * Returns the key on the parent model that is used to match related records.
      *
      * @return string The local key name
+     * 
      * @since 1.0.0
      */
     public function get_local_key()

@@ -2,16 +2,8 @@
 
 namespace Example\App\Http\Controllers;
 
-use Example\App\Http\Requests\ExampleRequest;
 use Example\App\Models\Event;
 use Framework\Http\Request;
-use Example\App\Models\Post;
-use Framework\Supports\Facades\DB;
-use Framework\Supports\Facades\Guard;
-use Framework\Supports\Facades\Option;
-
-use function Framework\app;
-use function Framework\collection;
 use function Framework\response;
 
 class EventsController

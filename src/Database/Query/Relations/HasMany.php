@@ -4,6 +4,7 @@ namespace Framework\Database\Query\Relations;
 
 use Framework\Database\Query\Model;
 use Framework\Collections\Collection;
+use Framework\Database\Concerns\HasDictionary;
 use Framework\Database\Query\QueryBuilder;
 
 use function Framework\collection;
@@ -19,6 +20,8 @@ use function Framework\collection;
  */
 class HasMany extends Relation
 {
+    use HasDictionary;
+
     /**
      * The foreign key on the related model that references the parent model.
      *
@@ -43,7 +46,9 @@ class HasMany extends Relation
      * @param Model $parent The parent model instance
      * @param mixed $foreign_key The related table's foreign key
      * @param mixed $local_key The parent's local key
+     * 
      * @return void No return value
+     * 
      * @since 1.0.0
      */
     public function __construct(Model $related, Model $parent, $foreign_key, $local_key)
@@ -62,6 +67,7 @@ class HasMany extends Relation
      * retrieved.
      *
      * @return void No return value
+     * 
      * @since 1.0.0
      */
     public function add_constraints()
@@ -122,6 +128,7 @@ class HasMany extends Relation
      * Get the existence compare key for the relation.
      *
      * @return string The existence compare key
+     * 
      * @since 1.0.0
      */
     public function get_existence_compare_key()
@@ -133,6 +140,7 @@ class HasMany extends Relation
      * Get the qualified parent key name.
      *
      * @return string The qualified parent key name
+     * 
      * @since 1.0.0
      */
     public function get_qualified_parent_key_name()
@@ -144,6 +152,7 @@ class HasMany extends Relation
      * Get the foreign key name.
      *
      * @return string The foreign key name
+     * 
      * @since 1.0.0
      */
     public function get_foreign_key_name()
@@ -157,6 +166,7 @@ class HasMany extends Relation
      * Get the qualified foreign key name.
      *
      * @return string The qualified foreign key name
+     * 
      * @since 1.0.0
      */
     public function get_qualified_foreign_key_name()
@@ -170,6 +180,7 @@ class HasMany extends Relation
      * Returns a collection of child models matching the applied constraints.
      *
      * @return Collection The collection of related models
+     * 
      * @since 1.0.0
      */
     public function get_results()
@@ -184,14 +195,18 @@ class HasMany extends Relation
      * all required children in a single query.
      *
      * @param Collection $models The parent models
+     * 
      * @return void No return value
+     * 
      * @since 1.0.0
      */
     public function add_eager_constraints(Collection $models)
     {
         $keys = [];
+
         foreach ($models as $model) {
             $key = $model->get_attribute($this->local_key);
+
             if ($key !== null) {
                 $keys[] = $key;
             }
@@ -209,37 +224,52 @@ class HasMany extends Relation
      * parent under the relation name, defaulting to an empty collection when
      * none are present.
      *
-     * @param Collection $models The parent models to receive results
-     * @param mixed $results The related results to match
+     * @param Collection<string, Model> $models The parent models to receive results
+     * @param Collection<string, Model> $results The related results to match
      * @param string $relation The relation name on the parent
-     * @return array The array of parent models with relations set
+     * 
+     * @return Collection The parent models with relations set
+     * 
      * @since 1.0.0
      */
-    public function match(Collection $models, $results, $relation)
+    public function match(Collection $models, Collection $results, $relation)
     {
-        $dictionary = [];
-
-        foreach ($results as $result) {
-            $key = $result->get_attribute($this->foreign_key);
-
-            if (!isset($dictionary[$key])) {
-                $dictionary[$key] = [];
-            }
-
-            $dictionary[$key][] = $result;
-        }
+        $dictionary = $this->build_dictionary($results);
 
         foreach ($models as $model) {
-            $key = $model->get_attribute($this->local_key);
+            $attribute = $this->get_dictionary_key($model->get_attribute($this->local_key));
 
-            if (isset($dictionary[$key])) {
-                $model->relations[$relation] = collection($dictionary[$key]);
-            } else {
-                $model->relations[$relation] = collection();
+            if ($attribute !== null && isset($dictionary[$attribute])) {
+                $model->set_relation($relation, new Collection($dictionary[$attribute]));
             }
         }
 
         return $models;
+    }
+
+    /**
+     * Build the dictionary for the relation from the results.
+     *
+     * @param Collection<string, Model> $results The related results
+     * 
+     * @return array The dictionary
+     * 
+     * @since 1.0.0
+     */
+    protected function build_dictionary(Collection $results)
+    {
+        $dictionary = [];
+
+        foreach ($results as $result) {
+            $attribute = $this->get_dictionary_key($result->get_attribute($this->foreign_key));
+
+            if ($attribute !== null && isset($dictionary[$attribute])) {
+                $dictionary[$attribute] ??= [];
+                $dictionary[$attribute][] = $result;
+            }
+        }
+
+        return $dictionary;
     }
 
     /**
@@ -249,7 +279,9 @@ class HasMany extends Relation
      * delegates to the related model's create method to persist the record.
      *
      * @param array $attributes The attributes for the new child model
+     * 
      * @return Model The created related model instance
+     * 
      * @since 1.0.0
      */
     public function create(array $attributes)
@@ -267,7 +299,9 @@ class HasMany extends Relation
      * Set the foreign key attribute for the given attributes array.
      *
      * @param array $attributes The attributes array to modify
+     * 
      * @return array The modified attributes array
+     * 
      * @since 1.0.0
      */
     protected function set_foreign_attributes_for_create(array $attributes)
@@ -284,7 +318,9 @@ class HasMany extends Relation
      * for each set of attributes and adding it to the models array.
      *
      * @param array $attributes The attributes for the new child models
+     * 
      * @return array<Model> The array of created related models
+     * 
      * @since 1.0.0
      */
     public function create_many(array $attributes)
@@ -308,6 +344,7 @@ class HasMany extends Relation
      * Returns the key on the parent model that is used to match related records.
      *
      * @return string The local key name
+     * 
      * @since 1.0.0
      */
     public function get_local_key()
