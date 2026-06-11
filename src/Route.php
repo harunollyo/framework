@@ -17,6 +17,8 @@ use ReflectionNamedType;
 use WP_REST_Request;
 
 use function Framework\app;
+use function Framework\Polyfill\array_first;
+use function Framework\Polyfill\array_last;
 
 /**
  * Handles route registration and middleware for the REST API.
@@ -348,7 +350,7 @@ class Route
     public function apply_group_options()
     {
         if (!empty(static::$group_stack)) {
-            $group = end(static::$group_stack);
+            $group = array_last(static::$group_stack);
 
             if (!empty($group['prefix'])) {
                 $this->endpoint = rtrim($group['prefix'], '/') . '/' . ltrim($this->endpoint, '/');
@@ -740,7 +742,7 @@ class Route
                 $dependencies = $this->resolve_method_dependencies($controller_instance, $method);
                 $requests = $this->resolve_requests($dependencies['requests'], $rest_request);
 
-                $first_request = reset($requests);
+                $first_request = array_first($requests);
                 $request_position = $first_request['position'];
                 $request = $first_request['resolved'];
 

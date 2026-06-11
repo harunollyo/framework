@@ -14,6 +14,8 @@ use InvalidArgumentException;
 use Iterator;
 use JsonSerializable;
 
+use function Framework\Polyfill\array_last;
+
 /**
  * Represent a simple iterable collection of items.
  *
@@ -225,7 +227,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      */
     public function last()
     {
-        return !empty($this->items) ? end($this->items) : null;
+        return !empty($this->items) ? array_last($this->items) : null;
     }
 
     /**

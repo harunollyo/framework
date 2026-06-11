@@ -28,6 +28,35 @@ if (!function_exists('Framework\Polyfill\array_first')) {
     }
 }
 
+if (!function_exists('Framework\Polyfill\array_last')) {
+    /**
+     * Get the last element of an array.
+     *
+     * @param array $array The array to get the last element from
+     *
+     * @return mixed|null The last element of the array or null if empty
+     *
+     * @since 1.0.0
+     */
+    function array_last(array $array) {
+        if (function_exists('\array_last')) {
+            return \array_last($array);
+        }
+
+        if (empty($array)) {
+            return null;
+        }
+
+        $last = null;
+
+        foreach ($array as $value) {
+            $last = $value;
+        }
+
+        return $last;
+    }
+}
+
 if (!function_exists('Framework\Polyfill\is_iterable')) {
     /**
      * Determine if the given value is iterable.

@@ -22,6 +22,8 @@ use Framework\Supports\Traits\Macroable;
 use InvalidArgumentException;
 
 use function Framework\collection;
+use function Framework\Polyfill\array_first;
+use function Framework\Polyfill\array_last;
 use function Framework\Polyfill\str_contains;
 use function Framework\tap;
 use function Framework\value;
@@ -607,7 +609,7 @@ class QueryBuilder
     {
         $result = (array) $this->first([$column]);
 
-        return count($result) > 0 ? reset($result) : null;
+        return count($result) > 0 ? array_first($result) : null;
     }
 
     /**
@@ -2730,7 +2732,7 @@ class QueryBuilder
         $separator = str_contains(strtolower($column_string), ' as ') ? ' as ' : '\.';
         $parts = Str::split($separator, $column_string);
 
-        return end($parts);
+        return array_last($parts);
     }
 
     /**
@@ -2991,7 +2993,7 @@ class QueryBuilder
             return true;
         }
 
-        if (!is_array(reset($values))) {
+        if (!is_array(array_first($values))) {
             $values = [$values];
         } else {
             foreach ($values as $key => $value) {
@@ -3137,12 +3139,12 @@ class QueryBuilder
             return 0;
         }
 
-        if (!is_array(reset($values))) {
+        if (!is_array(array_first($values))) {
             $values = [$values];
         }
 
         if (is_null($update)) {
-            $update = array_keys(reset($values));
+            $update = array_keys(array_first($values));
         }
 
         return $this->perform_upsert(
@@ -3992,7 +3994,7 @@ class QueryBuilder
     {
         $flatten = Arr::flatten($value);
 
-        return is_array($value) ? reset($flatten) : $value;
+        return is_array($value) ? array_first($flatten) : $value;
     }
 
     /**

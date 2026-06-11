@@ -8,6 +8,8 @@ use Framework\Database\Concerns\HasDictionary;
 use Framework\Database\Query\QueryBuilder;
 
 use function Framework\collection;
+use function Framework\Polyfill\array_first;
+use function Framework\Polyfill\array_last;
 
 /**
  * Define a one-to-many relation between parent and related models.
@@ -159,7 +161,7 @@ class HasMany extends Relation
     {
         $segments = explode('.', $this->get_qualified_foreign_key_name());
 
-        return end($segments);
+        return array_last($segments);
     }
 
     /**
@@ -325,7 +327,7 @@ class HasMany extends Relation
      */
     public function create_many(array $attributes)
     {
-        if (!is_array(reset($attributes))) {
+        if (!is_array(array_first($attributes))) {
             $attributes = [$attributes];
         }
 

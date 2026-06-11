@@ -6,6 +6,8 @@ use Closure;
 use Framework\Collections\Collection;
 use Framework\Database\Query\Relations\Relation;
 
+use function Framework\Polyfill\array_first;
+
 /**
  * Eager load one or more relations for a set of models.
  *
@@ -99,7 +101,7 @@ class EagerLoader
 
         $relation->add_eager_constraints($this->models);
 
-        $callback = reset($nested_relations);
+        $callback = array_first($nested_relations);
 
         if ($callback instanceof Closure) {
             $callback($relation->get_query());

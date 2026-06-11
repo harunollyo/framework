@@ -7,6 +7,8 @@ use Framework\Database\Concerns\HasDictionary;
 use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;
 
+use function Framework\Polyfill\array_last;
+
 /**
  * Define a one-to-one relation between parent and related models.
  *
@@ -157,7 +159,7 @@ class HasOne extends Relation
     {
         $segments = explode('.', $this->get_qualified_parent_key_name());
 
-        return end($segments);
+        return array_last($segments);
     }
 
     /**

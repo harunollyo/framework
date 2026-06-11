@@ -6,6 +6,8 @@ use Framework\Sanitizer;
 use Framework\Supports\Traits\Macroable;
 use Traversable;
 
+use function Framework\Polyfill\array_first;
+use function Framework\Polyfill\array_last;
 use function Framework\Polyfill\str_starts_with;
 
 /**
@@ -80,15 +82,15 @@ class Str
         $style = static::$increment_styles[$style] ?? static::$increment_styles['regular'];
 
         if (is_array($style[0])) {
-            $search_regex = reset($style[0]);
-            $replace_regex = end($style[0]);
+            $search_regex = array_first($style[0]);
+            $replace_regex = array_last($style[0]);
         } else {
             $search_regex = $replace_regex = $style[0];
         }
 
         if (is_array($style[1])) {
-            $old_format = reset($style[1]);
-            $new_format = end($style[1]);
+            $old_format = array_first($style[1]);
+            $new_format = array_last($style[1]);
         } else {
             $old_format = $new_format = $style[1];
         }

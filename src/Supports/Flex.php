@@ -10,6 +10,8 @@ use IteratorAggregate;
 use JsonSerializable;
 use Traversable;
 
+use function Framework\Polyfill\array_first;
+
 /**
  * @template TKey as string
  * @template TValue
@@ -249,7 +251,7 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
      */
     public function __call($method, $arguments)
     {
-        $this->attributes[$method] = count($arguments) > 0 ? reset($arguments) : true;
+        $this->attributes[$method] = count($arguments) > 0 ? array_first($arguments) : true;
 
         return $this;
     }

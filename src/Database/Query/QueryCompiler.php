@@ -7,6 +7,8 @@ use Framework\Database\Connection\Connection;
 use Framework\Supports\Arr;
 
 use function Framework\collection;
+use function Framework\Polyfill\array_first;
+use function Framework\Polyfill\array_last;
 
 class QueryCompiler
 {
@@ -74,11 +76,11 @@ class QueryCompiler
             return sprintf('insert into %s default values', $table);
         }
 
-        if (!is_array(reset($values))) {
+        if (!is_array(array_first($values))) {
             $values = [$values];
         }
 
-        $columns = $this->columnize(array_keys(reset($values)));
+        $columns = $this->columnize(array_keys(array_first($values)));
 
         $parameters = collection($values)
             ->map(function ($record) {
@@ -212,7 +214,7 @@ class QueryCompiler
     protected function compile_delete_with_joins(QueryBuilder $query, $table, $where)
     {
         $parts = explode(' as ', $table);
-        $alias = end($parts);
+        $alias = array_last($parts);
 
         $joins = $this->compile_joins($query, $query->joins);
 
