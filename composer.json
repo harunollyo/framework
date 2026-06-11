@@ -34,7 +34,7 @@
 		},
 		"files": [
 			"src/helpers.php",
-			"src/Polyfill/polyfill.php"
+			"src/Polyfill/Polyfill.php"
 		]
 	},
 	"autoload-dev": {

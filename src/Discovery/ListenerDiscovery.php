@@ -145,7 +145,7 @@ class ListenerDiscovery implements Discoverable, Cacheable
      */
     protected function listener_class(string $filename)
     {
-        $app_namespace = app()->get_namespace();
+        $app_namespace = rtrim(app()->get_namespace(), '\\');
         $namespace = $app_namespace . '\\Listeners\\';
 
         return $namespace . $filename;

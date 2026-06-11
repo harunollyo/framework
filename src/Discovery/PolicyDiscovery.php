@@ -102,7 +102,7 @@ class PolicyDiscovery implements Discoverable, Cacheable
      */
     protected function policy_class(string $policy_name)
     {
-        $app_namespace = app()->get_namespace();
+        $app_namespace = rtrim(app()->get_namespace(), '\\');
         $policy_base_namespace = $app_namespace . '\\Policies\\';
 
         return $policy_base_namespace . $policy_name;
@@ -116,7 +116,7 @@ class PolicyDiscovery implements Discoverable, Cacheable
      */
     protected function associated_model(string $policy_name)
     {
-        $app_namespace = app()->get_namespace();
+        $app_namespace = rtrim(app()->get_namespace(), '\\');
         $model_base_namespace = $app_namespace . '\\Models\\';
         $model_name = str_replace('Policy', '', $policy_name);
 

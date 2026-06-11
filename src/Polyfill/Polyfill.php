@@ -18,6 +18,7 @@ if (!function_exists('Framework\Polyfill\array_first')) {
         }
 
         if (empty($array)) {
+
             return null;
         }
 
@@ -165,17 +166,4 @@ if (!function_exists('Framework\Polyfill\str_ends_with')) {
     }
 }
 
-if (!class_exists('ArgumentCountError', false) && !class_exists('Framework\Polyfill\ArgumentCountError', false)) {
-    /**
-     * Polyfill for the ArgumentCountError class introduced in PHP 7.1.
-     *
-     * @since 1.0.0
-     */
-    class ArgumentCountError extends \Error
-    {
-    }
-}
-
-if (!class_exists('Framework\Polyfill\ArgumentCountError', false) && class_exists('ArgumentCountError', false)) {
-    class_alias('ArgumentCountError', 'Framework\Polyfill\ArgumentCountError');
-}
+class_exists(ArgumentCountError::class);
