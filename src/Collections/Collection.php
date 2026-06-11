@@ -5,6 +5,7 @@ namespace Framework\Collections;
 use ArrayAccess;
 use Closure;
 use Countable;
+use Framework\Concerns\EnumeratesValues;
 use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;
 use Framework\Supports\Arr;
@@ -25,7 +26,8 @@ use JsonSerializable;
  */
 class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonable, JsonSerializable
 {
-    use Conditionable;
+    use Conditionable,
+        EnumeratesValues;
 
     /**
      * The array of items contained in the collection.
@@ -246,6 +248,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * This is the logical opposite of has items and is commonly used for
      * guard clauses when rendering or transforming result sets.
      *
+     * @deprecated 1.0.0 Use empty() instead
      * @return bool True when empty; false otherwise
      * @since 1.0.0
      */
@@ -255,17 +258,40 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     }
 
     /**
+     * Determine if the collection is empty.
+     *
+     * @return bool True when empty; false otherwise
+     * @since 1.0.0
+     */
+    public function empty()
+    {
+        return $this->is_empty();
+    }
+
+    /**
      * Determine if the collection contains at least one item.
      *
      * Provides a more readable alternative to negating isEmpty when checking
      * for the presence of results before proceeding with further logic.
      *
+     * @deprecated 1.0.0 Use not_empty() instead
      * @return bool True when one or more items exist; false when empty
      * @since 1.0.0
      */
     public function is_not_empty()
     {
         return !$this->is_empty();
+    }
+
+    /**
+     * Determine if the collection is not empty.
+     *
+     * @return bool True when not empty; false otherwise
+     * @since 1.0.0
+     */
+    public function not_empty()
+    {
+        return !$this->empty();
     }
 
     /**
@@ -485,6 +511,86 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
         }
 
         return true;
+    }
+
+    /**
+     * Group the collection items by the given key.
+     *
+     * @param callable|array $group_by The key or callback to group by
+     * @param bool $preserve_keys Whether to preserve the keys
+     * 
+     * @return static A new collection containing the grouped items
+     * 
+     * @since 1.0.0
+     */
+    public function group_by($group_by, $preserve_keys = false)
+    {
+        if (!$this->is_callable($group_by) && is_array($group_by)) {
+            $next_groups = $group_by;
+            $group_by = array_shift($next_groups);
+        }
+
+        $group_by = $this->value_retriever($group_by);
+
+        $results = [];
+
+        foreach ($this->items as $key => $value) {
+            $group_keys = $group_by($value, $key);
+
+            if (!is_array($group_keys)) {
+                $group_keys = [$group_keys];
+            }
+
+            foreach ($group_keys as $group_key) {
+                if (is_bool($group_key)) {
+                    $group_key = (int) $group_key;
+                } elseif (is_null($group_key)) {
+                    $group_key = (string) $group_key;
+                }
+
+                if (!array_key_exists($group_key, $results)) {
+                    $results[$group_key] = $this->new_instance();
+                }
+
+                $results[$group_key]->offsetSet($preserve_keys ? $key : null, $value);
+            }
+        }
+
+        $result = $this->new_instance($results);
+
+        if (!empty($next_groups)) {
+            return $result->map(function ($inner) use($next_groups, $preserve_keys) {
+                return $inner->group_by($next_groups, $preserve_keys);
+            });
+        }
+
+        return $result;
+    }
+
+    /**
+     * Key the collection by the given key.
+     *
+     * @param callable|string $key_by The key or callback to key by
+     * @return static A new collection containing the keyed items
+     * @since 1.0.0
+     */
+    public function key_by($key_by)
+    {
+        $key_by = $this->value_retriever($key_by);
+
+        $results = [];
+
+        foreach ($this->items as $key => $value) {
+            $resolved_key = $key_by($value, $key);
+
+            if (is_object($resolved_key)) {
+                $resolved_key = (string) $resolved_key;
+            }
+
+            $results[$resolved_key] = $value;
+        }
+
+        return $this->new_instance($results);
     }
 
     /**
