@@ -5,6 +5,7 @@ use Example\App\Http\Controllers\SpeakersController;
 use Example\App\Models\Event;
 use Framework\Http\Request;
 use Framework\Route;
+use Framework\Supports\Arr;
 use Framework\Supports\Facades\DB;
 use Framework\Supports\Facades\Option;
 
@@ -33,7 +34,15 @@ Route::put('/speakers/{speaker}', [SpeakersController::class, 'update']);
 Route::get('/options', function (Request $request) {
     $events = Event::query()->get()->key_by('id');
 
+    $array = ['a', 'b', 'c'];
+
+    function abc($value, $key) {
+        return '[' . $key . '] => ' . $value;
+    }
+
+    $mapped = Arr::map($array, 'abc');
+
     return response()->json([
-        'events' => $events,
+        'events' => $mapped,
     ]);
 });

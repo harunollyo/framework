@@ -4,11 +4,15 @@ namespace Framework\Supports;
 
 use ArrayAccess;
 use Closure;
+use Error;
+use ErrorException;
 use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;
 use Framework\Collections\Collection;
 use Framework\Polyfill\ArgumentCountError;
 use InvalidArgumentException;
+use ReflectionFunction;
+use ReflectionMethod;
 
 use function Framework\deep_get;
 use function Framework\Polyfill\array_first;
@@ -64,9 +68,19 @@ class Arr
     {
         $keys = array_keys($array);
 
-        try {
+        if (is_array($callback)) {
+            $reflector = new ReflectionMethod($callback[0], $callback[1]);
+        } elseif (is_string($callback) && strpos($callback, '::') !== false) {
+            $reflector = new ReflectionMethod($callback);
+        } else {
+            $reflector = new ReflectionFunction($callback);
+        }
+
+        $required_params = $reflector->getNumberOfRequiredParameters();
+
+        if ($required_params >= 2) {
             $items = array_map($callback, $array, $keys);
-        } catch (ArgumentCountError $error) {
+        } else {
             $items = array_map($callback, $array);
         }
 

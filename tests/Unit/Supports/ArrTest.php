@@ -182,4 +182,42 @@ class ArrTest extends TestCase
             Arr::json_encode(['name' => 'Widget'])
         );
     }
+
+    public function test_map_preserves_keys_and_passes_value_and_key(): void
+    {
+        $result = Arr::map(['a' => 1, 'b' => 2], fn($value, $key) => $key . $value);
+
+        $this->assertSame(['a' => 'a1', 'b' => 'b2'], $result);
+    }
+
+    public function test_map_falls_back_for_value_only_internal_callbacks(): void
+    {
+        $this->assertSame(
+            ['a' => 'X', 'b' => 'Y'],
+            Arr::map(['a' => 'x', 'b' => 'y'], 'strtoupper')
+        );
+    }
+
+    public function test_reject_removes_items_where_callback_returns_true(): void
+    {
+        $result = Arr::reject([1, 2, 3, 4], fn($value) => $value % 2 === 0);
+
+        $this->assertSame([0 => 1, 2 => 3], $result);
+    }
+
+    public function test_accept_keeps_items_where_callback_returns_true(): void
+    {
+        $result = Arr::accept([1, 2, 3, 4], fn($value) => $value % 2 === 0);
+
+        $this->assertSame([1 => 2, 3 => 4], $result);
+    }
+
+    public function test_reject_and_accept_partition_items_for_same_predicate(): void
+    {
+        $items = ['a' => 1, 'b' => 2, 'c' => 3];
+        $predicate = fn($value) => $value > 1;
+
+        $this->assertSame(['b' => 2, 'c' => 3], Arr::accept($items, $predicate));
+        $this->assertSame(['a' => 1], Arr::reject($items, $predicate));
+    }
 }
