@@ -284,6 +284,63 @@ class Arr
     }
 
     /**
+     * Get the first item in the array.
+     *
+     * @param array $array The array to get the first item from
+     * @param callable|null $callback The callback to use to find the first item
+     * @param mixed|null $default The default value to return if no item is found
+     *
+     * @return mixed The first item or the default value
+     */
+    public static function first($array, $callback = null, $default = null)
+    {
+        if (is_null($callback)) {
+            if (empty($array)) {
+                return value($default);
+            }
+
+            if (is_array($array)) {
+                return reset($array);
+            }
+
+            foreach ($array as $item) {
+                return $item;
+            }
+
+            return value($default);
+        }
+
+        $array = static::from($array);
+
+        if (is_null($callback)) {
+            return !empty($array) ? $array[0] : null;
+        }
+
+        $key = static::find_key($array, $callback);
+
+        return $key !== null ? $array[$key] : value($default);
+    }
+
+    /**
+     * Find the key of the first item in the array that matches the callback.
+     *
+     * @param array $array The array to find the key in
+     * @param callable $callback The callback to use to find the key
+     *
+     * @return mixed|null The key of the first item that matches the callback, or null if no match is found
+     */
+    public static function find_key($array, $callback)
+    {
+        foreach ($array as $key => $value) {
+            if ($callback($value, $key)) {
+                return $key;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Convert the array to a JSON string
      *
      * @param array $array The array to convert

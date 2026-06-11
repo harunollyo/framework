@@ -2,6 +2,7 @@
 
 namespace Framework\Managers;
 
+use Framework\Collections\Collection;
 use Framework\Supports\Arr;
 use Framework\Wordpress\Models\Option;
 
@@ -11,6 +12,13 @@ use function Framework\without_prefix;
 
 class OptionManager
 {
+    /**
+     * The cache of the options.
+     *
+     * @var array
+     */
+    protected static array $cache = [];
+
     /**
      * Set the value of an option.
      *
@@ -24,7 +32,16 @@ class OptionManager
      */
     public function set(string $name, $value, $autoload = null, $with_prefix = true)
     {
-        return \update_option($this->get_option_name($name, $with_prefix), $value, $autoload);
+        $key = $this->prepare_option_name($name, $with_prefix);
+        $result = update_option($key, $value, $autoload);
+        $option = (object) [
+            'option_name' => $key,
+            'option_value' => $value,
+        ];
+
+        $this->update_cache($option);
+
+        return $result;
     }
 
     /**
@@ -35,15 +52,28 @@ class OptionManager
      *
      * @param string|array $name The option key to retrieve.
      * @param mixed|null $default The default value to return if the option does not exist.
+     *
      * @return mixed The value of the option or the default value.
+     * 
+     * @since 1.0.0
      */
     public function get($name, $default = null, $with_prefix = true)
     {
         $must_be_array = is_array($name);
 
         $names = $this->get_option_name($name, $with_prefix);
+        $fresh_option_names = collection($names)->reject(fn ($name) => $this->is_cached($name));
+        $cached_option_names = collection($names)->accept(fn ($name) => $this->is_cached($name));
 
-        $options = Option::query()->where_in('option_name', $names)->get();
+        $options = $this->get_options_from_cache($cached_option_names);
+
+        if (!$fresh_option_names->is_empty()) {
+            $fresh_options = Option::query()->where_in('option_name', $fresh_option_names->all())
+                ->get()->map(fn($value) => $this->value($value));
+            $this->sync_cache($fresh_options);
+            $plucked = $fresh_options->pluck('option_value', 'option_name');
+            $options = $options->merge($plucked);
+        }
 
         if ($options->is_empty()) {
             if (!$must_be_array) {
@@ -54,10 +84,11 @@ class OptionManager
         }
 
         if (!$must_be_array) {
-            return $options->first()->option_value ?? $default;
+            return $options->first() ?? $default;
         }
 
-        $results =  $options->pluck('option_value', 'option_name')->map(function($value, $key) use ($default) {
+        // Fill with defaults for the missing keys
+        $results =  $options->map(function($value, $key) use ($default) {
             if (is_array($default)) {
                 return !is_null($value) ? $value : ($default[$key] ?? null);
             }
@@ -68,6 +99,106 @@ class OptionManager
         $results = $this->refill_missing_keys_with_defaults($results, $names, $default, $with_prefix);
 
         return $this->rebase_keys($results, $with_prefix);
+    }
+
+    /**
+     * Get the options from the cache.
+     *
+     * @param Collection $options The options to get.
+     * 
+     * @return Collection The options from the cache.
+     */
+    protected function get_options_from_cache(Collection $options)
+    {
+        $data = [];
+
+        foreach ($options as $option_name) {
+            $data[$option_name] = static::$cache[$option_name];
+        }
+
+        return new Collection($data);
+    }
+
+    /**
+     * Get the value of the option.
+     *
+     * @param mixed $value The value of the option.
+     * 
+     * @return mixed The value of the option.
+     */
+    protected function value($value)
+    {
+        return maybe_unserialize($value);
+    }
+
+    /**
+     * Sync the cache with the options.
+     *
+     * @param Collection $options The options to sync.
+     * 
+     * @return void
+     * 
+     * @since 1.0.0
+     */
+    protected function sync_cache(Collection $options)
+    {
+        foreach ($options as $option) {
+            $this->update_cache($option);
+        }
+    }
+
+    /**
+     * Update the cache with the option name and value.
+     *
+     * @param object $option The option object.
+     * 
+     * @return void
+     * 
+     * @since 1.0.0
+     */
+    protected function update_cache($option)
+    {
+        static::$cache[$option->option_name] = $option->option_value;
+    }
+
+    /**
+     * Remove the option from the cache.
+     *
+     * @param string $option_name The name of the option.
+     * 
+     * @return void
+     * 
+     * @since 1.0.0
+     */
+    protected function remove_from_cache($option_name)
+    {
+        unset(static::$cache[$option_name]);
+    }
+
+    /**
+     * Clear the cache.
+     *
+     * @return void
+     * 
+     * @since 1.0.0
+     */
+    protected function clear_cache()
+    {
+        static::$cache = [];
+    }
+
+    /**
+     * Check if the option is cached.
+     *
+     * @param string $option_name The name of the option.
+     * 
+     * @return bool
+     * 
+     * @since 1.0.0
+     */
+    protected function is_cached($option_name)
+    {
+        return isset(static::$cache[$option_name]);
     }
 
     /**
@@ -117,7 +248,10 @@ class OptionManager
      */
     public function delete(string $name, $with_prefix = true)
     {
-        return \delete_option($this->get_option_name($name, $with_prefix));
+        $result = delete_option($this->prepare_option_name($name, $with_prefix));
+        $this->remove_from_cache($this->prepare_option_name($name, $with_prefix));
+
+        return $result;
     }
 
     /**
@@ -125,13 +259,26 @@ class OptionManager
      *
      * Prepends the app prefix to the given option key.
      *
-     * @param string|array $name The base option key.
+     * @param string|array<string> $name The base option key.
      * @return array The namespaced option key.
      */
     protected function get_option_name($name, $with_prefix = true)
     {
         $name = Arr::wrap($name);
 
-        return collection($name)->map(fn($name) => $with_prefix ? with_prefix($name) : $name)->all();
+        return collection($name)->map(fn($name) => $this->prepare_option_name($name, $with_prefix))->all();
+    }
+
+    /**
+     * Prepare the option name.
+     *
+     * @param string $name The name of the option.
+     * @param bool $with_prefix Whether to prefix the name.
+     * 
+     * @return string The prepared option name.
+     */
+    protected function prepare_option_name(string $name, bool $with_prefix = true)
+    {
+        return $with_prefix ? with_prefix($name) : $name;
     }
 }

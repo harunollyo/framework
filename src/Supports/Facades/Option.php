@@ -5,9 +5,9 @@ namespace Framework\Supports\Facades;
 use Framework\Facade;
 
 /**
- * @method static bool set(string $name, $value, $autoload = null)
- * @method static mixed get(string $name, $default = null)
- * @method static bool delete(string $name)
+ * @method static bool set(string $name, $value, $autoload = null, $with_prefix = true)
+ * @method static mixed get(string|array $name, $default = null, $with_prefix = true)
+ * @method static bool delete(string $name, $with_prefix = true)
  * 
  * @see \Framework\Managers\OptionManager
  */

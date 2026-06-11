@@ -199,13 +199,16 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Returns null when the collection is empty. This is typically used to
      * access a single model or value from a previously constrained result set
      * without performing additional checks.
+     * 
+     * @param callable|null $callback The callback to use to determine the first item
+     * @param mixed|null $default The default value to return if no items exist
      *
      * @return mixed The first item or null when no items exist
      * @since 1.0.0
      */
-    public function first()
+    public function first($callback = null, $default = null)
     {
-        return !empty($this->items) ? $this->items[0] : null;
+        return Arr::first($this->items, $callback, $default);
     }
 
     /**
@@ -403,6 +406,28 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
             return is_callable($callback)
                 ? !$callback($value, $key)
                 : $value != $callback;
+        });
+    }
+    
+    /**
+     * Accept items in the collection using a callback predicate.
+     *
+     * The callback should return true for items to accept. A new collection is
+     * returned leaving the original intact, enabling immutable-style chaining
+     * and reuse of the source collection.
+     *
+     * @param callable $callback The predicate determining which items remain
+     * 
+     * @return static A new collection containing only matching items
+     * 
+     * @since 1.0.0
+     */
+    public function accept($callback = true)
+    {
+        return $this->filter(function ($value, $key) use ($callback) {
+            return is_callable($callback)
+                ? $callback($value, $key)
+                : $value == $callback;
         });
     }
 
