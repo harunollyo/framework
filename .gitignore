@@ -2,6 +2,7 @@
 /stubs/wordpress-stubs.php
 /stubs/wp-cli-stubs.php
 /stubs/carbon
+/stubs/phpunit
 /.DS_Store
 /.idea/
 .DS_Store

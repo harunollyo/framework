@@ -113,7 +113,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Determine if the collection contains a given item.
      *
-     * @param mixed $key The item to check for
+     * @param mixed $value The item to check for
      * 
      * @return bool True if the collection contains the item, false otherwise
      * @since 1.0.0
@@ -136,7 +136,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Determine if the collection contains a given item using strict comparison.
      *
-     * @param mixed $key The item to check for
+     * @param mixed $value The item to check for
      * @return bool True if the collection contains the item, false otherwise
      * @since 1.0.0
      */
