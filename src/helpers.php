@@ -7,6 +7,7 @@ use Framework\Application;
 use Framework\AppSettings;
 use Framework\Collections\Collection;
 use Framework\Database\Migrations\Migrator;
+use Framework\Http\Request;
 use Framework\Wordpress\User;
 use Framework\Http\Response;
 use Framework\Supports\Arr;
@@ -37,8 +38,7 @@ if (!function_exists('Framework\app')) {
             return Application::get_instance();
         }
 
-        return Application::get_instance()
-            ->make($abstract, $parameters);
+        return Application::get_instance()->make($abstract, $parameters);
     }
 }
 
@@ -46,10 +46,13 @@ if (!function_exists('Framework\deep_get')) {
     /**
      * Get a value from an array using a dot notation key.
      *
-     * @param array $array
-     * @param string|array $key
-     * @param mixed $default
-     * @return mixed
+     * @param   array $target         The target array to get the value from.
+     * @param   string|array $key     The key to get the value from.
+     * @param   mixed $default        The default value to return if the key is not found.
+     * 
+     * @return  mixed                 The value from the array or the default value if the key is not found.
+     * 
+     * @since 1.0.0
      */
     function deep_get($target, $key, $default = null)
     {
@@ -159,19 +162,6 @@ if (!function_exists('Framework\user')) {
     }
 }
 
-if (!function_exists('Framework\settings')) {
-    /**
-     * Get the settings instance.
-     *
-     * @param string $key
-     * @return AppSettings
-     */
-    function settings($key)
-    {
-        return Settings::get($key);
-    }
-}
-
 if (!function_exists('Framework\response')) {
     /**
      * Get the response instance.
@@ -187,6 +177,33 @@ if (!function_exists('Framework\response')) {
             'Referrer-Policy' => 'no-referrer-when-downgrade',
             'Cache-Control' => 'public, max-age=60, stale-while-revalidate=30',
         ]);
+    }
+}
+
+if (!function_exists('Framework\request')) {
+    /**
+     * Get the request instance.
+     *
+     * @param string|null $key
+     * @param mixed $default
+     * 
+     * @return ($key is null ? Request : ($key is array ? array : mixed))
+     * 
+     * @since 1.0.0
+     */
+    function request($key = null, $default = null)
+    {
+        if (is_null($key)) {
+            return app('request');
+        }
+
+        if (is_array($key)) {
+            return app('request')->only($key);
+        }
+
+        $value = app('request')->get($key, $default);
+
+        return is_null($value) ? value($default) : $value;
     }
 }
 

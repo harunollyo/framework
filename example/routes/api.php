@@ -11,6 +11,7 @@ use Framework\Supports\Facades\Option;
 
 use function Framework\app;
 use function Framework\collection;
+use function Framework\request;
 use function Framework\response;
 
 Route::set_namespace('framework/v1');
@@ -32,17 +33,10 @@ Route::post('/speakers', [SpeakersController::class, 'create']);
 Route::put('/speakers/{speaker}', [SpeakersController::class, 'update']);
 
 Route::get('/options', function (Request $request) {
-    $events = Event::query()->get()->key_by('id');
-
-    $array = ['a', 'b', 'c'];
-
-    function abc($value, $key) {
-        return '[' . $key . '] => ' . $value;
-    }
-
-    $mapped = Arr::map($array, 'abc');
+    $r = request('hello');
 
     return response()->json([
-        'events' => $mapped,
+        'events' => $r,
+        'req' => $request->all(),
     ]);
 });

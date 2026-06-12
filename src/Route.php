@@ -712,6 +712,8 @@ class Route
                 $request = app()->make(Request::class);
                 $resolved = $request->make_request($rest_request);
 
+                $this->expose($request);
+
                 return $callback($resolved);
             };
         }
@@ -767,12 +769,33 @@ class Route
                     }
                 );
 
+                $this->expose($request);
+
                 // We are passing the request only while initiating the middleware pipeline
                 return $pipeline($request);
             } catch (Exception $exception) {
                 return ApiExceptionHandler::get_response($exception);
             }
         };
+    }
+
+    /**
+     * Expose the request to the container to use
+     * the current request instance to the underneath classes and methods.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Request
+     * 
+     * @throws Exception When the request is not a valid request object.
+     *
+     * @since 1.0.0
+     */
+    protected function expose(Request $request)
+    {
+        app()->instance('request', $request);
+
+        return $request;
     }
 
     /**

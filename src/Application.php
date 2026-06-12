@@ -248,6 +248,7 @@ class Application extends Container
                 'client-request' => ClientRequest::class,
                 'command' => CommandManager::class,
                 RequestContract::class => Request::class,
+                'request' => Request::class,
             ] as $key => $abstract
         ) {
             $this->alias($key, $abstract);
@@ -436,7 +437,10 @@ class Application extends Container
      * Register a database path.
      *
      * @param string $path
-     * @return self
+     * 
+     * @return static
+     * 
+     * @since 1.0.0
      */
     public function use_database_path($path)
     {
@@ -447,6 +451,15 @@ class Application extends Container
         return $this;
     }
 
+    /**
+     * Register a resource path.
+     *
+     * @param string $path
+     * 
+     * @return static
+     * 
+     * @since 1.0.0
+     */
     public function use_resource_path($path)
     {
         $this->resource_path = $path;

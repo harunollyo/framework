@@ -16,7 +16,9 @@ class Container implements ContainerContract
     /**
      * The instance of the container.
      *
-     * @var self|null
+     * @var static|null
+     * 
+     * @since 1.0.0
      */
     protected static $instance = null;
 
@@ -24,36 +26,38 @@ class Container implements ContainerContract
      * The bindings of the container.
      *
      * @var array
+     * 
+     * @since 1.0.0
      */
-    protected $bindings = [];
+    protected array $bindings = [];
 
     /**
      * The instances of the container (singletons).
      *
      * @var array
      */
-    protected $instances = [];
+    protected array $instances = [];
 
     /**
      * The aliases for services.
      *
      * @var array
      */
-    protected $aliases = [];
+    protected array $aliases = [];
 
     /**
      * Services currently being resolved (for circular dependency detection).
      *
      * @var array
      */
-    protected $resolved = [];
+    protected array $resolved = [];
 
     /**
      * Tagged services.
      *
      * @var array
      */
-    protected $tags = [];
+    protected array $tags = [];
 
     /**
      * The base path of the application.
@@ -127,12 +131,12 @@ class Container implements ContainerContract
      */
     public function instance(string $abstract, $instance)
     {
-        $is_bound = $this->bound($abstract);
+        $bounded = $this->bound($abstract);
 
         unset($this->aliases[$abstract]);
         $this->instances[$abstract] = $instance;
 
-        if ($is_bound) {
+        if ($bounded) {
             $this->rebound($abstract);
         }
 
@@ -408,11 +412,36 @@ class Container implements ContainerContract
     }
 
     /**
+     * Forget an instance from the container.
+     *
+     * @param string $abstract
+     * @return void
+     */
+    public function forget_instance($abstract)
+    {
+        unset($this->instances[$abstract]);
+    }
+
+    /**
+     * Forget all instances from the container.
+     *
+     * @return void
+     */
+    public function forget_instances()
+    {
+        $this->instances = [];
+    }
+
+    /**
      * Get the instance of the container.
      *
+     * @param string|null $base_path
+     * 
      * @return static
+     * 
+     * @since 1.0.0
      */
-    public static function get_instance(?string $base_path = null): self
+    public static function get_instance(?string $base_path = null)
     {
         if (is_null(static::$instance)) {
             static::$instance = new static($base_path);

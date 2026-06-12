@@ -6,6 +6,7 @@ use Example\App\Models\Event;
 use Example\App\Models\Speaker;
 use Framework\Http\Request;
 
+use function Framework\request;
 use function Framework\response;
 
 class EventsController
@@ -54,6 +55,16 @@ class EventsController
 		return response()->json([
 			'message' => 'Events upserted successfully.',
 			'event' => $event,
+		]);
+	}
+
+	public function options(Request $request)
+	{
+		$r = request();
+
+		return response()->json([
+			'events' => $r->all(),
+			'req' => $request->all(),
 		]);
 	}
 }
