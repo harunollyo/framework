@@ -15,7 +15,9 @@ use ReflectionFunction;
 use ReflectionMethod;
 
 use function Framework\deep_get;
+use function Framework\Polyfill\array_find_key;
 use function Framework\Polyfill\array_first;
+use function Framework\Polyfill\array_last;
 use function Framework\Polyfill\str_contains;
 use function Framework\value;
 
@@ -370,7 +372,7 @@ class Arr
      *
      * @return mixed The first item or the default value
      */
-    public static function first($array, $callback = null, $default = null)
+    public static function first($array, ?callable $callback = null, $default = null)
     {
         if (is_null($callback)) {
             if (empty($array)) {
@@ -394,28 +396,27 @@ class Arr
             return !empty($array) ? $array[0] : null;
         }
 
-        $key = static::find_key($array, $callback);
+        $key = array_find_key($array, $callback);
 
         return $key !== null ? $array[$key] : value($default);
     }
 
     /**
-     * Find the key of the first item in the array that matches the callback.
+     * Get the last item in the array.
      *
-     * @param array $array The array to find the key in
-     * @param callable $callback The callback to use to find the key
+     * @param array $array The array to get the last item from
+     * @param callable|null $callback The callback to use to find the last item
+     * @param mixed|null $default The default value to return if no item is found
      *
-     * @return mixed|null The key of the first item that matches the callback, or null if no match is found
+     * @return mixed The last item or the default value
      */
-    public static function find_key($array, $callback)
+    public static function last($array, ?callable $callback = null, $default = null)
     {
-        foreach ($array as $key => $value) {
-            if ($callback($value, $key)) {
-                return $key;
-            }
+        if (is_null($callback)) {
+            return empty($array) ? value($default) : array_last(static::from($array));
         }
 
-        return null;
+        return static::first(array_reverse($array, true), $callback, $default);
     }
 
     /**

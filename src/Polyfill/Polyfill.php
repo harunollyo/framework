@@ -47,13 +47,9 @@ if (!function_exists('Framework\Polyfill\array_last')) {
             return null;
         }
 
-        $last = null;
+        $reversed = array_reverse($array, true);
 
-        foreach ($array as $value) {
-            $last = $value;
-        }
-
-        return $last;
+        return array_first($reversed);
     }
 }
 
@@ -192,6 +188,52 @@ if (!function_exists('Framework\Polyfill\str_ends_with')) {
         $needle_length = strlen($needle);
 
         return $needle_length <= strlen($haystack) && substr_compare($haystack, $needle, -$needle_length) === 0;
+    }
+}
+
+if (!function_exists('Framework\Polyfill\array_find')) {
+    /**
+     * Find the first item in the array that matches the key.
+     *
+     * @param array $array The array to find the item in
+     * @param callable $callback The callback to find the item by
+     * @return mixed The first item that matches the key
+     */
+    function array_find(array $array, callable $callback) {
+        if (function_exists('\array_find')) {
+            return \array_find($array, $callback);
+        }
+
+        foreach ($array as $key => $item) {
+            if ($callback($item, $key)) {
+                return $item;
+            }
+        }
+
+        return null;
+    }
+}
+
+if (!function_exists('Framework\Polyfill\array_find_key')) {
+    /**
+     * Find the first item in the array that matches the key.
+     *
+     * @param array $array The array to find the item in
+     * @param callable $callback The callback to find the item by
+     * @return mixed The first item that matches the key
+     */
+    function array_find_key(array $array, callable $callback) {
+        if (function_exists('\array_find_key')) {
+            return \array_find_key($array, $callback);
+        }
+
+        foreach ($array as $key => $item) {
+            if ($callback($item, $key)) {
+                return $key;
+            }
+        }
+
+        return null;
     }
 }
 

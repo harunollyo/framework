@@ -892,7 +892,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * @return mixed The primary key value
      * @since 1.0.0
      */
-    protected function get_primary_key_value()
+    public function get_primary_key_value()
     {
         return $this->get_attribute($this->get_primary_key());
     }

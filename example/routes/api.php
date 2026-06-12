@@ -33,10 +33,10 @@ Route::post('/speakers', [SpeakersController::class, 'create']);
 Route::put('/speakers/{speaker}', [SpeakersController::class, 'update']);
 
 Route::get('/options', function (Request $request) {
-    $r = request('hello');
+    $events = Event::query()->get();
 
     return response()->json([
-        'events' => $r,
+        'events' => Arr::last($events),
         'req' => $request->all(),
     ]);
 });

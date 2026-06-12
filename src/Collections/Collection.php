@@ -8,6 +8,7 @@ use Countable;
 use Framework\Concerns\EnumeratesValues;
 use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;
+use Framework\Database\Query\Model;
 use Framework\Supports\Arr;
 use Framework\Supports\Traits\Conditionable;
 use InvalidArgumentException;
@@ -15,6 +16,7 @@ use Iterator;
 use JsonSerializable;
 
 use function Framework\Polyfill\array_last;
+use function Framework\value;
 
 /**
  * Represent a simple iterable collection of items.
@@ -445,6 +447,29 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     public function accept(callable $callback)
     {
         return $this->new_instance(Arr::accept($this->items, $callback));
+    }
+
+    /**
+     * Find the first item in the collection that matches the key.
+     *
+     * @param Closure|null $key The key to find the item by.
+     * @param mixed $default The default value to return if the key is not found.
+     *
+     * @return mixed The first item that matches the key.
+     * 
+     * @since 1.0.0
+     */
+    public function find($key, $default = null)
+    {
+        if (is_null($key)) {
+            return value($default);
+        }
+
+        if (!$key instanceof Closure) {
+            throw new InvalidArgumentException('The key must be a Closure.');
+        }
+
+        return Arr::first($this->items, $key, $default);
     }
 
     /**
