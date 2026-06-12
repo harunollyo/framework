@@ -8,7 +8,6 @@ use Countable;
 use Framework\Concerns\EnumeratesValues;
 use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;
-use Framework\Database\Query\Model;
 use Framework\Supports\Arr;
 use Framework\Supports\Traits\Conditionable;
 use InvalidArgumentException;
@@ -502,12 +501,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      */
     public function some(callable $callback)
     {
-        foreach ($this->items as $key => $item) {
-            if ($callback($item, $key)) {
-                return true;
-            }
-        }
-        return false;
+        return Arr::some($this->items, $callback);
     }
 
     /**
@@ -519,13 +513,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      */
     public function every(callable $callback)
     {
-        foreach ($this->items as $key => $item) {
-            if (!$callback($item, $key)) {
-                return false;
-            }
-        }
-
-        return true;
+        return Arr::every($this->items, $callback);
     }
 
     /**

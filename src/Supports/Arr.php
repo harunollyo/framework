@@ -15,6 +15,8 @@ use ReflectionFunction;
 use ReflectionMethod;
 
 use function Framework\deep_get;
+use function Framework\Polyfill\array_all;
+use function Framework\Polyfill\array_any;
 use function Framework\Polyfill\array_find_key;
 use function Framework\Polyfill\array_first;
 use function Framework\Polyfill\array_last;
@@ -417,6 +419,36 @@ class Arr
         }
 
         return static::first(array_reverse($array, true), $callback, $default);
+    }
+
+    /**
+     * Determine if any item in the array matches the callback.
+     *
+     * @param array $array The array to check
+     * @param callable $callback The callback to check
+     *
+     * @return bool True if any item matches the callback, false otherwise
+     *
+     * @since 1.0.0
+     */
+    public static function some($array, callable $callback)
+    {
+        return array_any(static::from($array), $callback);
+    }
+
+    /**
+     * Determine if all items in the array match the callback.
+     *
+     * @param array $array The array to check
+     * @param callable $callback The callback to check
+     * 
+     * @return bool True if all items match the callback, false otherwise
+     * 
+     * @since 1.0.0
+     */
+    public static function every($array, callable $callback)
+    {
+        return array_all(static::from($array), $callback);
     }
 
     /**

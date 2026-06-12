@@ -2,6 +2,8 @@
 
 namespace Framework\Polyfill;
 
+class_exists(ArgumentCountError::class);
+
 if (!function_exists('Framework\Polyfill\array_first')) {
     /**
      * Get the first element of an array.
@@ -237,4 +239,49 @@ if (!function_exists('Framework\Polyfill\array_find_key')) {
     }
 }
 
-class_exists(ArgumentCountError::class);
+
+if (!function_exists('Framework\Polyfill\array_any')) {
+    /**
+     * Determine if any item in the array matches the callback.
+     *
+     * @param array $array The array to check
+     * @param callable $callback The callback to check
+     * @return bool True if any item matches the callback, false otherwise
+     */
+    function array_any(array $array, callable $callback) {
+        if (function_exists('\array_any')) {
+            return \array_any($array, $callback);
+        }
+
+        foreach ($array as $key => $item) {
+            if ($callback($item, $key)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+if (!function_exists('Framework\Polyfill\array_all')) {
+    /**
+     * Determine if any item in the array matches the callback.
+     *
+     * @param array $array The array to check
+     * @param callable $callback The callback to check
+     * @return bool True if any item matches the callback, false otherwise
+     */
+    function array_all(array $array, callable $callback) {
+        if (function_exists('\array_all')) {
+            return \array_all($array, $callback);
+        }
+
+        foreach ($array as $key => $item) {
+            if (!$callback($item, $key)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
