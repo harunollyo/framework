@@ -3,7 +3,8 @@
 namespace Framework\Database\Query;
 
 use Closure;
-use Framework\Collections\Collection;
+use Framework\Database\Query\Collection;
+use Framework\Database\Concerns\HasDictionary;
 use Framework\Database\Query\Relations\Relation;
 
 use function Framework\Polyfill\array_first;
@@ -20,6 +21,8 @@ use function Framework\Polyfill\array_first;
  */
 class EagerLoader
 {
+    use HasDictionary;
+
     /**
      * The array of model instances that will have their relations eagerly loaded.
      *
@@ -86,7 +89,7 @@ class EagerLoader
      */
     protected function load_relation($relation_name, $nested_relations = null)
     {
-        if ($this->models->is_empty()) {
+        if ($this->models->empty()) {
             return;
         }
 
@@ -111,7 +114,7 @@ class EagerLoader
 
         $this->models = $relation->match($this->models, $results, $relation_name);
 
-        if (!empty($nested_relations) && !$results->is_empty() && !$callback instanceof Closure) {
+        if (!empty($nested_relations) && !$results->empty() && !$callback instanceof Closure) {
             $this->load_nested_relations($relation_name, $nested_relations);
         }
     }
@@ -137,18 +140,9 @@ class EagerLoader
 
             if ($related instanceof Collection) {
                 $related_models = $related_models->merge($related);
-                // $related = $related->all();
-            }
-
-            if (is_object($related)) {
+            } elseif (is_object($related)) {
                 $related_models->push($related);
             }
-
-            // if (is_array($related)) {
-            //     $related_models = array_merge($related_models, $related);
-            // } elseif (is_object($related)) {
-            //     $related_models[] = $related;
-            // }
         }
 
         if (!empty($related_models)) {

@@ -4,7 +4,7 @@ namespace Framework\Database\Query\Relations;
 
 use BadMethodCallException;
 use Closure;
-use Framework\Collections\Collection;
+use Framework\Database\Query\Collection;
 use Framework\Database\Query\Expression;
 use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;

@@ -9,6 +9,7 @@ use Framework\Collections\Collection;
 use Framework\Database\Concerns\ExecuteQueries;
 use Framework\Database\Concerns\RelationshipQueries;
 use Framework\Database\Connection\Connection;
+use Framework\Database\Query\Collection as QueryCollection;
 use Framework\Database\Query\EagerLoader;
 use Framework\Database\Query\Relations\Relation;
 use Framework\Exceptions\ModelNotFoundException;
@@ -2544,12 +2545,13 @@ class QueryBuilder
      * If eager loading relationships are specified, they are loaded to prevent N+1
      * query problems. The final results are wrapped in a Collection instance.
      *
-     * @return Collection A collection of model instances or raw data
+     * @return QueryCollection A collection of model instances or raw data
      *
      * @since 1.0.0
      */
     public function get($columns = ['*'])
     {
+        
         $columns = is_array($columns) ? $columns : func_get_args();
 
         $items = $this->once_with_columns(
@@ -2923,7 +2925,7 @@ class QueryBuilder
                 ->get();
         });
 
-        if (!$results->is_empty()) {
+        if (!$results->empty()) {
             return array_change_key_case($results->to_array())[0]['aggregate'];
         }
     }

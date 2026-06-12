@@ -246,21 +246,6 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     }
 
     /**
-     * Determine if the collection has no items.
-     *
-     * This is the logical opposite of has items and is commonly used for
-     * guard clauses when rendering or transforming result sets.
-     *
-     * @deprecated 1.0.0 Use empty() instead
-     * @return bool True when empty; false otherwise
-     * @since 1.0.0
-     */
-    public function is_empty()
-    {
-        return empty($this->items);
-    }
-
-    /**
      * Determine if the collection is empty.
      *
      * @return bool True when empty; false otherwise
@@ -268,22 +253,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      */
     public function empty()
     {
-        return $this->is_empty();
-    }
-
-    /**
-     * Determine if the collection contains at least one item.
-     *
-     * Provides a more readable alternative to negating isEmpty when checking
-     * for the presence of results before proceeding with further logic.
-     *
-     * @deprecated 1.0.0 Use not_empty() instead
-     * @return bool True when one or more items exist; false when empty
-     * @since 1.0.0
-     */
-    public function is_not_empty()
-    {
-        return !$this->is_empty();
+        return empty($this->items);
     }
 
     /**
@@ -785,7 +755,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      */
     public function percentage(callable $callback, int $precision = 2)
     {
-        if ($this->is_empty()) {
+        if ($this->empty()) {
             return null;
         }
 
@@ -816,7 +786,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      */
     public function load($relations)
     {
-        if ($this->is_not_empty()) {
+        if ($this->not_empty()) {
             $query = $this->first()->new_query_without_relations()->with(
                 is_string($relations) ? func_get_args() : $relations
             );

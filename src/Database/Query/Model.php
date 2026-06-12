@@ -7,20 +7,18 @@ use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;
 use Framework\Database\Concerns\HasAttributes;
 use Framework\Database\Concerns\HasRelationships;
-use Framework\Database\Connection\Connection;
-use Framework\Database\Query\Relations\Relation;
+use Framework\Database\Query\Collection;
 use Framework\Supports\Arr;
 use Framework\Supports\Traits\Macroable;
-use Framework\Collections\Collection;
 use Framework\Database\Concerns\GuardAttributes;
 use Framework\Supports\Facades\Date;
 use Exception;
 use Framework\Database\Concerns\HasTimestamps;
+use Framework\Database\Connection\Connection;
 use JsonSerializable;
 use ReflectionClass;
 
 use function Framework\app;
-use function Framework\collection;
 use function Framework\Polyfill\str_contains;
 
 /**
@@ -345,7 +343,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     {
         $columns = Arr::wrap($columns);
 
-        return collection($columns)
+        return $this->new_collection($columns)
             ->map(function ($column) {
                 return $this->prepare_column($column);
             })

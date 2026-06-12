@@ -175,7 +175,7 @@ abstract class CommandBase
             $args['longdesc'] = $this->description;
         }
 
-        if (!$this->synopsis->is_empty()) {
+        if (!$this->synopsis->empty()) {
             $args['synopsis'] = $this->synopsis->map(
                 function (Synopsis $synopsis) {
                     return $synopsis->to_array();

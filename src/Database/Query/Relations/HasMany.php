@@ -3,7 +3,7 @@
 namespace Framework\Database\Query\Relations;
 
 use Framework\Database\Query\Model;
-use Framework\Collections\Collection;
+use Framework\Database\Query\Collection;
 use Framework\Database\Concerns\HasDictionary;
 use Framework\Database\Query\QueryBuilder;
 

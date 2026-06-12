@@ -71,17 +71,16 @@ class OptionManager
 
         $options = $this->get_options_from_cache($cached_option_names);
 
-        if (!$fresh_option_names->is_empty()) {
-            $fresh_options = Option::query()->where_in('option_name', $fresh_option_names->all())
-                ->get()->map(function ($value) {
-                    return $this->value($value);
-                });
+        if (!$fresh_option_names->empty()) {
+            $fresh_options = Option::query()
+                ->where_in('option_name', $fresh_option_names->all())
+                ->get()->map(fn ($value) => $this->value($value));
             $this->sync_cache($fresh_options);
             $plucked = $fresh_options->pluck('option_value', 'option_name');
             $options = $options->merge($plucked);
         }
 
-        if ($options->is_empty()) {
+        if ($options->empty()) {
             if (!$must_be_array) {
                 return $default;
             }

@@ -13,7 +13,7 @@ class EventsController
 {
 	public function index(Request $request)
 	{
-		$events = Event::query()->with('speakers')->get();
+		$events = Event::query()->with('speakers.events')->get();
 
 		return response()->json([
 			'events' => $events
