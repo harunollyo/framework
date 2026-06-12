@@ -1,5 +1,6 @@
 /.github export-ignore
 /.vscode export-ignore
+/.cursor export-ignore
 /scripts export-ignore
 /stubs export-ignore
 /phpstan.neon.dist export-ignore
