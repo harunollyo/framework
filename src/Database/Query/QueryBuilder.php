@@ -3119,7 +3119,13 @@ class QueryBuilder
         try {
             return $this->create(array_merge($attributes,  value($values)));
         } catch (UniqueConstraintViolationException $exception) {
-            return $this->where($attributes)->first() ?? throw $exception;
+            $result = $this->where($attributes)->first();
+
+            if ($result === null) {
+                throw $exception;
+            }
+
+            return $result;
         }
     }
 
