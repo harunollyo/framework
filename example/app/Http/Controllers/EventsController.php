@@ -5,6 +5,7 @@ namespace Example\App\Http\Controllers;
 use Example\App\Models\Event;
 use Example\App\Models\Speaker;
 use Framework\Http\Request;
+use Framework\Supports\Facades\DB;
 
 use function Framework\request;
 use function Framework\response;
@@ -13,10 +14,13 @@ class EventsController
 {
 	public function index(Request $request)
 	{
+		DB::enable_query_log();
 		$events = Event::query()->with('speakers.events')->get();
+		$queries = DB::get_query_log();
 
 		return response()->json([
-			'events' => $events
+			'events' => $events,
+			'queries' => $queries,
 		]);
 	}
 

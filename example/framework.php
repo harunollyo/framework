@@ -41,4 +41,10 @@ add_action('init', 'framework_example_boot_application', 0);
 function framework_example_boot_application()
 {
     require_once FRAMEWORK_EXAMPLE_PATH . 'bootstrap/app.php';
+
+    wp_enqueue_script('framework-example', FRAMEWORK_EXAMPLE_URL . 'assets/js/script.js', [], '1.0.0', true);
+    wp_localize_script('framework-example', 'frameworkExample', [
+        'check_url' => rest_url('framework/v1/check'),
+        'file_url'  => FRAMEWORK_EXAMPLE_URL . 'assets/js/file.txt',
+    ]);
 }

@@ -395,12 +395,11 @@ class BelongsToMany extends Relation
             $pivot_key_name = "pivot_{$this->foreign_pivot_key}";
             $attribute = $this->get_dictionary_key($result->get_attribute($pivot_key_name));
 
-            if ($attribute === null) {
-                continue;
+            if ($attribute !== null) {
+                $dictionary[$attribute][] = $this->migrate_pivot_attributes($result);
+                $dictionary[$attribute] ??= [];
             }
 
-            $dictionary[$attribute] ??= [];
-            $dictionary[$attribute][] = $this->migrate_pivot_attributes($result);
         }
 
         return $dictionary;

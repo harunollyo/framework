@@ -40,3 +40,11 @@ Route::get('/options', function (Request $request) {
         'req' => $request->all(),
     ]);
 });
+
+Route::post('/check', function (Request $request) {
+    return response()->json([
+        'status' => 'ok',
+        'request' => $request->all(),
+        'file' => $request->file('attachment'),
+    ]);
+});

@@ -6,6 +6,7 @@ use Framework\Contracts\Request as RequestContract;
 use Framework\Contracts\Support\Arrayable;
 use Framework\Sanitizer;
 use Framework\Exceptions\AuthorizationException;
+use Framework\Http\Concerns\InteractsWithFiles;
 use Framework\Validation\Validator;
 use WP_REST_Request;
 
@@ -18,6 +19,8 @@ use function Framework\user;
  */
 class Request implements RequestContract, Arrayable
 {
+    use InteractsWithFiles;
+
     /**
      * The request's input attributes.
      *
@@ -125,6 +128,8 @@ class Request implements RequestContract, Arrayable
         $this->route = $request->get_route();
         $this->headers = $request->get_headers();
 
+        $this->load_files_from_global();
+
         $this->resolve_validation_and_sanitization();
 
         return $this;
@@ -148,9 +153,10 @@ class Request implements RequestContract, Arrayable
      * @since 1.0.0
      *
      * @param array $data The data to validate.
-     * @thorws \Framework\Exceptions\ValidationException
      *
      * @return array
+     *
+     * @throws \Framework\Exceptions\ValidationException
      */
     protected function run_validation(array $data, array $rules)
     {
@@ -167,7 +173,7 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @return array<key:string,value:string|callable(mixed):mixed|array>
+     * @return array<string,string|callable(mixed):mixed|array>
      */
     protected function filters()
     {

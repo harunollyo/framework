@@ -265,7 +265,7 @@ class HasMany extends Relation
         foreach ($results as $result) {
             $attribute = $this->get_dictionary_key($result->get_attribute($this->foreign_key));
 
-            if ($attribute !== null && isset($dictionary[$attribute])) {
+            if ($attribute !== null) {
                 $dictionary[$attribute] ??= [];
                 $dictionary[$attribute][] = $result;
             }

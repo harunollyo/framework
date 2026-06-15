@@ -257,6 +257,18 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     }
 
     /**
+     * Determine if the collection is empty.
+     *
+     * @deprecated Use empty() instead.
+     * @return bool True when empty; false otherwise
+     * @since 1.0.0
+     */
+    public function is_empty()
+    {
+        return $this->empty();
+    }
+
+    /**
      * Determine if the collection is not empty.
      *
      * @return bool True when not empty; false otherwise
@@ -265,6 +277,18 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     public function not_empty()
     {
         return !$this->empty();
+    }
+
+    /**
+     * Determine if the collection is not empty.
+     *
+     * @deprecated Use not_empty() instead.
+     * @return bool True when not empty; false otherwise
+     * @since 1.0.0
+     */
+    public function is_not_empty()
+    {
+        return $this->not_empty();
     }
 
     /**
