@@ -9,11 +9,19 @@ use function Framework\deep_get;
 trait InteractsWithFiles
 {
     /**
-     * The files uploaded in the request.
+     * Whether the files have been loaded from the global $_FILES array.
+     * For a same request, we need to load the files only once.
+     *
+     * @var bool
+     */
+    protected static bool $loaded = false;
+
+    /**
+     * The files array.
      *
      * @var array<string,UploadedFile>
      */
-    protected array $files = [];
+    protected static array $files = [];
 
     /**
      * Get all files from the request.
@@ -22,7 +30,9 @@ trait InteractsWithFiles
      */
     public function all_files()
     {
-        return $this->files;
+        $files = !static::$loaded ? $this->load_files_from_global() : static::$files;
+
+        return $files;
     }
 
     /**
@@ -45,23 +55,72 @@ trait InteractsWithFiles
     /**
      * Create the files from the global $_FILES array.
      *
-     * @return void
+     * @return array
      */
     protected function load_files_from_global()
     {
-        if (empty($_FILES)) {
-            return;
-        }
+        $files = $_FILES ?? [];
+        $keys = array_keys($files);
 
-        $files = [];
+        $files = array_map(function ($file) {
+            if (isset($file['name']) && is_array($file['name'])) {
+                return $this->convert_uploaded_files($file);
+            }
+            return $this->create_uploaded_file($file);
+        }, $_FILES ?? []);
 
-        foreach ($_FILES as $key => $file) {
-            $files[$key] = $this->create_uploaded_file($file);
-        }
+        static::$loaded = true;
 
-        $this->files = $files;
+        return static::$files = array_combine($keys, $files);
     }
 
+    /**
+     * Convert the uploaded files to an array of UploadedFile instances.
+     *
+     * @param array $files The array of files.
+     *
+     * @return array<string,UploadedFile>
+     * 
+     * @since 1.0.0
+     */
+    protected function convert_uploaded_files(array $files)
+    {
+        $results = [];
+        $results = array_fill(
+            0,
+            count($files['name'] ?? []),
+            ['name' => '', 'type' => '', 'tmp_name' => '', 'error' => 0, 'size' => 0],
+        );
+        $keys = ['name', 'type', 'tmp_name', 'error', 'size'];
+
+        foreach ($keys as $key) {
+            $this->process_item($files[$key], $key, $results);
+        }
+
+        return array_map([$this, 'create_uploaded_file'], $results);
+    }
+
+    /**
+     * Process an item from the files array.
+     *
+     * @param array $item The item to process.
+     * @param string $key The key of the item.
+     * @param array &$results The results array.
+     */
+    protected function process_item(array $item, string $key, array &$results)
+    {
+        foreach ($item as $index => $value) {
+            $results[$index][$key] = $value;
+        }
+    }
+
+    /**
+     * Check if a file exists in the request.
+     *
+     * @param string $key The key of the file.
+     *
+     * @return bool
+     */
     protected function has_file(string $key)
     {
         return isset($this->files[$key]);
@@ -75,6 +134,6 @@ trait InteractsWithFiles
      */
     protected function create_uploaded_file(array $file)
     {
-        return new UploadedFile($file['tmp_name'], $file['name'], $file['type'], $file['error']);
+        return new UploadedFile($file['tmp_name'], $file['name'], $file['type'], $file['error'], $file['size']);
     }
 }

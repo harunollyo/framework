@@ -124,11 +124,10 @@ class Request implements RequestContract, Arrayable
             $request->get_params(),
             $request->get_file_params()
         );
+
         $this->method = $request->get_method();
         $this->route = $request->get_route();
         $this->headers = $request->get_headers();
-
-        $this->load_files_from_global();
 
         $this->resolve_validation_and_sanitization();
 

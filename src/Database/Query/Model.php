@@ -492,9 +492,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
             $saved = $this->is_dirty()
                 ? $this->perform_update()
                 : true;
+        } else {
+            $saved = $this->perform_insert();
         }
-
-        $saved = $this->perform_insert();
 
         if ($saved) {
             $this->sync_original();
