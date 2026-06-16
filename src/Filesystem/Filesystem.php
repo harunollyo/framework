@@ -7,7 +7,10 @@ use Framework\Exceptions\AuthorizationException;
 use Framework\Exceptions\NotFoundException;
 use Framework\Sanitizer;
 use Framework\Supports\Traits\Macroable;
+use Framework\Wordpress\Constants\Capabilities;
 use WP_Filesystem_Base;
+
+use function Framework\Polyfill\str_starts_with;
 
 class Filesystem
 {
@@ -421,6 +424,10 @@ class Filesystem
      */
     public function upload(string $path, UploadedFile $file, $name = null)
     {
+        if (!current_user_can(Capabilities::UPLOAD_FILES)) {
+            throw new AuthorizationException('You are not authorized to upload files.');
+        }
+
         if (is_null($name)) {
             $name = $file->get_client_original_name();
         }
@@ -449,7 +456,20 @@ class Filesystem
     protected function make_upload_directory(string $path)
     {
         $upload_directory = wp_upload_dir()['basedir'];
+        $base = realpath($upload_directory);
 
-        return Path::join(rtrim($upload_directory, '/'), $path);
+        if ($base === false) {
+            throw new Exception('Upload directory is not available.');
+        }
+
+        $relative = Path::normalize($path);
+        $directory = str_replace('\\', '/', Path::join($base, $relative));
+        $base_normalized = str_replace('\\', '/', $base);
+
+        if ($directory !== $base_normalized && !str_starts_with($directory, $base_normalized . '/')) {
+            throw new AuthorizationException('Invalid upload path.');
+        }
+
+        return str_replace('/', DIRECTORY_SEPARATOR, $directory);
     }
 }

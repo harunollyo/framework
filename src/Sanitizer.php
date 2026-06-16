@@ -383,11 +383,6 @@ class Sanitizer
                     break;
                 }
 
-                if (is_serialized($value)) {
-                    $value = maybe_unserialize($value);
-                    break;
-                }
-
                 return null;
             case static::DATE:
                 if (!Date::is_valid_date($value)) {
@@ -407,7 +402,11 @@ class Sanitizer
                 $value = maybe_serialize($value);
                 break;
             case static::UNSERIALIZED:
-                $value = maybe_unserialize($value);
+                if (!is_serialized($value)) {
+                    break;
+                }
+
+                $value = unserialize(trim($value), ['allowed_classes' => false]);
                 break;
             default:
                 if (is_callable($type)) {

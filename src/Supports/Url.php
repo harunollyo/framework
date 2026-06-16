@@ -15,13 +15,7 @@ class Url
         $referer = $url;
         $redirect_url = add_query_arg($data, $referer);
 
-        if (headers_sent()) {
-            echo "<script>window.location.href = '$redirect_url';</script>";
-            exit;
-        }
-
-        wp_redirect($redirect_url);
-        exit;
+        static::perform_redirect($redirect_url);
     }
 
     public static function redirect_back($data = [])
@@ -29,8 +23,15 @@ class Url
         $referer = wp_get_referer();
         $redirect_url = add_query_arg($data, $referer);
 
+        static::perform_redirect($redirect_url);
+    }
+
+    protected static function perform_redirect($redirect_url)
+    {
         if (headers_sent()) {
-            echo "<script>window.location.href = '$redirect_url';</script>";
+            $safe_url = esc_url($redirect_url);
+
+            echo '<script>window.location.href = ' . wp_json_encode($safe_url) . ';</script>';
             exit;
         }
 
