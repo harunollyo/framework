@@ -26,6 +26,7 @@ use Framework\Validation\Rules\NullableRule;
 use Framework\Validation\Rules\NumberRule;
 use Framework\Validation\Rules\ObjectRule;
 use Framework\Validation\Rules\ProhibitedIfRule;
+use Framework\Validation\Rules\ProhibitedRule;
 use Framework\Validation\Rules\RegexRule;
 use Framework\Validation\Rules\RequiredIfExists;
 use Framework\Validation\Rules\RequiredIfRule;
@@ -75,6 +76,7 @@ class Validation
         'is_valid_image_id' => IsValidImageIdRule::class,
         'required_if' => RequiredIfRule::class,
         'required_if_sibling' => RequiredIfSiblingRule::class,
+        'prohibited' => ProhibitedRule::class,
         'prohibited_if' => ProhibitedIfRule::class,
         'required_if_exists' => RequiredIfExists::class,
         'user_exists' => UserExists::class,

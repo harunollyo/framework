@@ -4,6 +4,7 @@ namespace Framework\Filesystem;
 
 use Exception;
 use Framework\Container;
+use Framework\Exceptions\AuthorizationException;
 use Framework\Supports\Arr;
 use JsonSerializable;
 
@@ -212,7 +213,7 @@ class UploadedFile extends File implements JsonSerializable
      * @param string $directory
      * @param string|null $name
      * 
-     * @return string
+     * @return static
      * 
      * @throws Exception
      * 
@@ -342,7 +343,7 @@ class UploadedFile extends File implements JsonSerializable
     public function to_array()
     {
         return [
-            'tmp_name' => $this->getPathname(),
+            'path' => $this->getPathname(),
             'name' => $this->get_client_original_name(),
             'type' => $this->get_client_mime_type(),
             'error' => $this->get_error(),

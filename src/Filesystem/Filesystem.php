@@ -199,7 +199,7 @@ class Filesystem
      */
     public function put($path, $data)
     {
-        if (!$this->exists($path)) {
+        if ($this->missing($path)) {
             $this->make_dir($path);
         }
 
@@ -421,10 +421,6 @@ class Filesystem
      */
     public function upload(string $path, UploadedFile $file, $name = null)
     {
-        if (!current_user_can('upload_files')) {
-            throw new AuthorizationException('You are not allowed to upload files.');
-        }
-
         if (is_null($name)) {
             $name = $file->get_client_original_name();
         }
@@ -437,7 +433,9 @@ class Filesystem
             $this->make_dir($directory);
         }
 
-        return $file->move($directory, $name);
+        $response = $file->move($directory, $name);
+
+        return $response->getPathname();
     }
 
     /**

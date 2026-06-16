@@ -43,7 +43,7 @@ Route::get('/options', function (Request $request) {
 });
 
 Route::post('/check', function (Request $request) {
-    $attachment = $request->file('attachment')->each(fn ($file) => $file->store('attachments/public'));
+    $attachment = $request->file('attachment')->map->store('attachments/public');
 
     return response()->json([
         'status' => 'ok',

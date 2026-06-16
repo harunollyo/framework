@@ -5,7 +5,7 @@ namespace Framework\Collections;
 use ArrayAccess;
 use Closure;
 use Countable;
-use Framework\Concerns\EnumeratesValues;
+use Framework\Collections\Concerns\EnumeratesValues;
 use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;
 use Framework\Supports\Arr;
@@ -13,6 +13,7 @@ use Framework\Supports\Traits\Conditionable;
 use InvalidArgumentException;
 use Iterator;
 use JsonSerializable;
+
 
 use function Framework\Polyfill\array_last;
 use function Framework\value;
@@ -29,8 +30,7 @@ use function Framework\value;
  */
 class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonable, JsonSerializable
 {
-    use Conditionable,
-        EnumeratesValues;
+    use Conditionable, EnumeratesValues;
 
     /**
      * The array of items contained in the collection.
