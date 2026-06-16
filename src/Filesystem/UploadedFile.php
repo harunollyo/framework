@@ -3,6 +3,7 @@
 namespace Framework\Filesystem;
 
 use Exception;
+use Framework\Container;
 use Framework\Supports\Arr;
 use JsonSerializable;
 
@@ -55,13 +56,30 @@ class UploadedFile extends File implements JsonSerializable
      */
     public function __construct(string $path, string $original_name, ?string $mime_type = null, ?int $error = null, ?int $size = null)
     {
-        $this->original_name = $original_name;
-        $this->mime_type = $mime_type ?? '';
-        $this->error = $error ?? UPLOAD_ERR_OK;
-        $this->original_path = $path;
-        $this->size = $size ?? 0;
+        $this->original_name = $this->get_name($original_name);
+        $this->original_path = strtr($original_name, '\\', '/');
+        $this->mime_type = $mime_type ?? 'application/octet-stream';
+        $this->error = $error ?: \UPLOAD_ERR_OK;
+        $this->size = $size ?: 0;
 
-        parent::__construct($path);
+        parent::__construct($path, $this->error === \UPLOAD_ERR_OK);
+    }
+
+    /**
+     * Create a new uploaded file instance from a base file.
+     *
+     * @param static|array $file
+     * @return static
+     */
+    public static function create_from_base($file)
+    {
+        return $file instanceof static ? $file : new static(
+            $file['tmp_name'],
+            $file['name'],
+            $file['type'],
+            $file['error'],
+            $file['size'],
+        );
     }
 
     /**
@@ -95,9 +113,9 @@ class UploadedFile extends File implements JsonSerializable
      * 
      * @since 1.0.0
      */
-    public function get_client_original_mime_type()
+    public function get_client_mime_type()
     {
-        return $this->mime_type ?? '';
+        return $this->mime_type;
     }
 
     /**
@@ -109,7 +127,7 @@ class UploadedFile extends File implements JsonSerializable
      */
     public function get_client_original_path()
     {
-        return $this->original_path ?? '';
+        return $this->original_path;
     }
 
     /**
@@ -122,6 +140,56 @@ class UploadedFile extends File implements JsonSerializable
     public function get_error()
     {
         return $this->error;
+    }
+
+    /**
+     * Get the size of the uploaded file.
+     *
+     * @return int
+     * 
+     * @since 1.0.0
+     */
+    public function get_size()
+    {
+        return $this->size;
+    }
+
+    /**
+     * Store the uploaded file in a specified directory.
+     *
+     * @param string $path
+     * @param array $options
+     * @return string
+     * 
+     * @since 1.0.0
+     */
+    public function store(string $path, array $options = [])
+    {
+        return $this->store_as($path, $this->get_client_original_name(), $options);
+    }
+
+    /**
+     * Store the uploaded file in a specified directory with a specific name.
+     *
+     * @param string $path
+     * @param string|null $name
+     * @param array $options
+     * @return string
+     * 
+     * @throws AuthorizationException If the current user is not authorized to upload files.
+     * @throws Exception If the file cannot be moved to the target location or directory cannot be created.
+     * 
+     * @since 1.0.0
+     */
+    public function store_as(string $path,  $name = null, array $options = [])
+    {
+        if (is_null($name)) {
+            $name = $this->get_client_original_name();
+        }
+
+        return Container::get_instance()->make(Filesystem::class)->upload(
+            $path, $this, $name, $options
+        );
     }
 
     /**
@@ -274,10 +342,11 @@ class UploadedFile extends File implements JsonSerializable
     public function to_array()
     {
         return [
-            'original_name' => $this->original_name,
-            'mime_type' => $this->mime_type,
-            'error' => $this->error,
-            'original_path' => $this->original_path,
+            'tmp_name' => $this->getPathname(),
+            'name' => $this->get_client_original_name(),
+            'type' => $this->get_client_mime_type(),
+            'error' => $this->get_error(),
+            'size' => $this->get_size(),
         ];
     }
 

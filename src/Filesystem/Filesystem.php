@@ -2,7 +2,10 @@
 
 namespace Framework\Filesystem;
 
+use Exception;
+use Framework\Exceptions\AuthorizationException;
 use Framework\Exceptions\NotFoundException;
+use Framework\Sanitizer;
 use Framework\Supports\Traits\Macroable;
 use WP_Filesystem_Base;
 
@@ -397,5 +400,58 @@ class Filesystem
         }
 
         return $this->filesystem->touch($path);
+    }
+
+    /**
+     * Upload an {@see UploadedFile} instance to a specified directory.
+     *
+     * This method validates that the current user has permission to upload files, applies file name sanitization,
+     * ensures the upload directory exists (creating it if necessary), and then moves the uploaded file to the target location.
+     *
+     * @param string $path The relative subdirectory within the upload root to store the file.
+     * @param UploadedFile $file The uploaded file instance to store.
+     * @param string|null $name Optional. The file name to use for storage. Defaults to the original client file name.
+     *
+     * @return string Absolute path to the stored file on success.
+     *
+     * @throws AuthorizationException If the current user is not authorized to upload files.
+     * @throws Exception If the file cannot be moved to the target location or directory cannot be created.
+     *
+     * @since 1.0.0
+     */
+    public function upload(string $path, UploadedFile $file, $name = null)
+    {
+        if (!current_user_can('upload_files')) {
+            throw new AuthorizationException('You are not allowed to upload files.');
+        }
+
+        if (is_null($name)) {
+            $name = $file->get_client_original_name();
+        }
+
+        $name = Sanitizer::apply_rule($name, Sanitizer::FILE_NAME);
+
+        $directory = $this->make_upload_directory($path);
+
+        if ($this->missing($directory)) {
+            $this->make_dir($directory);
+        }
+
+        return $file->move($directory, $name);
+    }
+
+    /**
+     * Make the upload directory.
+     *
+     * @param string $path
+     * @return string
+     * 
+     * @since 1.0.0
+     */
+    protected function make_upload_directory(string $path)
+    {
+        $upload_directory = wp_upload_dir()['basedir'];
+
+        return Path::join(rtrim($upload_directory, '/'), $path);
     }
 }

@@ -36,6 +36,7 @@ restart:
 
 init:
 	docker compose run --rm wordpress-init
+	docker compose up -d --force-recreate php
 
 example-install: example-composer-install
 

@@ -2,26 +2,20 @@
 
 namespace Framework\Http\Concerns;
 
+use Framework\Collections\Collection;
 use Framework\Filesystem\UploadedFile;
+use SplFileInfo;
 
 use function Framework\deep_get;
 
 trait InteractsWithFiles
 {
     /**
-     * Whether the files have been loaded from the global $_FILES array.
-     * For a same request, we need to load the files only once.
-     *
-     * @var bool
-     */
-    protected static bool $loaded = false;
-
-    /**
      * The files array.
      *
      * @var array<string,UploadedFile>
      */
-    protected static array $files = [];
+    protected array $files = [];
 
     /**
      * Get all files from the request.
@@ -30,9 +24,9 @@ trait InteractsWithFiles
      */
     public function all_files()
     {
-        $files = !static::$loaded ? $this->load_files_from_global() : static::$files;
-
-        return $files;
+        return !empty($this->files)
+            ? $this->files
+            : $this->load_files_from_global();
     }
 
     /**
@@ -41,14 +35,10 @@ trait InteractsWithFiles
      * @param string $key The key of the file.
      * @param mixed $default The default value if the file is not found.
      * 
-     * @return UploadedFile|array<string,UploadedFile>
+     * @return UploadedFile|Collection<string,UploadedFile>
      */
     public function file(?string $key = null, $default = null)
     {
-        if (is_null($key)) {
-            return $this->all_files();
-        }
-
         return deep_get($this->all_files(), $key, $default);
     }
 
@@ -66,12 +56,11 @@ trait InteractsWithFiles
             if (isset($file['name']) && is_array($file['name'])) {
                 return $this->convert_uploaded_files($file);
             }
-            return $this->create_uploaded_file($file);
+
+            return UploadedFile::create_from_base($file);
         }, $_FILES ?? []);
 
-        static::$loaded = true;
-
-        return static::$files = array_combine($keys, $files);
+        return $this->files = array_combine($keys, $files);
     }
 
     /**
@@ -97,7 +86,7 @@ trait InteractsWithFiles
             $this->process_item($files[$key], $key, $results);
         }
 
-        return array_map([$this, 'create_uploaded_file'], $results);
+        return new Collection(array_map([$this, 'create_uploaded_file'], $results));
     }
 
     /**
@@ -123,7 +112,29 @@ trait InteractsWithFiles
      */
     protected function has_file(string $key)
     {
-        return isset($this->files[$key]);
+        if (!is_array($files = $this->file($key))) {
+            $files = [$files];
+        }
+
+        foreach ($files as $file) {
+            if ($this->is_valid_file($file)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a file is valid.
+     *
+     * @param mixed $file The file to check.
+     *
+     * @return bool
+     */
+    protected function is_valid_file($file)
+    {
+        return $file instanceof SplFileInfo && $file->getPath() !== '';
     }
 
     /**

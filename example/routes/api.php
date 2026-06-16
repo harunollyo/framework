@@ -3,6 +3,7 @@
 use Example\App\Http\Controllers\EventsController;
 use Example\App\Http\Controllers\SpeakersController;
 use Example\App\Models\Event;
+use Example\App\Models\PostMeta;
 use Framework\Http\Request;
 use Framework\Route;
 use Framework\Supports\Arr;
@@ -42,9 +43,10 @@ Route::get('/options', function (Request $request) {
 });
 
 Route::post('/check', function (Request $request) {
+    $attachment = $request->file('attachment')->each(fn ($file) => $file->store('attachments/public'));
+
     return response()->json([
         'status' => 'ok',
-        'request' => $request->all(),
-        'file' => $request->file('attachment'),
+        'attachment' => $attachment,
     ]);
 });

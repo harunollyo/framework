@@ -1,5 +1,8 @@
 FROM php:8.2-fpm
 
+RUN groupmod -o -g 82 www-data \
+    && usermod -o -u 82 -g www-data www-data
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libzip-dev \
     libpng-dev \

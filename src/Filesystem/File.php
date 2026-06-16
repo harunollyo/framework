@@ -101,7 +101,7 @@ class File extends SplFileInfo
 
         $target = rtrim($directory, '/\\') . \DIRECTORY_SEPARATOR . ($name === null ? $this->getBasename() : $this->get_name($name));
 
-        return new static($target, false);
+        return new self($target, false);
     }
 
     /**
