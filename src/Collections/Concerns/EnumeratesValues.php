@@ -16,6 +16,9 @@ use Framework\Collections\HigherOrderCollectionProxy;
 use function Framework\deep_get;
 
 /**
+ * @template TKey of array-key
+ * @template TValue
+ *
  * @property-read HigherOrderCollectionProxy<TKey, TValue> $average
  * @property-read HigherOrderCollectionProxy<TKey, TValue> $avg
  * @property-read HigherOrderCollectionProxy<TKey, TValue> $contains
