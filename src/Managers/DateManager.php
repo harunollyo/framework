@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Proxy manager forwarding static Carbon date calls to the framework Carbon class.
+ * Exposes the full Carbon API through __call for use by the Date facade.
+ * Centralizes date/time operations with WordPress timezone awareness.
+ *
+ * @package    Framework
+ * @subpackage Managers
+ * @since      1.0.0
+ */
 namespace Framework\Managers;
+
+defined('ABSPATH') || exit;
 
 use BadMethodCallException;
 use Framework\Supports\Carbon;
@@ -8,7 +18,6 @@ use Framework\Supports\Str;
 
 /**
  * @see https://carbon.nesbot.com/docs/
- *
  * @method bool can_be_created_from_format(?string $date, string $format)
  * @method \Framework\Supports\Carbon|null create($year = 0, $month = 1, $day = 1, $hour = 0, $minute = 0, $second = 0, $timezone = null)
  * @method \Framework\Supports\Carbon create_from_date($year = null, $month = null, $day = null, $timezone = null)
@@ -101,6 +110,7 @@ use Framework\Supports\Str;
  * @method \Framework\Supports\Carbon yesterday(\DateTimeZone|string|int|null $timezone = null)
  * @method string to_sql_datetime_string()
  */
+
 class DateManager
 {
     /**

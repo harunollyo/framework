@@ -1,7 +1,15 @@
 <?php
-
+/**
+ * Base class for event listeners defining a default priority of zero.
+ * Subclasses override priority to control dispatch order relative to other listeners.
+ * Keeps listener configuration minimal while supporting ordered execution.
+ *
+ * @package    Framework
+ * @since      1.0.0
+ */
 namespace Framework;
 
+defined('ABSPATH') || exit;
 
 class Listener
 {

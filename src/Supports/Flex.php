@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Lightweight dynamic object bag implementing ArrayAccess, JsonSerializable, and iteration.
+ * Stores arbitrary key-value attributes with fill, get, and fluent access patterns.
+ * Alternative to stdClass for structured but schema-free data.
+ *
+ * @package    Framework
+ * @subpackage Supports
+ * @since      1.0.0
+ */
 namespace Framework\Supports;
+
+defined('ABSPATH') || exit;
 
 use ArrayAccess;
 use ArrayIterator;
@@ -12,14 +22,6 @@ use Traversable;
 
 use function Framework\Polyfill\array_first;
 
-/**
- * @template TKey as string
- * @template TValue
- *
- * @package Framework\Supports
- *
- * @since 1.0.0
- */
 class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonSerializable
 {
     /**

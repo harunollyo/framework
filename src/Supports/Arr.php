@@ -1,6 +1,14 @@
 <?php
-
+/**
+ * The array helper class.
+ *
+ * @package    Framework
+ * @subpackage Supports
+ * @since      1.0.0
+ */
 namespace Framework\Supports;
+
+defined('ABSPATH') || exit;
 
 use ArrayAccess;
 use Closure;
@@ -23,11 +31,6 @@ use function Framework\Polyfill\array_last;
 use function Framework\Polyfill\str_contains;
 use function Framework\value;
 
-/**
- * The array helper class.
- *
- * @since 1.0.0
- */
 class Arr
 {
     /**

@@ -1,6 +1,15 @@
 <?php
-
+/**
+ * Translates thrown exceptions into consistent JSON REST responses for the API layer.
+ * Maps ValidationException and ModelNotFoundException to appropriate HTTP status codes with structured error payloads.
+ * Falls back to a generic JSON error using the exception code when no specialized handler applies.
+ *
+ * @package    Framework
+ * @since      1.0.0
+ */
 namespace Framework;
+
+defined('ABSPATH') || exit;
 
 use Framework\Exceptions\ModelNotFoundException;
 use Framework\Exceptions\ValidationException;

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Data access layer for creating, claiming, locking, and updating queue jobs.
+ * Implements optimistic locking via claim IDs and batch limits for concurrent workers.
+ * Handles stuck job recovery and pending job detection.
+ *
+ * @package    Framework
+ * @subpackage Scheduler\Repositories
+ * @since      1.0.0
+ */
 namespace Framework\Scheduler\Repositories;
+
+defined('ABSPATH') || exit;
 
 use Framework\Scheduler\Constants\JobStatus;
 use Framework\Scheduler\Models\SchedulerQueue;

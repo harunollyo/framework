@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Bootstraps the background job system including cron registration and async worker authentication.
+ * Manages setup, boot, and teardown of WordPress cron events for job processing and cleanup.
+ * Entry point called from CoreServiceProvider during application boot.
+ *
+ * @package    Framework
+ * @subpackage Scheduler
+ * @since      1.0.0
+ */
 namespace Framework\Scheduler;
+
+defined('ABSPATH') || exit;
 
 use Framework\Scheduler\Constants\Config;
 use Framework\Scheduler\Runner;

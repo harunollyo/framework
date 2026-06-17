@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Translates a QueryBuilder state array into parameterized SQL strings.
+ * Compiles selects, joins, wheres, aggregates, and pagination clauses for the WordPress database layer.
+ * The SQL generation engine behind the fluent query builder.
+ *
+ * @package    Framework
+ * @subpackage Database\Query
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query;
+
+defined('ABSPATH') || exit;
 
 use Framework\Collections\Collection;
 use Framework\Database\Connection\Connection;

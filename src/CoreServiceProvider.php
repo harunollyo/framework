@@ -1,6 +1,15 @@
 <?php
-
+/**
+ * Registers the framework's essential services during application bootstrap.
+ * Binds database, schema, migration, discovery, manager, and scheduler components into the container.
+ * Boots listener and policy discovery caching plus scheduler initialization.
+ *
+ * @package    Framework
+ * @since      1.0.0
+ */
 namespace Framework;
+
+defined('ABSPATH') || exit;
 
 use Framework\Console\CommandManager;
 use Framework\Database\Connection\Connection;

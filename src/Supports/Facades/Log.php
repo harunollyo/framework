@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Facade proxy for LogManager leveled file logging.
+ * Exposes debug, info, warning, error, and emergency static methods.
+ * Writes to the configured framework log file.
+ *
+ * @package    Framework
+ * @subpackage Supports\Facades
+ * @since      1.0.0
+ */
 namespace Framework\Supports\Facades;
+
+defined('ABSPATH') || exit;
 
 use Framework\Facade;
 
@@ -12,9 +22,9 @@ use Framework\Facade;
  * @method static void emergency($message)
  * @method static void critical($message)
  * @method static void alert($message)
- *
  * @see \Framework\Managers\LogManager
  */
+
 class Log extends Facade
 {
     public static function get_accessor()

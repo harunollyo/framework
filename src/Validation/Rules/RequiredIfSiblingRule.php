@@ -1,14 +1,17 @@
 <?php
-
-namespace Framework\Validation\Rules;
-
-use function Framework\deep_get;
-
 /**
  * Validates that a value is present and not null.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Validation\Rules
+ * @since      1.0.0
  */
+namespace Framework\Validation\Rules;
+
+defined('ABSPATH') || exit;
+
+use function Framework\deep_get;
+
 class RequiredIfSiblingRule extends BaseRule
 {
     /**

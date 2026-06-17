@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * WP_REST_Response subclass that encodes data as JSON with configurable encoding options.
+ * Preserves original data alongside the encoded content string.
+ * Used by the response helper for consistent API JSON output.
+ *
+ * @package    Framework
+ * @subpackage Http
+ * @since      1.0.0
+ */
 namespace Framework\Http;
+
+defined('ABSPATH') || exit;
 
 use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;

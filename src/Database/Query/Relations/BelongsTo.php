@@ -1,21 +1,22 @@
 <?php
-
+/**
+ * Define an inverse relation where the parent belongs to another model.
+ * Constrains the related query to the owner record referenced by the parent's foreign key.
+ * Supports lazy and eager loading and provides helpers to associate or dissociate the owner.
+ *
+ * @package    Framework
+ * @subpackage Database\Query\Relations
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query\Relations;
+
+defined('ABSPATH') || exit;
 
 use Framework\Database\Query\Collection;
 use Framework\Database\Concerns\HasDictionary;
 use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;
 
-/**
- * Define an inverse relation where the parent belongs to another model.
- *
- * Constrains the related query to the owner record referenced by the parent's
- * foreign key. Supports lazy and eager loading and provides helpers to
- * associate or dissociate the owner.
- *
- * @since 1.0.0
- */
 class BelongsTo extends Relation
 {
     use HasDictionary;

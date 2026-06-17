@@ -1,15 +1,18 @@
 <?php
-
+/**
+ * Exception thrown when a authorization fails.
+ *
+ * @package    Framework
+ * @subpackage Exceptions
+ * @since      1.0.0
+ */
 namespace Framework\Exceptions;
+
+defined('ABSPATH') || exit;
 
 use Framework\Http\Response;
 use RuntimeException;
 
-/**
- * Exception thrown when a authorization fails.
- *
- * @since 1.0.0
- */
 class AuthorizationException extends RuntimeException
 {
     public function __construct($message = '', $code = 0, $previous = null)

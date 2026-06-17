@@ -1,18 +1,16 @@
 <?php
-
+/**
+ * Interface HookSubscriber Defines the contract for a class that can subscribe to a WordPress hook (action or filter) and handle it with optional configuration.
+ * Implementing classes should define which hook they subscribe to, the type of the hook (action or filter), and optionally the priority and argument count.
+ *
+ * @package    Framework
+ * @subpackage Wordpress\Contracts
+ * @since      1.0.0
+ */
 namespace Framework\Wordpress\Contracts;
 
-/**
- * Interface HookSubscriber
- *
- * Defines the contract for a class that can subscribe to a WordPress hook
- * (action or filter) and handle it with optional configuration.
- *
- * Implementing classes should define which hook they subscribe to, the type
- * of the hook (action or filter), and optionally the priority and argument count.
- * 
- * @since 1.0.0
- */
+defined('ABSPATH') || exit;
+
 interface HookSubscriber
 {
     /**

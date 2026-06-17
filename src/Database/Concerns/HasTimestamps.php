@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Trait managing created_at and updated_at columns on models.
+ * Provides fresh timestamp helpers and hooks into save lifecycle for automatic timestamp writes.
+ * Can be disabled per model via the timestamps property.
+ *
+ * @package    Framework
+ * @subpackage Database\Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Database\Concerns;
+
+defined('ABSPATH') || exit;
 
 use Framework\Supports\Facades\Date;
 

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Trait that fires a non-blocking admin-ajax POST to trigger background job processing.
+ * Uses a secret key stored in options to authenticate the async worker request.
+ * Keeps the HTTP response fast while queue work continues in the background.
+ *
+ * @package    Framework
+ * @subpackage Scheduler\Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Scheduler\Concerns;
+
+defined('ABSPATH') || exit;
 
 use Framework\Scheduler\Constants\Config;
 use Framework\Supports\Facades\Option;

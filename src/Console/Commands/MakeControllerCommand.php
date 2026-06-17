@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Generates a controller class stub in the app Controllers directory.
+ * Writes the file with the correct namespace and class name derived from the given argument.
+ * Follows the same stub-and-write pattern as other make commands.
+ *
+ * @package    Framework
+ * @subpackage Console\Commands
+ * @since      1.0.0
+ */
 namespace Framework\Console\Commands;
+
+defined('ABSPATH') || exit;
 
 use Framework\Console\CommandBase;
 use Framework\Console\Synopsis;

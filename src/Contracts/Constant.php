@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Interface requiring a static all method that returns every constant defined on the class.
+ * Standardizes how constant holder classes expose their values to callers.
+ * Complements HasConstants for classes that prefer an explicit contract.
+ *
+ * @package    Framework
+ * @subpackage Contracts
+ * @since      1.0.0
+ */
 namespace Framework\Contracts;
+
+defined('ABSPATH') || exit;
 
 interface Constant
 {

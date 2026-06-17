@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Define a one-to-one relation between parent and related models.
+ * Constrains the related query to match a single record whose foreign key points to the parent's local key.
+ * Supports lazy and eager loading and matching results back to parent models.
+ *
+ * @package    Framework
+ * @subpackage Database\Query\Relations
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query\Relations;
+
+defined('ABSPATH') || exit;
 
 use Framework\Database\Query\Collection;
 use Framework\Database\Concerns\HasDictionary;
@@ -9,15 +19,6 @@ use Framework\Database\Query\QueryBuilder;
 
 use function Framework\Polyfill\array_last;
 
-/**
- * Define a one-to-one relation between parent and related models.
- *
- * Constrains the related query to match a single record whose foreign key
- * points to the parent's local key. Supports lazy and eager loading and
- * matching results back to parent models.
- *
- * @since 1.0.0
- */
 class HasOne extends Relation
 {
     use HasDictionary;

@@ -1,12 +1,15 @@
 <?php
-
-namespace Framework\Contracts;
-
 /**
  * Contract for validation rule.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Contracts
+ * @since      1.0.0
  */
+namespace Framework\Contracts;
+
+defined('ABSPATH') || exit;
+
 interface Rule
 {
     /**

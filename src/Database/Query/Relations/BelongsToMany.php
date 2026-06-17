@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Define a many-to-many relation using a pivot table.
+ * Joins the related table through a pivot, adding constraints and selections for pivot keys and optional pivot columns.
+ * Supports eager loading, matching results, and managing pivot records via attach, detach, sync, and toggle.
+ *
+ * @package    Framework
+ * @subpackage Database\Query\Relations
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query\Relations;
+
+defined('ABSPATH') || exit;
 
 use Framework\Database\Query\Model;
 use Framework\Database\Query\Collection;
@@ -11,15 +21,6 @@ use function Framework\collection;
 use function Framework\Polyfill\str_contains;
 use function Framework\Polyfill\str_starts_with;
 
-/**
- * Define a many-to-many relation using a pivot table.
- *
- * Joins the related table through a pivot, adding constraints and selections
- * for pivot keys and optional pivot columns. Supports eager loading, matching
- * results, and managing pivot records via attach, detach, sync, and toggle.
- *
- * @since 1.0.0
- */
 class BelongsToMany extends Relation
 {
     use HasDictionary;

@@ -1,16 +1,19 @@
 <?php
-
+/**
+ * Central registry of named sanitization strategies mapped to WordPress and custom cleaners.
+ * Defines constants for text, email, url, rich-text, and structured types with a dispatch method per rule name.
+ * Shared by validation and request sanitization pipelines.
+ *
+ * @package    Framework
+ * @since      1.0.0
+ */
 namespace Framework;
+
+defined('ABSPATH') || exit;
 
 use Framework\Supports\Facades\Date;
 
 use function Framework\is_valid_json;
-
-/**
- * Class Sanitizer.
- * 
- * @since 1.0.0
- */
 
 class Sanitizer
 {

@@ -1,15 +1,18 @@
 <?php
-
+/**
+ * Exception thrown when a query fails.
+ *
+ * @package    Framework
+ * @subpackage Exceptions
+ * @since      1.0.0
+ */
 namespace Framework\Exceptions;
+
+defined('ABSPATH') || exit;
 
 use Exception;
 use Throwable;
 
-/**
- * Exception thrown when a query fails.
- *
- * @since 1.0.0
- */
 class QueryException extends Exception
 {
     protected $sql;

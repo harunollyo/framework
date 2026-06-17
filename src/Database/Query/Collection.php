@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Eloquent collection specialized for model instances with dictionary-based merge.
+ * Indexes items by primary key to deduplicate during merge operations.
+ * Extends the base Collection with model-aware collection behavior.
+ *
+ * @package    Framework
+ * @subpackage Database\Query
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query;
+
+defined('ABSPATH') || exit;
 
 use Framework\Collections\Collection as BaseCollection;
 use Framework\Database\Concerns\HasDictionary;

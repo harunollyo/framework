@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Base class for database seeders with call tracking to prevent duplicate execution.
+ * Resolves seeder classes from the container and runs them within optional transactions.
+ * Coordinates ordered seeding through the static call API.
+ *
+ * @package    Framework
+ * @subpackage Database
+ * @since      1.0.0
+ */
 namespace Framework\Database;
+
+defined('ABSPATH') || exit;
 
 use Framework\Supports\Arr;
 use Framework\Supports\Facades\DB;

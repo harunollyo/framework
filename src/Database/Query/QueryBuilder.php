@@ -1,6 +1,15 @@
 <?php
-
+/**
+ * The QueryBuilder class provides a fluent interface for building SQL queries.
+ * This class allows you to construct complex SQL queries using a chainable method syntax, making it easier to write and maintain database queries.
+ *
+ * @package    Framework
+ * @subpackage Database\Query
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query;
+
+defined('ABSPATH') || exit;
 
 use BadMethodCallException;
 use Closure;
@@ -30,16 +39,10 @@ use function Framework\tap;
 use function Framework\value;
 
 /**
- * The QueryBuilder class provides a fluent interface for building SQL queries.
- *
- * This class allows you to construct complex SQL queries using a chainable
- * method syntax, making it easier to write and maintain database queries.
- * 
  * @method QueryBuilder when($value, callable $callback, $default)
  * @method QueryBuilder unless($value, callable $callback, $default)
- *
- * @since 1.0.0
  */
+
 class QueryBuilder
 {
     use ExecuteQueries, RelationshipQueries, Conditionable, Macroable {

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Builds multipart/form-data request bodies with configurable boundary strings.
+ * Encodes fields and file attachments into a single stream for HTTP client uploads.
+ * Used by the Http client when sending as_multipart requests.
+ *
+ * @package    Framework
+ * @subpackage Http\Client
+ * @since      1.0.0
+ */
 namespace Framework\Http\Client;
+
+defined('ABSPATH') || exit;
 
 use Framework\Collections\Collection;
 use UnexpectedValueException;

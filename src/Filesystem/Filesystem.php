@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * WordPress-aware filesystem wrapper around WP_Filesystem with read, write, delete, and directory helpers.
+ * Integrates capability checks and sanitization for admin file operations.
+ * Supports Macroable extension for custom file helpers.
+ *
+ * @package    Framework
+ * @subpackage Filesystem
+ * @since      1.0.0
+ */
 namespace Framework\Filesystem;
+
+defined('ABSPATH') || exit;
 
 use Exception;
 use Framework\Exceptions\AuthorizationException;

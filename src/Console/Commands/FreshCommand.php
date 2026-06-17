@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Drops all database tables and re-runs every pending migration from scratch.
+ * Combines schema reset with a full migrate pass for a clean development database.
+ * Intended for local or staging resets rather than production use.
+ *
+ * @package    Framework
+ * @subpackage Console\Commands
+ * @since      1.0.0
+ */
 namespace Framework\Console\Commands;
+
+defined('ABSPATH') || exit;
 
 use Framework\Console\CommandBase;
 use Framework\Console\Synopsis;

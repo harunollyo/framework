@@ -1,17 +1,18 @@
 <?php
-
+/**
+ * Represents a JOIN clause sub-builder for building join conditions fluently.
+ * This class extends the QueryBuilder and is used internally for building complex JOIN ON conditions, including nested and dynamic join clauses, for SQL queries.
+ *
+ * @package    Framework
+ * @subpackage Database\Query
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query;
+
+defined('ABSPATH') || exit;
 
 use Closure;
 
-/**
- * Represents a JOIN clause sub-builder for building join conditions fluently.
- *
- * This class extends the QueryBuilder and is used internally for building complex
- * JOIN ON conditions, including nested and dynamic join clauses, for SQL queries.
- *
- * @since 1.0.0
- */
 class JoinClause extends QueryBuilder
 {
     /**

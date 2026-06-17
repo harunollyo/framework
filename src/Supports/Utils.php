@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Miscellaneous utility methods including UUID generation, growth percentage calculation, and float-to-int rounding.
+ * Wraps wp_generate_uuid4 and provides safe numeric helpers for reporting features.
+ * Stateless static helpers with no container dependencies.
+ *
+ * @package    Framework
+ * @subpackage Supports
+ * @since      1.0.0
+ */
 namespace Framework\Supports;
+
+defined('ABSPATH') || exit;
 
 class Utils
 {

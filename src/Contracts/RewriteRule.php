@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Defines the shape of a WordPress rewrite rule registration.
+ * Requires pattern, query string, rule stack, and query var accessors.
+ * Used by classes that contribute custom URL routing rules.
+ *
+ * @package    Framework
+ * @subpackage Contracts
+ * @since      1.0.0
+ */
 namespace Framework\Contracts;
+
+defined('ABSPATH') || exit;
 
 interface RewriteRule
 {

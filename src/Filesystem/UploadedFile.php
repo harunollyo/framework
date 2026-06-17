@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Represents an HTTP uploaded file extending File with original name, mime, size, and error state.
+ * Supports moving to storage, JSON serialization, and WordPress media integration.
+ * Created by InteractsWithFiles from the global $_FILES array.
+ *
+ * @package    Framework
+ * @subpackage Filesystem
+ * @since      1.0.0
+ */
 namespace Framework\Filesystem;
+
+defined('ABSPATH') || exit;
 
 use Exception;
 use Framework\Container;

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Registers and resolves authorization policies for framework models.
+ * Maps model classes to policy handlers and evaluates user abilities through the Guard facade.
+ * Centralizes access control decisions for controllers and domain services.
+ *
+ * @package    Framework
+ * @subpackage Managers
+ * @since      1.0.0
+ */
 namespace Framework\Managers;
+
+defined('ABSPATH') || exit;
 
 use Exception;
 use Framework\Concerns\DependencyResolvable;
@@ -15,11 +25,6 @@ use function Framework\app;
 use function Framework\config_path;
 use function Framework\user;
 
-/**
- * Class PolicyManager
- *
- * Handles registration and authorization of model policies.
- */
 class PolicyManager
 {
     use DependencyResolvable;

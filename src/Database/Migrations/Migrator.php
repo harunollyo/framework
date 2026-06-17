@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Orchestrates running and rolling back migration classes.
+ * Compares registered migrations against the repository history and invokes up/down methods.
+ * Validates each migration implements the Migration contract before execution.
+ *
+ * @package    Framework
+ * @subpackage Database\Migrations
+ * @since      1.0.0
+ */
 namespace Framework\Database\Migrations;
+
+defined('ABSPATH') || exit;
 
 use Framework\Contracts\Migration;
 use Framework\Supports\Facades\Schema;

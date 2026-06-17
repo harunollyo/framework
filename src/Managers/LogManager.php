@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * File-based logger writing leveled messages to a configurable log path.
+ * Supports debug, info, warning, error, and other PSR-like severity levels with timestamps.
+ * Defaults to themeum-framework.log in the application base path.
+ *
+ * @package    Framework
+ * @subpackage Managers
+ * @since      1.0.0
+ */
 namespace Framework\Managers;
+
+defined('ABSPATH') || exit;
 
 use DateTime;
 use Framework\Supports\Facades\File;

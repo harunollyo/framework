@@ -1,6 +1,17 @@
 <?php
-
+/**
+ * Manage a shared PDO database connection.
+ * Provide a singleton-style access point to a configured PDO instance used by the ORM for executing queries and transactions.
+ * Handles DSN construction, error mode configuration, and connection lifecycle.
+ * Consumers request the instance rather than constructing connections directly.
+ *
+ * @package    Framework
+ * @subpackage Database\Connection
+ * @since      1.0.0
+ */
 namespace Framework\Database\Connection;
+
+defined('ABSPATH') || exit;
 
 use Closure;
 use DateTimeInterface;
@@ -17,16 +28,6 @@ use RuntimeException;
 use function Framework\collection;
 use function Framework\Polyfill\str_contains;
 
-/**
- * Manage a shared PDO database connection.
- *
- * Provide a singleton-style access point to a configured PDO instance used by
- * the ORM for executing queries and transactions. Handles DSN construction,
- * error mode configuration, and connection lifecycle. Consumers request the
- * instance rather than constructing connections directly.
- *
- * @since 1.0.0
- */
 class Connection
 {
     /**

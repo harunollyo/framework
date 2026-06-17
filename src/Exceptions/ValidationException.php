@@ -1,15 +1,18 @@
 <?php
-
+/**
+ * Exception thrown when validation fails.
+ *
+ * @package    Framework
+ * @subpackage Exceptions
+ * @since      1.0.0
+ */
 namespace Framework\Exceptions;
+
+defined('ABSPATH') || exit;
 
 use Framework\Http\Response;
 use Exception;
 
-/**
- * Exception thrown when validation fails.
- *
- * @since 1.0.0
- */
 class ValidationException extends Exception
 {
     /** @var array<string> */

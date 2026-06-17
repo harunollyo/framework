@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Facade proxy for the Filesystem service with read, write, exists, and directory helpers.
+ * Wraps WordPress filesystem operations behind a testable static API.
+ * Registered by FileSystemServiceProvider.
+ *
+ * @package    Framework
+ * @subpackage Supports\Facades
+ * @since      1.0.0
+ */
 namespace Framework\Supports\Facades;
+
+defined('ABSPATH') || exit;
 
 use Framework\Facade;
 
@@ -32,9 +42,9 @@ use Framework\Facade;
  * @method static int|false last_modified(string $path)
  * @method static bool make(string $path)
  * @method static bool make_dir(string $path)
- *
  * @see \Framework\Filesystem\Filesystem
  */
+
 class File extends Facade
 {
     public static function get_accessor()

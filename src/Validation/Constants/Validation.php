@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Maps validation rule string names to their rule class implementations.
+ * Serves as the central registry consumed by the Validator to resolve rule tokens like required, email, and unique.
+ * Keeps rule discovery declarative and extensible.
+ *
+ * @package    Framework
+ * @subpackage Validation\Constants
+ * @since      1.0.0
+ */
 namespace Framework\Validation\Constants;
+
+defined('ABSPATH') || exit;
 
 use Framework\Validation\Rules\AfterRule;
 use Framework\Validation\Rules\ArrayRule;

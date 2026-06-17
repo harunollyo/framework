@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Generates a service provider class stub in the application providers directory.
+ * Creates register and boot method shells ready for container bindings.
+ * Aligns new providers with the framework ServiceProvider contract.
+ *
+ * @package    Framework
+ * @subpackage Console\Commands
+ * @since      1.0.0
+ */
 namespace Framework\Console\Commands;
+
+defined('ABSPATH') || exit;
 
 use Framework\Console\CommandBase;
 use Framework\Console\Synopsis;

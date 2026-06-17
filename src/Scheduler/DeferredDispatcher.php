@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Fluent builder wrapping a queueable job before it is persisted to the queue.
+ * Supports chaining delay, priority, and batch size before calling dispatch to enqueue.
+ * Mirrors Laravel's delayed dispatch pattern for the WordPress scheduler.
+ *
+ * @package    Framework
+ * @subpackage Scheduler
+ * @since      1.0.0
+ */
 namespace Framework\Scheduler;
+
+defined('ABSPATH') || exit;
 
 class DeferredDispatcher
 {

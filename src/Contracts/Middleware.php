@@ -1,15 +1,16 @@
 <?php
-
-namespace Framework\Contracts;
-
 /**
  * Contract for middleware that can intercept and authorize API requests.
+ * Middleware classes implementing this interface should perform authorization or filtering logic before a route is executed.
  *
- * Middleware classes implementing this interface should perform
- * authorization or filtering logic before a route is executed.
- *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Contracts
+ * @since      1.0.0
  */
+namespace Framework\Contracts;
+
+defined('ABSPATH') || exit;
+
 interface Middleware
 {
     /**

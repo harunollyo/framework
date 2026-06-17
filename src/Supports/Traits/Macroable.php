@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Trait allowing runtime registration of custom static and instance methods via macro.
+ * Stores callables in a static map and dispatches unknown methods to them.
+ * Used by Application, Filesystem, and HTTP Request for extensibility.
+ *
+ * @package    Framework
+ * @subpackage Supports\Traits
+ * @since      1.0.0
+ */
 namespace Framework\Supports\Traits;
+
+defined('ABSPATH') || exit;
 
 use BadMethodCallException;
 

@@ -1,12 +1,15 @@
 <?php
-
-namespace Framework\Constants;
-
 /**
  * WordPress option keys used across the framework.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Constants
+ * @since      1.0.0
  */
+namespace Framework\Constants;
+
+defined('ABSPATH') || exit;
+
 class OptionKeys
 {
     /**

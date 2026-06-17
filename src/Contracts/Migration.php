@@ -1,14 +1,16 @@
 <?php
-
+/**
+ * Interface Migration Defines the contract for database migrations.
+ * Each implementing class should provide logic for setting up (up) and tearing down (down) database structures.
+ *
+ * @package    Framework
+ * @subpackage Contracts
+ * @since      1.0.0
+ */
 namespace Framework\Contracts;
 
-/**
- * Interface Migration
- *
- * Defines the contract for database migrations.
- * Each implementing class should provide logic for setting up (up)
- * and tearing down (down) database structures.
- */
+defined('ABSPATH') || exit;
+
 interface Migration
 {
     /**

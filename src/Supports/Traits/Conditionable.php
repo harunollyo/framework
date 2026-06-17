@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Trait adding when and unless conditional execution to any class.
+ * Runs a callback when a truthy condition is met and supports default fallbacks.
+ * Enables fluent conditional chains on builders and models.
+ *
+ * @package    Framework
+ * @subpackage Supports\Traits
+ * @since      1.0.0
+ */
 namespace Framework\Supports\Traits;
+
+defined('ABSPATH') || exit;
 
 use Closure;
 

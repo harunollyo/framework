@@ -1,12 +1,15 @@
 <?php
-
-namespace Framework\Http;
-
 /**
  * Handles standardized REST API responses for the plugin.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Http
+ * @since      1.0.0
  */
+namespace Framework\Http;
+
+defined('ABSPATH') || exit;
+
 class Response
 {
     /**

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Static proxy for the database manager resolved from the application container.
+ * Exposes query builder, transaction, and raw expression helpers through a concise facade API.
+ * Forwards static calls to the underlying DatabaseManager service binding.
+ *
+ * @package    Framework
+ * @subpackage Supports\Facades
+ * @since      1.0.0
+ */
 namespace Framework\Supports\Facades;
+
+defined('ABSPATH') || exit;
 
 use Framework\Facade;
 
@@ -14,9 +24,9 @@ use Framework\Facade;
  * @method static void disable_query_log()
  * @method static void flush_query_log()
  * @method static array get_query_log()
- * 
  * @see \Framework\Database\Connection\DatabaseManager
  */
+
 class DB extends Facade
 {
     /**

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Scaffolds a form request class with validation rule placeholders.
+ * Places the file under app Requests with the resolved namespace.
+ * Supports the request validation pipeline used by controllers and DTOs.
+ *
+ * @package    Framework
+ * @subpackage Console\Commands
+ * @since      1.0.0
+ */
 namespace Framework\Console\Commands;
+
+defined('ABSPATH') || exit;
 
 use Framework\Console\CommandBase;
 use Framework\Console\Synopsis;

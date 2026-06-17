@@ -1,15 +1,19 @@
 <?php
-
+/**
+ * Utility for casting values and nested structures to scalar and collection types.
+ * Normalizes request, option, and model data before validation and persistence layers consume it.
+ * Keeps type coercion logic out of controllers and repositories.
+ *
+ * @package    Framework
+ * @subpackage Supports
+ * @since      1.0.0
+ */
 namespace Framework\Supports;
+
+defined('ABSPATH') || exit;
 
 use Exception;
 
-/**
- * Class DataCaster
- *
- * Provides static utility methods to cast values and data structures
- * to specific types (e.g., integer, float, boolean, string, array).
- */
 class DataCaster
 {
     /**

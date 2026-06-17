@@ -1,17 +1,18 @@
 <?php
-
+/**
+ * Class to handle the user meta Provides static methods for getting, setting, updating, and deleting user meta.
+ *
+ * @package    Framework
+ * @subpackage Wordpress
+ * @since      1.0.0
+ */
 namespace Framework\Wordpress;
+
+defined('ABSPATH') || exit;
 
 use function Framework\with_prefix;
 use function Framework\without_prefix;
 
-/**
- * Class to handle the user meta
- *
- * Provides static methods for getting, setting, updating, and deleting user meta.
- *
- * @since 1.0.0
- */
 class UserMeta
 {
     /**

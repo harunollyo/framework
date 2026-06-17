@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Trait adding eager-load and aggregate query methods like with, with_count, and with_sum to the query builder.
+ * Builds subselects and join clauses for relationship data without N+1 queries.
+ * Extends QueryBuilder with Laravel-inspired relationship loading.
+ *
+ * @package    Framework
+ * @subpackage Database\Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Database\Concerns;
+
+defined('ABSPATH') || exit;
 
 use Closure;
 use Framework\Database\Query\Expression;

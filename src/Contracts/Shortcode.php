@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Contract for WordPress shortcode handlers.
+ * Requires a name accessor and a callback matching the add_shortcode signature.
+ * Standardizes shortcode registration across the plugin.
+ *
+ * @package    Framework
+ * @subpackage Contracts
+ * @since      1.0.0
+ */
 namespace Framework\Contracts;
+
+defined('ABSPATH') || exit;
 
 interface Shortcode
 {

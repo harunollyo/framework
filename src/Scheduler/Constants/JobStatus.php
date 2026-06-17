@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Defines the four queue job lifecycle states: pending, processing, failed, and completed.
+ * Used by QueueRepository and Runner to filter and transition job records.
+ * Keeps status values consistent across the scheduler database table.
+ *
+ * @package    Framework
+ * @subpackage Scheduler\Constants
+ * @since      1.0.0
+ */
 namespace Framework\Scheduler\Constants;
+
+defined('ABSPATH') || exit;
 
 class JobStatus
 {

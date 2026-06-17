@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Runtime exception thrown when a query expecting a single row returns more than one.
+ * Carries the matched record count for error reporting.
+ * Used by firstOrFail-style retrieval methods on the query builder.
+ *
+ * @package    Framework
+ * @subpackage Exceptions
+ * @since      1.0.0
+ */
 namespace Framework\Exceptions;
+
+defined('ABSPATH') || exit;
 
 use RuntimeException;
 

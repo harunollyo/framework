@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Contract for handling file uploads as WordPress media attachments.
+ * Defines upload returning structured attachment metadata including sizes and mime info.
+ * Abstracts media library integration behind a testable interface.
+ *
+ * @package    Framework
+ * @subpackage Contracts
+ * @since      1.0.0
+ */
 namespace Framework\Contracts;
+
+defined('ABSPATH') || exit;
 
 interface Uploader
 {

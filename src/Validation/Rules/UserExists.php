@@ -1,12 +1,15 @@
 <?php
-
-namespace Framework\Validation\Rules;
-
 /**
  * Rule to ensure a a user exist with id.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Validation\Rules
+ * @since      1.0.0
  */
+namespace Framework\Validation\Rules;
+
+defined('ABSPATH') || exit;
+
 class UserExists extends BaseRule
 {
     /**

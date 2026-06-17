@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Fluent HTTP client built on wp_remote_request with chainable headers, body, and auth options.
+ * Supports GET, POST, PUT, PATCH, DELETE and multipart or JSON body formats.
+ * Macroable for extending with custom request helpers.
+ *
+ * @package    Framework
+ * @subpackage Http\Client
+ * @since      1.0.0
+ */
 namespace Framework\Http\Client;
+
+defined('ABSPATH') || exit;
 
 use BadMethodCallException;
 use Framework\Collections\Collection;

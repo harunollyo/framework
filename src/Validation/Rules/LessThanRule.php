@@ -1,15 +1,18 @@
 <?php
-
+/**
+ * Rule to ensure the value is after the given date.
+ *
+ * @package    Framework
+ * @subpackage Validation\Rules
+ * @since      1.0.0
+ */
 namespace Framework\Validation\Rules;
+
+defined('ABSPATH') || exit;
 
 use Framework\Supports\Date;
 use Framework\Supports\Str;
 
-/**
- * Rule to ensure the value is after the given date.
- *
- * @since 1.0.0
- */
 class LessThanRule extends BaseRule
 {
     /**

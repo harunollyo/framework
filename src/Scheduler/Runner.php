@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Executes a batch of claimed queue jobs sequentially with configurable inter-job delays.
+ * Resets stuck jobs, resolves each job class from its DTO, and retriggers the async worker when more work remains.
+ * The runtime engine that processes deferred tasks.
+ *
+ * @package    Framework
+ * @subpackage Scheduler
+ * @since      1.0.0
+ */
 namespace Framework\Scheduler;
+
+defined('ABSPATH') || exit;
 
 use Framework\Scheduler\Concerns\HasAsyncWorker;
 use Framework\Scheduler\Constants\Config;

@@ -1,6 +1,14 @@
 <?php
-
+/**
+ * Handles data validation against defined rules.
+ *
+ * @package    Framework
+ * @subpackage Validation
+ * @since      1.0.0
+ */
 namespace Framework\Validation;
+
+defined('ABSPATH') || exit;
 
 use Framework\Validation\Constants\Validation;
 use Framework\Contracts\Rule;
@@ -10,11 +18,6 @@ use Framework\Validation\Rules\BaseRule;
 use Closure;
 use InvalidArgumentException;
 
-/**
- * Handles data validation against defined rules.
- *
- * @since 1.0.0
- */
 class Validator
 {
     /**

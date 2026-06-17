@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Fluent builder for defining database table columns, indexes, and constraints.
+ * Collects column definitions and table-level commands before handing them to the schema compiler.
+ * Provides a chainable API for migrations and programmatic schema changes.
+ *
+ * @package    Framework
+ * @subpackage Database\Schema
+ * @since      1.0.0
+ */
 namespace Framework\Database\Schema;
+
+defined('ABSPATH') || exit;
 
 use Framework\Database\Constants\ColumnTypes;
 use Framework\Database\Connection\Connection;
@@ -8,16 +18,6 @@ use Framework\Database\Schema\Definitions\Definition;
 use Framework\Database\Schema\Definitions\ForeignKeyDefinition;
 use Exception;
 
-/**
- * Class Structure
- *
- * This class provides a fluent interface for defining and managing the structure of a database table,
- * including columns, indexes, primary keys, unique constraints, and foreign key relationships.
- *
- * @package Framework\Database\Schema
- *
- * @since 1.0.0
- */
 class Structure
 {
     /**

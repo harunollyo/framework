@@ -1,15 +1,18 @@
 <?php
-
+/**
+ * Rule to ensure a a post exist with id and post type.
+ *
+ * @package    Framework
+ * @subpackage Validation\Rules
+ * @since      1.0.0
+ */
 namespace Framework\Validation\Rules;
+
+defined('ABSPATH') || exit;
 
 use Framework\Supports\Facades\DB;
 use Exception;
 
-/**
- * Rule to ensure a a post exist with id and post type.
- *
- * @since 1.0.0
- */
 class ExistsRule extends BaseRule
 {
     /**

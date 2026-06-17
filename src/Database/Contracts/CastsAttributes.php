@@ -1,13 +1,19 @@
 <?php
-
+/**
+ * Interface for custom attribute cast classes with get and set methods.
+ * Receives the model, key, value, and full attributes array for bidirectional transformation.
+ * Used in model $casts for complex types like JSON or enums.
+ *
+ * @package    Framework
+ * @subpackage Database\Contracts
+ * @since      1.0.0
+ */
 namespace Framework\Database\Contracts;
+
+defined('ABSPATH') || exit;
 
 use Framework\Database\Query\Model;
 
-/**
- * @template TGet
- * @template TSet
- */
 interface CastsAttributes
 {
     /**

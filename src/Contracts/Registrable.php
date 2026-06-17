@@ -1,12 +1,15 @@
 <?php
-
-namespace Framework\Contracts;
-
 /**
  * Contract for registering something like post type, taxonomies etc.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Contracts
+ * @since      1.0.0
  */
+namespace Framework\Contracts;
+
+defined('ABSPATH') || exit;
+
 interface Registrable
 {
     /**

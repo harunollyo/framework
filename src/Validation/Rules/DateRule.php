@@ -1,15 +1,18 @@
 <?php
-
+/**
+ * Validates that the given value matches db date format.
+ *
+ * @package    Framework
+ * @subpackage Validation\Rules
+ * @since      1.0.0
+ */
 namespace Framework\Validation\Rules;
+
+defined('ABSPATH') || exit;
 
 use Framework\Constants\DateTimeFormats;
 use DateTime;
 
-/**
- * Validates that the given value matches db date format.
- *
- * @since 1.0.0
- */
 class DateRule extends BaseRule
 {
     /**

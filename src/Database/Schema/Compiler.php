@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Compiles database table structure definitions into executable SQL statements.
+ * Translates fluent schema blueprints into CREATE and ALTER commands for WordPress database tables.
+ * Coordinates column modifiers, indexes, and foreign keys through the schema definition layer.
+ *
+ * @package    Framework
+ * @subpackage Database\Schema
+ * @since      1.0.0
+ */
 namespace Framework\Database\Schema;
+
+defined('ABSPATH') || exit;
 
 use Framework\Database\Query\Expression;
 use Framework\Database\Query\QueryBuilder;
@@ -8,15 +18,6 @@ use Framework\Database\Schema\Definitions\Definition;
 use Framework\Database\Schema\Definitions\ForeignKeyDefinition;
 use Exception;
 
-/**
- * Class Compiler
- *
- * Responsible for compiling the structure of a database table into SQL statements.
- *
- * @package Framework\Database\Schema
- *
- * @since 1.0.0
- */
 class Compiler
 {
     /**

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Wraps wp_remote_request results with JSON decoding, status checks, and dot-notation body access.
+ * Implements ArrayAccess for convenient response data retrieval.
+ * Provides ok, failed, and json helper methods for API integrations.
+ *
+ * @package    Framework
+ * @subpackage Http\Client
+ * @since      1.0.0
+ */
 namespace Framework\Http\Client;
+
+defined('ABSPATH') || exit;
 
 use ArrayAccess;
 use Framework\Collections\Collection;

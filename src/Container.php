@@ -1,6 +1,15 @@
 <?php
-
+/**
+ * The IoC (Inversion of Control) service container for the framework.
+ * Centralizes registration, resolution, and lifecycle management of services with automatic dependency injection, singleton binding, and aliasing.
+ * Acts as the backbone for dependency management across the application.
+ *
+ * @package    Framework
+ * @since      1.0.0
+ */
 namespace Framework;
+
+defined('ABSPATH') || exit;
 
 use Closure;
 use Exception;

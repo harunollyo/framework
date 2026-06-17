@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * WordPress phpmailer_init action that applies SMTP settings from plugin email configuration.
+ * Configures PHPMailer host, port, credentials, and encryption when SMTP mailer is selected.
+ * Enables outbound mail through custom SMTP servers.
+ *
+ * @package    Framework
+ * @subpackage Wordpress\Hooks\Actions
+ * @since      1.0.0
+ */
 namespace Framework\Wordpress\Hooks\Actions;
+
+defined('ABSPATH') || exit;
 
 use Framework\Wordpress\Constants\HookNames;
 use Framework\Wordpress\Constants\HookTypes;

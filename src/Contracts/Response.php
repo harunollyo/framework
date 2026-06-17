@@ -1,14 +1,16 @@
 <?php
-
-namespace Framework\Contracts;
-
 /**
  * Contract for sending structured JSON responses.
- *
  * Implementations should return a WordPress-compatible REST response.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Contracts
+ * @since      1.0.0
  */
+namespace Framework\Contracts;
+
+defined('ABSPATH') || exit;
+
 interface Response
 {
     /**

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Trait defining has_one, has_many, belongs_to, and belongs_to_many relationship builders.
+ * Infers foreign and local keys from model conventions when omitted.
+ * Entry point for defining associations on Model subclasses.
+ *
+ * @package    Framework
+ * @subpackage Database\Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Database\Concerns;
+
+defined('ABSPATH') || exit;
 
 use Framework\Database\Query\Relations\BelongsTo;
 use Framework\Database\Query\Relations\BelongsToMany;

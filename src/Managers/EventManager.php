@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Dispatches domain events to registered listener classes loaded from cache.
+ * Resolves listeners from the cached map, sorts by priority, and invokes handle on each match.
+ * Core of the framework event-driven architecture.
+ *
+ * @package    Framework
+ * @subpackage Managers
+ * @since      1.0.0
+ */
 namespace Framework\Managers;
+
+defined('ABSPATH') || exit;
 
 use Closure;
 use Framework\Listener;

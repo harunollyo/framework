@@ -1,23 +1,25 @@
 <?php
-
+/**
+ * Defines a foreign key constraint with configurable ON UPDATE and ON DELETE actions.
+ * Links local and referenced columns while expressing referential integrity rules in schema migrations.
+ * Integrates with the structure builder when declaring relational table constraints.
+ * Allows setting actions such as CASCADE, RESTRICT, SET NULL, and NO ACTION for both update and delete events.
+ *
+ * @package    Framework
+ * @subpackage Database\Schema\Definitions
+ * @since      1.0.0
+ */
 namespace Framework\Database\Schema\Definitions;
 
+defined('ABSPATH') || exit;
+
 /**
- * Class ForeignKeyDefinition
- *
- * Provides an interface for defining foreign key constraints and their actions
- * (ON UPDATE, ON DELETE) in database schema definitions. Allows setting actions such as
- * CASCADE, RESTRICT, SET NULL, and NO ACTION for both update and delete events.
- *
- * @package Framework\Database\Schema\Definitions
- *
- * @since 1.0.0
- * 
  * @method $this on(string $table)
  * @method $this on_update(string $action)
  * @method $this on_delete(string $action)
  * @method $this references(string $references)
  */
+
 class ForeignKeyDefinition extends Definition
 {
     /**

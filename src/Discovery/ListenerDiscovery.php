@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Scans app/Listeners for event listener classes and maps them to event types via reflection.
+ * Skips filesystem discovery in production when a cache file exists.
+ * Writes a listeners.cache.php config file for fast EventManager boot.
+ *
+ * @package    Framework
+ * @subpackage Discovery
+ * @since      1.0.0
+ */
 namespace Framework\Discovery;
+
+defined('ABSPATH') || exit;
 
 use Framework\Contracts\Cacheable;
 use Framework\Contracts\Discoverable;

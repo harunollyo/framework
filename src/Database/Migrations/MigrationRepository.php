@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Persists applied migration class names in WordPress options and reads registered migrations from container tags.
+ * Tracks which migrations have run and supports rollback state queries.
+ * Bridges the migrator with WordPress option storage.
+ *
+ * @package    Framework
+ * @subpackage Database\Migrations
+ * @since      1.0.0
+ */
 namespace Framework\Database\Migrations;
+
+defined('ABSPATH') || exit;
 
 use Framework\Constants\OptionKeys;
 use Framework\Supports\Facades\Option;

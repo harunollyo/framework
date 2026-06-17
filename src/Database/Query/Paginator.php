@@ -1,21 +1,22 @@
 <?php
-
+/**
+ * Represent a paginated slice of results with metadata.
+ * Wrap a collection of items and expose helpful pagination helpers such as current page, last page, and range indices.
+ * Typically constructed by the query builder when using paginate to return both data and context.
+ *
+ * @package    Framework
+ * @subpackage Database\Query
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query;
+
+defined('ABSPATH') || exit;
 
 use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;
 use Framework\Collections\Collection;
 use Framework\Supports\Arr;
 
-/**
- * Represent a paginated slice of results with metadata.
- *
- * Wrap a collection of items and expose helpful pagination helpers such as
- * current page, last page, and range indices. Typically constructed by the
- * query builder when using paginate to return both data and context.
- *
- * @since 1.0.0
- */
 class Paginator implements Arrayable, Jsonable
 {
     /**

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Loads action and filter hook classes from config/hooks.php and tags them for container discovery.
+ * Ensures RegisterRestApi is always registered even when config is empty.
+ * Boots hook instances onto WordPress during application boot.
+ *
+ * @package    Framework
+ * @subpackage Wordpress
+ * @since      1.0.0
+ */
 namespace Framework\Wordpress;
+
+defined('ABSPATH') || exit;
 
 use Framework\ServiceProvider;
 use Framework\Wordpress\Hooks\Actions\RegisterRestApi;

@@ -1,20 +1,20 @@
 <?php
-
+/**
+ * Abstract base for static facades that proxy calls to container-resolved services.
+ * Caches resolved instances per accessor and forwards __callStatic to the underlying object.
+ * Enables Laravel-style Facade::method() syntax throughout the framework.
+ *
+ * @package    Framework
+ * @since      1.0.0
+ */
 namespace Framework;
+
+defined('ABSPATH') || exit;
 
 use RuntimeException;
 
 use function Framework\app;
 
-/**
- * Abstract Facade base class for providing static interface to service container bindings.
- *
- * This class allows static method calls to be forwarded to underlying service instances
- * resolved from the application container. Child classes must implement get_accessor()
- * to specify the service binding key.
- *
- * @package Framework\Core
- */
 abstract class Facade
 {
     /**

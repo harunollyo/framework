@@ -1,22 +1,20 @@
 <?php
-
+/**
+ * Base hook subscriber with sensible defaults for WordPress action and filter registration.
+ * Implements HookSubscriber with standard priority and accepted-args values for concrete hook classes.
+ * Reduces boilerplate when wiring framework integrations into WordPress lifecycle events.
+ * Subclasses must implement: - get_name() - get_type() - handle() This class also defines constants for hook types: ACTION and FILTER.
+ *
+ * @package    Framework
+ * @subpackage Wordpress
+ * @since      1.0.0
+ */
 namespace Framework\Wordpress;
+
+defined('ABSPATH') || exit;
 
 use Framework\Wordpress\Contracts\HookSubscriber;
 
-/**
- * Class BaseHook
- *
- * Provides a base implementation of the HookSubscriber interface with default
- * values for priority and argument count. Subclasses must implement:
- * - get_name()
- * - get_type()
- * - handle()
- *
- * This class also defines constants for hook types: ACTION and FILTER.
- * 
- * @since 1.0.0
- */
 abstract class BaseHook implements HookSubscriber
 {
     /**

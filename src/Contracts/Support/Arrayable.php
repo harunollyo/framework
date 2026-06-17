@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Interface requiring to_array for objects that can be flattened to associative arrays.
+ * Used by DTOs, resources, and collections for serialization.
+ * Foundation for JSON encoding and API responses.
+ *
+ * @package    Framework
+ * @subpackage Contracts\Support
+ * @since      1.0.0
+ */
 namespace Framework\Contracts\Support;
+
+defined('ABSPATH') || exit;
 
 interface Arrayable
 {

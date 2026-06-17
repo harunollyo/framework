@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Combines Dispatchable and HasAsyncWorker with job configuration for priority, delay, batch size, and arguments.
+ * Base trait for classes that implement ShouldQueue and run asynchronously.
+ * Defines the fluent API consumed by DeferredDispatcher.
+ *
+ * @package    Framework
+ * @subpackage Scheduler\Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Scheduler\Concerns;
+
+defined('ABSPATH') || exit;
 
 use Framework\Scheduler\Constants\Config;
 

@@ -1,16 +1,20 @@
 <?php
-
+/**
+ * Represents a single database column definition with fluent attribute configuration.
+ * Supports type selection, length, nullability, defaults, and indexing through chainable methods.
+ * Feeds column metadata into the schema structure and compiler pipeline.
+ *
+ * @package    Framework
+ * @subpackage Database\Schema\Definitions
+ * @since      1.0.0
+ */
 namespace Framework\Database\Schema\Definitions;
+
+defined('ABSPATH') || exit;
 
 use Framework\Supports\Flex;
 
 /**
- * Class Definition
- *
- * Represents a database table column definition with various attributes and configuration methods.
- *
- * @since 1.0.0
- *
  * @method $this comment(string $comment)
  * @method $this default($value)
  * @method $this nullable()
@@ -24,6 +28,7 @@ use Framework\Supports\Flex;
  * @method $this unique()
  * @method $this use_current()
  */
+
 class Definition extends Flex
 {
     // Column definition

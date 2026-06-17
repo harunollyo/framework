@@ -1,14 +1,17 @@
 <?php
-
-namespace Framework\Exceptions;
-
-use Framework\Supports\Arr;
-
 /**
  * Exception thrown when a model (database record) is not found.
  *
- * @package Framework\Exceptions
+ * @package    Framework
+ * @subpackage Exceptions
+ * @since      1.0.0
  */
+namespace Framework\Exceptions;
+
+defined('ABSPATH') || exit;
+
+use Framework\Supports\Arr;
+
 class ModelNotFoundException extends NotFoundException
 {
     /**

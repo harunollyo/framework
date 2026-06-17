@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Facade proxy for the HTTP client Request builder.
+ * Exposes get, post, with_token, as_json, and other fluent request methods.
+ * Entry point for outbound HTTP integrations.
+ *
+ * @package    Framework
+ * @subpackage Supports\Facades
+ * @since      1.0.0
+ */
 namespace Framework\Supports\Facades;
+
+defined('ABSPATH') || exit;
 
 use Framework\Facade;
 
@@ -28,9 +38,9 @@ use Framework\Facade;
  * @method static \Framework\Http\Client\Request method(string $method)
  * @method static \Framework\Http\Client\Request attach(string $name, string $content, ?string $filename = null, array $headers = [])
  * @method static \Framework\Http\Client\Request macro($name, callable $macro)
- * 
  * @see \Framework\Http\Client\Request
  */
+
 class Http extends Facade
 {
     protected static $is_cacheable = false;

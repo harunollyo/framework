@@ -1,14 +1,17 @@
 <?php
-
-namespace Framework\Validation\Rules;
-
-use DateTime;
-
 /**
  * Validates that the given value matches a specific date format.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Validation\Rules
+ * @since      1.0.0
  */
+namespace Framework\Validation\Rules;
+
+defined('ABSPATH') || exit;
+
+use DateTime;
+
 class IsValidImageIdRule extends BaseRule
 {
     /**

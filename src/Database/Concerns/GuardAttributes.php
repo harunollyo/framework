@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Trait implementing mass-assignment protection via fillable and guarded lists.
+ * Supports global unguard for seeding and per-model fillable configuration.
+ * Prevents accidental writes to protected columns during bulk attribute sets.
+ *
+ * @package    Framework
+ * @subpackage Database\Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Database\Concerns;
+
+defined('ABSPATH') || exit;
 
 use function Framework\Polyfill\str_contains;
 

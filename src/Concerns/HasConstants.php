@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Trait exposing a class constants as keys, values, or the full map via reflection.
+ * Avoids hard-coding constant lists in consuming code.
+ * Used by constant holder classes that need runtime enumeration of their defined values.
+ *
+ * @package    Framework
+ * @subpackage Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Concerns;
 
 defined('ABSPATH') || exit;

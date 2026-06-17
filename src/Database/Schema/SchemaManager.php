@@ -1,16 +1,21 @@
 <?php
-
+/**
+ * Coordinates schema operations such as creating, altering, and dropping database tables.
+ * Bridges migration workflows with the structure builder and SQL compiler services.
+ * Exposes the primary entry point for programmatic table management in plugins.
+ *
+ * @package    Framework
+ * @subpackage Database\Schema
+ * @since      1.0.0
+ */
 namespace Framework\Database\Schema;
+
+defined('ABSPATH') || exit;
 
 use Closure;
 use Framework\Database\Connection\Connection;
 use Exception;
 
-/**
- * Class SchemaManager
- *
- * Manages database schema operations such as creating and dropping tables.
- */
 class SchemaManager
 {
     /**

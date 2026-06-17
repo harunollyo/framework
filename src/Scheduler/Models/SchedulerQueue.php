@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Eloquent model for the themeum_framework_scheduler_jobs database table.
+ * Tracks resolver, args, status, priority, scheduling time, claim ID, and attempt count.
+ * The persistence layer for background job records.
+ *
+ * @package    Framework
+ * @subpackage Scheduler\Models
+ * @since      1.0.0
+ */
 namespace Framework\Scheduler\Models;
+
+defined('ABSPATH') || exit;
 
 use Framework\Database\Query\Model;
 

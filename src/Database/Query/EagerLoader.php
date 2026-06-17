@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Eager load one or more relations for a set of models.
+ * Accept an array of models and a list of relation method names, then fetch and match related records in as few queries as possible.
+ * This reduces N+1 query patterns by batching lookups and hydrating relation data onto the provided models.
+ *
+ * @package    Framework
+ * @subpackage Database\Query
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query;
+
+defined('ABSPATH') || exit;
 
 use Closure;
 use Framework\Database\Query\Collection;
@@ -9,16 +19,6 @@ use Framework\Database\Query\Relations\Relation;
 
 use function Framework\Polyfill\array_first;
 
-/**
- * Eager load one or more relations for a set of models.
- *
- * Accept an array of models and a list of relation method names, then
- * fetch and match related records in as few queries as possible. This
- * reduces N+1 query patterns by batching lookups and hydrating relation
- * data onto the provided models.
- *
- * @since 1.0.0
- */
 class EagerLoader
 {
     use HasDictionary;

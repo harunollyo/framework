@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Catalog of standard WordPress capability slug constants.
+ * Uses HasConstants for runtime enumeration of all defined caps.
+ * Reference for authorization checks and capability registration hooks.
+ *
+ * @package    Framework
+ * @subpackage Wordpress\Constants
+ * @since      1.0.0
+ */
 namespace Framework\Wordpress\Constants;
+
+defined('ABSPATH') || exit;
 
 use Framework\Concerns\HasConstants;
 

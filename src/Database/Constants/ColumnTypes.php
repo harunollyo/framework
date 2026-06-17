@@ -1,14 +1,17 @@
 <?php
-
+/**
+ * Registry of supported database column type constants for schema definitions.
+ * Centralizes canonical type names used by the structure builder and SQL compiler.
+ * Keeps column declarations consistent across migrations and model metadata.
+ *
+ * @package    Framework
+ * @subpackage Database\Constants
+ * @since      1.0.0
+ */
 namespace Framework\Database\Constants;
 
-/**
- * Class ColumnTypes
- *
- * Defines constants for various database column types used in the application.
- * 
- * @since 1.0.0
- */
+defined('ABSPATH') || exit;
+
 class ColumnTypes
 {
     /**

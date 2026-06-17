@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Helper for building normalized attachment metadata arrays from WordPress media IDs.
+ * Handles images, videos with posters, and external video URLs.
+ * Produces consistent attachment shapes for API resources and DTOs.
+ *
+ * @package    Framework
+ * @subpackage Supports
+ * @since      1.0.0
+ */
 namespace Framework\Supports;
+
+defined('ABSPATH') || exit;
 
 class MediaAttachment
 {

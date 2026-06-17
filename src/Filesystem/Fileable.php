@@ -1,10 +1,16 @@
 <?php
-
-namespace Framework\Filesystem;
-
 /**
  * Fileable
  *
+ * @package    Framework
+ * @subpackage Filesystem
+ * @since      1.0.0
+ */
+namespace Framework\Filesystem;
+
+defined('ABSPATH') || exit;
+
+/**
  * @method bool is_file()
  * @method array glob($pattern, int $flags = 0)
  * @method string basename()
@@ -31,6 +37,7 @@ namespace Framework\Filesystem;
  * @method bool is_writable()
  * @method int|false last_modified()
  */
+
 class Fileable
 {
     /**

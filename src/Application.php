@@ -1,6 +1,15 @@
 <?php
-
+/**
+ * Central application kernel that extends the service container and orchestrates plugin bootstrap.
+ * Resolves framework paths, registers core and app-defined service providers, and manages the boot lifecycle with before/after callbacks.
+ * Acts as the single entry point for binding services, aliases, and application configuration.
+ *
+ * @package    Framework
+ * @since      1.0.0
+ */
 namespace Framework;
+
+defined('ABSPATH') || exit;
 
 use Framework\Container;
 use Framework\Contracts\Request as RequestContract;
@@ -38,10 +47,6 @@ use Framework\Supports\Arr;
 use InvalidArgumentException;
 use RuntimeException;
 
-/**
- * The main application class.
- * This class is responsible for bootstrapping the plugin and managing the plugin lifecycle.
- */
 class Application extends Container
 {
     use Macroable;

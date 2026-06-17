@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Immutable constants for scheduler cron event names, async worker settings, retry limits, and batch sizes.
+ * Centralizes magic strings used by Scheduler, Runner, and HasAsyncWorker.
+ * Prevents scattered configuration across scheduler components.
+ *
+ * @package    Framework
+ * @subpackage Scheduler\Constants
+ * @since      1.0.0
+ */
 namespace Framework\Scheduler\Constants;
+
+defined('ABSPATH') || exit;
 
 final class Config
 {

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Scaffolding generator that creates a new PHP class file from a stub in the application path.
+ * Accepts a class name and optional subdirectory, resolving namespaces from composer PSR-4 mappings.
+ * Speeds up boilerplate creation for arbitrary application classes.
+ *
+ * @package    Framework
+ * @subpackage Console\Commands
+ * @since      1.0.0
+ */
 namespace Framework\Console\Commands;
+
+defined('ABSPATH') || exit;
 
 use Framework\Console\CommandBase;
 use Framework\Console\Synopsis;

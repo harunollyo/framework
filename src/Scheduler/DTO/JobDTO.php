@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * DTO carrying id, args, and resolver class name for a queued job record.
+ * Passed from the repository to Runner when resolving and executing jobs.
+ * Thin data bag decoupling persistence from job execution logic.
+ *
+ * @package    Framework
+ * @subpackage Scheduler\DTO
+ * @since      1.0.0
+ */
 namespace Framework\Scheduler\DTO;
+
+defined('ABSPATH') || exit;
 
 use Framework\DTO;
 

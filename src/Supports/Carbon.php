@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Framework Carbon subclass adding isValidDate and to_sql_datetime_string helpers.
+ * Uses a standard BASE_FORMAT for database datetime storage.
+ * Wraps nesbot/carbon with conventions aligned to the query layer.
+ *
+ * @package    Framework
+ * @subpackage Supports
+ * @since      1.0.0
+ */
 namespace Framework\Supports;
+
+defined('ABSPATH') || exit;
 
 use Carbon\Carbon as BaseCarbon;
 use Carbon\Exceptions\InvalidFormatException;

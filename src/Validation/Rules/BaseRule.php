@@ -1,14 +1,17 @@
 <?php
-
-namespace Framework\Validation\Rules;
-
-use Framework\Contracts\Rule;
-
 /**
  * Abstract base class for validation rules.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Validation\Rules
+ * @since      1.0.0
  */
+namespace Framework\Validation\Rules;
+
+defined('ABSPATH') || exit;
+
+use Framework\Contracts\Rule;
+
 abstract class BaseRule implements Rule
 {
     /**

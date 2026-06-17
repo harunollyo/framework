@@ -1,18 +1,19 @@
 <?php
-
+/**
+ * The DatabaseManager class provides a high-level interface for managing database transactions.
+ * This class acts as a facade for transaction management, allowing you to begin, commit, and rollback transactions using the underlying database connection.
+ * It is designed to simplify transaction handling and ensure consistency across database operations.
+ *
+ * @package    Framework
+ * @subpackage Database\Connection
+ * @since      1.0.0
+ */
 namespace Framework\Database\Connection;
+
+defined('ABSPATH') || exit;
 
 use Framework\Supports\Traits\Macroable;
 
-/**
- * The DatabaseManager class provides a high-level interface for managing database transactions.
- *
- * This class acts as a facade for transaction management, allowing you to begin, commit,
- * and rollback transactions using the underlying database connection. It is designed to
- * simplify transaction handling and ensure consistency across database operations.
- *
- * @since 1.0.0
- */
 class DatabaseManager
 {
     use Macroable {

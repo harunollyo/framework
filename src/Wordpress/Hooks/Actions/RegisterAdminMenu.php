@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * WordPress admin_menu action that renders Menu subclasses declared in config.
+ * Validates each menu class extends Menu and calls render when displayable.
+ * Connects declarative menu config to wp admin page registration.
+ *
+ * @package    Framework
+ * @subpackage Wordpress\Hooks\Actions
+ * @since      1.0.0
+ */
 namespace Framework\Wordpress\Hooks\Actions;
+
+defined('ABSPATH') || exit;
 
 use Framework\Wordpress\Constants\HookTypes;
 use Framework\Wordpress\BaseHook;

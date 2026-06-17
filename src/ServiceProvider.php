@@ -1,7 +1,15 @@
 <?php
-
+/**
+ * Abstract base for application service providers with register and boot lifecycle hooks.
+ * Receives the Application instance and binds services in register while wiring hooks in boot.
+ * Pattern for modular plugin feature registration.
+ *
+ * @package    Framework
+ * @since      1.0.0
+ */
 namespace Framework;
 
+defined('ABSPATH') || exit;
 
 abstract class ServiceProvider
 {

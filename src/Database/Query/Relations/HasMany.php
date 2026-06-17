@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Define a one-to-many relation between parent and related models.
+ * Constrains the related query to records whose foreign key points to the parent's local key.
+ * Supports lazy loading, eager loading with where-in, and matching results back to parents as collections.
+ *
+ * @package    Framework
+ * @subpackage Database\Query\Relations
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query\Relations;
+
+defined('ABSPATH') || exit;
 
 use Framework\Database\Query\Model;
 use Framework\Database\Query\Collection;
@@ -11,15 +21,6 @@ use function Framework\collection;
 use function Framework\Polyfill\array_first;
 use function Framework\Polyfill\array_last;
 
-/**
- * Define a one-to-many relation between parent and related models.
- *
- * Constrains the related query to records whose foreign key points to the
- * parent's local key. Supports lazy loading, eager loading with where-in, and
- * matching results back to parents as collections.
- *
- * @since 1.0.0
- */
 class HasMany extends Relation
 {
     use HasDictionary;

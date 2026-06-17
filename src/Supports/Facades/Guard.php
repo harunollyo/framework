@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Facade proxy for PolicyManager authorization checks.
+ * Exposes authorize, allows, and denies for ability testing against models.
+ * Resolves from the policy container binding.
+ *
+ * @package    Framework
+ * @subpackage Supports\Facades
+ * @since      1.0.0
+ */
 namespace Framework\Supports\Facades;
+
+defined('ABSPATH') || exit;
 
 use Framework\Facade;
 
@@ -8,9 +18,9 @@ use Framework\Facade;
  * @method static mixed authorize(string $ability, $model = null, ...$arguments)
  * @method static bool allows(string $ability, $model = null, ...$arguments)
  * @method static bool denies(string $ability, $model = null, ...$arguments)
- * 
  * @see \Framework\Managers\PolicyManager
  */
+
 class Guard extends Facade
 {
     public static function get_accessor()

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * SplFileInfo subclass representing a single filesystem file with move and put helpers.
+ * Validates existence on construction when path checking is enabled.
+ * Wraps PHP file operations with framework-level error handling.
+ *
+ * @package    Framework
+ * @subpackage Filesystem
+ * @since      1.0.0
+ */
 namespace Framework\Filesystem;
+
+defined('ABSPATH') || exit;
 
 use Exception;
 use InvalidArgumentException;

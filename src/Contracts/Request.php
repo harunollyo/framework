@@ -1,14 +1,16 @@
 <?php
-
-namespace Framework\Contracts;
-
 /**
  * Contract for interacting with an HTTP request in a normalized way.
- *
  * This interface abstracts key methods for accessing request data, headers, routes, and HTTP method.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Contracts
+ * @since      1.0.0
  */
+namespace Framework\Contracts;
+
+defined('ABSPATH') || exit;
+
 interface Request
 {
     /**

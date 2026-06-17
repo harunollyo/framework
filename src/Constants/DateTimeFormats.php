@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Central registry of canonical date, datetime, and ISO-8601 interval format strings.
+ * Separates database storage formats from human-readable display formats and predefined DateInterval steps.
+ * Keeps date formatting consistent across models, queries, and UI layers.
+ *
+ * @package    Framework
+ * @subpackage Constants
+ * @since      1.0.0
+ */
 namespace Framework\Constants;
+
+defined('ABSPATH') || exit;
 
 class DateTimeFormats
 {

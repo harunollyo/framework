@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Executes database seeders, optionally targeting a specific class or the default DatabaseSeeder.
+ * Wraps seeding in transaction and error handling with logging on failure.
+ * Supports fresh database population after migrations.
+ *
+ * @package    Framework
+ * @subpackage Console\Commands
+ * @since      1.0.0
+ */
 namespace Framework\Console\Commands;
+
+defined('ABSPATH') || exit;
 
 use Framework\Console\CommandBase;
 use Framework\Console\Synopsis;

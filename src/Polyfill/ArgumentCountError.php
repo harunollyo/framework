@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Polyfill bootstrap for a namespaced ArgumentCountError compatible with PHP 7.1+.
+ * Wraps the native class when available or defines a minimal Error subclass otherwise.
+ * Loaded early so framework code can reference a consistent exception type across PHP versions.
+ *
+ * @package    Framework
+ * @subpackage Polyfill
+ * @since      1.0.0
+ */
 namespace Framework\Polyfill;
+
+defined('ABSPATH') || exit;
 
 if (!class_exists('Framework\Polyfill\ArgumentCountError', false)) {
     if (class_exists('ArgumentCountError', false)) {

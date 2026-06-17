@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Scaffolds an Eloquent-style model class extending the framework Model base.
+ * Outputs to the app Models path with fillable and table conventions from the stub.
+ * Reduces repetitive model setup for new database entities.
+ *
+ * @package    Framework
+ * @subpackage Console\Commands
+ * @since      1.0.0
+ */
 namespace Framework\Console\Commands;
+
+defined('ABSPATH') || exit;
 
 use Framework\Console\CommandBase;
 use Framework\Console\Synopsis;

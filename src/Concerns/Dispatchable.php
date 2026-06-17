@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Trait giving event classes static dispatch, dispatch_if, and dispatch_unless helpers.
+ * Instantiates the event and forwards it to the Event facade in one call.
+ * Keeps domain events decoupled from the EventManager while preserving a fluent dispatch API.
+ *
+ * @package    Framework
+ * @subpackage Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Concerns;
+
+defined('ABSPATH') || exit;
 
 use Closure;
 use Framework\Supports\Facades\Event;

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Registers framework commands with WP-CLI under a configurable base prefix.
+ * Resolves command classes from the container and validates they extend CommandBase.
+ * Bridges the application container and WordPress CLI for artisan-style command discovery.
+ *
+ * @package    Framework
+ * @subpackage Console
+ * @since      1.0.0
+ */
 namespace Framework\Console;
+
+defined('ABSPATH') || exit;
 
 use RuntimeException;
 

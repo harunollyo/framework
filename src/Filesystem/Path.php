@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Static utilities for joining path segments and normalizing filesystem paths.
+ * Handles trailing slashes, parent directory traversal, and cross-platform separators.
+ * Used by Application and generators for consistent path construction.
+ *
+ * @package    Framework
+ * @subpackage Filesystem
+ * @since      1.0.0
+ */
 namespace Framework\Filesystem;
+
+defined('ABSPATH') || exit;
 
 class Path
 {

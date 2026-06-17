@@ -1,14 +1,17 @@
 <?php
-
-namespace Framework\Exceptions;
-
-use Exception;
-
 /**
  * Exception thrown when an invalid or non-existent validation rule is used.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Exceptions
+ * @since      1.0.0
  */
+namespace Framework\Exceptions;
+
+defined('ABSPATH') || exit;
+
+use Exception;
+
 class InvalidValidationRuleException extends Exception
 {
     // Custom logic can be added here if needed.

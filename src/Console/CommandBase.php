@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Abstract base for WP-CLI commands registered through the framework.
+ * Defines synopsis, description, and lifecycle hooks including prepare and run.
+ * Normalizes argument handling so concrete commands focus on business logic rather than CLI plumbing.
+ *
+ * @package    Framework
+ * @subpackage Console
+ * @since      1.0.0
+ */
 namespace Framework\Console;
+
+defined('ABSPATH') || exit;
 
 use Framework\Collections\Collection;
 

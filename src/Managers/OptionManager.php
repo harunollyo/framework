@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Namespaced wrapper around WordPress update_option and get_option with in-memory caching.
+ * Applies and strips application prefixes for plugin-scoped settings.
+ * Provides bulk get, delete, and Option model integration for advanced queries.
+ *
+ * @package    Framework
+ * @subpackage Managers
+ * @since      1.0.0
+ */
 namespace Framework\Managers;
+
+defined('ABSPATH') || exit;
 
 use Framework\Collections\Collection;
 use Framework\Supports\Arr;

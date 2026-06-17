@@ -1,12 +1,15 @@
 <?php
-
-namespace Framework\Exceptions;
-
 /**
  * Exception thrown when a query fails.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Exceptions
+ * @since      1.0.0
  */
+namespace Framework\Exceptions;
+
+defined('ABSPATH') || exit;
+
 class UniqueConstraintViolationException extends QueryException
 {
     //

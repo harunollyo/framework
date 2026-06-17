@@ -1,12 +1,15 @@
 <?php
-
-namespace Framework\Validation\Rules;
-
 /**
  * Validates that a value is same as another specified field.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Validation\Rules
+ * @since      1.0.0
  */
+namespace Framework\Validation\Rules;
+
+defined('ABSPATH') || exit;
+
 class SameAsRule extends BaseRule
 {
     /**

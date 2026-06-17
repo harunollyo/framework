@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Trait providing dictionary key normalization for model collections.
+ * Converts attribute keys to strings via __toString or casting, throwing on unsupported types.
+ * Ensures collection merge and lookup use consistent primary-key indexing.
+ *
+ * @package    Framework
+ * @subpackage Database\Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Database\Concerns;
+
+defined('ABSPATH') || exit;
 
 use InvalidArgumentException;
 

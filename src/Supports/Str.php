@@ -1,6 +1,15 @@
 <?php
-
+/**
+ * A utility class for string manipulation and formatting.
+ * Provides various static methods to handle common string operations such as type conversion, slug generation, and string incrementation.
+ *
+ * @package    Framework
+ * @subpackage Supports
+ * @since      1.0.0
+ */
 namespace Framework\Supports;
+
+defined('ABSPATH') || exit;
 
 use Framework\Sanitizer;
 use Framework\Supports\Traits\Macroable;
@@ -10,12 +19,6 @@ use function Framework\Polyfill\array_first;
 use function Framework\Polyfill\array_last;
 use function Framework\Polyfill\str_starts_with;
 
-/**
- * A utility class for string manipulation and formatting.
- *
- * Provides various static methods to handle common string operations
- * such as type conversion, slug generation, and string incrementation.
- */
 class Str
 {
     use Macroable;

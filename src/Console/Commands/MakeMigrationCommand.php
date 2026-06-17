@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Creates a timestamped migration file in the database migrations folder.
+ * Uses a stub template and converts the supplied name to snake_case for the filename.
+ * Integrates with the migrator by placing files where MigrationRepository discovers them.
+ *
+ * @package    Framework
+ * @subpackage Console\Commands
+ * @since      1.0.0
+ */
 namespace Framework\Console\Commands;
+
+defined('ABSPATH') || exit;
 
 use Framework\Console\CommandBase;
 use Framework\Console\Synopsis;

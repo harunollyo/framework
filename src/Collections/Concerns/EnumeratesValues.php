@@ -1,6 +1,14 @@
 <?php
-
+/**
+ * Trait to enumerate values of the collection.
+ *
+ * @package    Framework
+ * @subpackage Collections\Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Collections\Concerns;
+
+defined('ABSPATH') || exit;
 
 use Exception;
 use Framework\Collections\HigherOrderCollectionProxy;
@@ -8,11 +16,6 @@ use Framework\Collections\HigherOrderCollectionProxy;
 use function Framework\deep_get;
 
 /**
- * Trait to enumerate values of the collection.
- *
- * @template TKey of array-key
- * @template TValue
- * 
  * @property-read HigherOrderCollectionProxy<TKey, TValue> $average
  * @property-read HigherOrderCollectionProxy<TKey, TValue> $avg
  * @property-read HigherOrderCollectionProxy<TKey, TValue> $contains
@@ -30,9 +33,8 @@ use function Framework\deep_get;
  * @property-read HigherOrderCollectionProxy<TKey, TValue> $reject
  * @property-read HigherOrderCollectionProxy<TKey, TValue> $some
  * @property-read HigherOrderCollectionProxy<TKey, TValue> $sum
- * 
- * @since 1.0.0
  */
+
 trait EnumeratesValues
 {
     protected static $proxies = [

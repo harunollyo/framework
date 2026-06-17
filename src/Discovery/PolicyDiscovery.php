@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Discovers authorization policy classes in app/Policies and associates them with model classes by naming convention.
+ * Caches the policy map for production and validates policy class names.
+ * Feeds PolicyManager with model-to-policy bindings.
+ *
+ * @package    Framework
+ * @subpackage Discovery
+ * @since      1.0.0
+ */
 namespace Framework\Discovery;
+
+defined('ABSPATH') || exit;
 
 use Framework\Contracts\Cacheable;
 use Framework\Contracts\Discoverable;

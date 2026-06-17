@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Execute queries and return the results.
+ * This trait provides methods for executing queries and returning the results.
+ * It is used to execute queries and return the results in a consistent manner.
+ *
+ * @package    Framework
+ * @subpackage Database\Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Database\Concerns;
+
+defined('ABSPATH') || exit;
 
 use Closure;
 use Framework\Collections\Collection;
@@ -9,14 +19,6 @@ use RuntimeException;
 
 use function Framework\collection;
 
-/**
- * Execute queries and return the results.
- *
- * This trait provides methods for executing queries and returning the results.
- * It is used to execute queries and return the results in a consistent manner.
- *
- * @since 1.0.0
- */
 trait ExecuteQueries
 {
     /**

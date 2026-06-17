@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Base class for declaring WordPress admin menu pages with title, capability, slug, and icon properties.
+ * Supports main menu and submenu types with a render method calling add_menu_page or add_submenu_page.
+ * Subclasses define is_displayable for conditional visibility.
+ *
+ * @package    Framework
+ * @subpackage Wordpress
+ * @since      1.0.0
+ */
 namespace Framework\Wordpress;
+
+defined('ABSPATH') || exit;
 
 use Framework\Wordpress\Constants\MenuTypes;
 use Framework\Supports\Arr;

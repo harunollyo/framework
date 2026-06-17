@@ -1,6 +1,15 @@
 <?php
-
+/**
+ * Fluent REST API route registrar for WordPress with middleware, grouping, and controller binding.
+ * Resolves controller actions via reflection and dependency injection from the container.
+ * Registers routes on rest_api_init through RegisterRestApi.
+ *
+ * @package    Framework
+ * @since      1.0.0
+ */
 namespace Framework;
+
+defined('ABSPATH') || exit;
 
 use Closure;
 use Framework\Contracts\Request as RequestContract;
@@ -20,11 +29,6 @@ use function Framework\app;
 use function Framework\Polyfill\array_first;
 use function Framework\Polyfill\array_last;
 
-/**
- * Handles route registration and middleware for the REST API.
- *
- * @since 1.0.0
- */
 class Route
 {
     /**

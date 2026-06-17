@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Wrapper around WP_User providing fluent capability checks via can_* magic methods.
+ * Integrates with Guard for policy authorization and manages prefixed user meta access.
+ * Offers a framework-native API over WordPress user APIs.
+ *
+ * @package    Framework
+ * @subpackage Wordpress
+ * @since      1.0.0
+ */
 namespace Framework\Wordpress;
+
+defined('ABSPATH') || exit;
 
 use Framework\Supports\Facades\Guard;
 use Framework\Wordpress\UserMeta;
@@ -72,6 +82,7 @@ use function Framework\with_prefix;
  * @method bool can_delete_themes() Check if user can delete themes
  * @method bool can_export() Check if user can export
  */
+
 class User
 {
     /**

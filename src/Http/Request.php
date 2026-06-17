@@ -1,6 +1,14 @@
 <?php
-
+/**
+ * Handles REST API request data abstraction for operations.
+ *
+ * @package    Framework
+ * @subpackage Http
+ * @since      1.0.0
+ */
 namespace Framework\Http;
+
+defined('ABSPATH') || exit;
 
 use Framework\Contracts\Request as RequestContract;
 use Framework\Contracts\Support\Arrayable;
@@ -12,11 +20,6 @@ use WP_REST_Request;
 
 use function Framework\user;
 
-/**
- * Handles REST API request data abstraction for operations.
- *
- * @since 1.0.0
- */
 class Request implements RequestContract, Arrayable
 {
     use InteractsWithFiles;

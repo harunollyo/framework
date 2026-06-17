@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Named constants for WordPress action and filter hook strings used by the framework.
+ * Covers init, admin, REST, mail, and template hooks among others.
+ * Prevents typos and enables IDE autocompletion for hook registration.
+ *
+ * @package    Framework
+ * @subpackage Wordpress\Constants
+ * @since      1.0.0
+ */
 namespace Framework\Wordpress\Constants;
+
+defined('ABSPATH') || exit;
 
 class HookNames
 {

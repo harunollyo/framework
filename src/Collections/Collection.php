@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Represent a simple iterable collection of items.
+ * Provide a lightweight wrapper around arrays with common helper methods such as mapping, filtering, iteration, and JSON/array conversion.
+ * Used throughout the ORM to return sets of models or raw records while offering a consistent API for traversal and transformation.
+ *
+ * @package    Framework
+ * @subpackage Collections
+ * @since      1.0.0
+ */
 namespace Framework\Collections;
+
+defined('ABSPATH') || exit;
 
 use ArrayAccess;
 use Closure;
@@ -18,16 +28,6 @@ use JsonSerializable;
 use function Framework\Polyfill\array_last;
 use function Framework\value;
 
-/**
- * Represent a simple iterable collection of items.
- *
- * Provide a lightweight wrapper around arrays with common helper methods
- * such as mapping, filtering, iteration, and JSON/array conversion. Used
- * throughout the ORM to return sets of models or raw records while offering
- * a consistent API for traversal and transformation.
- *
- * @since 1.0.0
- */
 class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonable, JsonSerializable
 {
     use Conditionable, EnumeratesValues;

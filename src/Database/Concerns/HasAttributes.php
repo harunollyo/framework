@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Core Eloquent-style attribute management for models including casting, mutators, and dirty tracking.
+ * Handles get/set, serialization, and relation-aware attribute access.
+ * The largest model concern powering the active record layer.
+ *
+ * @package    Framework
+ * @subpackage Database\Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Database\Concerns;
+
+defined('ABSPATH') || exit;
 
 use DateTime;
 use DateTimeInterface;

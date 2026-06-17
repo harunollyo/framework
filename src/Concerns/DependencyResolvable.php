@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Trait that resolves method parameters via reflection and the application container.
+ * Injects typed class dependencies automatically and fills primitive arguments from a provided map or defaults.
+ * Powers controller and route action resolution without manual wiring.
+ *
+ * @package    Framework
+ * @subpackage Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Concerns;
+
+defined('ABSPATH') || exit;
 
 use Exception;
 use ReflectionException;

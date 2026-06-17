@@ -1,15 +1,18 @@
 <?php
-
+/**
+ * Exception thrown when an invalid cast type is used.
+ *
+ * @package    Framework
+ * @subpackage Exceptions
+ * @since      1.0.0
+ */
 namespace Framework\Exceptions;
+
+defined('ABSPATH') || exit;
 
 use Exception;
 use RuntimeException;
 
-/**
- * Exception thrown when an invalid cast type is used.
- *
- * @since 1.0.0
- */
 class InvalidCastException extends RuntimeException
 {
     /**

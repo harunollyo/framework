@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Proxy that invokes methods on a target object and always returns the target for chaining.
+ * Powers the tap helper pattern where side-effect calls should not break fluent pipelines.
+ * Delegates __call to the wrapped instance.
+ *
+ * @package    Framework
+ * @subpackage Supports
+ * @since      1.0.0
+ */
 namespace Framework\Supports;
+
+defined('ABSPATH') || exit;
 
 class HigherOrderTapProxy
 {

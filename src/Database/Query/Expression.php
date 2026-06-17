@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Value object wrapping raw SQL fragments that should not be quoted by the query compiler.
+ * Passed to select, where, and order clauses when database functions or literals are needed.
+ * Prevents accidental parameter binding of SQL expressions.
+ *
+ * @package    Framework
+ * @subpackage Database\Query
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query;
+
+defined('ABSPATH') || exit;
 
 class Expression
 {

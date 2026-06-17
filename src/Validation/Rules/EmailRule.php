@@ -1,12 +1,15 @@
 <?php
-
-namespace Framework\Validation\Rules;
-
 /**
  * Validates that the given value is an email.
  *
- * @since 1.0.0
+ * @package    Framework
+ * @subpackage Validation\Rules
+ * @since      1.0.0
  */
+namespace Framework\Validation\Rules;
+
+defined('ABSPATH') || exit;
+
 class EmailRule extends BaseRule
 {
     /**

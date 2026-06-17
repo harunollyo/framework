@@ -1,18 +1,20 @@
 <?php
-
+/**
+ * Middleware to ensure the user is authenticated.
+ * Blocks access to routes unless the user is logged in.
+ *
+ * @package    Framework
+ * @subpackage Middlewares
+ * @since      1.0.0
+ */
 namespace Framework\Middlewares;
+
+defined('ABSPATH') || exit;
 
 use Framework\Contracts\Middleware;
 use Framework\Contracts\Request;
 use Framework\Exceptions\AuthorizationException;
 
-/**
- * Middleware to ensure the user is authenticated.
- *
- * Blocks access to routes unless the user is logged in.
- *
- * @since 1.0.0
- */
 class AuthMiddleware implements Middleware
 {
     /**

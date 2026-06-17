@@ -1,6 +1,15 @@
 <?php
-
+/**
+ * Base data transfer object with array construction, request hydration, and JSON serialization.
+ * Supports attribute casting, field picking/exclusion, and meta field extraction.
+ * Bridges validated HTTP input and API output with a typed property bag.
+ *
+ * @package    Framework
+ * @since      1.0.0
+ */
 namespace Framework;
+
+defined('ABSPATH') || exit;
 
 use Framework\Contracts\CastAttribute;
 use Framework\Contracts\Request;
@@ -9,11 +18,6 @@ use Framework\Exceptions\ValidationException;
 use Exception;
 use JsonSerializable;
 
-/**
- * Base Data Transfer Object
- *
- * @since 1.0.0
- */
 class DTO implements JsonSerializable, Arrayable
 {
     /**

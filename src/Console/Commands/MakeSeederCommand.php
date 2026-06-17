@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Creates a database seeder class in the seeders directory from a stub template.
+ * Names the class and file according to the supplied seeder name.
+ * Works with SeedCommand to populate tables during development.
+ *
+ * @package    Framework
+ * @subpackage Console\Commands
+ * @since      1.0.0
+ */
 namespace Framework\Console\Commands;
+
+defined('ABSPATH') || exit;
 
 use Framework\Console\CommandBase;
 use Framework\Console\Synopsis;

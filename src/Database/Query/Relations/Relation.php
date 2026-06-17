@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Base class for ORM relationship implementations.
+ * Holds references to the parent and related models and a query builder used to retrieve related data.
+ * Concrete relations implement constraint and match logic for lazy and eager loading scenarios.
+ *
+ * @package    Framework
+ * @subpackage Database\Query\Relations
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query\Relations;
+
+defined('ABSPATH') || exit;
 
 use BadMethodCallException;
 use Closure;
@@ -9,15 +19,6 @@ use Framework\Database\Query\Expression;
 use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;
 
-/**
- * Base class for ORM relationship implementations.
- *
- * Holds references to the parent and related models and a query builder used
- * to retrieve related data. Concrete relations implement constraint and match
- * logic for lazy and eager loading scenarios.
- *
- * @since 1.0.0
- */
 abstract class Relation
 {
     /**

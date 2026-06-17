@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Provides property-style access on collection items by delegating to a named collection method such as pluck or map.
+ * Lets callers write concise syntax like $collection->pluck->name instead of wrapping closures manually.
+ * Returns the transformed collection result for each accessed key.
+ *
+ * @package    Framework
+ * @subpackage Collections
+ * @since      1.0.0
+ */
 namespace Framework\Collections;
+
+defined('ABSPATH') || exit;
 
 class HigherOrderCollectionProxy
 {

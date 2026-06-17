@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Trait for HTTP request classes to access uploaded files from $_FILES.
+ * Normalizes nested file arrays into UploadedFile instances keyed by input name.
+ * Supports retrieving single files or collections via dot notation.
+ *
+ * @package    Framework
+ * @subpackage Http\Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Http\Concerns;
+
+defined('ABSPATH') || exit;
 
 use Framework\Collections\Collection;
 use Framework\Filesystem\UploadedFile;

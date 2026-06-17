@@ -1,6 +1,15 @@
 <?php
-
+/**
+ * Abstract API resource transformer that maps models or arrays to public response shapes.
+ * Offers static make, collection, and paginated helpers for batch serialization.
+ * Delegates property access to the underlying resource via magic methods.
+ *
+ * @package    Framework
+ * @since      1.0.0
+ */
 namespace Framework;
+
+defined('ABSPATH') || exit;
 
 use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;

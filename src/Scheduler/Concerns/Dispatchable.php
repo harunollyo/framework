@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Trait enabling static dispatch on queueable job classes returning a DeferredDispatcher.
+ * Creates the job instance, applies arguments, and defers enqueue until dispatch is called.
+ * Scheduler equivalent of the event Dispatchable trait.
+ *
+ * @package    Framework
+ * @subpackage Scheduler\Concerns
+ * @since      1.0.0
+ */
 namespace Framework\Scheduler\Concerns;
+
+defined('ABSPATH') || exit;
 
 use Framework\Scheduler\Constants\JobStatus;
 use Framework\Scheduler\DeferredDispatcher;

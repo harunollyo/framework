@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * WordPress rest_api_init action that registers all Route instances with the REST API.
+ * Iterates the static route registry and calls register on each.
+ * Bridges the Route fluent API to WordPress REST endpoints.
+ *
+ * @package    Framework
+ * @subpackage Wordpress\Hooks\Actions
+ * @since      1.0.0
+ */
 namespace Framework\Wordpress\Hooks\Actions;
+
+defined('ABSPATH') || exit;
 
 use Framework\Wordpress\Constants\HookNames;
 use Framework\Wordpress\Constants\HookTypes;

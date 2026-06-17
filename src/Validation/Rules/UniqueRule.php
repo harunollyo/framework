@@ -1,15 +1,18 @@
 <?php
-
+/**
+ * Rule to ensure that a value is unique in a specified database table and column.
+ *
+ * @package    Framework
+ * @subpackage Validation\Rules
+ * @since      1.0.0
+ */
 namespace Framework\Validation\Rules;
+
+defined('ABSPATH') || exit;
 
 use Framework\Supports\Facades\DB;
 use Exception;
 
-/**
- * Rule to ensure that a value is unique in a specified database table and column.
- *
- * @since 1.0.0
- */
 class UniqueRule extends BaseRule
 {
     /**

@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Distinguishes main admin menu entries from submenu entries.
+ * Consumed by the Menu base class to route render calls to add_menu_page or add_submenu_page.
+ * Keeps admin menu registration type-safe.
+ *
+ * @package    Framework
+ * @subpackage Wordpress\Constants
+ * @since      1.0.0
+ */
 namespace Framework\Wordpress\Constants;
+
+defined('ABSPATH') || exit;
 
 class MenuTypes
 {

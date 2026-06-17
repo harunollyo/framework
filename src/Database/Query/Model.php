@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * Provide an active record style base model for the Query Builder.
+ * Encapsulate table naming, attribute handling, persistence operations, and relationship definitions.
+ * Models interact with the query builder to perform CRUD operations, handle casting, timestamps, hydration, and eager loading of related records for a cohesive developer experience.
+ *
+ * @package    Framework
+ * @subpackage Database\Query
+ * @since      1.0.0
+ */
 namespace Framework\Database\Query;
+
+defined('ABSPATH') || exit;
 
 use ArrayAccess;
 use Framework\Contracts\Support\Arrayable;
@@ -21,16 +31,6 @@ use ReflectionClass;
 use function Framework\app;
 use function Framework\Polyfill\str_contains;
 
-/**
- * Provide an active record style base model for the Query Builder.
- *
- * Encapsulate table naming, attribute handling, persistence operations, and
- * relationship definitions. Models interact with the query builder to perform
- * CRUD operations, handle casting, timestamps, hydration, and eager loading
- * of related records for a cohesive developer experience.
- *
- * @since 1.0.0
- */
 abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializable
 {
     use Macroable,
