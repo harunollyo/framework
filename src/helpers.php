@@ -553,3 +553,37 @@ if (!function_exists('Framework\value')) {
         return $value instanceof Closure ? $value(...$args) : $value;
     }
 }
+
+if (!function_exists('Framework\is_rest_request')) {
+    /**
+     * Check if the current request is a REST request.
+     *
+     * @return bool
+     */
+    function is_rest_request() {
+        $is_rest = defined('REST_REQUEST') && REST_REQUEST;
+
+        if ($is_rest) {
+            return true;
+        }
+
+        $rest_route = Sanitizer::apply_rule(
+            filter_input(INPUT_GET, 'rest_route', FILTER_UNSAFE_RAW),
+            Sanitizer::BOOL
+        );
+
+        if ($rest_route) {
+            return true;
+        }
+
+        $request_uri = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
+
+        if (empty($request_uri)) {
+            return false;
+        }
+
+        $is_rest = strpos($request_uri, '/' . rest_get_url_prefix() . '/') !== false;
+
+        return $is_rest;
+    }
+}

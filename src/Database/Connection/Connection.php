@@ -493,7 +493,7 @@ class Connection
             return implode(', ', array_map([$this, 'quote_string'], $value));
         }
 
-        return sprintf("'%s'", $value);
+        return sprintf("'%s'", esc_sql($value));
     }
 
     /**
@@ -522,7 +522,7 @@ class Connection
                 throw new RuntimeException('Strings with invalid UTF-8 byte sequences cannot be escaped.');
             }
 
-            return sprintf("'%s'", $value);
+            return sprintf("'%s'", esc_sql($value));
         }
     }
 

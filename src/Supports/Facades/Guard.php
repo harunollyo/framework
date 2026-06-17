@@ -9,7 +9,7 @@ use Framework\Facade;
  * @method static bool allows(string $ability, $model = null, ...$arguments)
  * @method static bool denies(string $ability, $model = null, ...$arguments)
  * 
- * @see \Framework\Core\Managers\PolicyManager
+ * @see \Framework\Managers\PolicyManager
  */
 class Guard extends Facade
 {

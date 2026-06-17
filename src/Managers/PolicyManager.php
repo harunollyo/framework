@@ -155,8 +155,16 @@ class PolicyManager
         }
 
         if (method_exists($policy, 'before')) {
-            if (($result = $policy->before($user, $ability)) === false) {
-                return $result;
+            $before_result = $policy->before($user, $ability);
+
+            if ($before_result === true) {
+                return true;
+            }
+
+            if ($before_result === false) {
+                throw new AuthorizationException(
+                    sprintf('You are not authorized to %s this resource.', $ability)
+                );
             }
         }
 

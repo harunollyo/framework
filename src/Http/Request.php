@@ -195,18 +195,6 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
-     * Get the validated and sanitized data.
-     *
-     * @since 1.0.0
-     *
-     * @return array
-     */
-    public function clean()
-    {
-        return $this->all();
-    }
-
-    /**
      * Get the current user instance from the request.
      *
      * @since 1.0.0
@@ -578,7 +566,7 @@ class Request implements RequestContract, Arrayable
      */
     public function get_html(string $key, $default = null)
     {
-        return $this->get($key, $default, Sanitizer::TEXTAREA);
+        return $this->get($key, $default, Sanitizer::RICH_TEXT);
     }
 
     /**
@@ -648,7 +636,7 @@ class Request implements RequestContract, Arrayable
      */
     public function get_file_name(string $key, $default = null)
     {
-        return $this->get($key, $default, Sanitizer::TITLE);
+        return $this->get($key, $default, Sanitizer::FILE_NAME);
     }
 
     /**

@@ -292,7 +292,9 @@ class User
      */
     public function can($ability, $model = null)
     {
-        return Guard::allows($ability, $model);
+        return is_null($model)
+            ? current_user_can($ability)
+            : Guard::allows($ability, $model);
     }
 
     /**

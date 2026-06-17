@@ -14,6 +14,10 @@ namespace {
     if (!defined('FS_CHMOD_FILE')) {
         define('FS_CHMOD_FILE', 0644);
     }
+
+    if (!defined('REST_REQUEST')) {
+        define('REST_REQUEST', false);
+    }
 }
 
 namespace {
