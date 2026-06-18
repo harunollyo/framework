@@ -1,13 +1,17 @@
 <?php
 
-require_once dirname(__DIR__) . '/Support/SniffHelper.php';
+namespace Framework\Sniffs\Commenting;
+
+use Framework\Sniffs\Support\SniffHelper;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * Requires every declared property to have a docblock with @var and @since tags.
  *
  * @since 1.0.0
  */
-class Framework_Sniffs_Commenting_RequiredPropertyDocblockSniff implements PHP_CodeSniffer\Sniffs\Sniff
+class RequiredPropertyDocblockSniff implements Sniff
 {
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -23,20 +27,20 @@ class Framework_Sniffs_Commenting_RequiredPropertyDocblockSniff implements PHP_C
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
-     * @param int                        $stack_ptr  The position of the current token.
+     * @param File $phpcs_file The file being scanned.
+     * @param int  $stack_ptr  The position of the current token.
      *
      * @return void
      * @since 1.0.0
      */
-    public function process(PHP_CodeSniffer\Files\File $phpcs_file, $stack_ptr)
+    public function process(File $phpcs_file, $stack_ptr)
     {
         if (!$this->is_property_declaration($phpcs_file, $stack_ptr)) {
             return;
         }
 
         $tokens = $phpcs_file->getTokens();
-        $docblock_ptr = Framework_SniffHelper::find_preceding_docblock($tokens, $stack_ptr);
+        $docblock_ptr = SniffHelper::find_preceding_docblock($tokens, $stack_ptr);
 
         if ($docblock_ptr === null) {
             $phpcs_file->addError(
@@ -49,8 +53,8 @@ class Framework_Sniffs_Commenting_RequiredPropertyDocblockSniff implements PHP_C
             return;
         }
 
-        $content = Framework_SniffHelper::get_docblock_content($tokens, $docblock_ptr);
-        $parsed = Framework_SniffHelper::parse_docblock($content);
+        $content = SniffHelper::get_docblock_content($tokens, $docblock_ptr);
+        $parsed = SniffHelper::parse_docblock($content);
 
         if (!isset($parsed['tags']['var']) || trim($parsed['tags']['var'][0]) === '') {
             $phpcs_file->addError(
@@ -74,13 +78,13 @@ class Framework_Sniffs_Commenting_RequiredPropertyDocblockSniff implements PHP_C
     /**
      * Determine whether a variable token is a declared property.
      *
-     * @param PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
-     * @param int                        $stack_ptr  Variable token index.
+     * @param File $phpcs_file The file being scanned.
+     * @param int  $stack_ptr  Variable token index.
      *
      * @return bool
      * @since 1.0.0
      */
-    protected function is_property_declaration(PHP_CodeSniffer\Files\File $phpcs_file, $stack_ptr)
+    protected function is_property_declaration(File $phpcs_file, $stack_ptr)
     {
         $tokens = $phpcs_file->getTokens();
         $previous = $phpcs_file->findPrevious(T_WHITESPACE, $stack_ptr - 1, null, true);

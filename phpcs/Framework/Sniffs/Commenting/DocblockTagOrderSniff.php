@@ -1,13 +1,17 @@
 <?php
 
-require_once dirname(__DIR__) . '/Support/SniffHelper.php';
+namespace Framework\Sniffs\Commenting;
+
+use Framework\Sniffs\Support\SniffHelper;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * Validates method docblock tag order, spacing, and required tags.
  *
  * @since 1.0.0
  */
-class Framework_Sniffs_Commenting_DocblockTagOrderSniff implements PHP_CodeSniffer\Sniffs\Sniff
+class DocblockTagOrderSniff implements Sniff
 {
     /**
      * Expected tag order for method docblocks.
@@ -31,24 +35,24 @@ class Framework_Sniffs_Commenting_DocblockTagOrderSniff implements PHP_CodeSniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
-     * @param int                        $stack_ptr  The position of the current token.
+     * @param File $phpcs_file The file being scanned.
+     * @param int  $stack_ptr  The position of the current token.
      *
      * @return void
      * @since 1.0.0
      */
-    public function process(PHP_CodeSniffer\Files\File $phpcs_file, $stack_ptr)
+    public function process(File $phpcs_file, $stack_ptr)
     {
         $tokens = $phpcs_file->getTokens();
-        $docblock_ptr = Framework_SniffHelper::find_preceding_docblock($tokens, $stack_ptr);
+        $docblock_ptr = SniffHelper::find_preceding_docblock($tokens, $stack_ptr);
 
         if ($docblock_ptr === null) {
             return;
         }
 
-        $content = Framework_SniffHelper::get_docblock_content($tokens, $docblock_ptr);
-        $parsed = Framework_SniffHelper::parse_docblock($content);
-        $body_lines = Framework_SniffHelper::get_docblock_body_lines($tokens, $docblock_ptr);
+        $content = SniffHelper::get_docblock_content($tokens, $docblock_ptr);
+        $parsed = SniffHelper::parse_docblock($content);
+        $body_lines = SniffHelper::get_docblock_body_lines($tokens, $docblock_ptr);
 
         if ($parsed['description'] === '') {
             $phpcs_file->addError(
@@ -111,14 +115,14 @@ class Framework_Sniffs_Commenting_DocblockTagOrderSniff implements PHP_CodeSniff
     /**
      * Validate docblock tags appear in the required order.
      *
-     * @param PHP_CodeSniffer\Files\File $phpcs_file   The file being scanned.
-     * @param int                        $docblock_ptr Docblock open tag index.
-     * @param array                      $body_lines   Docblock body lines.
+     * @param File  $phpcs_file   The file being scanned.
+     * @param int   $docblock_ptr Docblock open tag index.
+     * @param array $body_lines   Docblock body lines.
      *
      * @return void
      * @since 1.0.0
      */
-    protected function validate_tag_order(PHP_CodeSniffer\Files\File $phpcs_file, $docblock_ptr, array $body_lines)
+    protected function validate_tag_order(File $phpcs_file, $docblock_ptr, array $body_lines)
     {
         $positions = [];
 
@@ -155,15 +159,15 @@ class Framework_Sniffs_Commenting_DocblockTagOrderSniff implements PHP_CodeSniff
     /**
      * Validate blank lines separate docblock sections.
      *
-     * @param PHP_CodeSniffer\Files\File $phpcs_file   The file being scanned.
-     * @param int                        $docblock_ptr Docblock open tag index.
-     * @param array                      $body_lines   Docblock body lines.
-     * @param array                      $parsed       Parsed docblock data.
+     * @param File  $phpcs_file   The file being scanned.
+     * @param int   $docblock_ptr Docblock open tag index.
+     * @param array $body_lines   Docblock body lines.
+     * @param array $parsed       Parsed docblock data.
      *
      * @return void
      * @since 1.0.0
      */
-    protected function validate_blank_line_separators(PHP_CodeSniffer\Files\File $phpcs_file, $docblock_ptr, array $body_lines, array $parsed)
+    protected function validate_blank_line_separators(File $phpcs_file, $docblock_ptr, array $body_lines, array $parsed)
     {
         $first_tag_line = null;
         $tag_first_lines = [];

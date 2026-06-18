@@ -1,13 +1,17 @@
 <?php
 
-require_once dirname(__DIR__) . '/Support/SniffHelper.php';
+namespace Framework\Sniffs\Commenting;
+
+use Framework\Sniffs\Support\SniffHelper;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * Validates the required file-level docblock structure.
  *
  * @since 1.0.0
  */
-class Framework_Sniffs_Commenting_FileDocblockSniff implements PHP_CodeSniffer\Sniffs\Sniff
+class FileDocblockSniff implements Sniff
 {
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -23,20 +27,20 @@ class Framework_Sniffs_Commenting_FileDocblockSniff implements PHP_CodeSniffer\S
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
-     * @param int                        $stack_ptr  The position of the current token.
+     * @param File $phpcs_file The file being scanned.
+     * @param int  $stack_ptr  The position of the current token.
      *
      * @return void
      * @since 1.0.0
      */
-    public function process(PHP_CodeSniffer\Files\File $phpcs_file, $stack_ptr)
+    public function process(File $phpcs_file, $stack_ptr)
     {
         if ($stack_ptr !== $phpcs_file->findNext(T_NAMESPACE, 0)) {
             return;
         }
 
         $tokens = $phpcs_file->getTokens();
-        $docblock_ptr = Framework_SniffHelper::find_preceding_docblock($tokens, $stack_ptr);
+        $docblock_ptr = SniffHelper::find_preceding_docblock($tokens, $stack_ptr);
 
         if ($docblock_ptr === null) {
             $phpcs_file->addError(
@@ -48,8 +52,8 @@ class Framework_Sniffs_Commenting_FileDocblockSniff implements PHP_CodeSniffer\S
             return;
         }
 
-        $content = Framework_SniffHelper::get_docblock_content($tokens, $docblock_ptr);
-        $parsed = Framework_SniffHelper::parse_docblock($content);
+        $content = SniffHelper::get_docblock_content($tokens, $docblock_ptr);
+        $parsed = SniffHelper::parse_docblock($content);
 
         if ($parsed['description'] === '') {
             $phpcs_file->addError(
@@ -95,13 +99,13 @@ class Framework_Sniffs_Commenting_FileDocblockSniff implements PHP_CodeSniffer\S
     /**
      * Extract the namespace string from a namespace token.
      *
-     * @param PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
-     * @param int                        $stack_ptr  Namespace token index.
+     * @param File $phpcs_file The file being scanned.
+     * @param int  $stack_ptr  Namespace token index.
      *
      * @return string
      * @since 1.0.0
      */
-    protected function get_namespace(PHP_CodeSniffer\Files\File $phpcs_file, $stack_ptr)
+    protected function get_namespace(File $phpcs_file, $stack_ptr)
     {
         $tokens = $phpcs_file->getTokens();
         $parts = [];

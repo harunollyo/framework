@@ -1,12 +1,15 @@
 <?php
 /**
  * Central application kernel that extends the service container and orchestrates plugin bootstrap.
- * Resolves framework paths, registers core and app-defined service providers, and manages the boot lifecycle with before/after callbacks.
+ * Resolves framework paths, registers core and app-defined service providers,
+ * and manages the boot lifecycle with before/after callbacks.
  * Acts as the single entry point for binding services, aliases, and application configuration.
  *
- * @package    Framework
- * @since      1.0.0
+ * @package Framework
+ *
+ * @since 1.0.0
  */
+
 namespace Framework;
 
 defined('ABSPATH') || exit;
@@ -53,43 +56,64 @@ class Application extends Container
 
     /**
      * Base path
+     *
      * @var string|null
+     * 
+     * @since 1.0.0
      */
     protected $base_path;
 
     /**
      * Bootstrap path
-     * @var string
+     *
+     * @var string|null
+     * 
+     * @since 1.0.0
      */
     protected $bootstrap_path;
 
     /**
      * Config path
-     * @var string
+     *
+     * @var string|null
+     * 
+     * @since 1.0.0
      */
     protected $config_path;
 
     /**
      * App path
-     * @var string
+     *
+     * @var string|null
+     * 
+     * @since 1.0.0
      */
     protected $app_path;
 
     /**
      * Database path
-     * @var string
+     *
+     * @var string|null
+     * 
+     * @since 1.0.0
      */
     protected $database_path;
 
     /**
      * Resources path
-     * @var string
+     *
+     * @var string|null
+     * 
+     * @since 1.0.0
      */
     protected $resource_path;
 
     /**
      * Service providers
-     * @var array
+     *
+     * @var array<string, ServiceProvider>
+     * 
+     * @since 1.0.0
      */
     protected $service_providers = [];
 
@@ -97,24 +121,35 @@ class Application extends Container
      * Mark the application booted or not
      *
      * @var bool
+     * 
+     * @since 1.0.0
      */
     protected bool $booted = false;
 
     /**
      * Booting callbacks
-     * @var array
+     *
+     * @var array<callable>
+     * 
+     * @since 1.0.0
      */
     protected array $booting_callbacks = [];
 
     /**
      * Booted callbacks
-     * @var array
+     *
+     * @var array<callable>
+     * 
+     * @since 1.0.0
      */
     protected array $booted_callbacks = [];
 
     /**
      * The application namespace
+     *
      * @var string
+     * 
+     * @since 1.0.0
      */
     protected string $namespace = '';
 
@@ -122,25 +157,37 @@ class Application extends Container
      * Cached namespaces resolved from composer PSR-4 paths.
      *
      * @var array<string, string>
+     * 
+     * @since 1.0.0
      */
     protected $namespace_paths = [];
 
     /**
      * The application prefix
+     *
      * @var string
+     * 
+     * @since 1.0.0
      */
     protected string $prefix = '';
 
     /**
      * The application is in development mode
+     *
      * @var string
+     * 
+     * @since 1.0.0
      */
     protected string $mode = 'production';
 
     /**
      * Create a new application instance
      *
+     * @param string|null $base_path The base path of the application.
+     *
      * @return void
+     * 
+     * @since 1.0.0
      */
     public function __construct(?string $base_path = null)
     {
@@ -159,8 +206,11 @@ class Application extends Container
     /**
      * Set the base path
      *
-     * @param string $path
-     * @return Application
+     * @param string $path The base path of the application.
+     *
+     * @return static
+     * 
+     * @since 1.0.0
      */
     public function set_base_path(string $path)
     {
@@ -175,6 +225,8 @@ class Application extends Container
      * Binding the inferred paths
      *
      * @return void
+     * 
+     * @since 1.0.0
      */
     protected function bind_inferred_paths()
     {
@@ -190,6 +242,8 @@ class Application extends Container
      * Registering the core bindings to the application container.
      *
      * @return void
+     * 
+     * @since 1.0.0
      */
     protected function register_base_bindings()
     {
@@ -201,6 +255,8 @@ class Application extends Container
      * Registering the core service providers to the application container.
      *
      * @return void
+     * 
+     * @since 1.0.0
      */
     protected function register_base_service_providers()
     {
@@ -213,6 +269,8 @@ class Application extends Container
      * Registering the core CLI commands.
      *
      * @return void
+     * 
+     * @since 1.0.0
      */
     protected function register_base_cli_commands()
     {
@@ -238,6 +296,8 @@ class Application extends Container
      * Registering the core aliases for future use.
      *
      * @return void
+     * 
+     * @since 1.0.0
      */
     protected function register_base_aliases()
     {
@@ -263,8 +323,11 @@ class Application extends Container
     /**
      * Register a service provider to the application.
      *
-     * @param ServiceProvider|string $provider
+     * @param ServiceProvider|string $provider The service provider class name or instance.
+     *
      * @return ServiceProvider
+     * 
+     * @since 1.0.0
      */
     public function register($provider)
     {
@@ -292,8 +355,11 @@ class Application extends Container
     /**
      * Get the registered service provider.
      *
-     * @param ServiceProvider|string $provider
+     * @param ServiceProvider|string $provider The service provider to get.
+     *
      * @return ServiceProvider|null
+     * 
+     * @since 1.0.0
      */
     protected function get_provider($provider)
     {
@@ -305,8 +371,11 @@ class Application extends Container
     /**
      * Resolve service provider from provider class name.
      *
-     * @param string $provider
+     * @param string $provider The service provider class name.
+     * 
      * @return ServiceProvider
+     * 
+     * @since 1.0.0
      */
     protected function resolve_provider(string $provider)
     {
@@ -316,8 +385,11 @@ class Application extends Container
     /**
      * Mark the service provider as registered.
      *
-     * @param ServiceProvider $provider
+     * @param ServiceProvider $provider The service provider to mark as registered.
+     * 
      * @return void
+     * 
+     * @since 1.0.0
      */
     protected function mark_as_registered(ServiceProvider $provider)
     {
@@ -329,8 +401,11 @@ class Application extends Container
     /**
      * Boot the service provider.
      *
-     * @param ServiceProvider $provider
+     * @param ServiceProvider $provider The service provider to boot.
+     * 
      * @return void
+     * 
+     * @since 1.0.0
      */
     protected function boot_provider(ServiceProvider $provider)
     {
@@ -343,6 +418,8 @@ class Application extends Container
      * Check if the application is booted or not.
      *
      * @return bool
+     * 
+     * @since 1.0.0
      */
     public function is_booted()
     {
@@ -352,7 +429,11 @@ class Application extends Container
     /**
      * Configure the application.
      *
-     * @return self
+     * @param string $base_path The base path of the application.
+     *
+     * @return static
+     * 
+     * @since 1.0.0
      */
     public static function configure(string $base_path)
     {
@@ -362,8 +443,11 @@ class Application extends Container
     /**
      * Register a route file.
      *
-     * @param string $path
+     * @param string $path The route file path.
+     * 
      * @return self
+     * 
+     * @since 1.0.0
      */
     public function use_routing(string $path)
     {
@@ -376,6 +460,15 @@ class Application extends Container
         return $this;
     }
 
+    /**
+     * Use a prefix for the application.
+     *
+     * @param string $prefix The prefix to use.
+     *
+     * @return self
+     * 
+     * @since 1.0.0
+     */
     public function use_prefix(string $prefix)
     {
         $this->prefix = Str::snake($prefix);
@@ -387,6 +480,8 @@ class Application extends Container
      * Get the application prefix.
      *
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function prefix()
     {
@@ -396,8 +491,11 @@ class Application extends Container
     /**
      * Register a bootstrap path.
      *
-     * @param string $path
-     * @return self
+     * @param string $path The bootstrap path.
+     *
+     * @return static
+     * 
+     * @since 1.0.0
      */
     public function use_bootstrap_path($path)
     {
@@ -411,8 +509,11 @@ class Application extends Container
     /**
      * Register a config path.
      *
-     * @param string $path
-     * @return self
+     * @param string $path The config path.
+     * 
+     * @return static
+     * 
+     * @since 1.0.0
      */
     public function use_config_path($path)
     {
@@ -426,10 +527,13 @@ class Application extends Container
     /**
      * Register an app path.
      *
-     * @param string $path
-     * @return self
+     * @param string $path The app path.
+     * 
+     * @return static
+     * 
+     * @since 1.0.0
      */
-    public function use_app_path($path)
+    public function use_app_path(string $path)
     {
         $this->app_path = $path;
 
@@ -441,7 +545,7 @@ class Application extends Container
     /**
      * Register a database path.
      *
-     * @param string $path
+     * @param string $path The database path.
      * 
      * @return static
      * 
@@ -459,7 +563,7 @@ class Application extends Container
     /**
      * Register a resource path.
      *
-     * @param string $path
+     * @param string $path The resource path.
      * 
      * @return static
      * 
@@ -477,9 +581,12 @@ class Application extends Container
     /**
      * Join paths.
      *
-     * @param string $base_path
-     * @param string $path
+     * @param string $base_path The base path to join.
+     * @param string $path The path to join.
+     * 
      * @return string
+     * 
+     * @since 1.0.0
      */
     protected function join_paths($base_path, $path)
     {
@@ -489,8 +596,11 @@ class Application extends Container
     /**
      * Get the path to the app directory.
      *
-     * @param string $path
+     * @param string $path The path to join.
+     * 
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function path($path = '')
     {
@@ -500,8 +610,11 @@ class Application extends Container
     /**
      * Get the path to the base directory.
      *
-     * @param string $path
+     * @param string $path The path to join.
+     *
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function base_path($path = '')
     {
@@ -511,8 +624,11 @@ class Application extends Container
     /**
      * Get the path to the bootstrap directory.
      *
-     * @param string $path
+     * @param string $path The path to join.
+     * 
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function bootstrap_path($path = '')
     {
@@ -522,8 +638,11 @@ class Application extends Container
     /**
      * Get the path to the config directory.
      *
-     * @param string $path
+     * @param string $path The path to join.
+     * 
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function config_path($path = '')
     {
@@ -533,8 +652,11 @@ class Application extends Container
     /**
      * Get the path to the database directory.
      *
-     * @param string $path
+     * @param string $path The path to join.
+     * 
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function database_path($path = '')
     {
@@ -544,8 +666,11 @@ class Application extends Container
     /**
      * Get the path to the resources directory.
      *
-     * @param string $path
+     * @param string $path The path to join.
+     * 
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function resource_path($path = '')
     {
@@ -555,7 +680,9 @@ class Application extends Container
     /**
      * Get the path to the bootstrap providers file.
      *
-     * @return string
+     * @return string The path to the bootstrap providers file.
+     * 
+     * @since 1.0.0
      */
     public function bootstrap_service_provider_path()
     {
@@ -565,8 +692,11 @@ class Application extends Container
     /**
      * Get the base URL of the application.
      *
-     * @param string $path
+     * @param string $path The path to join.
+     * 
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function base_url($path = '')
     {
@@ -581,18 +711,22 @@ class Application extends Container
      * Check if the CLI is available or not.
      *
      * @return bool
+     * 
+     * @since 1.0.0
      */
     public function is_cli_available()
     {
-        /** @disregard */
         return defined('WP_CLI') && WP_CLI;
     }
 
     /**
      * Register a booting callback.
      *
-     * @param callable $callback
+     * @param callable $callback The callback to register.
+     * 
      * @return void
+     * 
+     * @since 1.0.0
      */
     public function booting($callback)
     {
@@ -603,6 +737,8 @@ class Application extends Container
      * Boot the plugin application.
      *
      * @return void
+     * 
+     * @since 1.0.0
      */
     public function boot()
     {
@@ -629,8 +765,11 @@ class Application extends Container
     /**
      * Register a booted callback.
      *
-     * @param callable $callback
+     * @param callable $callback The callback to register.
+     *
      * @return void
+     * 
+     * @since 1.0.0
      */
     public function booted($callback)
     {
@@ -644,7 +783,11 @@ class Application extends Container
     /**
      * Fire the booting callbacks.
      *
+     * @param array<callable> $callbacks The callbacks to fire.
+     *
      * @return void
+     * 
+     * @since 1.0.0
      */
     protected function fire_app_callbacks(array $callbacks)
     {
@@ -657,6 +800,8 @@ class Application extends Container
      * Register other on demand provided providers.
      *
      * @return void
+     * 
+     * @since 1.0.0
      */
     protected function register_app_defined_providers()
     {
@@ -692,6 +837,8 @@ class Application extends Container
      * Generally it will come from the bootstrap/aliases.php file.
      *
      * @return void
+     * 
+     * @since 1.0.0
      */
     protected function register_app_defined_aliases()
     {
@@ -718,6 +865,8 @@ class Application extends Container
      * Get the application namespace.
      *
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function get_namespace()
     {
@@ -732,6 +881,8 @@ class Application extends Container
      * Parse the namespace from the composer.json file.
      *
      * @return string
+     * 
+     * @since 1.0.0
      */
     protected function parse_namespace_from_composer()
     {
@@ -741,8 +892,11 @@ class Application extends Container
     /**
      * Qualify a namespace under the application PSR-4 root.
      *
-     * @param string $suffix
+     * @param string $suffix The suffix to qualify.
+     *
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function qualify_app_namespace($suffix = '')
     {
@@ -761,6 +915,8 @@ class Application extends Container
      * Get the migrations namespace from the host composer.json PSR-4 map.
      *
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function get_migrations_namespace()
     {
@@ -771,6 +927,8 @@ class Application extends Container
      * Get the seeders namespace from composer or derive it from migrations.
      *
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function get_seeders_namespace()
     {
@@ -784,8 +942,11 @@ class Application extends Container
     /**
      * Resolve a PSR-4 namespace for a path relative to the application base.
      *
-     * @param string $relative_path
+     * @param string $relative_path The relative path to the namespace.
+     *
      * @return string
+     * 
+     * @since 1.0.0
      */
     public function get_namespace_for_path($relative_path)
     {
@@ -827,9 +988,11 @@ class Application extends Container
     /**
      * Set the application mode.
      *
-     * @param string $mode
+     * @param string $mode The mode to set.
      * 
      * @return static
+     * 
+     * @since 1.0.0
      */
     public function use_app_mode($mode = 'production')
     {
@@ -842,6 +1005,8 @@ class Application extends Container
      * Check if the application is in development mode.
      *
      * @return bool
+     * 
+     * @since 1.0.0
      */
     public function is_dev_mode()
     {

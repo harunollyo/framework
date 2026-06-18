@@ -1,11 +1,15 @@
 <?php
 
+namespace Framework\Sniffs\Support;
+
+use PHP_CodeSniffer\Util\Tokens;
+
 /**
  * Shared helpers for Framework PHPCS sniffs.
  *
  * @since 1.0.0
  */
-class Framework_SniffHelper
+class SniffHelper
 {
     /**
      * PHP-native method names exempt from snake_case enforcement.
@@ -77,13 +81,80 @@ class Framework_SniffHelper
      */
     public static function find_preceding_docblock(array $tokens, $index)
     {
-        $previous = $index - 1;
+        $ignore = Tokens::$scopeModifiers;
+        $ignore += [
+            T_VAR                    => T_VAR,
+            T_STATIC                 => T_STATIC,
+            T_FINAL                  => T_FINAL,
+            T_ABSTRACT               => T_ABSTRACT,
+            T_WHITESPACE             => T_WHITESPACE,
+            T_STRING                 => T_STRING,
+            T_NS_SEPARATOR           => T_NS_SEPARATOR,
+            T_NAMESPACE              => T_NAMESPACE,
+            T_NULLABLE               => T_NULLABLE,
+            T_ARRAY                  => T_ARRAY,
+            T_CALLABLE               => T_CALLABLE,
+            T_TYPE_UNION             => T_TYPE_UNION,
+            T_TYPE_INTERSECTION      => T_TYPE_INTERSECTION,
+            T_TYPE_OPEN_PARENTHESIS  => T_TYPE_OPEN_PARENTHESIS,
+            T_TYPE_CLOSE_PARENTHESIS => T_TYPE_CLOSE_PARENTHESIS,
+            T_NULL                   => T_NULL,
+            T_TRUE                   => T_TRUE,
+            T_FALSE                  => T_FALSE,
+            T_SELF                   => T_SELF,
+            T_PARENT                 => T_PARENT,
+            T_FUNCTION               => T_FUNCTION,
+        ];
 
-        while ($previous >= 0 && $tokens[$previous]['code'] === T_WHITESPACE) {
-            --$previous;
+        if (defined('T_READONLY')) {
+            $ignore[T_READONLY] = T_READONLY;
         }
 
-        if ($previous >= 0 && $tokens[$previous]['code'] === T_DOC_COMMENT_OPEN_TAG) {
+        if (defined('T_NAME_QUALIFIED')) {
+            $ignore[T_NAME_QUALIFIED] = T_NAME_QUALIFIED;
+        }
+
+        if (defined('T_NAME_FULLY_QUALIFIED')) {
+            $ignore[T_NAME_FULLY_QUALIFIED] = T_NAME_FULLY_QUALIFIED;
+        }
+
+        if (defined('T_NAME_RELATIVE')) {
+            $ignore[T_NAME_RELATIVE] = T_NAME_RELATIVE;
+        }
+
+        $previous = $index - 1;
+
+        while ($previous >= 0) {
+            $code = $tokens[$previous]['code'];
+
+            if (isset($ignore[$code])) {
+                --$previous;
+                continue;
+            }
+
+            if ($code === T_ATTRIBUTE_END && isset($tokens[$previous]['attribute_opener'])) {
+                $previous = $tokens[$previous]['attribute_opener'] - 1;
+                continue;
+            }
+
+            break;
+        }
+
+        if ($previous < 0) {
+            return null;
+        }
+
+        $code = $tokens[$previous]['code'];
+
+        if ($code === T_DOC_COMMENT_OPEN_TAG) {
+            return $previous;
+        }
+
+        if ($code === T_DOC_COMMENT_CLOSE_TAG) {
+            return $tokens[$previous]['comment_opener'] ?? null;
+        }
+
+        if ($code === T_DOC_COMMENT) {
             return $previous;
         }
 

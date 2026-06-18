@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
+exec php -n -d auto_prepend_file= "$DIR/run-phpcs.php" phpcbf "$@"

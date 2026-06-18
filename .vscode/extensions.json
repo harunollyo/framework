@@ -1,5 +1,6 @@
 {
     "recommendations": [
+        "obliviousharmony.vscode-php-codesniffer",
         "xdebug.php-debug"
     ]
 }

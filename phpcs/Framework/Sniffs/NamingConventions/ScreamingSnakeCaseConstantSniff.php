@@ -1,13 +1,17 @@
 <?php
 
-require_once dirname(__DIR__) . '/Support/SniffHelper.php';
+namespace Framework\Sniffs\NamingConventions;
+
+use Framework\Sniffs\Support\SniffHelper;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * Enforces SCREAMING_SNAKE_CASE constant names.
  *
  * @since 1.0.0
  */
-class Framework_Sniffs_NamingConventions_ScreamingSnakeCaseConstantSniff implements PHP_CodeSniffer\Sniffs\Sniff
+class ScreamingSnakeCaseConstantSniff implements Sniff
 {
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -23,13 +27,13 @@ class Framework_Sniffs_NamingConventions_ScreamingSnakeCaseConstantSniff impleme
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
-     * @param int                        $stack_ptr  The position of the current token.
+     * @param File $phpcs_file The file being scanned.
+     * @param int  $stack_ptr  The position of the current token.
      *
      * @return void
      * @since 1.0.0
      */
-    public function process(PHP_CodeSniffer\Files\File $phpcs_file, $stack_ptr)
+    public function process(File $phpcs_file, $stack_ptr)
     {
         $tokens = $phpcs_file->getTokens();
         $token_code = $tokens[$stack_ptr]['code'];
@@ -64,14 +68,14 @@ class Framework_Sniffs_NamingConventions_ScreamingSnakeCaseConstantSniff impleme
     /**
      * Validate a constant identifier uses SCREAMING_SNAKE_CASE.
      *
-     * @param PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
-     * @param int|false                  $name_ptr   Constant name token index.
-     * @param array                      $tokens     File tokens.
+     * @param File        $phpcs_file The file being scanned.
+     * @param int|false   $name_ptr   Constant name token index.
+     * @param array       $tokens     File tokens.
      *
      * @return void
      * @since 1.0.0
      */
-    protected function validate_constant_name(PHP_CodeSniffer\Files\File $phpcs_file, $name_ptr, array $tokens)
+    protected function validate_constant_name(File $phpcs_file, $name_ptr, array $tokens)
     {
         if ($name_ptr === false) {
             return;
@@ -79,7 +83,7 @@ class Framework_Sniffs_NamingConventions_ScreamingSnakeCaseConstantSniff impleme
 
         $constant_name = $tokens[$name_ptr]['content'];
 
-        if (Framework_SniffHelper::is_screaming_snake_case($constant_name)) {
+        if (SniffHelper::is_screaming_snake_case($constant_name)) {
             return;
         }
 

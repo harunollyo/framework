@@ -1,11 +1,16 @@
 <?php
 
+namespace Framework\Sniffs\Visibility;
+
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
+
 /**
  * Disallows private methods and properties.
  *
  * @since 1.0.0
  */
-class Framework_Sniffs_Visibility_NoPrivateSniff implements PHP_CodeSniffer\Sniffs\Sniff
+class NoPrivateSniff implements Sniff
 {
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -27,7 +32,7 @@ class Framework_Sniffs_Visibility_NoPrivateSniff implements PHP_CodeSniffer\Snif
      * @return void
      * @since 1.0.0
      */
-    public function process(PHP_CodeSniffer\Files\File $phpcs_file, $stack_ptr)
+    public function process(File $phpcs_file, $stack_ptr)
     {
         $phpcs_file->addError(
             'Private members are not allowed; use protected or public instead.',

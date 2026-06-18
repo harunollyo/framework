@@ -1,11 +1,16 @@
 <?php
 
+namespace Framework\Sniffs\Files;
+
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
+
 /**
  * Validates the required top-of-file declaration order for class files.
  *
  * @since 1.0.0
  */
-class Framework_Sniffs_Files_FileDeclarationOrderSniff implements PHP_CodeSniffer\Sniffs\Sniff
+class FileDeclarationOrderSniff implements Sniff
 {
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -21,13 +26,13 @@ class Framework_Sniffs_Files_FileDeclarationOrderSniff implements PHP_CodeSniffe
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
+     * @param File $phpcs_file The file being scanned.
      * @param int                        $stack_ptr  The position of the current token.
      *
      * @return void
      * @since 1.0.0
      */
-    public function process(PHP_CodeSniffer\Files\File $phpcs_file, $stack_ptr)
+    public function process(File $phpcs_file, $stack_ptr)
     {
         if ($stack_ptr !== 0) {
             return;
@@ -73,12 +78,12 @@ class Framework_Sniffs_Files_FileDeclarationOrderSniff implements PHP_CodeSniffe
     /**
      * Find the first class, interface, or trait declaration.
      *
-     * @param PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
+     * @param File $phpcs_file The file being scanned.
      *
      * @return int|false
      * @since 1.0.0
      */
-    protected function find_first_type_declaration(PHP_CodeSniffer\Files\File $phpcs_file)
+    protected function find_first_type_declaration(File $phpcs_file)
     {
         $tokens = $phpcs_file->getTokens();
         $type_ptr = $phpcs_file->findNext([T_CLASS, T_INTERFACE, T_TRAIT], 0);
@@ -101,13 +106,13 @@ class Framework_Sniffs_Files_FileDeclarationOrderSniff implements PHP_CodeSniffe
     /**
      * Find the ABSPATH guard statement after the namespace.
      *
-     * @param PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
+     * @param File $phpcs_file The file being scanned.
      * @param int                        $start      Start search index.
      *
      * @return int|false
      * @since 1.0.0
      */
-    protected function find_abspath_guard(PHP_CodeSniffer\Files\File $phpcs_file, $start)
+    protected function find_abspath_guard(File $phpcs_file, $start)
     {
         $tokens = $phpcs_file->getTokens();
         $defined_ptr = $phpcs_file->findNext(T_STRING, $start, null, false, 'defined');
@@ -119,7 +124,7 @@ class Framework_Sniffs_Files_FileDeclarationOrderSniff implements PHP_CodeSniffe
                 $string_ptr = $phpcs_file->findNext(T_CONSTANT_ENCAPSED_STRING, $open_paren + 1);
 
                 if ($string_ptr !== false && $tokens[$string_ptr]['content'] === "'ABSPATH'") {
-                    $or_ptr = $phpcs_file->findNext(T_LOGICAL_OR, $string_ptr + 1);
+                    $or_ptr = $phpcs_file->findNext([T_LOGICAL_OR, T_BOOLEAN_OR], $string_ptr + 1);
 
                     if ($or_ptr !== false) {
                         $exit_ptr = $phpcs_file->findNext(T_EXIT, $or_ptr + 1);

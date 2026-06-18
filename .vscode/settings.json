@@ -1,4 +1,18 @@
 {
+    "phpCodeSniffer.standard": "Automatic",
+    "phpCodeSniffer.lintAction": "Change",
+    "phpCodeSniffer.exec.osx": "scripts/phpcs",
+    "phpCodeSniffer.exec.linux": "scripts/phpcs",
+    "phpCodeSniffer.exec.windows": "scripts\\phpcs.bat",
+    "phpCodeSniffer.exclude": [
+        "**/vendor/**",
+        "**/tests/**",
+        "**/example/**",
+        "src/helpers.php",
+        "src/Polyfill/**",
+        "src/Console/stubs/**",
+        "phpcs/**"
+    ],
     "php.debug.port": 9003,
     "php.debug.ideKey": "PHPSTORM",
     "php.debug.pathMappings": {
