@@ -1,6 +1,6 @@
 # Themeum Framework
 
-Laravel-inspired PHP framework for WordPress plugins. This guide walks through integrating `themeum/framework` into a plugin named **Kirki**.
+An elegant PHP framework for WordPress plugins. This guide walks through integrating `themeum/framework` into a plugin named **Kirki**.
 
 Contributors working on the library itself can use the local playground in [example/README.md](example/README.md).
 

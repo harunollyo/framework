@@ -1,7 +1,7 @@
 <?php
 /**
  * Defines the service container API for binding, singletons, aliases, and resolution.
- * Mirrors Laravel-style container operations adapted for PHP 7.4.
+ * Mirrors container operations adapted for PHP 7.4.
  * Implemented by Application and used wherever dependency injection is required.
  *
  * @package    Framework

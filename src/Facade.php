@@ -2,7 +2,7 @@
 /**
  * Abstract base for static facades that proxy calls to container-resolved services.
  * Caches resolved instances per accessor and forwards __callStatic to the underlying object.
- * Enables Laravel-style Facade::method() syntax throughout the framework.
+ * Enables Facade::method() syntax throughout the framework.
  *
  * @package    Framework
  * @since      1.0.0

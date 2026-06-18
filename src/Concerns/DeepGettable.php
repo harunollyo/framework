@@ -2,7 +2,7 @@
 /**
  * Trait that retrieves nested array values using dot-notation keys.
  * Walks each segment recursively and returns a default when any level is missing or empty.
- * Shared by classes that need Laravel-style deep array access without pulling in a full Arr helper.
+ * Shared by classes that need deep array access without pulling in a full Arr helper.
  *
  * @package    Framework
  * @subpackage Concerns

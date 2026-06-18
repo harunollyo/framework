@@ -68,7 +68,7 @@ class PolyfillTest extends TestCase
         $this->assertTrue(str_contains('framework', 'work'));
         $this->assertTrue(str_contains('framework', 'frame'));
         $this->assertTrue(str_contains('framework', ''));
-        $this->assertFalse(str_contains('framework', 'laravel'));
+        $this->assertFalse(str_contains('framework', 'random'));
         $this->assertFalse(str_contains('', 'needle'));
     }
 

@@ -1,7 +1,7 @@
 {
 	"name": "themeum/framework",
 	"type": "library",
-	"description": "Laravel-inspired PHP framework for WordPress plugins",
+	"description": "Elegant PHP framework for WordPress plugins",
 	"license": "GPL-2.0-or-later",
 	"version": "1.0.0",
 	"keywords": [
