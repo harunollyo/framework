@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ruleset name="FrameworkLibrary">
+    <description>PSR-12 and Framework custom coding standards for src/</description>
+
+    <config name="installed_paths" value="phpcs"/>
+    <arg name="basepath" value="."/>
+    <arg value="ps"/>
+    <arg name="colors"/>
+
+    <config name="testVersion" value="7.4-"/>
+
+    <file>src</file>
+
+    <exclude-pattern>src/helpers.php</exclude-pattern>
+    <exclude-pattern>src/Polyfill/</exclude-pattern>
+    <exclude-pattern>src/Console/stubs/</exclude-pattern>
+
+    <rule ref="PSR12"/>
+    <rule ref="Framework"/>
+</ruleset>

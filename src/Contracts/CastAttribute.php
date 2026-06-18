@@ -14,5 +14,14 @@ defined('ABSPATH') || exit;
 
 interface CastAttribute
 {
+    /**
+     * Get the value of the attribute.
+     *
+     * @param mixed $value The value to cast.
+     *
+     * @return mixed The casted value.
+     * 
+     * @since 1.0.0
+     */
     public function get($value);
 }
