@@ -27,6 +27,8 @@ class HasOne extends Relation
      * The foreign key on the related model that references the parent model.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $foreign_key;
 
@@ -34,6 +36,8 @@ class HasOne extends Relation
      * The local key on the parent model that is referenced by the related model.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $local_key;
 
@@ -47,9 +51,9 @@ class HasOne extends Relation
      * @param Model $parent The parent model instance
      * @param mixed $foreign_key The related table's foreign key
      * @param mixed $local_key The parent's local key
-     * 
+     *
      * @return void No return value
-     * 
+     *
      * @since 1.0.0
      */
     public function __construct(Model $related, Model $parent, $foreign_key, $local_key)
@@ -67,8 +71,8 @@ class HasOne extends Relation
      * whose foreign key matches that value to ensure only the related record
      * is retrieved.
      *
-     * @return void No return value
-     * 
+     * @return void
+     *
      * @since 1.0.0
      */
     public function add_constraints()
@@ -87,9 +91,9 @@ class HasOne extends Relation
      * @param QueryBuilder $query The query builder instance
      * @param QueryBuilder $parent The parent query builder instance
      * @param array $columns The columns to select
-     * 
+     *
      * @return QueryBuilder The aggregate query builder
-     * 
+     *
      * @since 1.0.0
      */
     public function get_relation_existence_query(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
@@ -107,9 +111,9 @@ class HasOne extends Relation
      * @param QueryBuilder $query The query builder instance
      * @param QueryBuilder $parent The parent query builder instance
      * @param array $columns The columns to select
-     * 
+     *
      * @return QueryBuilder The aggregate query builder
-     * 
+     *
      * @since 1.0.0
      */
     public function get_relation_existence_query_for_self_relation(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
@@ -129,7 +133,7 @@ class HasOne extends Relation
      * Get the existence compare key for the relation.
      *
      * @return string The existence compare key
-     * 
+     *
      * @since 1.0.0
      */
     public function get_existence_compare_key()
@@ -141,7 +145,7 @@ class HasOne extends Relation
      * Get the qualified parent key name.
      *
      * @return string The qualified parent key name
-     * 
+     *
      * @since 1.0.0
      */
     public function get_qualified_parent_key_name()
@@ -153,7 +157,7 @@ class HasOne extends Relation
      * Get the foreign key name.
      *
      * @return string The foreign key name
-     * 
+     *
      * @since 1.0.0
      */
     public function get_foreign_key_name()
@@ -170,7 +174,7 @@ class HasOne extends Relation
      * correspond to the one related record for the parent.
      *
      * @return mixed The related model instance or null if not found
-     * 
+     *
      * @since 1.0.0
      */
     public function get_results()
@@ -184,9 +188,10 @@ class HasOne extends Relation
      * Collects parent local keys and scopes the query using a where_in to fetch
      * all related records in a single query.
      *
-     * @param  Collection $models The array of parent models
-     * @return void No return value
-     * 
+     * @param Collection $models The array of parent models
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     public function add_eager_constraints(Collection $models)
@@ -213,9 +218,9 @@ class HasOne extends Relation
      * @param Collection $models The parent models to receive results
      * @param mixed $results The related results to match
      * @param string $relation The relation name on the parent
-     * 
+     *
      * @return array The array of parent models with relations set
-     * 
+     *
      * @since 1.0.0
      */
     public function match(Collection $models, $results, $relation)
@@ -236,10 +241,10 @@ class HasOne extends Relation
     /**
      * Build the dictionary for the relation from the results.
      *
-     * @param Collection<string, Model> $results The related results
-     * 
+     * @param Collection $results The results.
+     *
      * @return array The dictionary
-     * 
+     *
      * @since 1.0.0
      */
     protected function build_dictionary(Collection $results)
@@ -263,7 +268,7 @@ class HasOne extends Relation
      * Returns the key on the parent model that is used to match related records.
      *
      * @return string The local key name
-     * 
+     *
      * @since 1.0.0
      */
     public function get_local_key()

@@ -19,16 +19,39 @@ use Framework\Route;
 
 class RegisterRestApi extends BaseHook
 {
+    /**
+     * Get the name.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     public function get_name()
     {
         return HookNames::REST_API_INIT;
     }
 
+    /**
+     * Get the type.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     public function get_type()
     {
         return HookTypes::ACTION;
     }
 
+    /**
+     * Handle.
+     *
+     * @param mixed $args The positional arguments.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function handle(...$args)
     {
         $routes = Route::get_routes();

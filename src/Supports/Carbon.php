@@ -23,10 +23,11 @@ class Carbon extends BaseCarbon
     /**
      * Check if the value is a valid date.
      *
-     * @param mixed $value
+     * @param mixed $value The value.
      *
      * @return bool
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public static function isValidDate($value)
     {
@@ -47,7 +48,8 @@ class Carbon extends BaseCarbon
      * Convert the Carbon instance to a base format string.
      *
      * @return string
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function toBaseDateString()
     {
@@ -58,7 +60,8 @@ class Carbon extends BaseCarbon
      * Convert the Carbon instance to a SQL safe date string.
      *
      * @return string
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function toSqlDatetimeString()
     {
@@ -69,7 +72,8 @@ class Carbon extends BaseCarbon
      * Convert the Carbon instance to a SQL safe date string (snake_case alias).
      *
      * @return string
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function to_sql_datetime_string()
     {

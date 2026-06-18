@@ -16,9 +16,30 @@ use Framework\Database\Query\Model;
 
 class SchedulerQueue extends Model
 {
+    /**
+     * The table.
+     *
+     * @var string
+     *
+     * @since 1.0.0
+     */
     protected $table = 'themeum_framework_scheduler_jobs';
+    /**
+     * The primary key.
+     *
+     * @var string
+     *
+     * @since 1.0.0
+     */
     protected $primary_key = 'id';
 
+    /**
+     * The fillable.
+     *
+     * @var string
+     *
+     * @since 1.0.0
+     */
     protected $fillable = [
         'resolver',
         'args',

@@ -22,16 +22,41 @@ use function Framework\config;
 
 class RegisterAdminMenu extends BaseHook
 {
+    /**
+     * Get the name.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     public function get_name()
     {
         return HookNames::ADMIN_MENU;
     }
 
+    /**
+     * Get the type.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     public function get_type()
     {
         return HookTypes::ACTION;
     }
 
+    /**
+     * Handle.
+     *
+     * @param mixed $args The positional arguments.
+     *
+     * @return void
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
     public function handle(...$args)
     {
         $menus = config('menu', []);

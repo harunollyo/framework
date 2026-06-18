@@ -17,8 +17,11 @@ interface Parser
     /**
      * Parse the content.
      *
-     * @param  string $content
+     * @param string $content The content.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function parse(string $content): string;
 }

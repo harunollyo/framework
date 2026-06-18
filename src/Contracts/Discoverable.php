@@ -18,6 +18,8 @@ interface Discoverable
      * Discover from the file system.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function discover();
 }

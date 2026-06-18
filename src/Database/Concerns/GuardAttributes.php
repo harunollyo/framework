@@ -20,6 +20,8 @@ trait GuardAttributes
      * The attributes that are mass assignable.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $fillable = [];
 
@@ -27,6 +29,8 @@ trait GuardAttributes
      * The attributes that should be protected from mass assignment.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $guarded = ['*'];
 
@@ -34,6 +38,8 @@ trait GuardAttributes
      * Indicates if all mass assignment is allowed.
      *
      * @var bool
+     *
+     * @since 1.0.0
      */
     protected static $unguarded = false;
 
@@ -41,6 +47,8 @@ trait GuardAttributes
      * Get the fillable attributes for the model.
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function get_fillable()
     {
@@ -50,8 +58,11 @@ trait GuardAttributes
     /**
      * Set the fillable attributes for the model.
      *
-     * @param  array $fillable
+     * @param array $fillable The fillable.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function fillable(array $fillable)
     {
@@ -63,8 +74,11 @@ trait GuardAttributes
     /**
      * Merge the given fillable attributes with the existing fillable attributes.
      *
-     * @param  array $fillable
+     * @param array $fillable The fillable.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function merge_fillable(array $fillable)
     {
@@ -81,6 +95,8 @@ trait GuardAttributes
      * Get the guarded attributes for the model.
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function get_guarded()
     {
@@ -90,8 +106,11 @@ trait GuardAttributes
     /**
      * Set the guarded attributes for the model.
      *
-     * @param  array $guarded
+     * @param array $guarded The guarded.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function guard(array $guarded)
     {
@@ -103,8 +122,11 @@ trait GuardAttributes
     /**
      * Merge the given guarded attributes with the existing guarded attributes.
      *
-     * @param  array $guarded
+     * @param array $guarded The guarded.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function merge_guarded(array $guarded)
     {
@@ -120,8 +142,11 @@ trait GuardAttributes
     /**
      * Enable mass assignment for all attributes.
      *
-     * @param  bool $state
+     * @param mixed $state The state.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public static function unguard($state = true)
     {
@@ -132,6 +157,8 @@ trait GuardAttributes
      * Disable mass assignment for all attributes.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public static function reguard()
     {
@@ -142,6 +169,8 @@ trait GuardAttributes
      * Determine if mass assignment is enabled for all attributes.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public static function is_unguarded()
     {
@@ -151,8 +180,11 @@ trait GuardAttributes
     /**
      * Execute the given callback while mass assignment is enabled for all attributes.
      *
-     * @param  callable $callback
+     * @param callable $callback The callback to invoke.
+     *
      * @return mixed
+     *
+     * @since 1.0.0
      */
     public static function unguarded(callable $callback)
     {
@@ -172,8 +204,11 @@ trait GuardAttributes
     /**
      * Determine if the given key is fillable.
      *
-     * @param  string $key
+     * @param mixed $key The key.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_fillable($key)
     {
@@ -195,8 +230,11 @@ trait GuardAttributes
     /**
      * Determine if the given key is guarded.
      *
-     * @param  string $key
+     * @param mixed $key The key.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_guarded($key)
     {

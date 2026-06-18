@@ -20,6 +20,8 @@ class Listener
      * child classes. The higher the value the more the priority.
      *
      * @return int
+     *
+     * @since 1.0.0
      */
     public function priority()
     {

@@ -26,6 +26,8 @@ class MakeSeederCommand extends CommandBase
      * The arguments
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $args;
 
@@ -33,6 +35,8 @@ class MakeSeederCommand extends CommandBase
      * The arguments
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $assoc;
 
@@ -40,12 +44,16 @@ class MakeSeederCommand extends CommandBase
      * The base path for the models
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $output_dir;
 
     /**
      * Initialize the command
-     * 
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     public function __construct()
@@ -58,10 +66,12 @@ class MakeSeederCommand extends CommandBase
     /**
      * Run the command
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function run($args, $assoc)
     {
@@ -79,12 +89,26 @@ class MakeSeederCommand extends CommandBase
         $this->create();
     }
 
+    /**
+     * Determine whether the database seeder missing.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
     protected function is_database_seeder_missing()
     {
         return File::missing(database_path('seeders/DatabaseSeeder.php'));
     }
 
 
+    /**
+     * Create database seeder.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     protected function create_database_seeder()
     {
         $data = [
@@ -116,6 +140,8 @@ class MakeSeederCommand extends CommandBase
      * Get data for seeder file
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     protected function data()
     {
@@ -134,10 +160,12 @@ class MakeSeederCommand extends CommandBase
     /**
      * Check if the command passed the validation
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function passed($args, $assoc)
     {
@@ -147,9 +175,9 @@ class MakeSeederCommand extends CommandBase
     /**
      * Create a new model file
      *
-     * @param string $model
-     *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function create()
     {
@@ -173,6 +201,8 @@ class MakeSeederCommand extends CommandBase
      * Get the stub content
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function get_stub()
     {
@@ -188,10 +218,11 @@ class MakeSeederCommand extends CommandBase
     /**
      * Populate the stub content
      *
-     * @param string $model
-     * @param string $stub
+     * @param mixed $data The data payload.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function populate_stub($data)
     {
@@ -206,6 +237,8 @@ class MakeSeederCommand extends CommandBase
      * Prepare the command's synopsis and other metadata
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function prepare()
     {

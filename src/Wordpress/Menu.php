@@ -24,6 +24,8 @@ class Menu
      * The page menu type i.e. main menu or submenu
      *
      * @var MenuTypes
+     *
+     * @since 1.0.0
      */
     protected $menu_type = MenuTypes::MAIN_MENU;
 
@@ -31,6 +33,8 @@ class Menu
      * The page title
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $page_title = null;
 
@@ -38,6 +42,8 @@ class Menu
      * The menu title
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $menu_title = null;
 
@@ -45,6 +51,8 @@ class Menu
      * The capabilities
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $capabilities = null;
 
@@ -52,6 +60,8 @@ class Menu
      * The menu slug
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $menu_slug = null;
 
@@ -59,6 +69,8 @@ class Menu
      * The callback
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $callback = '__return_false';
 
@@ -66,6 +78,8 @@ class Menu
      * The icon url
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $icon_url = null;
 
@@ -73,6 +87,8 @@ class Menu
      * The position
      *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected $position = null;
 
@@ -80,10 +96,21 @@ class Menu
      * The parent slug
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $parent_slug = null;
 
 
+    /**
+     * Create a new instance.
+     *
+     * @return void
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
     public function __construct()
     {
         if (!$this->check_required_properties()) {
@@ -91,11 +118,25 @@ class Menu
         }
     }
 
+    /**
+     * Determine whether the displayable.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
     public function is_displayable()
     {
         return true;
     }
 
+    /**
+     * Check required properties.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     protected function check_required_properties()
     {
         $properties = [
@@ -118,6 +159,8 @@ class Menu
      * Render the menu
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function render()
     {

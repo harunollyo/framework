@@ -24,9 +24,9 @@ class ApiExceptionHandler
      * Get the response for the exception.
      *
      * @param Exception $exception The exception to get the response for.
-     * 
+     *
      * @return Response The response for the exception.
-     * 
+     *
      * @since 1.0.0
      */
     public static function get_response(Exception $exception)
@@ -55,9 +55,9 @@ class ApiExceptionHandler
      * Get the fallback response for the exception.
      *
      * @param Exception $exception The exception to get the fallback response for.
-     * 
+     *
      * @return Response The fallback response for the exception.
-     * 
+     *
      * @since 1.0.0
      */
     protected static function fallback_response(Exception $exception)

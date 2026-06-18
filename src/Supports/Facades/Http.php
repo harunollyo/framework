@@ -43,8 +43,22 @@ use Framework\Facade;
 
 class Http extends Facade
 {
+    /**
+     * The is cacheable.
+     *
+     * @var bool
+     *
+     * @since 1.0.0
+     */
     protected static $is_cacheable = false;
 
+    /**
+     * Get the accessor.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     public static function get_accessor()
     {
         return 'client-request';

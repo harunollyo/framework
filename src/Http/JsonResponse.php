@@ -25,6 +25,8 @@ class JsonResponse extends WP_REST_Response
      * The original data that was passed to the response.
      *
      * @var mixed
+     *
+     * @since 1.0.0
      */
     protected $original;
 
@@ -32,6 +34,8 @@ class JsonResponse extends WP_REST_Response
      * The content of the response.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $content;
 
@@ -39,6 +43,8 @@ class JsonResponse extends WP_REST_Response
      * The encoding options for the response.
      *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected $encoding_options = 0;
 
@@ -49,6 +55,10 @@ class JsonResponse extends WP_REST_Response
      * @param int $status The HTTP status code
      * @param array $headers The headers to be sent with the response
      * @param int $options The JSON encoding options
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct($data = [], $status = 200, array $headers = [], int $options = 0)
     {
@@ -67,8 +77,11 @@ class JsonResponse extends WP_REST_Response
     /**
      * Set the encoding options for the response.
      *
-     * @param  int $option The JSON encoding options
+     * @param int $option The JSON encoding options
+     *
      * @return $this The response instance for method chaining
+     *
+     * @since 1.0.0
      */
     public function set_encoding_options($option)
     {
@@ -81,6 +94,8 @@ class JsonResponse extends WP_REST_Response
      * Get the encoding options for the response.
      *
      * @return int The JSON encoding options
+     *
+     * @since 1.0.0
      */
     public function get_encoding_options()
     {
@@ -90,9 +105,12 @@ class JsonResponse extends WP_REST_Response
     /**
      * Get the content of the response.
      *
-     * @param  bool $assoc Whether to return the content as an associative array
-     * @param  int $depth The maximum depth of the content
+     * @param bool $assoc Whether to return the content as an associative array
+     * @param int $depth The maximum depth of the content
+     *
      * @return mixed The content of the response
+     *
+     * @since 1.0.0
      */
     public function get_content($assoc = false, $depth = 512)
     {
@@ -112,8 +130,13 @@ class JsonResponse extends WP_REST_Response
     /**
      * Set the content of the response.
      *
-     * @param  mixed $data The data to be encoded as JSON
+     * @param mixed $data The data to be encoded as JSON
+     *
      * @return $this The response instance for method chaining
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function set_content($data)
     {
@@ -147,8 +170,11 @@ class JsonResponse extends WP_REST_Response
     /**
      * Check if the JSON is valid.
      *
-     * @param  int $json_error The JSON error code
+     * @param int $json_error The JSON error code
+     *
      * @return bool Whether the JSON is valid
+     *
+     * @since 1.0.0
      */
     protected function is_valid_json($json_error)
     {
@@ -167,8 +193,11 @@ class JsonResponse extends WP_REST_Response
     /**
      * Check if the encoding options have a specific option set.
      *
-     * @param  int $option The option to check
+     * @param int $option The option to check
+     *
      * @return bool Whether the option is set
+     *
+     * @since 1.0.0
      */
     protected function has_encoding_options($option)
     {

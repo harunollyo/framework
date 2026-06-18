@@ -36,21 +36,18 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * The array of items contained in the collection.
      *
-     * Stores the elements managed by the collection, which may be model instances
-     * or raw values. Used for all collection operations such as iteration, mapping,
-     * and conversion to arrays or JSON.
-     *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $items = [];
 
     /**
      * The current position of the iterator.
      *
-     * Tracks the index within the items array for implementing the Iterator interface,
-     * allowing the collection to be traversed using foreach and other iteration constructs.
-     *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected $position = 0;
 
@@ -61,9 +58,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * storage. This is used by query results and relation loaders to wrap raw
      * arrays in a consistent interface for further processing and consumption.
      *
-     * @param  array $items The items to seed the collection
+     * @param array $items The items to seed the collection
+     *
      * @return void No return value; initializes internal state
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function __construct(array $items = [])
     {
@@ -94,7 +93,8 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * native arrays instead of collection instances.
      *
      * @return array The raw array of items stored in the collection
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function all()
     {
@@ -105,7 +105,8 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Get the values of the collection.
      *
      * @return static A new collection containing the values
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function values()
     {
@@ -116,9 +117,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Determine if the collection contains a given item.
      *
      * @param mixed $value The item to check for
-     * 
+     * @param bool $strict The strict.
+     *
      * @return bool True if the collection contains the item, false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function contains($value, bool $strict = false)
     {
@@ -138,9 +141,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Determine if the collection contains a given item using strict comparison.
      *
-     * @param  mixed $value The item to check for
+     * @param mixed $value The item to check for
+     *
      * @return bool True if the collection contains the item, false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function contains_strict($value)
     {
@@ -150,9 +155,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Determine if the collection does not contain a given item.
      *
-     * @param  mixed $value The item to check for
+     * @param mixed $value The item to check for
+     *
      * @return bool True if the collection does not contain the item, false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function not_contains($value)
     {
@@ -162,9 +169,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Determine if the collection does not contain a given item using strict comparison.
      *
-     * @param  mixed $value The item to check for
+     * @param mixed $value The item to check for
+     *
      * @return bool True if the collection does not contain the item, false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function not_contains_strict($value)
     {
@@ -174,9 +183,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Diff the collection with the given items.
      *
-     * @param  mixed $items The items to diff with the collection
+     * @param mixed $items The items to diff with the collection
+     *
      * @return static A new collection containing the diff
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function diff($items)
     {
@@ -188,9 +199,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Get the arrayable items from the given items.
      *
-     * @param  mixed $items The items to get the arrayable items from
+     * @param mixed $items The items to get the arrayable items from
+     *
      * @return array The arrayable items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_arrayable_items($items)
     {
@@ -205,12 +218,13 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Returns null when the collection is empty. This is typically used to
      * access a single model or value from a previously constrained result set
      * without performing additional checks.
-     * 
+     *
      * @param callable|null $callback The callback to use to determine the first item
      * @param mixed|null $default The default value to return if no items exist
      *
      * @return mixed The first item or null when no items exist
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function first($callback = null, $default = null)
     {
@@ -225,7 +239,8 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * where the terminal element is meaningful.
      *
      * @return mixed The last item or null when no items exist
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function last()
     {
@@ -239,7 +254,8 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * PHP's count behavior and is frequently used in pagination and guards.
      *
      * @return int The number of items contained in the collection
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function count(): int
     {
@@ -250,7 +266,8 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Determine if the collection is empty.
      *
      * @return bool True when empty; false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function empty()
     {
@@ -260,9 +277,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Determine if the collection is empty.
      *
-     * @deprecated Use empty() instead.
-     * @return     bool True when empty; false otherwise
-     * @since      1.0.0
+     * @return bool True when empty; false otherwise
+     *
+     * @since 1.0.0
      */
     public function is_empty()
     {
@@ -273,7 +290,8 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Determine if the collection is not empty.
      *
      * @return bool True when not empty; false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function not_empty()
     {
@@ -283,9 +301,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Determine if the collection is not empty.
      *
-     * @deprecated Use not_empty() instead.
-     * @return     bool True when not empty; false otherwise
-     * @since      1.0.0
+     * @return bool True when not empty; false otherwise
+     *
+     * @since 1.0.0
      */
     public function is_not_empty()
     {
@@ -295,9 +313,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Add one or more items to the end of the collection.
      *
-     * @param  mixed $values The values to add to the collection
+     * @param mixed $values The values to add to the collection
+     *
      * @return $this The collection instance for method chaining
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function push(...$values)
     {
@@ -311,9 +331,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Add one or more items to the beginning of the collection.
      *
-     * @param  mixed $values The values to add to the collection
+     * @param mixed $values The values to add to the collection
+     *
      * @return $this The collection instance for method chaining
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function unshift(...$values)
     {
@@ -326,7 +348,8 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Remove and return the last item from the collection.
      *
      * @return mixed The removed item or null if the collection is empty
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function pop()
     {
@@ -337,7 +360,8 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Reverse the order of the collection items.
      *
      * @return static A new collection with the items in reverse order
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function reverse()
     {
@@ -351,9 +375,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * collected into a new collection. This does not mutate the original and
      * supports fluent method chaining by returning a collection instance.
      *
-     * @param  callable $callback The transformer to apply to each item
+     * @param callable $callback The transformer to apply to each item
+     *
      * @return static A new collection containing transformed items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function map(callable $callback)
     {
@@ -364,7 +390,8 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Collapse a collection of arrays into a single array.
      *
      * @return static A new collection containing collapsed items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function collapse()
     {
@@ -378,9 +405,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * collected into a new collection. This does not mutate the original and
      * supports fluent method chaining by returning a collection instance.
      *
-     * @param  callable $callback The transformer to apply to each item
+     * @param callable $callback The transformer to apply to each item
+     *
      * @return static A new collection containing transformed items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function flat_map(callable $callback)
     {
@@ -394,9 +423,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * returned leaving the original intact, enabling immutable-style chaining
      * and reuse of the source collection.
      *
-     * @param  callable $callback The predicate determining which items remain
+     * @param callable $callback The predicate determining which items remain
+     *
      * @return static A new collection containing only matching items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function filter($callback)
     {
@@ -415,9 +446,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * and reuse of the source collection.
      *
      * @param callable $callback The predicate determining which items remain
-     * 
+     *
      * @return static A new collection containing only matching items
-     * 
+     *
      * @since 1.0.0
      */
     public function reject(callable $callback)
@@ -433,9 +464,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * and reuse of the source collection.
      *
      * @param callable $callback The predicate determining which items remain
-     * 
+     *
      * @return static A new collection containing only matching items
-     * 
+     *
      * @since 1.0.0
      */
     public function accept(callable $callback)
@@ -450,7 +481,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * @param mixed $default The default value to return if the key is not found.
      *
      * @return mixed The first item that matches the key.
-     * 
+     *
+     * @throws \InvalidArgumentException
+     *
      * @since 1.0.0
      */
     public function find($key, $default = null)
@@ -473,9 +506,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * iteration stops early. This method returns the collection instance for
      * method chaining with subsequent operations.
      *
-     * @param  callable $callback The function to invoke for each item
+     * @param callable $callback The function to invoke for each item
+     *
      * @return $this The collection instance for method chaining
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function each(callable $callback)
     {
@@ -490,9 +525,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Determine if the collection satisfies a given condition.
      *
-     * @param  callable $callback The callback to check the items
+     * @param callable $callback The callback to check the items
+     *
      * @return bool True if the collection satisfies the condition, false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function some(callable $callback)
     {
@@ -502,9 +539,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Determine if the collection satisfies a given condition.
      *
-     * @param  callable $callback The callback to check the items
+     * @param callable $callback The callback to check the items
+     *
      * @return bool True if the collection satisfies the condition, false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function every(callable $callback)
     {
@@ -516,9 +555,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      *
      * @param callable|array $group_by The key or callback to group by
      * @param bool $preserve_keys Whether to preserve the keys
-     * 
+     *
      * @return static A new collection containing the grouped items
-     * 
+     *
      * @since 1.0.0
      */
     public function group_by($group_by, $preserve_keys = false)
@@ -568,9 +607,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Key the collection by the given key.
      *
-     * @param  callable|string $key_by The key or callback to key by
+     * @param callable|string $key_by The key or callback to key by
+     *
      * @return static A new collection containing the keyed items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function key_by($key_by)
     {
@@ -598,8 +639,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * key. Missing properties or keys are represented as null. A new collection
      * of the extracted values is returned for additional transformations.
      *
-     * @param  string|array|int|Closure|null $value The value to pluck
-     * @param  string|Closure|null $key The key to pluck by
+     * @param string|array|int|Closure|null $value The value to pluck
+     * @param string|Closure|null $key The key to pluck by
+     *
      * @return static A new collection of extracted values
      *
      * @since 1.0.0
@@ -612,9 +654,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Create a new collection instance.
      *
-     * @param  array $items The items to seed the collection
+     * @param array $items The items to seed the collection
+     *
      * @return static A new collection instance
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     protected function new_instance($items = [])
     {
@@ -624,9 +668,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Merge the collection with the given items.
      *
-     * @param  mixed $items The items to merge with the collection
+     * @param mixed $items The items to merge with the collection
+     *
      * @return static A new collection containing the merged items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function merge($items)
     {
@@ -637,9 +683,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Merge the collection with the given items recursively.
      *
      * @param mixed $items The items to merge with the collection
-     * 
+     *
      * @return static A new collection containing the merged items
-     * 
+     *
      * @since 1.0.0
      */
     public function merge_recursive($items)
@@ -650,9 +696,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Union the collection with the given items.
      *
-     * @param  mixed $items The items to union with the collection
+     * @param mixed $items The items to union with the collection
+     *
      * @return static A new collection containing the union of items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function union($items)
     {
@@ -664,11 +712,13 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Return a new collection containing only the specified keys.
      *
-     * @param  mixed $keys The keys to keep
+     * @param mixed $keys The keys to keep
+     *
      * @return static A new collection containing only the specified keys
-     * 
-     * @throws InvalidArgumentException If no keys are passed
-     * @since  1.0.0
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function only($keys)
     {
@@ -684,9 +734,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Sort the collection items.
      *
-     * @param  callable $callback The callback to sort the items
+     * @param callable $callback The callback to sort the items
+     *
      * @return static A new collection containing the sorted items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function sort($callback = null)
     {
@@ -702,9 +754,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Sum the collection items.
      *
-     * @param  callable $callback The callback to sum the items
+     * @param callable $callback The callback to sum the items
+     *
      * @return int The sum of the items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function sum($callback = null)
     {
@@ -720,9 +774,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Calculate the average of the collection items.
      *
-     * @param  callable $callback The callback to calculate the average
+     * @param callable $callback The callback to calculate the average
+     *
      * @return float The average of the items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function average($callback = null)
     {
@@ -732,9 +788,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Calculate the average of the collection items.
      *
-     * @param  callable $callback The callback to calculate the average
+     * @param callable $callback The callback to calculate the average
+     *
      * @return float The average of the items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function avg($callback = null)
     {
@@ -744,9 +802,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Find the minimum value in the collection.
      *
-     * @param  callable $callback The callback to find the minimum value
+     * @param callable $callback The callback to find the minimum value
+     *
      * @return mixed The minimum value
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function min($callback = null)
     {
@@ -758,9 +818,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Find the maximum value in the collection.
      *
-     * @param  callable $callback The callback to find the maximum value
+     * @param callable $callback The callback to find the maximum value
+     *
      * @return mixed The maximum value
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function max($callback = null)
     {
@@ -772,10 +834,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Calculate the percentage of items that satisfy a given condition.
      *
-     * @param  callable $callback The callback to calculate the percentage
-     * @param  int $precision The number of decimal places to round to
+     * @param callable $callback The callback to calculate the percentage
+     * @param int $precision The number of decimal places to round to
+     *
      * @return float|null The percentage of items that satisfy the condition
-     * 
+     *
      * @since 1.0.0
      */
     public function percentage(callable $callback, int $precision = 2)
@@ -793,9 +856,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Join the collection items into a string using a glue.
      *
-     * @param  string $glue The glue to join the items with
+     * @param string $glue The glue to join the items with
+     *
      * @return string The joined string
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function join(string $glue = ',')
     {
@@ -805,9 +870,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     /**
      * Eager load the relationships for the collection.
      *
-     * @param  mixed $relations The relations to eager load
+     * @param mixed $relations The relations to eager load
+     *
      * @return static A new collection containing the eager loaded items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function load($relations)
     {
@@ -826,7 +893,8 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Convert the collection to an array.
      *
      * @return array The array representation of the collection
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function to_array()
     {
@@ -839,8 +907,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Convert the collection into a JSON string.
      * This is an alias of the toJson method for following wordpress convention.
      *
+     * @param mixed $options The options array.
+     *
      * @return string The JSON-encoded representation of the items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function to_json($options = 0)
     {
@@ -853,9 +924,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Part of the ArrayAccess contract. This checks whether an index is set in
      * the internal array and returns a boolean accordingly.
      *
-     * @param  mixed $offset The array index to check for existence
+     * @param mixed $offset The array index to check for existence
+     *
      * @return bool True when the offset exists; false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function offsetExists($offset): bool
     {
@@ -869,7 +942,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * access to collection items while keeping behavior predictable.
      *
      * @param  mixed $offset The array index to retrieve
+     * 
      * @return mixed The value at the offset or null if not set
+     * 
      * @since  1.0.0
      */
     #[\ReturnTypeWillChange]
@@ -884,10 +959,12 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * When the offset is null, the value is appended to the end of the list.
      * This fulfills the ArrayAccess interface for write operations.
      *
-     * @param  mixed $offset The index to set, or null to append
-     * @param  mixed $value The value to assign at the offset
-     * @return void No return value
-     * @since  1.0.0
+     * @param mixed $offset The index to set, or null to append
+     * @param mixed $value The value to assign at the offset
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function offsetSet($offset, $value): void
     {
@@ -904,9 +981,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Removes the key from the internal array if present. This supports the
      * ArrayAccess interface for deletion semantics.
      *
-     * @param  mixed $offset The index to remove from the collection
-     * @return void No return value
-     * @since  1.0.0
+     * @param mixed $offset The index to remove from the collection
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function offsetUnset($offset): void
     {
@@ -923,6 +1002,13 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * @since  1.0.0
      */
     #[\ReturnTypeWillChange]
+    /**
+     * Current.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function current()
     {
         return $this->items[$this->position];
@@ -935,6 +1021,13 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * @since  1.0.0
      */
     #[\ReturnTypeWillChange]
+    /**
+     * JsonSerialize.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function jsonSerialize()
     {
         return array_map(function ($value) {
@@ -961,6 +1054,13 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * @since  1.0.0
      */
     #[\ReturnTypeWillChange]
+    /**
+     * Key.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function key()
     {
         return $this->position;
@@ -972,8 +1072,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Increments the internal position counter by one. Part of the Iterator
      * interface contract to enable standard iteration semantics.
      *
-     * @return void No return value
-     * @since  1.0.0
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function next(): void
     {
@@ -986,8 +1087,9 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Resets the internal pointer to the beginning so that iteration can be
      * restarted or reused by consumers expecting fresh traversal.
      *
-     * @return void No return value
-     * @since  1.0.0
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function rewind(): void
     {
@@ -1001,7 +1103,8 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * This informs iteration whether to continue or terminate.
      *
      * @return bool True when a current item exists; false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function valid(): bool
     {

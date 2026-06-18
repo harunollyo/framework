@@ -21,10 +21,12 @@ class MigrateCommand extends CommandBase
     /**
      * Run the command
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function run($args, $assoc)
     {

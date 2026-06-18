@@ -18,6 +18,8 @@ class AfterRule extends BaseRule
      * Check if the rule is valid.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -38,6 +40,8 @@ class AfterRule extends BaseRule
      * Get the error message if the rule is not valid.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {

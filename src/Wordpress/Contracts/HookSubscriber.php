@@ -17,6 +17,8 @@ interface HookSubscriber
      * Get the name of the WordPress hook this subscriber listens to.
      *
      * @return string The hook name (e.g., 'init', 'rest_api_init', etc.)
+     *
+     * @since 1.0.0
      */
     public function get_name();
 
@@ -24,6 +26,8 @@ interface HookSubscriber
      * Get the type of the hook: 'action' or 'filter'.
      *
      * @return string Either 'action' or 'filter'.
+     *
+     * @since 1.0.0
      */
     public function get_type();
 
@@ -31,6 +35,8 @@ interface HookSubscriber
      * Get the priority at which the hook should be fired.
      *
      * @return int The priority level (default is 10).
+     *
+     * @since 1.0.0
      */
     public function get_priority();
 
@@ -38,14 +44,19 @@ interface HookSubscriber
      * Get the number of arguments the hook callback accepts.
      *
      * @return int Number of accepted arguments.
+     *
+     * @since 1.0.0
      */
     public function get_args_count();
 
     /**
      * Handle the hook logic. Will be called when the hook is fired.
      *
-     * @param  mixed ...$args All arguments passed to the hook.
+     * @param mixed $args The positional arguments.
+     *
      * @return mixed Return value is only used for filters. Actions can return void.
+     *
+     * @since 1.0.0
      */
     public function handle(...$args);
 }

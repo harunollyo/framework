@@ -26,6 +26,8 @@ class MakeModelCommand extends CommandBase
      * The arguments for the command
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $args;
 
@@ -33,6 +35,8 @@ class MakeModelCommand extends CommandBase
      * The options for the command
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $assoc;
 
@@ -40,12 +44,16 @@ class MakeModelCommand extends CommandBase
      * The base path for the models
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $output_dir;
 
     /**
      * Initialize the command
-     * 
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     public function __construct()
@@ -57,10 +65,12 @@ class MakeModelCommand extends CommandBase
     /**
      * Run the command
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function run($args, $assoc)
     {
@@ -70,6 +80,13 @@ class MakeModelCommand extends CommandBase
         $this->create();
     }
 
+    /**
+     * Data.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     protected function data()
     {
         return [
@@ -87,10 +104,12 @@ class MakeModelCommand extends CommandBase
     /**
      * Check if the command passed the validation
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function passed($args, $assoc)
     {
@@ -100,9 +119,9 @@ class MakeModelCommand extends CommandBase
     /**
      * Create a new model file
      *
-     * @param string $model
-     *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function create()
     {
@@ -127,6 +146,8 @@ class MakeModelCommand extends CommandBase
      * Get the stub content
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function get_stub()
     {
@@ -142,10 +163,12 @@ class MakeModelCommand extends CommandBase
     /**
      * Populate the stub content
      *
-     * @param string $model
-     * @param string $stub
+     * @param mixed $model The model instance.
+     * @param mixed $stub The stub.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function populate_stub($model, $stub)
     {
@@ -160,6 +183,8 @@ class MakeModelCommand extends CommandBase
      * Prepare the command's synopsis and other metadata
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function prepare()
     {

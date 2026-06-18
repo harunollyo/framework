@@ -26,8 +26,24 @@ class Runner
 {
     use HasAsyncWorker;
 
+    /**
+     * The repository.
+     *
+     * @var mixed
+     *
+     * @since 1.0.0
+     */
     protected $repository;
 
+    /**
+     * Create a new instance.
+     *
+     * @param QueueRepository $repository The repository.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function __construct(QueueRepository $repository)
     {
         $this->repository = $repository;
@@ -35,13 +51,15 @@ class Runner
 
     /**
      * Executes the scheduler runner.
-     * 
-     * This method manages the lifecycle of job processing. It first resets stuck jobs 
-     * that have exceeded the timeout, then claims a batch of jobs for the current 
-     * execution cycle. Each job is resolved sequentially with a configurable delay. 
+     *
+     * This method manages the lifecycle of job processing. It first resets stuck jobs
+     * that have exceeded the timeout, then claims a batch of jobs for the current
+     * execution cycle. Each job is resolved sequentially with a configurable delay.
      * Finally, it triggers an asynchronous worker if more pending jobs remain.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function run()
     {
@@ -68,13 +86,15 @@ class Runner
 
     /**
      * Creates a Job Data Transfer Object (DTO) from a raw job record.
-     * 
-     * Validates the raw job object and converts it into a structured JobDTO 
+     *
+     * Validates the raw job object and converts it into a structured JobDTO
      * instance. It also handles decoding the JSON-encoded arguments for the job.
      *
-     * @param  object $job The raw job record from the database.
+     * @param object $job The raw job record from the database.
+     *
      * @return JobDTO
-     * @throws Exception If validation of the job data fails.
+     *
+     * @since 1.0.0
      */
     protected function create_job_dto($job)
     {
@@ -90,13 +110,17 @@ class Runner
 
     /**
      * Validates the integrity of the job record.
-     * 
-     * Ensures that the job object is not empty and that a resolver class 
+     *
+     * Ensures that the job object is not empty and that a resolver class
      * has been specified for processing the job.
      *
-     * @param  object|null $job The raw job record to validate.
-     * @throws Exception If the job is invalid or missing a resolver class.
+     * @param object|null $job The raw job record to validate.
+     *
      * @return void
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
     protected function validate($job)
     {
@@ -111,14 +135,17 @@ class Runner
 
     /**
      * Resolves and executes the business logic for a specific job.
-     * 
-     * This method instantiates the resolver class, executes its handle method, 
-     * and marks the job as completed in the database. If an error occurs, 
+     *
+     * This method instantiates the resolver class, executes its handle method,
+     * and marks the job as completed in the database. If an error occurs,
      * it marks the job as failed and logs the error.
      *
-     * @param  JobDTO $job The job data transfer object.
-     * @param  QueueRepository $repository The queue repository for status updates.
+     * @param JobDTO $job The job data transfer object.
+     * @param QueueRepository $repository The queue repository for status updates.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function resolve(JobDTO $job, QueueRepository $repository)
     {
@@ -140,13 +167,17 @@ class Runner
 
     /**
      * Instantiates a resolver class instance from the service container.
-     * 
-     * Checks if the resolver class exists and if it implements the required 
+     *
+     * Checks if the resolver class exists and if it implements the required
      * handle method before attempting to create the instance.
      *
-     * @param  string $resolver The fully qualified class name of the resolver.
+     * @param string $resolver The fully qualified class name of the resolver.
+     *
      * @return object The instantiated resolver.
-     * @throws Exception If the class is missing or does not have a handle method.
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
     protected function make_resolver(string $resolver)
     {
@@ -164,9 +195,12 @@ class Runner
     /**
      * Cleanup jobs that have been completed or failed for a specific status.
      *
-     * @param  string $status
-     * @param  int $days
+     * @param string $status The status.
+     * @param int $days The days.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function cleanup(string $status, int $days = 7)
     {
@@ -175,13 +209,15 @@ class Runner
 
     /**
      * Cleanup failed jobs from the scheduler repository.
-     * 
-     * This method identifies and removes job records that have reached a failed 
-     * status and have exceeded the retention period of 15 days. This process 
-     * ensures that the scheduler table does not grow indefinitely with 
+     *
+     * This method identifies and removes job records that have reached a failed
+     * status and have exceeded the retention period of 15 days. This process
+     * ensures that the scheduler table does not grow indefinitely with
      * unsuccessful job entries, maintaining optimal database performance.
      *
      * @return bool Returns true if the cleanup operation was successful.
+     *
+     * @since 1.0.0
      */
     public function clean_failed_jobs()
     {
@@ -190,13 +226,15 @@ class Runner
 
     /**
      * Cleanup completed jobs from the scheduler repository.
-     * 
-     * This method identifies and removes job records that have been successfully 
-     * processed and have exceeded the retention period of 7 days. Regularly 
-     * clearing completed records helps maintain a lean database table and 
+     *
+     * This method identifies and removes job records that have been successfully
+     * processed and have exceeded the retention period of 7 days. Regularly
+     * clearing completed records helps maintain a lean database table and
      * improves query performance for pending tasks.
      *
      * @return bool Returns true if the cleanup operation was successful.
+     *
+     * @since 1.0.0
      */
     public function clean_completed_jobs()
     {

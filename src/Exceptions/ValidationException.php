@@ -16,15 +16,22 @@ use Exception;
 class ValidationException extends Exception
 {
     /**
-     * @var array<string> The errors.
+     * The errors.
+     *
+     * @var array<string>
      *
      * @since 1.0.0
-    */
+     */
     protected $errors;
 
     /**
+     * With errors.
+     *
+     * @param array $errors The errors.
+     * @param string $message The message.
+     *
      * @return static
-     * 
+     *
      * @since 1.0.0
      */
     public static function with_errors(array $errors, string $message = 'Validation failed!')
@@ -35,6 +42,13 @@ class ValidationException extends Exception
         return $instance;
     }
 
+    /**
+     * Get the errors.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     public function get_errors()
     {
         return $this->errors;

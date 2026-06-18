@@ -26,6 +26,8 @@ class UploadedFile extends File implements JsonSerializable
      * The original name of the uploaded file.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected string $original_name;
 
@@ -33,6 +35,8 @@ class UploadedFile extends File implements JsonSerializable
      * The MIME type of the uploaded file.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected string $mime_type;
 
@@ -40,6 +44,8 @@ class UploadedFile extends File implements JsonSerializable
      * The error of the uploaded file.
      *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected int $error;
 
@@ -47,6 +53,8 @@ class UploadedFile extends File implements JsonSerializable
      * The original path of the uploaded file.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected string $original_path;
 
@@ -54,16 +62,23 @@ class UploadedFile extends File implements JsonSerializable
      * The size of the uploaded file.
      *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected int $size;
 
     /**
      * Create a new uploaded file instance.
      *
-     * @param string $path
-     * @param string $original_name
-     * @param string|null $mime_type
-     * @param int|null $error
+     * @param string $path The path.
+     * @param string $original_name The original name.
+     * @param ?string $mime_type The mime type.
+     * @param ?int $error The error.
+     * @param ?int $size The size.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct(string $path, string $original_name, ?string $mime_type = null, ?int $error = null, ?int $size = null)
     {
@@ -79,8 +94,11 @@ class UploadedFile extends File implements JsonSerializable
     /**
      * Create a new uploaded file instance from a base file.
      *
-     * @param  static|array $file
+     * @param mixed $file The file.
+     *
      * @return static
+     *
+     * @since 1.0.0
      */
     public static function create_from_base($file)
     {
@@ -97,7 +115,7 @@ class UploadedFile extends File implements JsonSerializable
      * Get the original name of the uploaded file.
      *
      * @return string
-     * 
+     *
      * @since 1.0.0
      */
     public function get_client_original_name()
@@ -109,7 +127,7 @@ class UploadedFile extends File implements JsonSerializable
      * Get the original extension of the uploaded file.
      *
      * @return string
-     * 
+     *
      * @since 1.0.0
      */
     public function get_client_original_extension()
@@ -121,7 +139,7 @@ class UploadedFile extends File implements JsonSerializable
      * Get the original MIME type of the uploaded file.
      *
      * @return string
-     * 
+     *
      * @since 1.0.0
      */
     public function get_client_mime_type()
@@ -133,7 +151,7 @@ class UploadedFile extends File implements JsonSerializable
      * Get the original path of the uploaded file.
      *
      * @return string
-     * 
+     *
      * @since 1.0.0
      */
     public function get_client_original_path()
@@ -145,7 +163,7 @@ class UploadedFile extends File implements JsonSerializable
      * Get the error of the uploaded file.
      *
      * @return int
-     * 
+     *
      * @since 1.0.0
      */
     public function get_error()
@@ -157,7 +175,7 @@ class UploadedFile extends File implements JsonSerializable
      * Get the size of the uploaded file.
      *
      * @return int
-     * 
+     *
      * @since 1.0.0
      */
     public function get_size()
@@ -168,10 +186,11 @@ class UploadedFile extends File implements JsonSerializable
     /**
      * Store the uploaded file in a specified directory.
      *
-     * @param  string $path
-     * @param  array $options
+     * @param string $path The path.
+     * @param array $options The options array.
+     *
      * @return string
-     * 
+     *
      * @since 1.0.0
      */
     public function store(string $path, array $options = [])
@@ -182,14 +201,12 @@ class UploadedFile extends File implements JsonSerializable
     /**
      * Store the uploaded file in a specified directory with a specific name.
      *
-     * @param  string $path
-     * @param  string|null $name
-     * @param  array $options
+     * @param string $path The path.
+     * @param mixed $name The name.
+     * @param array $options The options array.
+     *
      * @return string
-     * 
-     * @throws AuthorizationException If the current user is not authorized to upload files.
-     * @throws Exception If the file cannot be moved to the target location or directory cannot be created.
-     * 
+     *
      * @since 1.0.0
      */
     public function store_as(string $path, $name = null, array $options = [])
@@ -210,7 +227,7 @@ class UploadedFile extends File implements JsonSerializable
      * Check if the uploaded file is valid.
      *
      * @return bool
-     * 
+     *
      * @since 1.0.0
      */
     public function is_valid()
@@ -223,13 +240,13 @@ class UploadedFile extends File implements JsonSerializable
     /**
      * Move the uploaded file to a new location.
      *
-     * @param string $directory
-     * @param string|null $name
-     * 
+     * @param string $directory The directory.
+     * @param ?string $name The name.
+     *
      * @return static
-     * 
-     * @throws Exception
-     * 
+     *
+     * @throws \Exception
+     *
      * @since 1.0.0
      */
     public function move(string $directory, ?string $name = null)
@@ -263,7 +280,7 @@ class UploadedFile extends File implements JsonSerializable
      * Get the error message of the uploaded file.
      *
      * @return string
-     * 
+     *
      * @since 1.0.0
      */
     public function get_error_message()
@@ -275,7 +292,7 @@ class UploadedFile extends File implements JsonSerializable
      * Get the exception message of the uploaded file.
      *
      * @return string
-     * 
+     *
      * @since 1.0.0
      */
     protected function get_exception_message()
@@ -301,7 +318,7 @@ class UploadedFile extends File implements JsonSerializable
      * Get the maximum file size of the uploaded file.
      *
      * @return int
-     * 
+     *
      * @since 1.0.0
      */
     protected function get_max_file_size()
@@ -315,9 +332,10 @@ class UploadedFile extends File implements JsonSerializable
     /**
      * Parse the file size.
      *
-     * @param  string $size
+     * @param string $size The size.
+     *
      * @return int
-     * 
+     *
      * @since 1.0.0
      */
     protected function parse_file_size(string $size)
@@ -356,7 +374,7 @@ class UploadedFile extends File implements JsonSerializable
      * Convert the uploaded file to an array.
      *
      * @return array
-     * 
+     *
      * @since 1.0.0
      */
     public function to_array()
@@ -374,7 +392,7 @@ class UploadedFile extends File implements JsonSerializable
      * Convert the uploaded file to a string.
      *
      * @return string
-     * 
+     *
      * @since 1.0.0
      */
     public function __toString()
@@ -386,7 +404,7 @@ class UploadedFile extends File implements JsonSerializable
      * Convert the uploaded file to a JSON string.
      *
      * @return string
-     * 
+     *
      * @since 1.0.0
      */
     public function jsonSerialize(): string

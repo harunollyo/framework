@@ -24,6 +24,8 @@ trait InteractsWithFiles
      * The files array.
      *
      * @var array<string,UploadedFile>
+     *
+     * @since 1.0.0
      */
     protected array $files = [];
 
@@ -31,6 +33,8 @@ trait InteractsWithFiles
      * Get all files from the request.
      *
      * @return array<string,UploadedFile>
+     *
+     * @since 1.0.0
      */
     public function all_files()
     {
@@ -44,8 +48,10 @@ trait InteractsWithFiles
      *
      * @param string $key The key of the file.
      * @param mixed $default The default value if the file is not found.
-     * 
+     *
      * @return UploadedFile|Collection<string,UploadedFile>
+     *
+     * @since 1.0.0
      */
     public function file(?string $key = null, $default = null)
     {
@@ -56,6 +62,8 @@ trait InteractsWithFiles
      * Create the files from the global $_FILES array.
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     protected function load_files_from_global()
     {
@@ -79,7 +87,7 @@ trait InteractsWithFiles
      * @param array $files The array of files.
      *
      * @return array<string,UploadedFile>
-     * 
+     *
      * @since 1.0.0
      */
     protected function convert_uploaded_files(array $files)
@@ -104,7 +112,11 @@ trait InteractsWithFiles
      *
      * @param array $item The item to process.
      * @param string $key The key of the item.
-     * @param array &$results The results array.
+     * @param array $results The results.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     protected function process_item(array $item, string $key, array &$results)
     {
@@ -119,6 +131,8 @@ trait InteractsWithFiles
      * @param string $key The key of the file.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function has_file(string $key)
     {
@@ -141,6 +155,8 @@ trait InteractsWithFiles
      * @param mixed $file The file to check.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function is_valid_file($file)
     {
@@ -150,8 +166,11 @@ trait InteractsWithFiles
     /**
      * Create a new uploaded file instance.
      *
-     * @param  array $file The file array from the $_FILES superglobal.
+     * @param array $file The file array from the $_FILES superglobal.
+     *
      * @return UploadedFile
+     *
+     * @since 1.0.0
      */
     protected function create_uploaded_file(array $file)
     {

@@ -23,6 +23,8 @@ class MigrationRepository
      * Get the previous migrations.
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function get_previous_migrations()
     {
@@ -32,8 +34,11 @@ class MigrationRepository
     /**
      * Update the migrations.
      *
-     * @param  array $migrations
+     * @param array $migrations The migrations.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function update_migrations(array $migrations)
     {
@@ -44,6 +49,8 @@ class MigrationRepository
      * Remove the migrations.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function remove_migrations()
     {
@@ -54,6 +61,8 @@ class MigrationRepository
      * Get the registered migrations.
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function get_registered_migrations()
     {
@@ -64,6 +73,8 @@ class MigrationRepository
      * Check if the rollback is enabled.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_rollback_enabled()
     {

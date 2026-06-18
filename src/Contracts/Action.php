@@ -18,6 +18,8 @@ interface Action
      * Execute the action logic.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function handle();
 }

@@ -16,6 +16,8 @@ class ProhibitedRule extends BaseRule
      * Determine if the value is present.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -26,6 +28,8 @@ class ProhibitedRule extends BaseRule
      * Get the error message for the prohibited field.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {
@@ -37,6 +41,8 @@ class ProhibitedRule extends BaseRule
      * Ignore rule check.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function ignore_rule_check()
     {

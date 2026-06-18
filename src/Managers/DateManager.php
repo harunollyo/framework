@@ -116,11 +116,14 @@ class DateManager
     /**
      * Handle the Carbon date functions. Forward the date methods from Date Facade to Carbon.
      *
-     * @param string $method
-     * @param array $parameters
+     * @param mixed $method The method name.
+     * @param mixed $parameters The parameters array.
      *
      * @return mixed
-     * @throws BadMethodCallException
+     *
+     * @throws \BadMethodCallException
+     *
+     * @since 1.0.0
      */
     public function __call($method, $parameters)
     {

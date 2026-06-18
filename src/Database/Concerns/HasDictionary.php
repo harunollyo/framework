@@ -19,9 +19,13 @@ trait HasDictionary
     /**
      * Get the dictionary key for the attribute.
      *
-     * @param  mixed $attribute The attribute to get the key for
+     * @param mixed $attribute The attribute to get the key for
+     *
      * @return string The dictionary key
-     * @since  1.0.0
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     protected function get_dictionary_key($attribute)
     {

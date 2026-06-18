@@ -16,6 +16,8 @@ class SameAsRule extends BaseRule
      * Determine if the value is matched.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -28,6 +30,8 @@ class SameAsRule extends BaseRule
      * Get the error message for a missing field.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {

@@ -21,8 +21,14 @@ class File extends SplFileInfo
     /**
      * Create a new file instance.
      *
-     * @param  string $path
+     * @param string $path The path.
+     * @param bool $check_path The check path.
+     *
      * @return void
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function __construct(string $path, bool $check_path = true)
     {
@@ -36,12 +42,13 @@ class File extends SplFileInfo
     /**
      * Move the file to a new location.
      *
-     * @param string $directory
-     * @param string|null $name
-     * 
+     * @param string $directory The directory.
+     * @param ?string $name The name.
+     *
      * @return static
-     * @throws Exception
-     * 
+     *
+     * @throws \Exception
+     *
      * @since 1.0.0
      */
     public function move(string $directory, ?string $name = null)
@@ -71,9 +78,9 @@ class File extends SplFileInfo
      * Get the contents of the file.
      *
      * @return string
-     * 
-     * @throws Exception
-     * 
+     *
+     * @throws \Exception
+     *
      * @since 1.0.0
      */
     public function get_content()
@@ -90,13 +97,13 @@ class File extends SplFileInfo
     /**
      * Get the target file.
      *
-     * @param string $directory
-     * @param string|null $name
-     * 
+     * @param string $directory The directory.
+     * @param ?string $name The name.
+     *
      * @return static
-     * 
-     * @throws Exception
-     * 
+     *
+     * @throws \Exception
+     *
      * @since 1.0.0
      */
     protected function get_target_file(string $directory, ?string $name = null)
@@ -119,9 +126,10 @@ class File extends SplFileInfo
     /**
      * Get the name of the file.
      *
-     * @param  string $name
+     * @param string $name The name.
+     *
      * @return string
-     * 
+     *
      * @since 1.0.0
      */
     protected function get_name(string $name)

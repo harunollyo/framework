@@ -17,8 +17,11 @@ interface Jsonable
     /**
      * Convert the object to a JSON string.
      *
+     * @param mixed $options The options array.
+     *
      * @return string The JSON representation of the object
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function to_json($options = 0);
 }

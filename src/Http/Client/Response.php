@@ -27,29 +27,39 @@ class Response implements ArrayAccess
 
     /**
      * The raw response data.
-     * 
+     *
      * @var array|\WP_Error
+     *
+     * @since 1.0.0
      */
     protected $response;
 
     /**
      * The decoded JSON response.
-     * 
+     *
      * @var array|null
+     *
+     * @since 1.0.0
      */
     protected $decoded;
 
     /**
      * The response cookies.
-     * 
+     *
      * @var array|null
+     *
+     * @since 1.0.0
      */
     protected $cookies;
 
     /**
      * Create a new response instance.
-     * 
-     * @param array|\WP_Error $response
+     *
+     * @param mixed $response The response instance.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct($response)
     {
@@ -58,8 +68,10 @@ class Response implements ArrayAccess
 
     /**
      * Get the body of the response.
-     * 
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function body()
     {
@@ -68,10 +80,13 @@ class Response implements ArrayAccess
 
     /**
      * Get the JSON decoded body of the response as an associative array.
-     * 
-     * @param  string|null $key
-     * @param  mixed $default
+     *
+     * @param mixed $key The key.
+     * @param mixed $default The default.
+     *
      * @return mixed
+     *
+     * @since 1.0.0
      */
     public function json($key = null, $default = null)
     {
@@ -88,8 +103,10 @@ class Response implements ArrayAccess
 
     /**
      * Get the JSON decoded body of the response as an object.
-     * 
+     *
      * @return object|null
+     *
+     * @since 1.0.0
      */
     public function object()
     {
@@ -98,9 +115,12 @@ class Response implements ArrayAccess
 
     /**
      * Get the JSON decoded body of the response as a collection.
-     * 
-     * @param  string|null $key
+     *
+     * @param mixed $key The key.
+     *
      * @return \Framework\Collections\Collection
+     *
+     * @since 1.0.0
      */
     public function collect($key = null)
     {
@@ -109,9 +129,12 @@ class Response implements ArrayAccess
 
     /**
      * Get a header from the response.
-     * 
-     * @param  string $name
+     *
+     * @param mixed $name The name.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function header($name)
     {
@@ -120,8 +143,10 @@ class Response implements ArrayAccess
 
     /**
      * Get all headers from the response.
-     * 
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function headers()
     {
@@ -130,8 +155,10 @@ class Response implements ArrayAccess
 
     /**
      * Get the cookies from the response.
-     * 
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function cookies()
     {
@@ -140,8 +167,10 @@ class Response implements ArrayAccess
 
     /**
      * Get the status code of the response.
-     * 
+     *
      * @return int
+     *
+     * @since 1.0.0
      */
     public function status()
     {
@@ -150,8 +179,10 @@ class Response implements ArrayAccess
 
     /**
      * Get the reason phrase of the response.
-     * 
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function reason()
     {
@@ -160,8 +191,10 @@ class Response implements ArrayAccess
 
     /**
      * Determine if the response status code was successful (2xx).
-     * 
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function successful()
     {
@@ -170,8 +203,10 @@ class Response implements ArrayAccess
 
     /**
      * Determine if the response status code was a redirection (3xx).
-     * 
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function redirected()
     {
@@ -180,8 +215,10 @@ class Response implements ArrayAccess
 
     /**
      * Determine if the response status code was a client error (4xx).
-     * 
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function client_error()
     {
@@ -190,8 +227,10 @@ class Response implements ArrayAccess
 
     /**
      * Determine if the response status code was a server error (5xx).
-     * 
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function server_error()
     {
@@ -200,8 +239,10 @@ class Response implements ArrayAccess
 
     /**
      * Determine if the response status code was a client or server error.
-     * 
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function failed()
     {
@@ -210,9 +251,12 @@ class Response implements ArrayAccess
 
     /**
      * Execute the given callback if the response has a failed status code.
-     * 
-     * @param  callable $callback
+     *
+     * @param callable $callback The callback to invoke.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function on_error(callable $callback)
     {
@@ -225,9 +269,12 @@ class Response implements ArrayAccess
 
     /**
      * Determine if the given offset exists in the JSON response.
-     * 
-     * @param  mixed $offset
+     *
+     * @param mixed $offset The offset.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function offsetExists($offset): bool
     {
@@ -236,9 +283,12 @@ class Response implements ArrayAccess
 
     /**
      * Get the value at the given offset from the JSON response.
-     * 
-     * @param  mixed $offset
+     *
+     * @param mixed $offset The offset.
+     *
      * @return mixed
+     *
+     * @since 1.0.0
      */
     public function offsetGet($offset)
     {
@@ -247,11 +297,15 @@ class Response implements ArrayAccess
 
     /**
      * Set the value at the given offset.
-     * 
-     * @param  mixed $offset
-     * @param  mixed $value
+     *
+     * @param mixed $offset The offset.
+     * @param mixed $value The value.
+     *
      * @return void
+     *
      * @throws \Exception
+     *
+     * @since 1.0.0
      */
     public function offsetSet($offset, $value): void
     {
@@ -260,10 +314,14 @@ class Response implements ArrayAccess
 
     /**
      * Unset the value at the given offset.
-     * 
-     * @param  mixed $offset
+     *
+     * @param mixed $offset The offset.
+     *
      * @return void
+     *
      * @throws \Exception
+     *
+     * @since 1.0.0
      */
     public function offsetUnset($offset): void
     {
@@ -272,8 +330,10 @@ class Response implements ArrayAccess
 
     /**
      * Get the body of the response as a string.
-     * 
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function __toString()
     {

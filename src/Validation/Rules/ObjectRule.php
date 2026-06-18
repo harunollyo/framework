@@ -16,6 +16,8 @@ class ObjectRule extends BaseRule
      * Check if the value is a valid object.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -26,6 +28,8 @@ class ObjectRule extends BaseRule
      * Get the error message for an invalid object value.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {

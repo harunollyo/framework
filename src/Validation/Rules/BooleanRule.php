@@ -13,9 +13,11 @@ defined('ABSPATH') || exit;
 class BooleanRule extends BaseRule
 {
     /**
-     * check for strict data type 
-     * 
+     * Check for strict data type
+     *
      * @var bool
+     *
+     * @since 1.0.0
      */
     protected $check_strict_data_type = true;
 
@@ -23,6 +25,8 @@ class BooleanRule extends BaseRule
      * Determine if the value is a boolean.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -46,6 +50,8 @@ class BooleanRule extends BaseRule
      * Get the error message for a non-boolean value.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {

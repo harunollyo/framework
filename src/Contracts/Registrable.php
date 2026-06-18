@@ -16,6 +16,8 @@ interface Registrable
      * Register something.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function register();
 }

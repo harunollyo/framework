@@ -24,7 +24,7 @@ trait Conditionable
      * @param mixed $default The default value to return if the value is true
      *
      * @return mixed The result of the callback or the default value
-     * 
+     *
      * @since 1.0.0
      */
     public function when($value, callable $callback, $default = null)
@@ -48,7 +48,7 @@ trait Conditionable
      * @param mixed $default The default value to return if the value is false
      *
      * @return mixed The result of the callback or the default value
-     * 
+     *
      * @since 1.0.0
      */
     public function unless($value, callable $callback, $default = null)

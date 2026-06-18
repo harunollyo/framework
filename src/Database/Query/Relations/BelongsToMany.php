@@ -27,73 +27,82 @@ class BelongsToMany extends Relation
 
     /**
      * The name of the pivot table used for the many-to-many relationship.
-     * This table holds the associations between the parent and related models.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $pivot_table;
 
     /**
      * The foreign key column name on the pivot table referencing the parent model.
-     * This column stores the identifier of the parent model in the pivot table.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $foreign_pivot_key;
 
     /**
      * The foreign key column name on the pivot table referencing the related model.
-     * This column stores the identifier of the related model in the pivot table.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $related_pivot_key;
 
     /**
      * The primary key name on the parent model.
-     * This is the key used to identify the parent model in its own table.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $parent_key;
 
     /**
      * The primary key name on the related model.
-     * This is the key used to identify the related model in its own table.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $related_key;
 
     /**
      * The additional columns to be selected from the pivot table.
-     * These columns allow retrieval of extra data stored in the pivot table.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $pivot_columns = [];
 
     /**
      * The additional where conditions to be applied on the pivot table.
-     * These conditions filter the pivot table records when querying the relationship.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $pivot_wheres = [];
 
     /**
      * The additional where in conditions to be applied on the pivot table.
-     * These conditions filter the pivot table records when querying the relationship.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $pivot_where_ins = [];
 
     /**
      * The additional where null conditions to be applied on the pivot table.
-     * These conditions filter the pivot table records when querying the relationship.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $pivot_where_nulls = [];
 
@@ -110,9 +119,9 @@ class BelongsToMany extends Relation
      * @param mixed $related_pivot_key The pivot column for the related key
      * @param mixed $parent_key The local key name on the parent model
      * @param mixed $related_key The key name on the related model
-     * 
+     *
      * @return void No return value
-     * 
+     *
      * @since 1.0.0
      */
     public function __construct(
@@ -139,8 +148,8 @@ class BelongsToMany extends Relation
      * Ensures the relation query joins the pivot and filters using the
      * parent's key when available so only related records are returned.
      *
-     * @return void No return value
-     * 
+     * @return void
+     *
      * @since 1.0.0
      */
     public function add_constraints()
@@ -161,9 +170,9 @@ class BelongsToMany extends Relation
      * @param QueryBuilder $query The query builder instance
      * @param QueryBuilder $parent The parent query builder instance
      * @param mixed $columns The columns to select
-     * 
+     *
      * @return QueryBuilder The aggregate query
-     * 
+     *
      * @since 1.0.0
      */
     public function get_relation_existence_query(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
@@ -183,9 +192,9 @@ class BelongsToMany extends Relation
      * @param QueryBuilder $query The query builder instance
      * @param QueryBuilder $parent The parent query builder instance
      * @param mixed $columns The columns to select
-     * 
+     *
      * @return QueryBuilder The aggregate query
-     * 
+     *
      * @since 1.0.0
      */
     public function get_relation_existence_query_for_self_join(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
@@ -203,7 +212,7 @@ class BelongsToMany extends Relation
      * Get the existence compare key for the relation.
      *
      * @return string The existence compare key
-     * 
+     *
      * @since 1.0.0
      */
     public function get_existence_compare_key()
@@ -217,8 +226,10 @@ class BelongsToMany extends Relation
      * Selects all related columns along with the foreign pivot key aliased for
      * matching. Establishes the join between related and pivot tables.
      *
-     * @return void No return value
-     * 
+     * @param mixed $query The query builder instance.
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     protected function perform_join($query = null)
@@ -245,7 +256,7 @@ class BelongsToMany extends Relation
      * Get the related columns for the query.
      *
      * @return array The related columns
-     * 
+     *
      * @since 1.0.0
      */
     protected function related_columns()
@@ -261,9 +272,9 @@ class BelongsToMany extends Relation
      * Prepare the related column for the query.
      *
      * @param string $column The column to prepare
-     * 
+     *
      * @return string The prepared column
-     * 
+     *
      * @since 1.0.0
      */
     protected function prepare_related_column($column)
@@ -283,7 +294,7 @@ class BelongsToMany extends Relation
      * Prepare pivot columns for the query.
      *
      * @return array The prepared pivot columns
-     * 
+     *
      * @since 1.0.0
      */
     protected function qualify_pivot_columns()
@@ -308,7 +319,7 @@ class BelongsToMany extends Relation
      * columns as aliases prefixed with pivot_.
      *
      * @return Collection The collection of related models
-     * 
+     *
      * @since 1.0.0
      */
     public function get_results()
@@ -323,9 +334,9 @@ class BelongsToMany extends Relation
      * foreign pivot key so all related models can be fetched at once.
      *
      * @param Collection $models The parent models to constrain by
-     * 
-     * @return void No return value
-     * 
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     public function add_eager_constraints(Collection $models)
@@ -357,11 +368,11 @@ class BelongsToMany extends Relation
      * empty collection when none exist.
      *
      * @param Collection $models The parent models receiving results
-     * @param Collection<string, Model> $results The related results including pivot aliases
+     * @param Collection $results The results.
      * @param string $relation The relation name on the parent
-     * 
+     *
      * @return Collection The parent models with relations populated
-     * 
+     *
      * @since 1.0.0
      */
     public function match(Collection $models, Collection $results, $relation)
@@ -382,10 +393,10 @@ class BelongsToMany extends Relation
     /**
      * Build the dictionary for the relation from the results.
      *
-     * @param Collection<string, Model> $results The related results
-     * 
+     * @param Collection $results The results.
+     *
      * @return array The dictionary
-     * 
+     *
      * @since 1.0.0
      */
     protected function build_dictionary(Collection $results)
@@ -409,9 +420,9 @@ class BelongsToMany extends Relation
      * Migrate pivot attributes to the model.
      *
      * @param Model $model The model to migrate the pivot attributes to
-     * 
+     *
      * @return Model The model with the migrated pivot attributes
-     * 
+     *
      * @since 1.0.0
      */
     protected function migrate_pivot_attributes(Model $model): Model
@@ -437,9 +448,9 @@ class BelongsToMany extends Relation
      * selections for each as pivot_<name> to the relation query.
      *
      * @param mixed $columns The pivot column name(s) to include
-     * 
+     *
      * @return $this The relation instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function with_pivot($columns)
@@ -461,9 +472,10 @@ class BelongsToMany extends Relation
      * @param string $column The pivot column to filter
      * @param mixed $operator The comparison operator or value when two args
      * @param mixed $value The value to compare against when operator provided
-     * 
+     * @param mixed $boolean The boolean.
+     *
      * @return $this The relation instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function where_pivot($column, $operator = null, $value = null, $boolean = 'and')
@@ -483,12 +495,12 @@ class BelongsToMany extends Relation
     /**
      * Add a "where" clause on the pivot table with "or" boolean.
      *
-     * @param string $column
-     * @param mixed $operator
-     * @param mixed $value
-     * 
+     * @param mixed $column The column.
+     * @param mixed $operator The operator.
+     * @param mixed $value The value.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function or_where_pivot($column, $operator = null, $value = null)
@@ -499,13 +511,13 @@ class BelongsToMany extends Relation
     /**
      * Add a "where between" clause on the pivot table.
      *
-     * @param string $column
-     * @param array $values
-     * @param string $boolean
-     * @param bool $not
-     * 
+     * @param mixed $column The column.
+     * @param array $values The values.
+     * @param mixed $boolean The boolean.
+     * @param mixed $not The not.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function where_pivot_between($column, array $values, $boolean = 'and', $not = false)
@@ -516,11 +528,11 @@ class BelongsToMany extends Relation
     /**
      * Add an "or where between" clause on the pivot table.
      *
-     * @param string $column
-     * @param array $values
-     * 
+     * @param mixed $column The column.
+     * @param array $values The values.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function or_where_pivot_between($column, array $values)
@@ -531,12 +543,12 @@ class BelongsToMany extends Relation
     /**
      * Add a "where not between" clause on the pivot table.
      *
-     * @param string $column
-     * @param array $values
-     * @param string $boolean
-     * 
+     * @param mixed $column The column.
+     * @param array $values The values.
+     * @param mixed $boolean The boolean.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function where_pivot_not_between($column, array $values, $boolean = 'and')
@@ -547,11 +559,11 @@ class BelongsToMany extends Relation
     /**
      * Add an "or where not between" clause on the pivot table.
      *
-     * @param string $column
-     * @param array $values
-     * 
+     * @param mixed $column The column.
+     * @param array $values The values.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function or_where_pivot_not_between($column, array $values)
@@ -562,13 +574,13 @@ class BelongsToMany extends Relation
     /**
      * Add a "where in" clause on the pivot table.
      *
-     * @param string $column
-     * @param array|\Closure $values
-     * @param string $boolean
-     * @param bool $not
-     * 
+     * @param mixed $column The column.
+     * @param mixed $values The values.
+     * @param mixed $boolean The boolean.
+     * @param mixed $not The not.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function where_pivot_in($column, $values, $boolean = 'and', $not = false)
@@ -581,11 +593,11 @@ class BelongsToMany extends Relation
     /**
      * Add an "or where in" clause on the pivot table.
      *
-     * @param string $column
-     * @param array|\Closure $values
-     * 
+     * @param mixed $column The column.
+     * @param mixed $values The values.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function or_where_pivot_in($column, $values)
@@ -596,12 +608,12 @@ class BelongsToMany extends Relation
     /**
      * Add a "where not in" clause on the pivot table.
      *
-     * @param string $column
-     * @param array|\Closure $values
-     * @param string $boolean
-     * 
+     * @param mixed $column The column.
+     * @param mixed $values The values.
+     * @param mixed $boolean The boolean.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function where_pivot_not_in($column, $values, $boolean = 'and')
@@ -612,11 +624,11 @@ class BelongsToMany extends Relation
     /**
      * Add an "or where not in" clause on the pivot table.
      *
-     * @param string $column
-     * @param array|\Closure $values
-     * 
+     * @param mixed $column The column.
+     * @param mixed $values The values.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function or_where_pivot_not_in($column, $values)
@@ -627,12 +639,12 @@ class BelongsToMany extends Relation
     /**
      * Add a "where null" clause on the pivot table.
      *
-     * @param string $column
-     * @param string $boolean
-     * @param bool $not
-     * 
+     * @param mixed $column The column.
+     * @param mixed $boolean The boolean.
+     * @param mixed $not The not.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function where_pivot_null($column, $boolean = 'and', $not = false)
@@ -645,9 +657,10 @@ class BelongsToMany extends Relation
     /**
      * Add an "or where null" clause on the pivot table.
      *
-     * @param  string $column
+     * @param mixed $column The column.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function or_where_pivot_null($column)
@@ -658,11 +671,11 @@ class BelongsToMany extends Relation
     /**
      * Add a "where not null" clause on the pivot table.
      *
-     * @param string $column
-     * @param string $boolean
-     * 
+     * @param mixed $column The column.
+     * @param mixed $boolean The boolean.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function where_pivot_not_null($column, $boolean = 'and')
@@ -673,10 +686,10 @@ class BelongsToMany extends Relation
     /**
      * Add an "or where not null" clause on the pivot table.
      *
-     * @param string $column
-     * 
+     * @param mixed $column The column.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function or_where_pivot_not_null($column)
@@ -687,11 +700,11 @@ class BelongsToMany extends Relation
     /**
      * Add an "order by" clause on the pivot table.
      *
-     * @param string $column
-     * @param string $direction
-     * 
+     * @param mixed $column The column.
+     * @param mixed $direction The direction.
+     *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function order_by_pivot($column, $direction = 'asc')
@@ -703,9 +716,9 @@ class BelongsToMany extends Relation
      * Prepare the pivot column for the query.
      *
      * @param mixed $column The pivot column to prepare
-     * 
+     *
      * @return string The prepared pivot column
-     * 
+     *
      * @since 1.0.0
      */
     protected function qualify_pivot_column($column)
@@ -731,9 +744,9 @@ class BelongsToMany extends Relation
      *
      * @param mixed $id The related model id or array map of ids to attributes
      * @param array $attributes Additional pivot attributes to store
-     * 
-     * @return void No return value
-     * 
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     public function attach($id, array $attributes = [])
@@ -767,9 +780,9 @@ class BelongsToMany extends Relation
      * the given related ids when provided.
      *
      * @param mixed $ids Optional id or array of ids to detach
-     * 
+     *
      * @return int The number of pivot rows deleted
-     * 
+     *
      * @since 1.0.0
      */
     public function detach($ids = null)
@@ -799,9 +812,9 @@ class BelongsToMany extends Relation
      *
      * @param mixed $ids Array or map of ids to attributes, or single id
      * @param bool $detaching Whether to remove records not in the provided set
-     * 
+     *
      * @return array Summary of changes: attached, detached, updated
-     * 
+     *
      * @since 1.0.0
      */
     public function sync($ids, $detaching = true)
@@ -855,9 +868,9 @@ class BelongsToMany extends Relation
      * while adding and updating as needed.
      *
      * @param mixed $ids Array or map of ids to attributes, or single id
-     * 
+     *
      * @return array Summary of changes from the sync operation
-     * 
+     *
      * @since 1.0.0
      */
     public function syncWithoutDetaching($ids)
@@ -872,9 +885,9 @@ class BelongsToMany extends Relation
      * Returns a summary of attachments and detachments performed.
      *
      * @param mixed $ids One id, array of ids, or variadic list
-     * 
+     *
      * @return array Summary of attachments and detachments
-     * 
+     *
      * @since 1.0.0
      */
     public function toggle($ids)
@@ -907,7 +920,7 @@ class BelongsToMany extends Relation
      * matches the parent, and returns a plain array of ids.
      *
      * @return array The list of currently attached related ids
-     * 
+     *
      * @since 1.0.0
      */
     protected function get_current_pivot_ids()
@@ -932,9 +945,9 @@ class BelongsToMany extends Relation
      *
      * @param mixed $id The related model id whose pivot row to update
      * @param array $attributes The attributes to update on the pivot row
-     * 
-     * @return void No return value
-     * 
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     protected function update_existing_pivot($id, array $attributes)
@@ -956,9 +969,9 @@ class BelongsToMany extends Relation
      *
      * @param array $record The pivot attributes being inserted or updated
      * @param bool $update Whether this is an update operation
-     * 
-     * @return void No return value
-     * 
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     protected function add_timestamps_to_pivot(array &$record, $update = false)
@@ -982,9 +995,9 @@ class BelongsToMany extends Relation
      *
      * @param mixed $id The related id to update on the pivot
      * @param array $attributes The attributes to write to the pivot row
-     * 
-     * @return void No return value
-     * 
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     public function updateExistingPivot($id, array $attributes)
@@ -998,7 +1011,7 @@ class BelongsToMany extends Relation
      * Returns the key on the parent model that is used to match related records.
      *
      * @return string The local key name
-     * 
+     *
      * @since 1.0.0
      */
     public function get_local_key()

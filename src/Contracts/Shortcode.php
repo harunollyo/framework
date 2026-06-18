@@ -18,16 +18,21 @@ interface Shortcode
      * Get the shortcode name.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_name();
 
     /**
      * The shortcode callback function.
      *
-     * @param  array $attributes
-     * @param  string $content
-     * @param  string $shortcode_tag
+     * @param mixed $attributes The attributes array.
+     * @param string $content The content.
+     * @param string $shortcode_tag The shortcode tag.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function callback($attributes, string $content = '', string $shortcode_tag = '');
 }

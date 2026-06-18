@@ -60,6 +60,8 @@ class QueryBuilder
      * The database connection instance used to execute queries.
      *
      * @var \Framework\Database\Connection\Connection
+     *
+     * @since 1.0.0
      */
     public $connection;
 
@@ -67,6 +69,8 @@ class QueryBuilder
      * The query compiler instance used to compile the query.
      *
      * @var \Framework\Database\Query\QueryCompiler
+     *
+     * @since 1.0.0
      */
     public $compiler;
 
@@ -74,6 +78,8 @@ class QueryBuilder
      * The name of the table to perform queries against.
      *
      * @var string|null
+     *
+     * @since 1.0.0
      */
     public $from;
 
@@ -81,6 +87,8 @@ class QueryBuilder
      * The columns to be selected in the query. Defaults to all columns.
      *
      * @var array|null
+     *
+     * @since 1.0.0
      */
     public $columns;
 
@@ -88,6 +96,8 @@ class QueryBuilder
      * The where conditions applied to the query for filtering results.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     public $wheres = [];
 
@@ -95,6 +105,8 @@ class QueryBuilder
      * The bindings for prepared statements to prevent SQL injection.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     public $bindings = [
         'select' => [],
@@ -110,6 +122,8 @@ class QueryBuilder
      * List of valid SQL operators supported by the query builder.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     public $operators = [
         '=',
@@ -151,6 +165,8 @@ class QueryBuilder
      * The join clauses to include related tables in the query.
      *
      * @var array|null
+     *
+     * @since 1.0.0
      */
     public $joins;
 
@@ -158,6 +174,8 @@ class QueryBuilder
      * The columns used to group the query results.
      *
      * @var array|null
+     *
+     * @since 1.0.0
      */
     public $groups;
 
@@ -165,6 +183,8 @@ class QueryBuilder
      * The having conditions applied after grouping results.
      *
      * @var array|null
+     *
+     * @since 1.0.0
      */
     public $havings;
 
@@ -172,6 +192,8 @@ class QueryBuilder
      * The order by clauses to sort the query results.
      *
      * @var array|null
+     *
+     * @since 1.0.0
      */
     public $orders;
 
@@ -179,6 +201,8 @@ class QueryBuilder
      * The aggregate function and columns to be used in the query.
      *
      * @var array|null
+     *
+     * @since 1.0.0
      */
     public $aggregate;
 
@@ -186,6 +210,8 @@ class QueryBuilder
      * The maximum number of records to return from the query.
      *
      * @var int|null
+     *
+     * @since 1.0.0
      */
     public $limit;
 
@@ -193,6 +219,8 @@ class QueryBuilder
      * The number of records to skip before starting to return results.
      *
      * @var int|null
+     *
+     * @since 1.0.0
      */
     public $offset;
 
@@ -200,6 +228,8 @@ class QueryBuilder
      * The relationships to eager load with the query results.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     public $relations = [];
 
@@ -207,6 +237,8 @@ class QueryBuilder
      * The relationships to count with the query results.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     public $with_count = [];
 
@@ -214,6 +246,8 @@ class QueryBuilder
      * The model class used to hydrate the query results.
      *
      * @var Model|null
+     *
+     * @since 1.0.0
      */
     public $model = null;
 
@@ -221,6 +255,8 @@ class QueryBuilder
      * The Wordpress Database connection instance.
      *
      * @var \wpdb|null
+     *
+     * @since 1.0.0
      */
     public $db = null;
 
@@ -228,6 +264,8 @@ class QueryBuilder
      * The distinct flag to select distinct rows from the query.
      *
      * @var bool|array
+     *
+     * @since 1.0.0
      */
     public $distinct = false;
 
@@ -235,6 +273,8 @@ class QueryBuilder
      * The flag to enable or disable resolving relations of the results.
      *
      * @var bool
+     *
+     * @since 1.0.0
      */
     protected static $should_resolve_relations = true;
 
@@ -263,6 +303,8 @@ class QueryBuilder
      * Sync the query builder with the model
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function sync_with_model()
     {
@@ -272,6 +314,15 @@ class QueryBuilder
         }
     }
 
+    /**
+     * Set the model.
+     *
+     * @param Model $model The model instance.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function set_model(Model $model)
     {
         $this->model = $model;
@@ -282,6 +333,8 @@ class QueryBuilder
      * Get the model instance
      *
      * @return Model|null The model instance
+     *
+     * @since 1.0.0
      */
     public function get_model()
     {
@@ -292,6 +345,8 @@ class QueryBuilder
      * Get the query compiler instance
      *
      * @return QueryCompiler
+     *
+     * @since 1.0.0
      */
     public function get_compiler()
     {
@@ -302,6 +357,8 @@ class QueryBuilder
      * Get the limit for the query
      *
      * @return int|null The limit for the query
+     *
+     * @since 1.0.0
      */
     public function get_limit()
     {
@@ -312,12 +369,21 @@ class QueryBuilder
      * Get the offset for the query
      *
      * @return int|null The offset for the query
+     *
+     * @since 1.0.0
      */
     public function get_offset()
     {
         return !is_null($this->offset) ? (int) $this->offset : null;
     }
 
+    /**
+     * Default key name.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function default_key_name()
     {
         if ($this->model) {
@@ -399,6 +465,8 @@ class QueryBuilder
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
      *
+     * @throws \InvalidArgumentException
+     *
      * @since 1.0.0
      */
     public function set_bindings(array $bindings, $type = 'where')
@@ -419,6 +487,8 @@ class QueryBuilder
      * @param string $type The type of binding to add
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
+     *
+     * @throws \InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -479,7 +549,7 @@ class QueryBuilder
      * @param array $bindings Parameter values to bind to the query
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function select_raw($expression, array $bindings = [])
@@ -500,7 +570,7 @@ class QueryBuilder
      * @param string $as The alias for the subquery
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function select_subquery($query, $as)
@@ -519,7 +589,7 @@ class QueryBuilder
      * @param string|Expression|array $columns The column to add
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function add_select($columns)
@@ -549,7 +619,7 @@ class QueryBuilder
      * Set the distinct flag for the query
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function distinct()
@@ -569,7 +639,7 @@ class QueryBuilder
      * Check if the query has any results
      *
      * @return bool True if the query has any results, false otherwise
-     * 
+     *
      * @since 1.0.0
      */
     public function exists()
@@ -592,7 +662,7 @@ class QueryBuilder
      * Check if the query does not have any results
      *
      * @return bool True if the query does not have any results, false otherwise
-     * 
+     *
      * @since 1.0.0
      */
     public function does_not_exists()
@@ -606,7 +676,7 @@ class QueryBuilder
      * @param string $column The column name to get the value from
      *
      * @return mixed The value of the column
-     * 
+     *
      * @since 1.0.0
      */
     public function value($column)
@@ -627,6 +697,7 @@ class QueryBuilder
      * @param string $column The column name to filter
      * @param string|null $operator The comparison operator (=, >, <, etc.)
      * @param mixed|null $value The value to compare against
+     * @param mixed $boolean The boolean.
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
      *
@@ -891,8 +962,12 @@ class QueryBuilder
      *
      * @param string $column The column name to check
      * @param array|Closure $values The array of values to match against
+     * @param mixed $boolean The boolean.
+     * @param mixed $not The not.
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
+     *
+     * @throws \InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -948,6 +1023,7 @@ class QueryBuilder
      *
      * @param string $column The column name to check
      * @param array $values The array of values to exclude
+     * @param mixed $boolean The boolean.
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
      *
@@ -982,6 +1058,8 @@ class QueryBuilder
      *
      * @param string $column The column name to check
      * @param array $values Array containing the start and end values for the range
+     * @param mixed $boolean The boolean.
+     * @param mixed $not The not.
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
      *
@@ -1026,6 +1104,7 @@ class QueryBuilder
      *
      * @param string $column The column name to check
      * @param array $values Array containing the start and end values for the range to exclude
+     * @param mixed $boolean The boolean.
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
      *
@@ -1059,6 +1138,8 @@ class QueryBuilder
      * undefined data in specific columns.
      *
      * @param string $columns The column name to check for null values
+     * @param mixed $boolean The boolean.
+     * @param mixed $not The not.
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
      *
@@ -1098,6 +1179,7 @@ class QueryBuilder
      * data in specific columns and excluding records with missing values.
      *
      * @param string $column The column name to check for non-null values
+     * @param mixed $boolean The boolean.
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
      *
@@ -1629,6 +1711,7 @@ class QueryBuilder
      * @param string|null $operator The join operator (=, >, <, etc.)
      * @param string|null $second The second column in the join condition
      * @param string $type The type of join (INNER, LEFT, RIGHT)
+     * @param mixed $where The where.
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
      *
@@ -1762,9 +1845,9 @@ class QueryBuilder
      * @param string $first The first column in the join condition
      * @param string|null $operator The join operator (=, >, <, etc.)
      * @param string|null $second The second column in the join condition
-     * 
+     *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function left_join_sub($query, $as, $first, $operator = null, $second = null)
@@ -1801,9 +1884,9 @@ class QueryBuilder
      * @param string $first The first column in the join condition
      * @param string $operator The join operator
      * @param string $second The second column in the join condition
-     * 
+     *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function right_join_where($table, $first, $operator, $second)
@@ -1819,9 +1902,9 @@ class QueryBuilder
      * @param string $first The first column in the join condition
      * @param string|null $operator The join operator (=, >, <, etc.)
      * @param string|null $second The second column in the join condition
-     * 
+     *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function right_join_sub($query, $as, $first, $operator = null, $second = null)
@@ -1837,7 +1920,7 @@ class QueryBuilder
      * functions like COUNT, SUM, AVG, etc. Multiple columns can be specified to create
      * hierarchical grouping.
      *
-     * @param string ...$groups The columns to group by
+     * @param mixed $groups The groups.
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
      *
@@ -1887,6 +1970,7 @@ class QueryBuilder
      * @param string $column The column name to filter on
      * @param string $operator The comparison operator
      * @param mixed $value The value to compare against
+     * @param mixed $boolean The boolean.
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
      *
@@ -1971,7 +2055,7 @@ class QueryBuilder
      * This method adds a basic HAVING condition to the query using the OR boolean operator.
      * It functions identically to the having() method but uses OR instead of AND to combine
      * with previous conditions. The operator defaults to '=' if not specified.
-     * 
+     *
      * @param string $column The column name to filter
      * @param string|null $operator The comparison operator (=, >, <, etc.)
      * @param mixed|null $value The value to compare against
@@ -2138,6 +2222,8 @@ class QueryBuilder
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
      *
+     * @throws \InvalidArgumentException
+     *
      * @since 1.0.0
      */
     public function order_by($column, $direction = 'asc')
@@ -2238,6 +2324,8 @@ class QueryBuilder
      * @param int $limit The maximum number of records to return
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
+     *
+     * @since 1.0.0
      */
     public function take($limit)
     {
@@ -2250,6 +2338,8 @@ class QueryBuilder
      * @param int $value The number of records to skip
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
+     *
+     * @since 1.0.0
      */
     public function skip($value)
     {
@@ -2284,6 +2374,7 @@ class QueryBuilder
      * and can significantly improve performance when accessing related data.
      *
      * @param array|string $relations The relationships to load
+     * @param mixed $callback The callback to invoke.
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
      *
@@ -2316,9 +2407,11 @@ class QueryBuilder
     /**
      * Parse relations into a normalized nested structure.
      *
-     * @param  array $relations The relations to parse
+     * @param array $relations The relations to parse
+     *
      * @return array The parsed relations
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function parse_relations($relations)
     {
@@ -2354,11 +2447,13 @@ class QueryBuilder
     /**
      * Parse a nested relation string or array into the parsed structure.
      *
-     * @param  string $relation The relation string (may contain dots)
-     * @param  array &$parsed The parsed relations array to update
-     * @param  mixed $nested The nested relations if any
-     * @return void No return value
-     * @since  1.0.0
+     * @param string $relation The relation string (may contain dots)
+     * @param mixed $parsed The parsed.
+     * @param mixed $nested The nested relations if any
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function parse_nested_relation($relation, &$parsed, $nested = null)
     {
@@ -2406,12 +2501,12 @@ class QueryBuilder
 
     /**
      * Call a scope on the query
-     * 
+     *
      * @param callable $scope The scope to call
      * @param array $parameters The parameters to pass to the scope
-     * 
+     *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function call_scope(callable $scope, array $parameters = [])
@@ -2434,10 +2529,12 @@ class QueryBuilder
     /**
      * Add new wheres from the given query to the current query within a new group
      *
-     * @param  QueryBuilder $query The query to get new wheres from
-     * @param  int $original_with_count The original count of wheres in the current query
-     * @return void No return value
-     * @since  1.0.0
+     * @param QueryBuilder $query The query to get new wheres from
+     * @param int $original_with_count The original count of wheres in the current query
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     protected function add_new_wheres_within_groups(QueryBuilder $query, int $original_with_count)
     {
@@ -2450,12 +2547,12 @@ class QueryBuilder
 
     /**
      * Group where slice for scope
-     * 
+     *
      * @param QueryBuilder $query The query builder instance to group where slice for
      * @param array $where_slice The where slice to group
-     * 
-     * @return void No return value
-     * 
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     protected function group_where_slice_for_scope(QueryBuilder $query, $where_slice)
@@ -2478,12 +2575,12 @@ class QueryBuilder
 
     /**
      * Create a nested where clause
-     * 
+     *
      * @param array $where_slice The where slice to create nested where clause for
      * @param string $boolean The boolean operator (and, or)
-     * 
+     *
      * @return array Returns the nested where clause
-     * 
+     *
      * @since 1.0.0
      */
     protected function create_nested_where($where_slice, $boolean = 'and')
@@ -2504,6 +2601,8 @@ class QueryBuilder
      * @param mixed $value The value to get the placeholder for
      *
      * @return string The placeholder for the value
+     *
+     * @since 1.0.0
      */
     protected function get_placeholder_by_value($value): string
     {
@@ -2522,7 +2621,8 @@ class QueryBuilder
      * Convert the binding values into prepare statement ready placeholders.
      * This is mainly generating %s,%d,%f placeholders for the query.
      *
-     * @param  array $bindings
+     * @param mixed $bindings The bindings.
+     *
      * @return array
      *
      * @since 1.0.0
@@ -2549,6 +2649,8 @@ class QueryBuilder
      * If a model class is configured, the results are hydrated into model instances.
      * If eager loading relationships are specified, they are loaded to prevent N+1
      * query problems. The final results are wrapped in a Collection instance.
+     *
+     * @param mixed $columns The columns.
      *
      * @return QueryCollection A collection of model instances or raw data
      *
@@ -2578,9 +2680,11 @@ class QueryBuilder
     /**
      * Eager load the relationships for the collection.
      *
-     * @param  Collection $models The models to eager load
+     * @param Collection $models The models to eager load
+     *
      * @return Collection A new collection containing the eager loaded items
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function eager_load_relations(Collection $models)
     {
@@ -2598,9 +2702,11 @@ class QueryBuilder
     /**
      * Temporarily disable resolving relations for the duration of the callback.
      *
-     * @param  Closure $callback The callback to execute with resolving relations disabled
+     * @param Closure $callback The callback to execute with resolving relations disabled
+     *
      * @return mixed The return value of the callback
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     protected static function without_resolving_relations(Closure $callback)
     {
@@ -2623,6 +2729,8 @@ class QueryBuilder
      * @param callable $callback The callback function to execute
      *
      * @return mixed The results of the query
+     *
+     * @since 1.0.0
      */
     protected function once_with_columns($columns, $callback)
     {
@@ -2643,6 +2751,8 @@ class QueryBuilder
      * Execute the query and return the results
      *
      * @return array The results of the query
+     *
+     * @since 1.0.0
      */
     protected function run_select()
     {
@@ -2659,6 +2769,8 @@ class QueryBuilder
      * matching record. If a model class is configured, the result is hydrated into
      * a model instance. If no records match the query conditions, null is returned.
      *
+     * @param mixed $columns The columns.
+     *
      * @return mixed The first model instance or raw data record, or null if no results
      *
      * @since 1.0.0
@@ -2671,10 +2783,12 @@ class QueryBuilder
     /**
      * Execute the query and return the first matching record or throw an exception if no record is found.
      *
-     * @param  array $columns The columns to select
+     * @param array $columns The columns to select
+     *
      * @return mixed The first model instance or raw data record
-     * @throws ModelNotFoundException If no record is found
-     * 
+     *
+     * @throws \ModelNotFoundException
+     *
      * @since 1.0.0
      */
     public function first_or_fail($columns = ['*'])
@@ -2750,6 +2864,8 @@ class QueryBuilder
      * @param string $key The key to pluck from
      *
      * @return Collection The plucked values
+     *
+     * @since 1.0.0
      */
     protected function pluck_from_array($results, $column, $key)
     {
@@ -2776,6 +2892,8 @@ class QueryBuilder
      * @param string $key The key to pluck from
      *
      * @return Collection The plucked values
+     *
+     * @since 1.0.0
      */
     protected function pluck_from_object($results, $column, $key)
     {
@@ -2942,6 +3060,8 @@ class QueryBuilder
      * @param string $columns The columns to apply the function to
      *
      * @return QueryBuilder Returns the QueryBuilder instance for method chaining
+     *
+     * @since 1.0.0
      */
     protected function set_aggregate($function, $columns)
     {
@@ -2962,6 +3082,8 @@ class QueryBuilder
      * @param string $columns The columns to apply the function to
      *
      * @return mixed The result of the aggregate function
+     *
+     * @since 1.0.0
      */
     public function numeric_aggregate($function, $columns = ['*'])
     {
@@ -3018,7 +3140,8 @@ class QueryBuilder
     /**
      * Create a new model instance and save it to the database
      *
-     * @param  array $attributes The attributes to set
+     * @param array $attributes The attributes to set
+     *
      * @return Model The new model instance
      *
      * @since 1.0.0
@@ -3036,6 +3159,8 @@ class QueryBuilder
      * @param array $values The values to update.
      *
      * @return int The number of rows affected by the update operation.
+     *
+     * @since 1.0.0
      */
     public function update(array $values)
     {
@@ -3077,8 +3202,8 @@ class QueryBuilder
     /**
      * Update a record or create a new record.
      *
-     * @param array $attributes
-     * @param array $values
+     * @param array $attributes The attributes array.
+     * @param array $values The values.
      *
      * @return Model
      *
@@ -3095,10 +3220,13 @@ class QueryBuilder
 
     /**
      * Get the first record or create a new record.
-     * 
-     * @param  array $attributes
-     * @param  Closure|array $values
+     *
+     * @param array $attributes The attributes array.
+     * @param mixed $values The values.
+     *
      * @return mixed
+     *
+     * @since 1.0.0
      */
     public function first_or_create(array $attributes, $values = [])
     {
@@ -3113,10 +3241,10 @@ class QueryBuilder
 
     /**
      * Create a new record or get the first record.
-     * 
-     * @param array $attributes
-     * @param Closure|array $values
-     * 
+     *
+     * @param array $attributes The attributes array.
+     * @param mixed $values The values.
+     *
      * @return mixed
      *
      * @since 1.0.0
@@ -3170,7 +3298,7 @@ class QueryBuilder
      * Add the timestamps to the upsert values.
      *
      * @param array $values The values to add the timestamps to.
-     * 
+     *
      * @return array The values with the timestamps added.
      *
      * @since 1.0.0
@@ -3201,7 +3329,7 @@ class QueryBuilder
      * Add the updated at column to the upsert columns.
      *
      * @param array $update The columns to update.
-     * 
+     *
      * @return array The columns to update.
      *
      * @since 1.0.0
@@ -3226,9 +3354,9 @@ class QueryBuilder
      *
      * @param array $values The values to upsert.
      * @param array $update The columns to update.
-     * 
+     *
      * @return int The number of rows affected by the upsert operation.
-     * 
+     *
      * @since 1.0.0
      */
     protected function perform_upsert(array $values, array $update)
@@ -3308,6 +3436,10 @@ class QueryBuilder
      * @param array $extra The extra columns to update.
      *
      * @return bool True if the increment was successful, false otherwise.
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function increment($column, $amount = 1, array $extra = [])
     {
@@ -3325,6 +3457,10 @@ class QueryBuilder
      * @param array $extra The extra columns to update.
      *
      * @return bool True if the increment was successful, false otherwise.
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function increment_each(array $columns, array $extra = [])
     {
@@ -3355,6 +3491,10 @@ class QueryBuilder
      * @param array $extra The extra columns to update.
      *
      * @return bool True if the decrement was successful, false otherwise.
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function decrement($column, $amount = 1, array $extra = [])
     {
@@ -3372,6 +3512,10 @@ class QueryBuilder
      * @param array $extra The extra columns to update.
      *
      * @return bool True if the decrement was successful, false otherwise.
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function decrement_each(array $columns, array $extra = [])
     {
@@ -3401,8 +3545,10 @@ class QueryBuilder
      *
      * @return mixed The sole record.
      *
-     * @throws RecordNotFoundException If no record is found.
-     * @throws MultipleRecordsFoundException If multiple records are found.
+     * @throws \RecordNotFoundException
+     * @throws \MultipleRecordsFoundException
+     *
+     * @since 1.0.0
      */
     public function sole($columns = ['*'])
     {
@@ -3427,6 +3573,8 @@ class QueryBuilder
      * @param string $value The value to create a raw expression from.
      *
      * @return Expression The raw expression.
+     *
+     * @since 1.0.0
      */
     public function raw($value)
     {
@@ -3440,6 +3588,8 @@ class QueryBuilder
      * @param int $per_page The number of records per page.
      *
      * @return QueryBuilder The query builder instance.
+     *
+     * @since 1.0.0
      */
     public function for_page($page, $per_page = self::PAGINATION_LIMIT)
     {
@@ -3454,6 +3604,8 @@ class QueryBuilder
      * @param string $column The column to get records before.
      *
      * @return $this Returns the QueryBuilder instance for method chaining
+     *
+     * @since 1.0.0
      */
     public function for_page_before_id($per_page = self::PAGINATION_LIMIT, $last_id = 0, $column = 'id')
     {
@@ -3477,6 +3629,8 @@ class QueryBuilder
      * @param string $column The column to get records after.
      *
      * @return $this Returns the QueryBuilder instance for method chaining
+     *
+     * @since 1.0.0
      */
     public function for_page_after_id($per_page = self::PAGINATION_LIMIT, $last_id = 0, $column = 'id')
     {
@@ -3498,6 +3652,8 @@ class QueryBuilder
      * @param string $column The column to remove the existing orders for.
      *
      * @return array|null The existing orders without the given column.
+     *
+     * @since 1.0.0
      */
     protected function remove_existing_orders_for($column)
     {
@@ -3517,6 +3673,8 @@ class QueryBuilder
      * Enforce the order by primary key.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function enforce_order_by_primary_key()
     {
@@ -3535,6 +3693,8 @@ class QueryBuilder
      * @param string $direction The direction to reorder by.
      *
      * @return QueryBuilder The query builder instance.
+     *
+     * @since 1.0.0
      */
     public function reorder($column = null, $direction = 'asc')
     {
@@ -3558,6 +3718,8 @@ class QueryBuilder
      *
      * @param int $per_page Number of records per page
      * @param int $page Current page number
+     * @param mixed $columns The columns.
+     * @param mixed $total The total.
      *
      * @return Paginator A paginator instance with the results and pagination info
      *
@@ -3582,6 +3744,8 @@ class QueryBuilder
      * @param array $columns The columns to count.
      *
      * @return int The count for pagination.
+     *
+     * @since 1.0.0
      */
     protected function get_count_for_pagination($columns = ['*'])
     {
@@ -3602,6 +3766,8 @@ class QueryBuilder
      * @param array $columns The columns to count.
      *
      * @return array The results of the count query.
+     *
+     * @since 1.0.0
      */
     protected function run_pagination_count_query($columns = ['*'])
     {
@@ -3635,6 +3801,8 @@ class QueryBuilder
      * Clone the query for pagination count.
      *
      * @return QueryBuilder The cloned query builder instance.
+     *
+     * @since 1.0.0
      */
     protected function clone_for_pagination_count()
     {
@@ -3648,6 +3816,8 @@ class QueryBuilder
      * @param QueryBuilder $query The query to merge the bindings with.
      *
      * @return QueryBuilder The query builder instance.
+     *
+     * @since 1.0.0
      */
     protected function merge_bindings(self $query)
     {
@@ -3662,6 +3832,8 @@ class QueryBuilder
      * @param array $columns The columns to remove the aliases from.
      *
      * @return array The columns without the aliases.
+     *
+     * @since 1.0.0
      */
     protected function without_select_aliases(array $columns)
     {
@@ -3802,6 +3974,8 @@ class QueryBuilder
      * @param array $bindings The bindings to clean
      *
      * @return array Array of cleaned bindings
+     *
+     * @since 1.0.0
      */
     public function clean_bindings(array $bindings)
     {
@@ -3856,7 +4030,8 @@ class QueryBuilder
     /**
      * Create a new model instance
      *
-     * @param  array $attributes The attributes to set
+     * @param array $attributes The attributes to set
+     *
      * @return Model The new model instance
      *
      * @since 1.0.0
@@ -3902,6 +4077,8 @@ class QueryBuilder
      * @param mixed $value The value to check
      *
      * @return bool True if the value is queryable, false otherwise
+     *
+     * @since 1.0.0
      */
     protected function is_queryable($value)
     {
@@ -3916,6 +4093,8 @@ class QueryBuilder
      * @param Closure|QueryBuilder $query The subquery to create
      *
      * @return array [sql, bindings]
+     *
+     * @since 1.0.0
      */
     protected function create_subquery($query)
     {
@@ -3934,6 +4113,10 @@ class QueryBuilder
      * @param Closure|QueryBuilder $query The subquery to parse
      *
      * @return array [sql, bindings]
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     protected function parse_subquery($query)
     {
@@ -3954,6 +4137,8 @@ class QueryBuilder
      * @param string $operator The operator to check
      *
      * @return bool True if the operator is invalid, false otherwise
+     *
+     * @since 1.0.0
      */
     protected function is_invalid_operator($operator)
     {
@@ -3968,6 +4153,8 @@ class QueryBuilder
      * @param mixed $value The value to check
      *
      * @return bool True if the operator and value are invalid, false otherwise
+     *
+     * @since 1.0.0
      */
     protected function is_invalid_operator_and_value($operator, $value)
     {
@@ -3984,6 +4171,10 @@ class QueryBuilder
      * @param bool $use_default Whether to use the default operator
      *
      * @return array The prepared value and operator
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     protected function prepare_value_and_operator($value, $operator, $use_default = false)
     {
@@ -4002,6 +4193,8 @@ class QueryBuilder
      * @param mixed $value The value to flatten
      *
      * @return mixed The flattened value
+     *
+     * @since 1.0.0
      */
     protected function flatten_value($value)
     {
@@ -4014,6 +4207,8 @@ class QueryBuilder
      * Clone the query builder
      *
      * @return QueryBuilder The cloned query builder
+     *
+     * @since 1.0.0
      */
     public function clone()
     {
@@ -4026,6 +4221,8 @@ class QueryBuilder
      * @param array $properties The properties to clone without
      *
      * @return QueryBuilder The cloned query builder
+     *
+     * @since 1.0.0
      */
     protected function clone_without(array $properties)
     {
@@ -4044,6 +4241,8 @@ class QueryBuilder
      * @param array $except The bindings to clone without
      *
      * @return QueryBuilder The cloned query builder
+     *
+     * @since 1.0.0
      */
     public function clone_without_bindings(array $except)
     {
@@ -4059,9 +4258,11 @@ class QueryBuilder
     /**
      * Check if the query has a named scope.
      *
-     * @param  string $scope The scope name to check
+     * @param string $scope The scope name to check
+     *
      * @return bool True when the scope exists; false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     protected function has_named_scope(string $scope)
     {
@@ -4071,10 +4272,12 @@ class QueryBuilder
     /**
      * Call a named scope on the model.
      *
-     * @param  string $scope The scope name to call
-     * @param  array $parameters The parameters to pass to the scope
+     * @param string $scope The scope name to call
+     * @param array $parameters The parameters to pass to the scope
+     *
      * @return mixed The result of the scope call
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     protected function call_named_scope(string $scope, array $parameters = [])
     {
@@ -4090,7 +4293,9 @@ class QueryBuilder
      * @param array $parameters The arguments for the method
      *
      * @return mixed The result of the method call
-     * 
+     *
+     * @throws \BadMethodCallException
+     *
      * @since 1.0.0
      */
     public function __call(string $method, array $parameters)

@@ -17,11 +17,12 @@ class Path
     /**
      * Join path segments onto a base path.
      *
-     * @param string $base
-     * @param string ...$paths
+     * @param mixed $base The base.
+     * @param mixed $paths The paths.
      *
      * @return string
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public static function join($base, ...$paths)
     {
@@ -39,10 +40,11 @@ class Path
     /**
      * Normalize a filesystem path without requiring it to exist.
      *
-     * @param string $path
+     * @param mixed $path The path.
      *
      * @return string
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public static function normalize($path)
     {

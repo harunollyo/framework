@@ -44,14 +44,19 @@ class Fileable
      * The path to the file.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $path;
 
     /**
      * Create a new file instance.
      *
-     * @param  string $path
+     * @param string $path The path.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct(string $path)
     {
@@ -61,8 +66,11 @@ class Fileable
     /**
      * Create a new file instance.
      *
-     * @param  string $path
+     * @param string $path The path.
+     *
      * @return static
+     *
+     * @since 1.0.0
      */
     public static function make(string $path)
     {
@@ -72,9 +80,12 @@ class Fileable
     /**
      * Get the parameters for the given method.
      *
-     * @param  string $method
-     * @param  array $parameters
+     * @param mixed $method The method name.
+     * @param mixed $parameters The parameters array.
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     protected function parameters($method, $parameters)
     {
@@ -90,9 +101,14 @@ class Fileable
     /**
      * Handle dynamic method calls into the filesystem.
      *
-     * @param  string $method
-     * @param  array $parameters
+     * @param mixed $method The method name.
+     * @param mixed $parameters The parameters array.
+     *
      * @return mixed
+     *
+     * @throws \BadMethodCallException
+     *
+     * @since 1.0.0
      */
     public function __call($method, $parameters)
     {

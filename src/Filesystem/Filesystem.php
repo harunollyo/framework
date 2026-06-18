@@ -30,6 +30,8 @@ class Filesystem
      * The WordPress filesystem.
      *
      * @var WP_Filesystem_Base
+     *
+     * @since 1.0.0
      */
     protected $filesystem;
 
@@ -37,6 +39,10 @@ class Filesystem
      * Create a new filesystem instance.
      *
      * @return void
+     *
+     * @throws \RuntimeException
+     *
+     * @since 1.0.0
      */
     public function __construct()
     {
@@ -58,8 +64,11 @@ class Filesystem
     /**
      * Check if the given path is a file.
      *
-     * @param  string $file
+     * @param mixed $file The file.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_file($file)
     {
@@ -69,9 +78,12 @@ class Filesystem
     /**
      * Find path names matching a pattern.
      *
-     * @param  string $pattern
-     * @param  int $flags
+     * @param mixed $pattern The pattern.
+     * @param mixed $flags The flags.
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function glob($pattern, $flags = 0)
     {
@@ -81,8 +93,11 @@ class Filesystem
     /**
      * Get the base name of a path.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function basename($path)
     {
@@ -92,8 +107,11 @@ class Filesystem
     /**
      * Get the file name of a path.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function name($path)
     {
@@ -103,8 +121,11 @@ class Filesystem
     /**
      * Get the file extension of a path.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function extension($path)
     {
@@ -114,9 +135,12 @@ class Filesystem
     /**
      * Copy a file to a new location.
      *
-     * @param  string $path
-     * @param  string $target
+     * @param mixed $path The path.
+     * @param mixed $target The target.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function copy($path, $target)
     {
@@ -126,9 +150,12 @@ class Filesystem
     /**
      * Move a file to a new location.
      *
-     * @param  string $path
-     * @param  string $target
+     * @param mixed $path The path.
+     * @param mixed $target The target.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function move($path, $target)
     {
@@ -138,8 +165,11 @@ class Filesystem
     /**
      * Delete the file at a given path.
      *
-     * @param  string|array $paths
+     * @param mixed $paths The paths.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function delete($paths)
     {
@@ -158,9 +188,12 @@ class Filesystem
     /**
      * Get or set permissions of a file or directory.
      *
-     * @param  string $path
-     * @param  int|null $mode
+     * @param mixed $path The path.
+     * @param mixed $mode The mode.
+     *
      * @return mixed
+     *
+     * @since 1.0.0
      */
     public function chmod($path, $mode = null)
     {
@@ -174,9 +207,12 @@ class Filesystem
     /**
      * Append to a file.
      *
-     * @param  string $path
-     * @param  string $data
+     * @param mixed $path The path.
+     * @param mixed $data The data payload.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function append($path, $data)
     {
@@ -190,9 +226,12 @@ class Filesystem
     /**
      * Prepend to a file.
      *
-     * @param  string $path
-     * @param  string $data
+     * @param mixed $path The path.
+     * @param mixed $data The data payload.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function prepend($path, $data)
     {
@@ -206,9 +245,12 @@ class Filesystem
     /**
      * Write the contents of a file.
      *
-     * @param  string $path
-     * @param  string $data
+     * @param mixed $path The path.
+     * @param mixed $data The data payload.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function put($path, $data)
     {
@@ -222,10 +264,13 @@ class Filesystem
     /**
      * Get the contents of a file.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return string
      *
-     * @throws \Framework\Exceptions\NotFoundException
+     * @throws \NotFoundException
+     *
+     * @since 1.0.0
      */
     public function get($path)
     {
@@ -245,9 +290,12 @@ class Filesystem
     /**
      * Get the contents of a JSON file and decode it.
      *
-     * @param  string $path
-     * @param  int $flags
+     * @param mixed $path The path.
+     * @param mixed $flags The flags.
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function json($path, $flags = 0)
     {
@@ -257,9 +305,12 @@ class Filesystem
     /**
      * Calculate the hash of a file.
      *
-     * @param  string $path
-     * @param  string $algorithm
+     * @param mixed $path The path.
+     * @param mixed $algorithm The algorithm.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function hash($path, $algorithm = 'md5')
     {
@@ -269,8 +320,11 @@ class Filesystem
     /**
      * Determine if a file or directory exists.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function exists($path)
     {
@@ -280,8 +334,11 @@ class Filesystem
     /**
      * Determine if a file or directory does not exist.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function missing($path)
     {
@@ -291,8 +348,11 @@ class Filesystem
     /**
      * Get the directory name of a path.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function dirname($path)
     {
@@ -302,8 +362,11 @@ class Filesystem
     /**
      * Get the file type of a path.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function type($path)
     {
@@ -313,8 +376,11 @@ class Filesystem
     /**
      * Get the MIME type of a path.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function mime_type($path)
     {
@@ -324,8 +390,11 @@ class Filesystem
     /**
      * Get the size of a file.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return int|false
+     *
+     * @since 1.0.0
      */
     public function size($path)
     {
@@ -335,8 +404,11 @@ class Filesystem
     /**
      * Determine if a file is a directory.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_directory($path)
     {
@@ -346,8 +418,11 @@ class Filesystem
     /**
      * Determine if a file is readable.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_readable($path)
     {
@@ -357,8 +432,11 @@ class Filesystem
     /**
      * Determine if a file is writable.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_writable($path)
     {
@@ -368,8 +446,11 @@ class Filesystem
     /**
      * Get the last modified time of a file.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return int|false
+     *
+     * @since 1.0.0
      */
     public function last_modified($path)
     {
@@ -379,8 +460,11 @@ class Filesystem
     /**
      * Make a directory.
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function make_dir($path)
     {
@@ -398,8 +482,11 @@ class Filesystem
     /**
      * Make a file or directory.
      *
-     * @param  string $path
+     * @param string $path The path.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function make(string $path)
     {
@@ -427,8 +514,7 @@ class Filesystem
      *
      * @return string Absolute path to the stored file on success.
      *
-     * @throws AuthorizationException If the current user is not authorized to upload files.
-     * @throws Exception If the file cannot be moved to the target location or directory cannot be created.
+     * @throws \AuthorizationException
      *
      * @since 1.0.0
      */
@@ -458,9 +544,13 @@ class Filesystem
     /**
      * Make the upload directory.
      *
-     * @param  string $path
+     * @param string $path The path.
+     *
      * @return string
-     * 
+     *
+     * @throws \Exception
+     * @throws \AuthorizationException
+     *
      * @since 1.0.0
      */
     protected function make_upload_directory(string $path)

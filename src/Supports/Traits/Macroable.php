@@ -16,14 +16,24 @@ use BadMethodCallException;
 
 trait Macroable
 {
+    /**
+     * The macros.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
     protected static array $macros = [];
 
     /**
      * Register a macro.
      *
-     * @param  string $name
-     * @param  callable $macro
+     * @param mixed $name The name.
+     * @param callable $macro The macro.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public static function macro($name, callable $macro)
     {
@@ -33,8 +43,11 @@ trait Macroable
     /**
      * Check if a macro is registered.
      *
-     * @param  string $name
+     * @param mixed $name The name.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public static function has_macro($name)
     {
@@ -44,9 +57,14 @@ trait Macroable
     /**
      * Dynamically handle calls to the class.
      *
-     * @param  string $method
-     * @param  array $arguments
+     * @param string $method The method name.
+     * @param array $arguments The method arguments.
+     *
      * @return mixed
+     *
+     * @throws \BadMethodCallException
+     *
+     * @since 1.0.0
      */
     public function __call(string $method, array $arguments)
     {
@@ -65,9 +83,14 @@ trait Macroable
     /**
      * Dynamically handle calls to the class.
      *
-     * @param  string $method
-     * @param  array $arguments
+     * @param string $method The method name.
+     * @param array $arguments The method arguments.
+     *
      * @return mixed
+     *
+     * @throws \BadMethodCallException
+     *
+     * @since 1.0.0
      */
     public static function __callStatic(string $method, array $arguments)
     {

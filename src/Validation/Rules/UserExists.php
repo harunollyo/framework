@@ -16,6 +16,8 @@ class UserExists extends BaseRule
      * Check if the user exist
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -30,6 +32,8 @@ class UserExists extends BaseRule
      * Get the error message if the post does not exist.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {

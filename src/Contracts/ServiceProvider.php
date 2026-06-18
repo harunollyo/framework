@@ -17,8 +17,11 @@ interface ServiceProvider
     /**
      * Register the service provider.
      *
-     * @param  array $args
+     * @param mixed $args The positional arguments.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function register(...$args);
 }

@@ -16,22 +16,24 @@ interface Response
     /**
      * Return a JSON-formatted REST response.
      *
-     * @since 1.0.0
+     * @param array $data The response data.
+     * @param int $code Optional. HTTP status code. Default Response::OK.
      *
-     * @param  array $data The response data.
-     * @param  int   $code Optional. HTTP status code. Default Response::OK.
      * @return static
+     *
+     * @since 1.0.0
      */
     public function json(array $data, int $code = 200);
 
     /**
      * Return a text-formatted REST response.
      *
-     * @since 1.0.0
+     * @param string $data The response data.
+     * @param int $code Optional. HTTP status code. Default Response::OK.
      *
-     * @param  string $data The response data.
-     * @param  int    $code Optional. HTTP status code. Default Response::OK.
      * @return static
+     *
+     * @since 1.0.0
      */
     public function text(string $data, int $code = 200);
 }

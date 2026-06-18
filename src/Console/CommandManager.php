@@ -22,15 +22,20 @@ class CommandManager
      * The base command name
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $command_base = 'kirki';
 
     /**
      * Register a command
      *
-     * @param  string $name
-     * @param  mixed $command
+     * @param string $name The name.
+     * @param mixed $command The command.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function register(string $name, $command)
     {
@@ -43,8 +48,13 @@ class CommandManager
     /**
      * Resolve the command
      *
-     * @param  mixed $command
+     * @param mixed $command The command.
+     *
      * @return CommandBase
+     *
+     * @throws \RuntimeException
+     *
+     * @since 1.0.0
      */
     protected function resolve($command)
     {
@@ -66,8 +76,11 @@ class CommandManager
     /**
      * Make the command name
      *
-     * @param  string $command
+     * @param mixed $command The command.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function make($command)
     {

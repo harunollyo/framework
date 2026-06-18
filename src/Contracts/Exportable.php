@@ -18,7 +18,8 @@ interface Exportable
      * Export data as an DTO instance.
      *
      * @return \Framework\DTO|mixed
-     * @throws \Exception
-     * */
+     *
+     * @since 1.0.0
+     */
     public function export();
 }

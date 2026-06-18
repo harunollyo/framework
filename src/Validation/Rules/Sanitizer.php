@@ -16,6 +16,8 @@ class Sanitizer extends BaseRule
      * Check if the value is valid.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -27,6 +29,8 @@ class Sanitizer extends BaseRule
      * Get the error message if the value is less than the min value.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {
@@ -37,6 +41,8 @@ class Sanitizer extends BaseRule
      * Sanitize the data.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function sanitize_data()
     {

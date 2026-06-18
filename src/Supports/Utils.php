@@ -17,10 +17,13 @@ class Utils
     /**
      * Calculates the percentage growth from the previous to the current value.
      *
-     * @param  mixed $current The current value.
-     * @param  mixed $previous The previous value.
-     * @param  int $precision The number of decimal places to round to. Defaults to 2.
+     * @param mixed $current The current value.
+     * @param mixed $previous The previous value.
+     * @param int $precision The number of decimal places to round to. Defaults to 2.
+     *
      * @return float The percentage growth.
+     *
+     * @since 1.0.0
      */
     public static function calculate_growth_in_percent($current, $previous, $precision = 2)
     {
@@ -42,6 +45,8 @@ class Utils
      * Generates a UUID.
      *
      * @return string The UUID.
+     *
+     * @since 1.0.0
      */
     public static function uuid()
     {
@@ -51,8 +56,11 @@ class Utils
     /**
      * Converts a float to an integer by rounding up.
      *
-     * @param  float $value The float value to convert.
+     * @param float $value The float value to convert.
+     *
      * @return int The rounded integer value.
+     *
+     * @since 1.0.0
      */
     public static function to_int($value)
     {

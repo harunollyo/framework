@@ -14,12 +14,32 @@ defined('ABSPATH') || exit;
 
 class Url
 {
+    /**
+     * Make.
+     *
+     * @param mixed $url The url.
+     * @param mixed $data The data payload.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public static function make($url, $data = [])
     {
         $referer = $url;
         return add_query_arg($data, $referer);
     }
 
+    /**
+     * Redirect.
+     *
+     * @param mixed $url The url.
+     * @param mixed $data The data payload.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public static function redirect($url, $data = [])
     {
         $referer = $url;
@@ -28,6 +48,15 @@ class Url
         static::perform_redirect($redirect_url);
     }
 
+    /**
+     * Redirect back.
+     *
+     * @param mixed $data The data payload.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public static function redirect_back($data = [])
     {
         $referer = wp_get_referer();
@@ -36,6 +65,15 @@ class Url
         static::perform_redirect($redirect_url);
     }
 
+    /**
+     * Perform redirect.
+     *
+     * @param mixed $redirect_url The redirect url.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     protected static function perform_redirect($redirect_url)
     {
         if (headers_sent()) {

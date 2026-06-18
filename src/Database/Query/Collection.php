@@ -19,6 +19,15 @@ class Collection extends BaseCollection
 {
     use HasDictionary;
 
+    /**
+     * Create a new instance.
+     *
+     * @param array $items The items.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function __construct(array $items = [])
     {
         parent::__construct($items);
@@ -27,9 +36,11 @@ class Collection extends BaseCollection
     /**
      * Merge the items into the collection.
      *
-     * @param  Collection|array<string, Model> $items The items to merge
+     * @param mixed $items The items.
+     *
      * @return static The merged collection
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function merge($items)
     {
@@ -49,9 +60,11 @@ class Collection extends BaseCollection
     /**
      * Get the dictionary for the collection.
      *
-     * @param  Collection|array<string, Model> $items The items to get the dictionary for
+     * @param mixed $items The items.
+     *
      * @return array The dictionary
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_dictionary($items = null)
     {

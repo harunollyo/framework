@@ -23,6 +23,8 @@ class Paginator implements Arrayable, Jsonable
      * The collection of items for the current page.
      *
      * @var Collection
+     *
+     * @since 1.0.0
      */
     protected $items;
 
@@ -30,6 +32,8 @@ class Paginator implements Arrayable, Jsonable
      * The total number of matching records across all pages.
      *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected $total;
 
@@ -37,6 +41,8 @@ class Paginator implements Arrayable, Jsonable
      * The number of items displayed per page.
      *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected $per_page;
 
@@ -44,6 +50,8 @@ class Paginator implements Arrayable, Jsonable
      * The current page number (1-based index).
      *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected $current_page;
 
@@ -51,6 +59,8 @@ class Paginator implements Arrayable, Jsonable
      * The last page number, calculated from total and per_page.
      *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected $last_page;
 
@@ -61,12 +71,14 @@ class Paginator implements Arrayable, Jsonable
      * numbers and boundaries. The last page is derived by dividing total by
      * per-page and rounding up to the nearest integer.
      *
-     * @param  Collection $items The items for the current page
-     * @param  int $total The total number of matching records
-     * @param  int $per_page The number of items per page
-     * @param  int $current_page The current page number (1-based)
+     * @param Collection $items The items for the current page
+     * @param int $total The total number of matching records
+     * @param int $per_page The number of items per page
+     * @param int $current_page The current page number (1-based)
+     *
      * @return void No return value
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function __construct(Collection $items, $total, $per_page, $current_page)
     {
@@ -84,7 +96,8 @@ class Paginator implements Arrayable, Jsonable
      * serialization by callers.
      *
      * @return Collection The items contained in this paginator page
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function items()
     {
@@ -98,7 +111,8 @@ class Paginator implements Arrayable, Jsonable
      * items returned.
      *
      * @return int The total number of records
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function total()
     {
@@ -112,7 +126,8 @@ class Paginator implements Arrayable, Jsonable
      * to compute page counts and range indices.
      *
      * @return int The number of items per page
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_per_page()
     {
@@ -126,7 +141,8 @@ class Paginator implements Arrayable, Jsonable
      * fetching the current slice of results.
      *
      * @return int The current page number
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_current_page()
     {
@@ -140,7 +156,8 @@ class Paginator implements Arrayable, Jsonable
      * upper bound for valid page navigation.
      *
      * @return int The highest page number available
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_last_page()
     {
@@ -154,7 +171,8 @@ class Paginator implements Arrayable, Jsonable
      * navigation is possible.
      *
      * @return bool True when there are additional pages; false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function has_more_page()
     {
@@ -168,7 +186,8 @@ class Paginator implements Arrayable, Jsonable
      * is useful for conditionally rendering pagination controls.
      *
      * @return bool True when multiple pages exist; false for a single page
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function has_pages()
     {
@@ -181,7 +200,8 @@ class Paginator implements Arrayable, Jsonable
      * Useful for disabling previous navigation controls in UIs.
      *
      * @return bool True when on page 1; false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function on_first_page()
     {
@@ -194,7 +214,8 @@ class Paginator implements Arrayable, Jsonable
      * Useful for disabling next navigation controls in UIs.
      *
      * @return bool True when on the last page; false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function on_last_page()
     {
@@ -208,7 +229,8 @@ class Paginator implements Arrayable, Jsonable
      * current page and per-page values.
      *
      * @return int|null The starting item index or null when empty
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function first_item()
     {
@@ -222,7 +244,8 @@ class Paginator implements Arrayable, Jsonable
      * the number of items in the current page minus one.
      *
      * @return int|null The ending item index or null when empty
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function last_item()
     {
@@ -236,7 +259,8 @@ class Paginator implements Arrayable, Jsonable
      * counts, range, and flags commonly used by consumers to render controls.
      *
      * @return array The array representation of the paginator
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function to_array()
     {
@@ -259,8 +283,11 @@ class Paginator implements Arrayable, Jsonable
      * Encodes the array form of the paginator for straightforward transport or
      * logging purposes.
      *
+     * @param mixed $options The options array.
+     *
      * @return string The JSON-encoded paginator representation
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function to_json($options = 0)
     {

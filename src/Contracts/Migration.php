@@ -19,6 +19,8 @@ interface Migration
      * This method should contain logic to create or modify database tables.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
 
     public function up();
@@ -29,6 +31,8 @@ interface Migration
      * This method should contain logic to undo changes made by the `up()` method.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function down();
 }

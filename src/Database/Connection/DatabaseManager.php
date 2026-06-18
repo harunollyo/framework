@@ -24,6 +24,8 @@ class DatabaseManager
      * The database connection instance.
      *
      * @var Connection
+     *
+     * @since 1.0.0
      */
     protected $connection;
 
@@ -45,6 +47,8 @@ class DatabaseManager
      * Get the database connection instance
      *
      * @return Connection The database connection instance
+     *
+     * @since 1.0.0
      */
     public function connection()
     {
@@ -58,6 +62,8 @@ class DatabaseManager
      * @param array $arguments The arguments for the method
      *
      * @return mixed The result of the method call
+     *
+     * @since 1.0.0
      */
     public function __call($method, $arguments)
     {

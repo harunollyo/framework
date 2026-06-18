@@ -23,6 +23,8 @@ class FreshCommand extends CommandBase
      * The sequential arguments
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $args;
 
@@ -30,16 +32,20 @@ class FreshCommand extends CommandBase
      * The assoc arguments
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $assoc;
 
     /**
      * Run the command
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function run($args, $assoc)
     {
@@ -58,6 +64,8 @@ class FreshCommand extends CommandBase
      * Fresh the database
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function fresh()
     {
@@ -68,6 +76,8 @@ class FreshCommand extends CommandBase
      * Run the migrations
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function run_migrations()
     {
@@ -79,6 +89,8 @@ class FreshCommand extends CommandBase
      * Run the seeder
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function run_seeder()
     {
@@ -92,6 +104,8 @@ class FreshCommand extends CommandBase
      * Check if the database needs to be seeded
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function need_seeding()
     {
@@ -102,6 +116,8 @@ class FreshCommand extends CommandBase
      * Prepare the command synopsis and metadata
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function prepare()
     {

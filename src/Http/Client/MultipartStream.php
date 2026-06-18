@@ -23,6 +23,8 @@ class MultipartStream
      * The boundary string used to separate parts of the multipart stream.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $boundary;
 
@@ -30,6 +32,8 @@ class MultipartStream
      * The stream of data to be sent.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $stream;
 
@@ -38,6 +42,10 @@ class MultipartStream
      *
      * @param array $data The data to be sent.
      * @param string|null $boundary The boundary string to use.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct(array $data, ?string $boundary = null)
     {
@@ -49,6 +57,8 @@ class MultipartStream
      * Get the boundary string used to separate parts of the multipart stream.
      *
      * @return string The boundary string.
+     *
+     * @since 1.0.0
      */
     public function boundary()
     {
@@ -59,6 +69,8 @@ class MultipartStream
      * Get the stream of data to be sent.
      *
      * @return string The stream of data.
+     *
+     * @since 1.0.0
      */
     public function payload()
     {
@@ -71,6 +83,10 @@ class MultipartStream
      * @param array $data The data to be sent.
      *
      * @return string The stream of data.
+     *
+     * @throws \UnexpectedValueException
+     *
+     * @since 1.0.0
      */
     protected function create_stream(array $data)
     {
@@ -95,6 +111,10 @@ class MultipartStream
      * @param array $item The data to be sent.
      *
      * @return string The stream item.
+     *
+     * @throws \UnexpectedValueException
+     *
+     * @since 1.0.0
      */
     protected function create_stream_item(array $item)
     {
@@ -121,6 +141,8 @@ class MultipartStream
      * @param array $headers The headers of the element.
      *
      * @return string The stream element.
+     *
+     * @since 1.0.0
      */
     protected function create_element($name, $contents, ?string $filename = null, array $headers = [])
     {
@@ -140,6 +162,8 @@ class MultipartStream
      * @param array $headers The headers of the element.
      *
      * @return string The file stream.
+     *
+     * @since 1.0.0
      */
     protected function create_file_stream($name, $contents, $filename, array $headers = [])
     {
@@ -161,6 +185,8 @@ class MultipartStream
      * @param string $filename The filename of the file.
      *
      * @return string The mimetype of the file.
+     *
+     * @since 1.0.0
      */
     protected function get_mimetype(string $filename)
     {
@@ -175,6 +201,8 @@ class MultipartStream
      * @param array $headers The headers of the element.
      *
      * @return string The field stream.
+     *
+     * @since 1.0.0
      */
     protected function create_field_stream($name, $contents, array $headers = [])
     {
@@ -199,6 +227,8 @@ class MultipartStream
      * @param array $headers The headers to create.
      *
      * @return string The headers.
+     *
+     * @since 1.0.0
      */
     protected function create_headers(array $headers)
     {

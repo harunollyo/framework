@@ -27,6 +27,8 @@ class PolicyDiscovery implements Discoverable, Cacheable
      * The discovered policies array.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected array $policies = [];
 
@@ -34,6 +36,8 @@ class PolicyDiscovery implements Discoverable, Cacheable
      * Discover the policies from the file system.
      *
      * @return self
+     *
+     * @since 1.0.0
      */
     public function discover()
     {
@@ -74,8 +78,11 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Get the filename of the policy.
      *
-     * @param  string $path
+     * @param string $path The path.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function filename(string $path)
     {
@@ -85,9 +92,12 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Add a policy to the policies array.
      *
-     * @param  string $model
-     * @param  string $policy
+     * @param string $model The model instance.
+     * @param string $policy The policy.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function add_policy(string $model, string $policy)
     {
@@ -98,6 +108,8 @@ class PolicyDiscovery implements Discoverable, Cacheable
      * Get the policies array.
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function policies()
     {
@@ -107,8 +119,11 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Get the policy class from the policy name.
      *
-     * @param  string $policy_name
+     * @param string $policy_name The policy name.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function policy_class(string $policy_name)
     {
@@ -121,8 +136,11 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Get the model class from the policy name.
      *
-     * @param  string $policy_name
+     * @param string $policy_name The policy name.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function associated_model(string $policy_name)
     {
@@ -136,8 +154,11 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Check if the policy name is valid.
      *
-     * @param  string $policy_name
+     * @param string $policy_name The policy name.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function is_valid_policy_name(string $policy_name)
     {
@@ -157,8 +178,11 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Cache the policies.
      *
-     * @param  string|null $path
+     * @param ?string $path The path.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function cache(?string $path = null)
     {
@@ -179,8 +203,11 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Check if the policies are cacheable.
      *
-     * @param  string $path
+     * @param string $path The path.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_cacheable(string $path)
     {

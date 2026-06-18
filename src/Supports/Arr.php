@@ -40,8 +40,9 @@ class Arr
      *
      * @return array
      *
-     * @throws InvalidArgumentException If the items cannot be represented by a scalar value
-     * @since  1.0.0
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public static function from($items)
     {
@@ -153,7 +154,7 @@ class Arr
      * @param callable $callback The callable function for rejecting
      *
      * @return array The rejected array
-     * 
+     *
      * @since 1.0.0
      */
     public static function reject($array, callable $callback)
@@ -172,7 +173,7 @@ class Arr
      * @param callable $callback The callable function for accepting
      *
      * @return array The accepted array
-     * 
+     *
      * @since 1.0.0
      */
     public static function accept($array, callable $callback)
@@ -222,7 +223,7 @@ class Arr
      * @param mixed $default The default value if the key does not exist
      *
      * @return mixed
-     * 
+     *
      * @since 1.0.0
      */
     public static function get($array, $key, $default = null)
@@ -376,6 +377,8 @@ class Arr
      * @param mixed|null $default The default value to return if no item is found
      *
      * @return mixed The first item or the default value
+     *
+     * @since 1.0.0
      */
     public static function first($array, ?callable $callback = null, $default = null)
     {
@@ -414,6 +417,8 @@ class Arr
      * @param mixed|null $default The default value to return if no item is found
      *
      * @return mixed The last item or the default value
+     *
+     * @since 1.0.0
      */
     public static function last($array, ?callable $callback = null, $default = null)
     {
@@ -444,9 +449,9 @@ class Arr
      *
      * @param array $array The array to check
      * @param callable $callback The callback to check
-     * 
+     *
      * @return bool True if all items match the callback, false otherwise
-     * 
+     *
      * @since 1.0.0
      */
     public static function every($array, callable $callback)

@@ -16,8 +16,26 @@ use RuntimeException;
 
 class MultipleRecordsFoundException extends RuntimeException
 {
+    /**
+     * The count.
+     *
+     * @var mixed
+     *
+     * @since 1.0.0
+     */
     protected $count;
 
+    /**
+     * Create a new instance.
+     *
+     * @param mixed $count The count.
+     * @param mixed $code The code.
+     * @param mixed $previous The previous.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function __construct($count, $code = 0, $previous = null)
     {
         $this->count = $count;
@@ -25,6 +43,13 @@ class MultipleRecordsFoundException extends RuntimeException
         parent::__construct(sprintf('%d records were found', $count, $code, $previous));
     }
 
+    /**
+     * Get the count.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     public function get_count()
     {
         return $this->count;

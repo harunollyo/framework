@@ -137,19 +137,22 @@ class Response
      * The request headers
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $headers = [];
 
     /**
      * Send a JSON response.
      *
-     * @since 1.0.0
+     * @param array $data The data to send.
+     * @param int $status The HTTP status code.
+     * @param array $headers The headers to send.
+     * @param int $options The options to use when encoding the data.
      *
-     * @param  array $data The data to send.
-     * @param  int $status The HTTP status code.
-     * @param  array $headers The headers to send.
-     * @param  int $options The options to use when encoding the data.
      * @return JsonResponse
+     *
+     * @since 1.0.0
      */
     public function json($data = [], $status = 200, array $headers = [], int $options = 0)
     {
@@ -159,10 +162,11 @@ class Response
     /**
      * Set the headers for the response.
      *
-     * @since 1.0.0
+     * @param array $headers The headers to set.
      *
-     * @param  array $headers The headers to set.
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function with_headers(array $headers)
     {

@@ -19,8 +19,11 @@ trait HasTimestamps
     /**
      * Convert a value to a date time string for storage.
      *
-     * @param  mixed $value The value to convert
+     * @param mixed $value The value to convert
+     *
      * @return mixed The formatted date time string or the original empty value
+     *
+     * @since 1.0.0
      */
     abstract protected function from_date_time($value);
 
@@ -28,6 +31,8 @@ trait HasTimestamps
      * Indicates if the model should automatically manage created_at and updated_at timestamps.
      *
      * @var bool
+     *
+     * @since 1.0.0
      */
     protected $timestamps = true;
 
@@ -35,7 +40,8 @@ trait HasTimestamps
      * Determine if the model uses timestamps.
      *
      * @return bool True when the model uses timestamps; false otherwise
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function uses_timestamps()
     {
@@ -46,6 +52,8 @@ trait HasTimestamps
      * Get the current timestamp for a model instance.
      *
      * @return \Framework\Supports\Carbon The current timestamp
+     *
+     * @since 1.0.0
      */
     public function fresh_timestamp()
     {
@@ -56,6 +64,8 @@ trait HasTimestamps
      * Get the current timestamp as a string.
      *
      * @return string The current timestamp as a string
+     *
+     * @since 1.0.0
      */
     public function fresh_timestamp_string()
     {
@@ -66,6 +76,8 @@ trait HasTimestamps
      * Get the name of the "created at" column.
      *
      * @return string|null The name of the "created at" column
+     *
+     * @since 1.0.0
      */
     public function get_created_at_column()
     {
@@ -82,6 +94,8 @@ trait HasTimestamps
      * Get the name of the "updated at" column.
      *
      * @return string|null The name of the "updated at" column
+     *
+     * @since 1.0.0
      */
     public function get_updated_at_column()
     {
@@ -97,8 +111,11 @@ trait HasTimestamps
     /**
      * Set the value of the "created at" column.
      *
-     * @param  mixed $value The value to set
+     * @param mixed $value The value to set
+     *
      * @return $this The model instance for method chaining
+     *
+     * @since 1.0.0
      */
     public function set_created_at($value)
     {
@@ -110,8 +127,11 @@ trait HasTimestamps
     /**
      * Set the value of the "updated at" column.
      *
-     * @param  mixed $value The value to set
+     * @param mixed $value The value to set
+     *
      * @return $this The model instance for method chaining
+     *
+     * @since 1.0.0
      */
     public function set_updated_at($value)
     {
@@ -124,6 +144,8 @@ trait HasTimestamps
      * Get the qualified name of the "updated at" column.
      *
      * @return string|null The qualified name of the "updated at" column
+     *
+     * @since 1.0.0
      */
     public function get_qualified_updated_at_column()
     {
@@ -136,6 +158,8 @@ trait HasTimestamps
      * Get the qualified name of the "created at" column.
      *
      * @return string|null The qualified name of the "created at" column
+     *
+     * @since 1.0.0
      */
     public function get_qualified_created_at_column()
     {

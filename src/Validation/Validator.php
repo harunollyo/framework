@@ -24,6 +24,8 @@ class Validator
      * The input data to validate.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $data = [];
 
@@ -31,6 +33,8 @@ class Validator
      * The validated data after passing all rules.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $validated_data = [];
 
@@ -38,6 +42,8 @@ class Validator
      * The validation rules for the data.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $rules = [];
 
@@ -45,14 +51,20 @@ class Validator
      * The errors encountered during validation.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $errors = [];
 
     /**
      * Create a new Validator instance.
      *
-     * @param array $data  The input data.
+     * @param array $data The input data.
      * @param array $rules The validation rules.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct(array $data, array $rules)
     {
@@ -63,9 +75,12 @@ class Validator
     /**
      * Static factory method for creating a Validator instance.
      *
-     * @param  array $data
-     * @param  array $rules
+     * @param array $data The data payload.
+     * @param array $rules The rules.
+     *
      * @return static
+     *
+     * @since 1.0.0
      */
     public static function make(array $data, array $rules)
     {
@@ -73,13 +88,17 @@ class Validator
     }
 
     /**
-     * apply if we need to validate a field rules if the callback is resolved.
+     * Apply if we need to validate a field rules if the callback is resolved.
      *
-     * @param string|array $field   The fields to validate
-     * @param string $rules         The validation rules to applied if $callback returns true.
-     * @param callable $callback    The callback to check if the field should be validated
+     * @param string|array $field The fields to validate
+     * @param string $rules The validation rules to applied if $callback returns true.
+     * @param callable $callback The callback to check if the field should be validated
      *
      * @return static
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function apply_if($field, string $rules, callable $callback)
     {
@@ -106,6 +125,8 @@ class Validator
      * Determine if the data passed validation.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_valid()
     {
@@ -117,6 +138,8 @@ class Validator
      * Determine if the validation failed
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_failed()
     {
@@ -128,7 +151,8 @@ class Validator
      * Validate the data against the defined rules.
      *
      * @return bool
-     * @throws ValidationException
+     *
+     * @since 1.0.0
      */
     public function validate()
     {
@@ -143,6 +167,8 @@ class Validator
      * Get the validated data.
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function validated()
     {
@@ -153,6 +179,8 @@ class Validator
      * Get validation errors, if any.
      *
      * @return array|null
+     *
+     * @since 1.0.0
      */
     public function get_errors()
     {
@@ -163,6 +191,8 @@ class Validator
      * Run validation on the data using defined rules.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function run_validation()
     {
@@ -180,20 +210,14 @@ class Validator
      * Recursively traverses the input data structure according to a dot-notated rule key,
      * handling wildcard segments (e.g., *) to apply validation rules at dynamic levels.
      *
-     * @param mixed $current_data               The current level of data being inspected. This is a portion
-     *                                          of the original data array.
+     * @param mixed $current_data The current level of data being inspected. This is a portion
+     * @param array $key_segments The remaining parts (split by '.') of the rule key that
+     * @param array $traversed_path_stack The stack of key_segments already traversed so far. This is used
+     * @param array $rules An array of validation rules to apply (e.g., ['required', 'string']).
      *
-     * @param array $key_segments               The remaining parts (split by '.') of the rule key that
-     *                                          still need to be resolved. e.g. 'items.*.id' would be  ['items', '*', 'id']
-     *
-     * @param array $traversed_path_stack       The stack of key_segments already traversed so far. This is used
-     *                                          to reconstruct the current dot-notated key (e.g., 'items.0.id')
-     *                                          for both error messages and setting validated values.
-     *
-     * @param  array $rules                      An array of validation rules to apply (e.g., ['required', 'string']).
-     *                                          These are parsed from the rule string and passed into the validation
-     *                                          functions.
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function traverse_and_validate($current_data, $key_segments, $traversed_path_stack, $rules)
     {
@@ -251,12 +275,16 @@ class Validator
     /**
      * Applies a set of rules to a given value.
      *
-     * @param array  $rules      An array of validation rules to apply.
-     * @param string $traversed_key   The dot-notated key of the value being validated.
-     * @param mixed|null  $value      The value being validated.
-     * @param bool  $is_field_missing  Whether the field being validated is missing from request.
+     * @param array $rules An array of validation rules to apply.
+     * @param string $traversed_key The dot-notated key of the value being validated.
+     * @param mixed|null $value The value being validated.
+     * @param bool $is_field_missing Whether the field being validated is missing from request.
      *
      * @return void
+     *
+     * @throws \InvalidValidationRuleException
+     *
+     * @since 1.0.0
      */
     protected function apply_rules($rules, $traversed_key, $value = null, $is_field_missing = false)
     {
@@ -317,9 +345,12 @@ class Validator
     /**
      * Validate strict rules.
      * check is there any rule is true then return true otherwise false and set errors
-     * 
-     * @param  array $strict_validations
+     *
+     * @param array $strict_validations The strict validations.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function validate_strict_rules(array $strict_validations)
     {
@@ -343,6 +374,8 @@ class Validator
      * @param mixed $value The value to set at the specified path in the validated data array.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function set_validated_data($keys, $value)
     {
@@ -359,13 +392,16 @@ class Validator
     /**
      * Get the rule class instance.
      *
-     * @param string|Rule  $rule
-     * @param string $key
-     * @param mixed  $value
-     * @param array  $all_applied_rules
-     * 
+     * @param mixed $rule The rule.
+     * @param mixed $key The key.
+     * @param mixed $value The value.
+     * @param mixed $all_applied_rules The all applied rules.
+     *
      * @return Rule
-     * @throws InvalidValidationRuleException
+     *
+     * @throws \InvalidValidationRuleException
+     *
+     * @since 1.0.0
      */
     protected function get_rule_class($rule, $key, $value, $all_applied_rules)
     {
@@ -389,9 +425,12 @@ class Validator
      * Set the error message for a given key in the errors array.
      * The key can be a dot-notated string, e.g. `user.email`.
      *
-     * @param  string $key   The key to set the error
-     * @param  string $error_msg The error message
+     * @param string $key The key to set the error
+     * @param string $error_msg The error message
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function add_error($key, $error_msg)
     {

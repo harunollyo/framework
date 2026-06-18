@@ -18,6 +18,8 @@ interface RewriteRule
      * Get the pattern to match the rewrite rule.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_pattern(): string;
 
@@ -25,6 +27,8 @@ interface RewriteRule
      * Get the query string to add to the rewrite rule.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_query_string(): string;
 
@@ -32,6 +36,8 @@ interface RewriteRule
      * Get the rule stack to add the rule to.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_rule_stack(): string;
 
@@ -39,6 +45,8 @@ interface RewriteRule
      * Get the query vars to add to the rewrite rule.
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function get_query_vars(): array;
 
@@ -46,6 +54,8 @@ interface RewriteRule
      * Get the template path to load.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_template_path(): string;
 
@@ -53,6 +63,8 @@ interface RewriteRule
      * Handle the rewrite rule to manage adding the rule
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function handle();
 }

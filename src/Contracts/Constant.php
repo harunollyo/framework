@@ -16,8 +16,10 @@ interface Constant
 {
     /**
      * Get all the constants
-     * 
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public static function all();
 }

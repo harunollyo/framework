@@ -13,9 +13,11 @@ defined('ABSPATH') || exit;
 class NumberRule extends BaseRule
 {
     /**
-     * check for strict data type 
-     * 
+     * Check for strict data type
+     *
      * @var bool
+     *
+     * @since 1.0.0
      */
     protected $check_strict_data_type = true;
 
@@ -23,6 +25,8 @@ class NumberRule extends BaseRule
      * Determine if the value is a number.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -33,6 +37,8 @@ class NumberRule extends BaseRule
      * Get the error message for a non-number value.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {

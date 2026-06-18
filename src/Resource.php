@@ -23,6 +23,8 @@ abstract class Resource implements Arrayable, Jsonable
      * The resource instance.
      *
      * @var object|array
+     *
+     * @since 1.0.0
      */
     protected $resource;
 
@@ -30,6 +32,10 @@ abstract class Resource implements Arrayable, Jsonable
      * Create a new resource instance.
      *
      * @param object|array $resource The resource to create a new instance of.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct($resource)
     {
@@ -44,6 +50,8 @@ abstract class Resource implements Arrayable, Jsonable
      * Convert the resource to an array.
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     abstract public function to_array();
 
@@ -53,6 +61,8 @@ abstract class Resource implements Arrayable, Jsonable
      * @param mixed $resource The resource to create a new instance of.
      *
      * @return array|null
+     *
+     * @since 1.0.0
      */
     public static function make($resource)
     {
@@ -73,6 +83,8 @@ abstract class Resource implements Arrayable, Jsonable
      * @param iterable $resources The iterable of resources to convert.
      *
      * @return array The array of resource representations.
+     *
+     * @since 1.0.0
      */
     public static function collection($resources)
     {
@@ -104,6 +116,8 @@ abstract class Resource implements Arrayable, Jsonable
      * @param Paginator $paginator The paginator object to convert.
      *
      * @return array The array of resource representations, including pagination metadata.
+     *
+     * @since 1.0.0
      */
     public static function paginated(Paginator $paginator)
     {
@@ -122,8 +136,11 @@ abstract class Resource implements Arrayable, Jsonable
      * Encodes the array form of the resource for straightforward transport or
      * logging purposes.
      *
+     * @param mixed $options The options array.
+     *
      * @return string The JSON-encoded paginator representation
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function to_json($options = 0)
     {
@@ -140,6 +157,8 @@ abstract class Resource implements Arrayable, Jsonable
      * @param string $name The name of the property to check.
      *
      * @return bool True if the property exists, false otherwise.
+     *
+     * @since 1.0.0
      */
     public function __isset($name)
     {
@@ -156,6 +175,8 @@ abstract class Resource implements Arrayable, Jsonable
      * @param string $name The name of the property to access.
      *
      * @return mixed The value of the accessed property.
+     *
+     * @since 1.0.0
      */
     public function __get($name)
     {
@@ -173,6 +194,8 @@ abstract class Resource implements Arrayable, Jsonable
      * @param mixed $value The value to set.
      *
      * @return $this The current instance.
+     *
+     * @since 1.0.0
      */
     public function __set($name, $value)
     {
@@ -192,6 +215,8 @@ abstract class Resource implements Arrayable, Jsonable
      * @param array $args The arguments to pass to the method.
      *
      * @return mixed The return value of the accessed method.
+     *
+     * @since 1.0.0
      */
     public function __call($method, $args)
     {

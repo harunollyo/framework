@@ -22,8 +22,11 @@ class QueueRepository
     /**
      * Create a new job in the queue.
      *
-     * @param  array $data
+     * @param array $data The data payload.
+     *
      * @return SchedulerQueue
+     *
+     * @since 1.0.0
      */
     public function create(array $data)
     {
@@ -33,8 +36,11 @@ class QueueRepository
     /**
      * Get jobs associated with a specific claim ID.
      *
-     * @param  string $claim_id
+     * @param string $claim_id The claim id.
+     *
      * @return \Framework\Collections\Collection
+     *
+     * @since 1.0.0
      */
     public function get_claimed_jobs(string $claim_id)
     {
@@ -46,9 +52,12 @@ class QueueRepository
     /**
      * Lock pending jobs for a specific claim ID.
      *
-     * @param  string $claim_id
-     * @param  int $batch
+     * @param string $claim_id The claim id.
+     * @param int $batch The batch.
+     *
      * @return int
+     *
+     * @since 1.0.0
      */
     public function lock_jobs(string $claim_id, int $batch)
     {
@@ -68,9 +77,12 @@ class QueueRepository
     /**
      * Update the status of a specific job.
      *
-     * @param  int $id
-     * @param  string $status
+     * @param int $id The identifier.
+     * @param string $status The status.
+     *
      * @return int
+     *
+     * @since 1.0.0
      */
     protected function update_status(int $id, string $status)
     {
@@ -83,8 +95,11 @@ class QueueRepository
     /**
      * Mark a job as completed.
      *
-     * @param  int $id
+     * @param int $id The identifier.
+     *
      * @return int
+     *
+     * @since 1.0.0
      */
     public function mark_as_completed(int $id)
     {
@@ -94,9 +109,12 @@ class QueueRepository
     /**
      * Mark a job as failed and handle retry logic.
      *
-     * @param  int $id
-     * @param  int $retry
+     * @param int $id The identifier.
+     * @param int $retry The retry.
+     *
      * @return int|void
+     *
+     * @since 1.0.0
      */
     public function mark_as_failed(int $id, int $retry = 3)
     {
@@ -126,9 +144,12 @@ class QueueRepository
     /**
      * Reset jobs that have been stuck in processing status.
      *
-     * @param  int $timeout
-     * @param  int $max_retries
+     * @param int $timeout The timeout.
+     * @param int $max_retries The max retries.
+     *
      * @return int
+     *
+     * @since 1.0.0
      */
     public function reset_stuck_jobs(int $timeout, int $max_retries = 3)
     {
@@ -159,6 +180,8 @@ class QueueRepository
      * Check if there are any pending jobs ready to be processed.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function has_pending_jobs()
     {
@@ -172,13 +195,16 @@ class QueueRepository
     /**
      * Cleanup jobs that have been completed or failed for a specific status.
      *
-     * This method chunks the jobs by ID to reduce the load on the database 
-     * and deletes them in batches. It also includes a sleep delay to prevent 
+     * This method chunks the jobs by ID to reduce the load on the database
+     * and deletes them in batches. It also includes a sleep delay to prevent
      * overwhelming the database with too many queries.
      *
-     * @param  string $status
-     * @param  int $days
+     * @param mixed $status The status.
+     * @param mixed $days The days.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function cleanup($status, $days)
     {

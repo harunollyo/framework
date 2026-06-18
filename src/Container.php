@@ -27,7 +27,7 @@ class Container implements ContainerContract
      * The instance of the container.
      *
      * @var static|null
-     * 
+     *
      * @since 1.0.0
      */
     protected static $instance = null;
@@ -36,7 +36,7 @@ class Container implements ContainerContract
      * The bindings of the container.
      *
      * @var array
-     * 
+     *
      * @since 1.0.0
      */
     protected array $bindings = [];
@@ -45,7 +45,7 @@ class Container implements ContainerContract
      * The instances of the container (singletons).
      *
      * @var array
-     * 
+     *
      * @since 1.0.0
      */
     protected array $instances = [];
@@ -54,7 +54,7 @@ class Container implements ContainerContract
      * The aliases for services.
      *
      * @var array
-     * 
+     *
      * @since 1.0.0
      */
     protected array $aliases = [];
@@ -63,7 +63,7 @@ class Container implements ContainerContract
      * Services currently being resolved (for circular dependency detection).
      *
      * @var array
-     * 
+     *
      * @since 1.0.0
      */
     protected array $resolved = [];
@@ -72,7 +72,7 @@ class Container implements ContainerContract
      * Tagged services.
      *
      * @var array
-     * 
+     *
      * @since 1.0.0
      */
     protected array $tags = [];
@@ -81,7 +81,7 @@ class Container implements ContainerContract
      * The base path of the application.
      *
      * @var string
-     * 
+     *
      * @since 1.0.0
      */
     protected $base_path;
@@ -90,9 +90,9 @@ class Container implements ContainerContract
      * Create a new container instance.
      *
      * @param string|null $base_path The base path of the application.
-     * 
+     *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     public function __construct(?string $base_path = null)
@@ -105,9 +105,9 @@ class Container implements ContainerContract
      *
      * @param string $name The name of the service.
      * @param Closure|null $resolver The resolver for the service.
-     * 
+     *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     public function bind(string $name, ?Closure $resolver = null)
@@ -129,9 +129,9 @@ class Container implements ContainerContract
      *
      * @param string $name The name of the service.
      * @param Closure|null $resolver The resolver for the service.
-     * 
+     *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     public function singleton(string $name, ?Closure $resolver = null)
@@ -150,14 +150,14 @@ class Container implements ContainerContract
 
     /**
      * Bind an existing instance to the container.
-     * 
+     *
      * @template TInstance of mixed
-     * 
+     *
      * @param string $abstract The abstract name of the service.
      * @param TInstance $instance The instance of the service.
-     * 
+     *
      * @return TInstance
-     * 
+     *
      * @since 1.0.0
      */
     public function instance(string $abstract, $instance)
@@ -179,9 +179,11 @@ class Container implements ContainerContract
      *
      * @param string $alias The alias name of the service.
      * @param string $abstract The abstract name of the service.
-     * 
+     *
      * @return void
-     * 
+     *
+     * @throws \LogicException
+     *
      * @since 1.0.0
      */
     public function alias(string $alias, string $abstract)
@@ -198,9 +200,9 @@ class Container implements ContainerContract
      *
      * @param array $services The services to tag.
      * @param string $tag The tag to add the services to.
-     * 
+     *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     public function tag(array $services, string $tag)
@@ -214,9 +216,9 @@ class Container implements ContainerContract
      * Get all services with a given tag.
      *
      * @param string $tag The tag to get the services from.
-     * 
+     *
      * @return array
-     * 
+     *
      * @since 1.0.0
      */
     public function tagged(string $tag): array
@@ -232,9 +234,9 @@ class Container implements ContainerContract
      * Check if a class has been resolved.
      *
      * @param string $name The name of the service.
-     * 
+     *
      * @return bool
-     * 
+     *
      * @since 1.0.0
      */
     protected function resolved(string $name): bool
@@ -247,9 +249,9 @@ class Container implements ContainerContract
      *
      * @param string $name The name of the service.
      * @param array $parameters The parameters to pass to the service.
-     * 
+     *
      * @return mixed
-     * 
+     *
      * @since 1.0.0
      */
     public function make(string $name, array $parameters = [])
@@ -262,9 +264,9 @@ class Container implements ContainerContract
      *
      * @param string $name The name of the service.
      * @param array $parameters The parameters to pass to the service.
-     * 
+     *
      * @return mixed
-     * 
+     *
      * @since 1.0.0
      */
     protected function resolve(string $name, array $parameters = [])
@@ -291,9 +293,9 @@ class Container implements ContainerContract
      *
      * @param string $name The name of the service.
      * @param array $parameters The parameters to pass to the service.
-     * 
+     *
      * @return mixed
-     * 
+     *
      * @since 1.0.0
      */
     protected function resolve_binding(string $name, array $parameters = [])
@@ -314,9 +316,11 @@ class Container implements ContainerContract
      *
      * @param string $class The class to autowire.
      * @param array $parameters The parameters to pass to the class.
-     * 
+     *
      * @return mixed
-     * 
+     *
+     * @throws \Exception
+     *
      * @since 1.0.0
      */
     protected function autowire(string $class, array $parameters = [])
@@ -361,9 +365,9 @@ class Container implements ContainerContract
      *
      * @param array $parameters The parameters to pass to the dependencies.
      * @param array $primitives The primitives to pass to the dependencies.
-     * 
+     *
      * @return array
-     * 
+     *
      * @since 1.0.0
      */
     protected function resolve_dependencies(array $parameters, array $primitives = []): array
@@ -393,9 +397,11 @@ class Container implements ContainerContract
      *
      * @param ReflectionParameter $parameter The parameter to resolve.
      * @param array $primitives The primitives to pass to the dependencies.
-     * 
+     *
      * @return mixed
-     * 
+     *
+     * @throws \Exception
+     *
      * @since 1.0.0
      */
     protected function resolve_primitive(ReflectionParameter $parameter, array $primitives)
@@ -421,9 +427,9 @@ class Container implements ContainerContract
      * Get the alias for a service.
      *
      * @param string $name The name of the service.
-     * 
+     *
      * @return string
-     * 
+     *
      * @since 1.0.0
      */
     protected function get_alias(string $name): string
@@ -435,9 +441,9 @@ class Container implements ContainerContract
      * Check if a class exists in the container.
      *
      * @param string $name The name of the service.
-     * 
+     *
      * @return bool
-     * 
+     *
      * @since 1.0.0
      */
     public function has(string $name): bool
@@ -449,9 +455,9 @@ class Container implements ContainerContract
      * Check if a name is an alias.
      *
      * @param string $name The name of the service.
-     * 
+     *
      * @return bool
-     * 
+     *
      * @since 1.0.0
      */
     public function is_alias(string $name): bool
@@ -463,9 +469,9 @@ class Container implements ContainerContract
      * Check if a name is bound in the container.
      *
      * @param string $abstract The abstract name of the service.
-     * 
+     *
      * @return bool
-     * 
+     *
      * @since 1.0.0
      */
     public function bound($abstract)
@@ -479,9 +485,9 @@ class Container implements ContainerContract
      * Rebind a name in the container.
      *
      * @param string $abstract The abstract name of the service.
-     * 
+     *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     public function rebound($abstract)
@@ -493,9 +499,9 @@ class Container implements ContainerContract
      * Forget an instance from the container.
      *
      * @param string $abstract The abstract name of the service.
-     * 
+     *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     public function forget_instance($abstract)
@@ -507,7 +513,7 @@ class Container implements ContainerContract
      * Forget all instances from the container.
      *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     public function forget_instances()
@@ -519,9 +525,9 @@ class Container implements ContainerContract
      * Get the instance of the container.
      *
      * @param string|null $base_path The base path of the application.
-     * 
+     *
      * @return static
-     * 
+     *
      * @since 1.0.0
      */
     public static function get_instance(?string $base_path = null)
@@ -537,7 +543,7 @@ class Container implements ContainerContract
      * Flush all bindings and instances.
      *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     public function flush()

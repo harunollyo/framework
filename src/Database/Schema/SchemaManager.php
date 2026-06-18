@@ -19,7 +19,11 @@ use Exception;
 class SchemaManager
 {
     /**
-     * @var Connection|null The database connection instance.
+     * The connection.
+     *
+     * @var Connection|null
+     *
+     * @since 1.0.0
      */
     protected $connection = null;
 
@@ -27,6 +31,10 @@ class SchemaManager
      * SchemaManager constructor.
      *
      * @param Connection $connection The database connection instance.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct(Connection $connection)
     {
@@ -36,9 +44,14 @@ class SchemaManager
     /**
      * Create a new table in the database.
      *
-     * @param  string $table The name of the table to create.
-     * @param  Closure $callback The callback to define the table structure.
+     * @param string $table The name of the table to create.
+     * @param Closure $callback The callback to define the table structure.
+     *
      * @return void
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
     public function create($table, Closure $callback)
     {
@@ -57,6 +70,8 @@ class SchemaManager
      * Disable foreign key constraint checking.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function disabled_checking_foreign_key_constraints()
     {
@@ -67,6 +82,8 @@ class SchemaManager
      * Enable foreign key constraint checking.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function enabled_checking_foreign_key_constraints()
     {
@@ -76,8 +93,11 @@ class SchemaManager
     /**
      * Drop a table if it exists.
      *
-     * @param  string $table The name of the table to drop.
+     * @param string $table The name of the table to drop.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function drop_if_exists(string $table)
     {
@@ -94,8 +114,11 @@ class SchemaManager
     /**
      * Drop a table.
      *
-     * @param  string $table The name of the table to drop.
+     * @param string $table The name of the table to drop.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function drop(string $table)
     {

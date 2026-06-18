@@ -18,14 +18,19 @@ interface Capability
      * Execute the action logic.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function handle();
 
     /**
      * Get the capabilities .
      *
-     * @param  string $role
+     * @param mixed $role The role.
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function get_capabilities($role = null);
 }

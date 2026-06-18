@@ -26,6 +26,8 @@ class MakeMigrationCommand extends CommandBase
      * Command's positional arguments
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $args;
 
@@ -33,6 +35,8 @@ class MakeMigrationCommand extends CommandBase
      * Command's associative arguments
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $assoc;
 
@@ -40,6 +44,8 @@ class MakeMigrationCommand extends CommandBase
      * Migration base path
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $output_dir;
 
@@ -47,6 +53,8 @@ class MakeMigrationCommand extends CommandBase
      * Initialize the command
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct()
     {
@@ -59,6 +67,8 @@ class MakeMigrationCommand extends CommandBase
      * Prepare the command's synopsis and other metadata
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function prepare()
     {
@@ -80,10 +90,12 @@ class MakeMigrationCommand extends CommandBase
     /**
      * Run the command
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function run($args, $assoc)
     {
@@ -96,10 +108,12 @@ class MakeMigrationCommand extends CommandBase
     /**
      * Check if the command passed the validation
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function passed($args, $assoc)
     {
@@ -110,6 +124,8 @@ class MakeMigrationCommand extends CommandBase
      * Get data for migration file
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     protected function data()
     {
@@ -129,6 +145,8 @@ class MakeMigrationCommand extends CommandBase
      * Get migration stub content
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function get_stub()
     {
@@ -144,9 +162,9 @@ class MakeMigrationCommand extends CommandBase
     /**
      * Create migration file
      *
-     * @param string $filename
-     *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function create()
     {
@@ -169,9 +187,11 @@ class MakeMigrationCommand extends CommandBase
     /**
      * Get table name from filename
      *
-     * @param string $filename
+     * @param mixed $filename The filename.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function table($filename)
     {
@@ -193,9 +213,11 @@ class MakeMigrationCommand extends CommandBase
     /**
      * Get migration class name from filename
      *
-     * @param string $filename
+     * @param mixed $filename The filename.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function migration_class($filename)
     {
@@ -205,11 +227,11 @@ class MakeMigrationCommand extends CommandBase
     /**
      * Populate stub content
      *
-     * @param string $table
-     * @param string $class
-     * @param string $stub
+     * @param mixed $data The data payload.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function populate_stub($data)
     {

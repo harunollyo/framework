@@ -25,6 +25,8 @@ class BelongsTo extends Relation
      * The foreign key on the parent model that references the owner model.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $foreign_key;
 
@@ -32,6 +34,8 @@ class BelongsTo extends Relation
      * The primary key or unique key on the related (owner) model being referenced.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $owner_key;
 
@@ -39,6 +43,8 @@ class BelongsTo extends Relation
      * The child model instance.
      *
      * @var Model
+     *
+     * @since 1.0.0
      */
     protected $child;
 
@@ -48,12 +54,14 @@ class BelongsTo extends Relation
      * Stores the foreign and owner key names and applies constraints so the
      * query targets the owning record for the current parent model.
      *
-     * @param  Model $related The related (owner) model instance
-     * @param  Model $child The parent model instance
-     * @param  mixed $foreign_key The foreign key on the parent model
-     * @param  mixed $owner_key The key on the related model being referenced
+     * @param Model $related The related (owner) model instance
+     * @param Model $child The parent model instance
+     * @param mixed $foreign_key The foreign key on the parent model
+     * @param mixed $owner_key The key on the related model being referenced
+     *
      * @return void No return value
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function __construct(Model $related, Model $child, $foreign_key, $owner_key)
     {
@@ -72,8 +80,9 @@ class BelongsTo extends Relation
      * owner's key equals that value, ensuring only the referenced owner is
      * returned.
      *
-     * @return void No return value
-     * @since  1.0.0
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function add_constraints()
     {
@@ -88,11 +97,13 @@ class BelongsTo extends Relation
     /**
      * Get the aggregate query for the relation.
      *
-     * @param  QueryBuilder $query The query builder instance
-     * @param  QueryBuilder $parent The parent query builder instance
-     * @param  mixed $columns The columns to select
+     * @param QueryBuilder $query The query builder instance
+     * @param QueryBuilder $parent The parent query builder instance
+     * @param mixed $columns The columns to select
+     *
      * @return QueryBuilder The aggregate query
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_relation_existence_query(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
     {
@@ -110,11 +121,13 @@ class BelongsTo extends Relation
     /**
      * Get the aggregate query for the relation for self join.
      *
-     * @param  QueryBuilder $query The query builder instance
-     * @param  QueryBuilder $parent The parent query builder instance
-     * @param  mixed $columns The columns to select
+     * @param QueryBuilder $query The query builder instance
+     * @param QueryBuilder $parent The parent query builder instance
+     * @param mixed $columns The columns to select
+     *
      * @return QueryBuilder The aggregate query
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_relation_existence_query_for_self_relation(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
     {
@@ -135,7 +148,8 @@ class BelongsTo extends Relation
      * Get the qualified foreign key name.
      *
      * @return string The qualified foreign key name
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_qualified_foreign_key_name()
     {
@@ -148,7 +162,8 @@ class BelongsTo extends Relation
      * Returns the first (and only) result from the constrained query.
      *
      * @return mixed The owner model instance or null if not found
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_results()
     {
@@ -161,9 +176,11 @@ class BelongsTo extends Relation
      * Collects foreign key values from parents and scopes the query using a
      * where_in on the owner's key to fetch all owners in one query.
      *
-     * @param  Collection $models The parent models to derive keys from
-     * @return void No return value
-     * @since  1.0.0
+     * @param Collection $models The parent models to derive keys from
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function add_eager_constraints(Collection $models)
     {
@@ -187,11 +204,11 @@ class BelongsTo extends Relation
      * model to each parent under the relation name.
      *
      * @param Collection $models The parent models receiving owners
-     * @param Collection<string, Model> $results The owner results fetched by the query
+     * @param Collection $results The results.
      * @param string $relation The relation name on the parent
-     * 
+     *
      * @return Collection The parent models with owners assigned
-     * 
+     *
      * @since 1.0.0
      */
     public function match(Collection $models, Collection $results, $relation)
@@ -212,10 +229,10 @@ class BelongsTo extends Relation
     /**
      * Build the dictionary for the relation from the results.
      *
-     * @param Collection<string, Model> $results The related results
-     * 
+     * @param Collection $results The results.
+     *
      * @return array The dictionary
-     * 
+     *
      * @since 1.0.0
      */
     protected function build_dictionary(Collection $results)
@@ -239,7 +256,8 @@ class BelongsTo extends Relation
      * Sets the parent's foreign key to the owner's key value and updates the
      * in-memory relation reference for immediate access and serialization.
      *
-     * @param  Model $model The owner model to associate
+     * @param Model $model The owner model to associate
+     *
      * @return Model The parent model for method chaining
      *
      * @since 1.0.0
@@ -263,7 +281,8 @@ class BelongsTo extends Relation
      * so that subsequent access reflects the dissociation.
      *
      * @return Model The parent model for method chaining
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function dissociate()
     {
@@ -280,7 +299,8 @@ class BelongsTo extends Relation
      * Returns the key on the parent model that is used to match related records.
      *
      * @return string The local key name
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_local_key()
     {

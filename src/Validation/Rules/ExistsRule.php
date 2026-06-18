@@ -19,6 +19,10 @@ class ExistsRule extends BaseRule
      * Check if the value exists in the specified database table and column.
      *
      * @return bool
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -37,6 +41,8 @@ class ExistsRule extends BaseRule
      * Get the error message if the row does not exist in DB table.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {

@@ -18,13 +18,19 @@ class DeferredDispatcher
      * The job instance that is being deferred for dispatching.
      *
      * @var mixed
+     *
+     * @since 1.0.0
      */
     protected $job;
 
     /**
      * Initialize the dispatcher with a specific job instance.
      *
-     * @param mixed $job
+     * @param mixed $job The job.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct($job)
     {
@@ -34,8 +40,11 @@ class DeferredDispatcher
     /**
      * Specify the delay (time or interval) before the job should be executed.
      *
-     * @param  mixed $moment
+     * @param mixed $moment The moment.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function delay($moment)
     {
@@ -47,8 +56,11 @@ class DeferredDispatcher
     /**
      * Set the execution priority level for the job.
      *
-     * @param  int $priority
+     * @param int $priority The priority.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function priority(int $priority)
     {
@@ -61,6 +73,8 @@ class DeferredDispatcher
      * Ensure the job is executed without any scheduled delay.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function without_delay()
     {
@@ -72,9 +86,12 @@ class DeferredDispatcher
     /**
      * Proxy method calls to the underlying job instance to allow fluent configuration.
      *
-     * @param  string $method
-     * @param  array $parameters
+     * @param mixed $method The method name.
+     * @param mixed $parameters The parameters array.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function __call($method, $parameters)
     {
@@ -84,10 +101,12 @@ class DeferredDispatcher
     }
 
     /**
-     * Finalize the job by storing it in the database and triggering it immediately 
+     * Finalize the job by storing it in the database and triggering it immediately
      * via an async worker if no delay is specified.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __destruct()
     {

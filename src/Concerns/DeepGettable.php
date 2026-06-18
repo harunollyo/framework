@@ -17,11 +17,13 @@ trait DeepGettable
     /**
      * Return the nested setting values by key recursively.
      *
-     * @param array $settings
-     * @param string|array $keys
-     * @param mixed $default
+     * @param array $settings The settings.
+     * @param mixed $keys The keys.
+     * @param mixed $default The default.
      *
      * @return mixed|null
+     *
+     * @since 1.0.0
      */
     protected function deep_get(array $settings, $keys, $default = null)
     {

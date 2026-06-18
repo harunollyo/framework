@@ -15,6 +15,17 @@ use RuntimeException;
 
 class AuthorizationException extends RuntimeException
 {
+    /**
+     * Create a new instance.
+     *
+     * @param mixed $message The message.
+     * @param mixed $code The code.
+     * @param mixed $previous The previous.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function __construct($message = '', $code = 0, $previous = null)
     {
         if ($message === '') {

@@ -32,6 +32,8 @@ class SeedCommand extends CommandBase
      * The sequential arguments
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $args;
 
@@ -39,16 +41,20 @@ class SeedCommand extends CommandBase
      * The assoc arguments
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $assoc;
 
     /**
      * Run the command
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function run($args, $assoc)
     {
@@ -62,6 +68,8 @@ class SeedCommand extends CommandBase
      * Discover the seeders
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     protected function discover()
     {
@@ -88,6 +96,8 @@ class SeedCommand extends CommandBase
      * Get the seeders
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     protected function seeders()
     {
@@ -101,8 +111,11 @@ class SeedCommand extends CommandBase
     /**
      * Get the seeder classes
      *
-     * @param  string $class
+     * @param mixed $class The class.
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     protected function seeder_classes($class)
     {
@@ -122,8 +135,11 @@ class SeedCommand extends CommandBase
     /**
      * Get the filename of the seeder
      *
-     * @param  string $path
+     * @param mixed $path The path.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function filename($path)
     {
@@ -133,8 +149,11 @@ class SeedCommand extends CommandBase
     /**
      * Get the classname of the seeder
      *
-     * @param  string $filename
+     * @param mixed $filename The filename.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function classname($filename)
     {
@@ -146,8 +165,11 @@ class SeedCommand extends CommandBase
     /**
      * Check if the seeder exists
      *
-     * @param  string $class
+     * @param mixed $class The class.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function exists($class)
     {
@@ -158,6 +180,8 @@ class SeedCommand extends CommandBase
      * Seed the database
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function seed()
     {
@@ -192,6 +216,8 @@ class SeedCommand extends CommandBase
      * Prepare the command synopsis and metadata
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function prepare()
     {

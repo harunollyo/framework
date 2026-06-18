@@ -89,15 +89,19 @@ class User
      * The WP_User instance
      *
      * @var WP_User|null
+     *
+     * @since 1.0.0
      */
     protected $user = null;
 
     /**
      * Constructor populates the current user instance
-     * 
-     * @param int|null $user_id
+     *
+     * @param mixed $user_id The user id.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct($user_id = null)
     {
@@ -111,8 +115,11 @@ class User
     /**
      * Sync the user by provided user id.
      *
-     * @param  int $user_id
+     * @param int $user_id The user id.
+     *
      * @return static
+     *
+     * @since 1.0.0
      */
     public function sync(int $user_id)
     {
@@ -125,12 +132,21 @@ class User
      * Get the current user instance
      *
      * @return WP_User|null
+     *
+     * @since 1.0.0
      */
     public function get()
     {
         return $this->user;
     }
 
+    /**
+     * Get the data.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     public function get_data()
     {
         return [
@@ -147,7 +163,11 @@ class User
     /**
      * Get the current user meta data
      *
+     * @param string $key The key.
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function get_user_meta(string $key = '')
     {
@@ -158,6 +178,8 @@ class User
      * Get the current user ID
      *
      * @return int
+     *
+     * @since 1.0.0
      */
     public function get_id()
     {
@@ -168,6 +190,8 @@ class User
      * Get the current user email
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_email()
     {
@@ -178,6 +202,8 @@ class User
      * Get the username
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_username()
     {
@@ -188,6 +214,8 @@ class User
      * Get the current user avatar
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_avatar()
     {
@@ -198,6 +226,8 @@ class User
      * Get the current user display name
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_display_name()
     {
@@ -208,6 +238,8 @@ class User
      * Get the current user first name
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_first_name()
     {
@@ -224,6 +256,8 @@ class User
      * Get the current user last name
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_last_name()
     {
@@ -244,6 +278,8 @@ class User
      * Get the current user roles
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function get_roles()
     {
@@ -253,8 +289,11 @@ class User
     /**
      * Set the current user role
      *
-     * @param  string $role
+     * @param mixed $role The role.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function set_role($role)
     {
@@ -264,8 +303,11 @@ class User
     /**
      * Check if the current user has a specific role
      *
-     * @param  string $role
+     * @param string $role The role.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function has_role(string $role)
     {
@@ -276,6 +318,8 @@ class User
      * Check if the current user is logged in
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_logged_in()
     {
@@ -285,9 +329,12 @@ class User
     /**
      * Get the current user meta
      *
-     * @param  string $key
-     * @param  mixed $default
+     * @param string $key The key.
+     * @param mixed $default The default.
+     *
      * @return mixed
+     *
+     * @since 1.0.0
      */
     public function get_meta(string $key, $default = null)
     {
@@ -297,9 +344,12 @@ class User
     /**
      * Check if the user can perform an action on a model
      *
-     * @param  string $ability
-     * @param  mixed $model
+     * @param mixed $ability The ability.
+     * @param mixed $model The model instance.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function can($ability, $model = null)
     {
@@ -311,9 +361,12 @@ class User
     /**
      * Check if the user cannot perform an action on a model
      *
-     * @param  string $ability
-     * @param  mixed $model
+     * @param mixed $ability The ability.
+     * @param mixed $model The model instance.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function cannot($ability, $model = null)
     {
@@ -325,10 +378,14 @@ class User
      * Allows calling methods like can_edit_posts(), can_manage_options(), etc.
      * The method name must start with 'can_' followed by a valid capability from Capabilities class.
      *
-     * @param  string $name The method name being called
-     * @param  array $arguments Arguments passed to the method (unused)
-     * @throws Exception If method doesn't start with 'can_' or capability doesn't exist
+     * @param string $name The method name being called
+     * @param array $arguments Arguments passed to the method (unused)
+     *
      * @return bool Whether the user has the requested capability
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
     public function __call($name, $arguments = [])
     {

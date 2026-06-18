@@ -28,6 +28,8 @@ trait HasAsyncWorker
      * for the worker to complete its task.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function trigger_async_worker()
     {

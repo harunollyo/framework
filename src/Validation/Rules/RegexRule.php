@@ -16,6 +16,8 @@ class RegexRule extends BaseRule
      * Determine if the value is valid based on the regex.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -26,6 +28,8 @@ class RegexRule extends BaseRule
      * Get the error message for invalid value.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {

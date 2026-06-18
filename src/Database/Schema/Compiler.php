@@ -23,21 +23,26 @@ class Compiler
     /**
      * List of column modifiers to apply.
      *
-     * @var array<int, string>
+     * @var array<int,
+     *
+     * @since 1.0.0
      */
     protected $modifiers = ['unsigned', 'nullable', 'default', 'auto_increment', 'comment'];
 
     /**
      * List of table commands to generate.
      *
-     * @var array<int, string>
+     * @var array<int,
+     *
+     * @since 1.0.0
      */
     protected $commands = ['primary', 'unique', 'index', 'foreign'];
 
     /**
      * Compile the SQL statement for creating a table.
      *
-     * @param  Structure $structure
+     * @param Structure $structure The structure.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -54,7 +59,8 @@ class Compiler
     /**
      * Compile the CREATE TABLE SQL statement.
      *
-     * @param  Structure $structure
+     * @param Structure $structure The structure.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -77,7 +83,8 @@ class Compiler
     /**
      * Compile all table commands (primary, unique, index, foreign).
      *
-     * @param  Structure $structure
+     * @param Structure $structure The structure.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -97,7 +104,8 @@ class Compiler
     /**
      * Generate the PRIMARY KEY SQL statement.
      *
-     * @param  Structure $structure
+     * @param Structure $structure The structure.
+     *
      * @return string|null
      *
      * @since 1.0.0
@@ -130,7 +138,8 @@ class Compiler
     /**
      * Generate the UNIQUE KEY SQL statements.
      *
-     * @param  Structure $structure
+     * @param Structure $structure The structure.
+     *
      * @return string|null
      *
      * @since 1.0.0
@@ -166,7 +175,8 @@ class Compiler
     /**
      * Generate the INDEX KEY SQL statements.
      *
-     * @param  Structure $structure
+     * @param Structure $structure The structure.
+     *
      * @return string|null
      *
      * @since 1.0.0
@@ -202,7 +212,8 @@ class Compiler
     /**
      * Generate the FOREIGN KEY SQL statements.
      *
-     * @param  Structure $structure
+     * @param Structure $structure The structure.
+     *
      * @return string|null
      *
      * @since 1.0.0
@@ -231,8 +242,9 @@ class Compiler
     /**
      * Compile a single FOREIGN KEY SQL statement.
      *
-     * @param  ForeignKeyDefinition $command
-     * @param  Structure $structure
+     * @param ForeignKeyDefinition $command The command.
+     * @param Structure $structure The structure.
+     *
      * @return string|null
      *
      * @since 1.0.0
@@ -264,8 +276,9 @@ class Compiler
     /**
      * Append the character set and collation to the SQL statement.
      *
-     * @param  string $sql
-     * @param  Structure $structure
+     * @param mixed $sql The sql.
+     * @param Structure $structure The structure.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -287,8 +300,9 @@ class Compiler
     /**
      * Append the storage engine to the SQL statement.
      *
-     * @param  string $sql
-     * @param  Structure $structure
+     * @param mixed $sql The sql.
+     * @param Structure $structure The structure.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -308,7 +322,8 @@ class Compiler
     /**
      * Compile the column definitions for the table.
      *
-     * @param  Structure $structure
+     * @param Structure $structure The structure.
+     *
      * @return array<int, string>
      *
      * @since 1.0.0
@@ -325,7 +340,8 @@ class Compiler
     /**
      * Extract and register commands (primary, unique, index) from column definitions.
      *
-     * @param  Structure $structure
+     * @param Structure $structure The structure.
+     *
      * @return void
      *
      * @since 1.0.0
@@ -352,8 +368,9 @@ class Compiler
     /**
      * Compile a single column definition.
      *
-     * @param  Definition $column
-     * @param  Structure $structure
+     * @param mixed $column The column.
+     * @param mixed $structure The structure.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -372,9 +389,10 @@ class Compiler
     /**
      * Add all applicable modifiers to a column definition.
      *
-     * @param  string $sql
-     * @param  Definition $column
-     * @param  Structure $structure
+     * @param mixed $sql The sql.
+     * @param mixed $column The column.
+     * @param mixed $structure The structure.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -392,8 +410,9 @@ class Compiler
     /**
      * Add UNSIGNED modifier to a column if applicable.
      *
-     * @param  Definition $column
-     * @param  Structure $structure
+     * @param mixed $column The column.
+     * @param mixed $structure The structure.
+     *
      * @return string|null
      *
      * @since 1.0.0
@@ -408,8 +427,9 @@ class Compiler
     /**
      * Add NULL/NOT NULL modifier to a column if applicable.
      *
-     * @param  Definition $column
-     * @param  Structure $structure
+     * @param Definition $column The column.
+     * @param Structure $structure The structure.
+     *
      * @return string|null
      *
      * @since 1.0.0
@@ -426,8 +446,9 @@ class Compiler
     /**
      * Add DEFAULT value modifier to a column if applicable.
      *
-     * @param  Definition $column
-     * @param  Structure $structure
+     * @param Definition $column The column.
+     * @param Structure $structure The structure.
+     *
      * @return string|null
      *
      * @since 1.0.0
@@ -442,8 +463,9 @@ class Compiler
     /**
      * Add COMMENT modifier to a column if applicable.
      *
-     * @param  Definition $column
-     * @param  Structure $structure
+     * @param Definition $column The column.
+     * @param Structure $structure The structure.
+     *
      * @return string|null
      *
      * @since 1.0.0
@@ -458,8 +480,9 @@ class Compiler
     /**
      * Add AUTO_INCREMENT modifier to a column if applicable.
      *
-     * @param  Definition $column
-     * @param  Structure $structure
+     * @param Definition $column The column.
+     * @param Structure $structure The structure.
+     *
      * @return string|null
      *
      * @since 1.0.0
@@ -474,7 +497,8 @@ class Compiler
     /**
      * Format the default value for SQL.
      *
-     * @param  mixed $value
+     * @param mixed $value The value.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -492,6 +516,15 @@ class Compiler
         return sprintf("'%s'", $value);
     }
 
+    /**
+     * Get the value.
+     *
+     * @param mixed $value The value.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     protected function get_value($value)
     {
         if ($value instanceof Expression) {
@@ -504,7 +537,8 @@ class Compiler
     /**
      * Get the formatted column name for SQL.
      *
-     * @param  Definition $column
+     * @param mixed $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -517,9 +551,11 @@ class Compiler
     /**
      * Get the SQL data type for a column.
      *
-     * @param  Definition $column
+     * @param mixed $column The column.
+     *
      * @return string
-     * @throws Exception
+     *
+     * @throws \Exception
      *
      * @since 1.0.0
      */
@@ -538,7 +574,8 @@ class Compiler
     /**
      * Get the SQL type for a string column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -551,7 +588,8 @@ class Compiler
     /**
      * Get the SQL type for a text column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -564,7 +602,8 @@ class Compiler
     /**
      * Get the SQL type for a medium text column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -577,7 +616,8 @@ class Compiler
     /**
      * Get the SQL type for a long text column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -590,7 +630,8 @@ class Compiler
     /**
      * Get the SQL type for a big integer column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -603,7 +644,8 @@ class Compiler
     /**
      * Get the SQL type for an integer column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -616,7 +658,8 @@ class Compiler
     /**
      * Get the SQL type for a float column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -633,7 +676,8 @@ class Compiler
     /**
      * Get the SQL type for a double column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -646,7 +690,8 @@ class Compiler
     /**
      * Get the SQL type for a decimal column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -659,7 +704,8 @@ class Compiler
     /**
      * Get the SQL type for a boolean column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -672,7 +718,8 @@ class Compiler
     /**
      * Get the SQL type for a tinyint column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -689,7 +736,8 @@ class Compiler
     /**
      * Get the SQL type for a date column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -702,7 +750,8 @@ class Compiler
     /**
      * Get the SQL type for a datetime column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -721,7 +770,8 @@ class Compiler
     /**
      * Get the SQL type for a time column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -734,7 +784,8 @@ class Compiler
     /**
      * Get the SQL type for a timestamp column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -753,7 +804,8 @@ class Compiler
     /**
      * Get the SQL type for an enum column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -766,7 +818,8 @@ class Compiler
     /**
      * Get the SQL type for a set column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -779,7 +832,8 @@ class Compiler
     /**
      * Get the SQL type for an IP address column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -792,7 +846,8 @@ class Compiler
     /**
      * Get the SQL type for a UUID column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -805,7 +860,8 @@ class Compiler
     /**
      * Get the SQL type for a year column.
      *
-     * @param  Definition $column
+     * @param Definition $column The column.
+     *
      * @return string
      *
      * @since 1.0.0
@@ -818,8 +874,9 @@ class Compiler
     /**
      * Check if a command exists in the structure.
      *
-     * @param  Structure $structure
-     * @param  string $name
+     * @param Structure $structure The structure.
+     * @param mixed $name The name.
+     *
      * @return bool
      *
      * @since 1.0.0
@@ -833,8 +890,9 @@ class Compiler
     /**
      * Get a command from the structure.
      *
-     * @param  Structure $structure
-     * @param  string $name
+     * @param Structure $structure The structure.
+     * @param mixed $name The name.
+     *
      * @return mixed|null
      *
      * @since 1.0.0

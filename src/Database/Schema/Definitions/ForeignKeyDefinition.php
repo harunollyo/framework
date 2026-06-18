@@ -26,6 +26,8 @@ class ForeignKeyDefinition extends Definition
      * Set ON UPDATE action to CASCADE.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function cascade_on_update()
     {
@@ -36,6 +38,8 @@ class ForeignKeyDefinition extends Definition
      * Set ON DELETE action to CASCADE.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function cascade_on_delete()
     {
@@ -46,6 +50,8 @@ class ForeignKeyDefinition extends Definition
      * Set ON UPDATE action to RESTRICT.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function restrict_on_update()
     {
@@ -56,6 +62,8 @@ class ForeignKeyDefinition extends Definition
      * Set ON DELETE action to RESTRICT.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function restrict_on_delete()
     {
@@ -66,6 +74,8 @@ class ForeignKeyDefinition extends Definition
      * Set ON UPDATE action to SET NULL.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function null_on_update()
     {
@@ -76,6 +86,8 @@ class ForeignKeyDefinition extends Definition
      * Set ON DELETE action to SET NULL.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function null_on_delete()
     {
@@ -86,6 +98,8 @@ class ForeignKeyDefinition extends Definition
      * Set ON UPDATE action to NO ACTION.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function no_action_on_update()
     {
@@ -96,6 +110,8 @@ class ForeignKeyDefinition extends Definition
      * Set ON DELETE action to NO ACTION.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function no_action_on_delete()
     {

@@ -21,6 +21,8 @@ abstract class BaseHook implements HookSubscriber
      * Get the priority for this hook. Can be overridden by subclasses.
      *
      * @return int Hook priority. Lower numbers correspond to earlier execution.
+     *
+     * @since 1.0.0
      */
     public function get_priority()
     {
@@ -32,15 +34,40 @@ abstract class BaseHook implements HookSubscriber
      * Can be overridden by subclasses.
      *
      * @return int Number of accepted arguments.
+     *
+     * @since 1.0.0
      */
     public function get_args_count()
     {
         return 1;
     }
 
+    /**
+     * Get the name.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     abstract public function get_name();
 
+    /**
+     * Get the type.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     abstract public function get_type();
 
+    /**
+     * Handle.
+     *
+     * @param mixed $args The positional arguments.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     abstract public function handle(...$args);
 }

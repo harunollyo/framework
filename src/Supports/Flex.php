@@ -25,12 +25,22 @@ use function Framework\Polyfill\array_first;
 class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonSerializable
 {
     /**
+     * The attributes.
+     *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $attributes = [];
 
     /**
-     * @param array $attributes
+     * Create a new instance.
+     *
+     * @param array $attributes The attributes array.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct(array $attributes = [])
     {
@@ -40,7 +50,11 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
     /**
      * Fill the attributes with the given array.
      *
-     * @param array $attributes
+     * @param array $attributes The attributes array.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     protected function fill(array $attributes)
     {
@@ -131,6 +145,8 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
      * @param string $name The attribute name.
      * @param mixed $value The value to set.
      *
+     * @return void
+     *
      * @since 1.0.0
      */
     public function __set($name, $value)
@@ -157,6 +173,8 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
      *
      * @param string $name The attribute name.
      *
+     * @return void
+     *
      * @since 1.0.0
      */
     public function __unset($name)
@@ -167,8 +185,11 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
     /**
      * Determine if the given offset exists.
      *
-     * @param  TKey  $offset
+     * @param mixed $offset The offset.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function offsetExists($offset): bool
     {
@@ -182,6 +203,15 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
      * @return TValue|null
      */
     #[\ReturnTypeWillChange]
+    /**
+     * OffsetGet.
+     *
+     * @param mixed $offset The offset.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function offsetGet($offset)
     {
         return $this->value($offset);
@@ -190,9 +220,12 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
     /**
      * Set the value at the given offset.
      *
-     * @param  TKey  $offset
-     * @param  TValue  $value
+     * @param mixed $offset The offset.
+     * @param mixed $value The value.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function offsetSet($offset, $value): void
     {
@@ -202,8 +235,11 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
     /**
      * Unset the value at the given offset.
      *
-     * @param  TKey  $offset
+     * @param mixed $offset The offset.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function offsetUnset($offset): void
     {
@@ -214,6 +250,8 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
      * Get an iterator for the attributes.
      *
      * @return ArrayIterator<TKey, TValue>
+     *
+     * @since 1.0.0
      */
     public function getIterator(): Traversable
     {
@@ -224,6 +262,8 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
      * Specify data which should be serialized to JSON.
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function jsonSerialize(): array
     {
@@ -233,8 +273,11 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
     /**
      * Convert the object to a JSON string.
      *
-     * @param  int  $options
+     * @param mixed $options The options array.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function to_json($options = 0)
     {

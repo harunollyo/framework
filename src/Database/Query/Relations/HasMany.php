@@ -29,6 +29,8 @@ class HasMany extends Relation
      * The foreign key on the related model that references the parent model.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $foreign_key;
 
@@ -36,6 +38,8 @@ class HasMany extends Relation
      * The local key on the parent model that is referenced by the foreign key.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $local_key;
 
@@ -49,9 +53,9 @@ class HasMany extends Relation
      * @param Model $parent The parent model instance
      * @param mixed $foreign_key The related table's foreign key
      * @param mixed $local_key The parent's local key
-     * 
+     *
      * @return void No return value
-     * 
+     *
      * @since 1.0.0
      */
     public function __construct(Model $related, Model $parent, $foreign_key, $local_key)
@@ -69,8 +73,8 @@ class HasMany extends Relation
      * whose foreign key equals that value to ensure only belonging children are
      * retrieved.
      *
-     * @return void No return value
-     * 
+     * @return void
+     *
      * @since 1.0.0
      */
     public function add_constraints()
@@ -89,9 +93,9 @@ class HasMany extends Relation
      * @param QueryBuilder $query The query builder instance
      * @param QueryBuilder $parent The parent query builder instance
      * @param mixed $columns The columns to select
-     * 
+     *
      * @return QueryBuilder The aggregate query
-     * 
+     *
      * @since 1.0.0
      */
     public function get_relation_existence_query(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
@@ -109,9 +113,9 @@ class HasMany extends Relation
      * @param QueryBuilder $query The query builder instance
      * @param QueryBuilder $parent The parent query builder instance
      * @param mixed $columns The columns to select
-     * 
+     *
      * @return QueryBuilder The aggregate query
-     * 
+     *
      * @since 1.0.0
      */
     public function get_relation_existence_query_for_self_relation(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
@@ -131,7 +135,7 @@ class HasMany extends Relation
      * Get the existence compare key for the relation.
      *
      * @return string The existence compare key
-     * 
+     *
      * @since 1.0.0
      */
     public function get_existence_compare_key()
@@ -143,7 +147,7 @@ class HasMany extends Relation
      * Get the qualified parent key name.
      *
      * @return string The qualified parent key name
-     * 
+     *
      * @since 1.0.0
      */
     public function get_qualified_parent_key_name()
@@ -155,7 +159,7 @@ class HasMany extends Relation
      * Get the foreign key name.
      *
      * @return string The foreign key name
-     * 
+     *
      * @since 1.0.0
      */
     public function get_foreign_key_name()
@@ -169,7 +173,7 @@ class HasMany extends Relation
      * Get the qualified foreign key name.
      *
      * @return string The qualified foreign key name
-     * 
+     *
      * @since 1.0.0
      */
     public function get_qualified_foreign_key_name()
@@ -183,7 +187,7 @@ class HasMany extends Relation
      * Returns a collection of child models matching the applied constraints.
      *
      * @return Collection The collection of related models
-     * 
+     *
      * @since 1.0.0
      */
     public function get_results()
@@ -198,9 +202,9 @@ class HasMany extends Relation
      * all required children in a single query.
      *
      * @param Collection $models The parent models
-     * 
-     * @return void No return value
-     * 
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     public function add_eager_constraints(Collection $models)
@@ -227,12 +231,12 @@ class HasMany extends Relation
      * parent under the relation name, defaulting to an empty collection when
      * none are present.
      *
-     * @param Collection<string, Model> $models The parent models to receive results
-     * @param Collection<string, Model> $results The related results to match
+     * @param Collection $models The models.
+     * @param Collection $results The results.
      * @param string $relation The relation name on the parent
-     * 
+     *
      * @return Collection The parent models with relations set
-     * 
+     *
      * @since 1.0.0
      */
     public function match(Collection $models, Collection $results, $relation)
@@ -253,10 +257,10 @@ class HasMany extends Relation
     /**
      * Build the dictionary for the relation from the results.
      *
-     * @param Collection<string, Model> $results The related results
-     * 
+     * @param Collection $results The results.
+     *
      * @return array The dictionary
-     * 
+     *
      * @since 1.0.0
      */
     protected function build_dictionary(Collection $results)
@@ -282,9 +286,9 @@ class HasMany extends Relation
      * delegates to the related model's create method to persist the record.
      *
      * @param array $attributes The attributes for the new child model
-     * 
+     *
      * @return Model The created related model instance
-     * 
+     *
      * @since 1.0.0
      */
     public function create(array $attributes)
@@ -302,9 +306,9 @@ class HasMany extends Relation
      * Set the foreign key attribute for the given attributes array.
      *
      * @param array $attributes The attributes array to modify
-     * 
+     *
      * @return array The modified attributes array
-     * 
+     *
      * @since 1.0.0
      */
     protected function set_foreign_attributes_for_create(array $attributes)
@@ -321,9 +325,9 @@ class HasMany extends Relation
      * for each set of attributes and adding it to the models array.
      *
      * @param array $attributes The attributes for the new child models
-     * 
+     *
      * @return array<Model> The array of created related models
-     * 
+     *
      * @since 1.0.0
      */
     public function create_many(array $attributes)
@@ -347,7 +351,7 @@ class HasMany extends Relation
      * Returns the key on the parent model that is used to match related records.
      *
      * @return string The local key name
-     * 
+     *
      * @since 1.0.0
      */
     public function get_local_key()

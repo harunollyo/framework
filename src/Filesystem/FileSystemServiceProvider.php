@@ -16,6 +16,13 @@ use Framework\ServiceProvider;
 
 class FileSystemServiceProvider extends ServiceProvider
 {
+    /**
+     * Register.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function register()
     {
         $this->app->alias('files', Filesystem::class);

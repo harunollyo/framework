@@ -18,14 +18,19 @@ class HigherOrderTapProxy
      * The target instance.
      *
      * @var object
+     *
+     * @since 1.0.0
      */
     protected $target;
 
     /**
      * Create a new proxy instance.
      *
-     * @param  object  $target
+     * @param mixed $target The target.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct($target)
     {
@@ -35,9 +40,12 @@ class HigherOrderTapProxy
     /**
      * Dynamically handle calls to the object.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param mixed $method The method name.
+     * @param mixed $parameters The parameters array.
+     *
      * @return mixed
+     *
+     * @since 1.0.0
      */
     public function __call($method, $parameters)
     {

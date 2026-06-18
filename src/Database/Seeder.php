@@ -23,8 +23,10 @@ class Seeder
 {
     /**
      * Store the called seeder classes
-     * 
+     *
      * @var string[]
+     *
+     * @since 1.0.0
      */
     protected static $called = [];
 
@@ -32,14 +34,19 @@ class Seeder
      * Track the already resolved seeders so that it doesn't run again
      *
      * @var string[]
+     *
+     * @since 1.0.0
      */
     protected static $resolved = [];
 
     /**
      * Call the seeders
      *
-     * @param  string|string[] $class
+     * @param mixed $class The class.
+     *
      * @return Seeder
+     *
+     * @since 1.0.0
      */
     public function call($class)
     {
@@ -57,8 +64,11 @@ class Seeder
     /**
      * Resolve the seeder
      *
-     * @param  string $class
+     * @param mixed $class The class.
+     *
      * @return Seeder
+     *
+     * @since 1.0.0
      */
     protected function resolve($class)
     {
@@ -69,6 +79,8 @@ class Seeder
      * Run the seeder
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function run()
     {
@@ -79,6 +91,8 @@ class Seeder
      * Run the seeders
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __invoke()
     {

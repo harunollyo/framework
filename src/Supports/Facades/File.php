@@ -47,6 +47,13 @@ use Framework\Facade;
 
 class File extends Facade
 {
+    /**
+     * Get the accessor.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     public static function get_accessor()
     {
         return 'files';

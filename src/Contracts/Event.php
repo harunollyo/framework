@@ -14,5 +14,12 @@ defined('ABSPATH') || exit;
 
 interface Event
 {
+    /**
+     * Handle.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function handle();
 }

@@ -18,6 +18,8 @@ class HigherOrderCollectionProxy
      * The collection instance.
      *
      * @var Collection
+     *
+     * @since 1.0.0
      */
     protected $collection;
 
@@ -25,6 +27,8 @@ class HigherOrderCollectionProxy
      * The method to call on the collection.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $method;
 
@@ -33,7 +37,9 @@ class HigherOrderCollectionProxy
      *
      * @param Collection $collection The collection instance.
      * @param string $method The method to call on the collection.
-     * 
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     public function __construct(Collection $collection, string $method)
@@ -45,9 +51,10 @@ class HigherOrderCollectionProxy
     /**
      * Get the value of the property.
      *
-     * @param  string $key The key of the property.
+     * @param string $key The key of the property.
+     *
      * @return mixed
-     * 
+     *
      * @since 1.0.0
      */
     public function __get($key)
@@ -60,10 +67,11 @@ class HigherOrderCollectionProxy
     /**
      * Call the method on the collection.
      *
-     * @param  string $method The method to call on the collection.
-     * @param  array $parameters The parameters to pass to the method.
+     * @param string $method The method to call on the collection.
+     * @param array $parameters The parameters to pass to the method.
+     *
      * @return mixed
-     * 
+     *
      * @since 1.0.0
      */
     public function __call($method, $parameters)

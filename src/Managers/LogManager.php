@@ -19,8 +19,24 @@ use function Framework\base_path;
 
 class LogManager
 {
+    /**
+     * The path.
+     *
+     * @var string
+     *
+     * @since 1.0.0
+     */
     protected string $path;
 
+    /**
+     * Create a new instance.
+     *
+     * @param ?string $path The path.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function __construct(?string $path = null)
     {
         $this->path = $path ?? base_path('themeum-framework.log');
@@ -29,8 +45,11 @@ class LogManager
     /**
      * Log a debug message.
      *
-     * @param  string $message
+     * @param mixed $message The message.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function debug($message)
     {
@@ -40,8 +59,11 @@ class LogManager
     /**
      * Log an info message.
      *
-     * @param  string $message
+     * @param mixed $message The message.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function info($message)
     {
@@ -51,8 +73,11 @@ class LogManager
     /**
      * Log a warning message.
      *
-     * @param  string $message
+     * @param mixed $message The message.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function warning($message)
     {
@@ -62,8 +87,11 @@ class LogManager
     /**
      * Log an error message.
      *
-     * @param  string $message
+     * @param mixed $message The message.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function error($message)
     {
@@ -73,8 +101,11 @@ class LogManager
     /**
      * Log an emergency message.
      *
-     * @param  string $message
+     * @param mixed $message The message.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function emergency($message)
     {
@@ -84,8 +115,11 @@ class LogManager
     /**
      * Log a critical message.
      *
-     * @param  string $message
+     * @param mixed $message The message.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function critical($message)
     {
@@ -95,8 +129,11 @@ class LogManager
     /**
      * Log an alert message.
      *
-     * @param  string $message
+     * @param mixed $message The message.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function alert($message)
     {
@@ -107,6 +144,8 @@ class LogManager
      * Clear the log file.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function clear()
     {
@@ -116,9 +155,12 @@ class LogManager
     /**
      * Format the message.
      *
-     * @param  string $message
-     * @param  string $type
+     * @param mixed $message The message.
+     * @param mixed $type The type.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function format($message, $type)
     {
@@ -133,9 +175,12 @@ class LogManager
     /**
      * Write the message to the log file.
      *
-     * @param  string $message
-     * @param  string $type
+     * @param mixed $message The message.
+     * @param mixed $type The type.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function write($message, $type)
     {

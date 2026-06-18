@@ -26,6 +26,8 @@ class QueryCompiler
      * The database connection instance used to execute queries.
      *
      * @var \Framework\Database\Connection\Connection
+     *
+     * @since 1.0.0
      */
     protected $connection;
 
@@ -35,6 +37,8 @@ class QueryCompiler
      * @param Connection $connection The database connection instance.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct(Connection $connection)
     {
@@ -45,6 +49,8 @@ class QueryCompiler
      * The components of the query to compile.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $components = [
         'aggregate',
@@ -63,6 +69,8 @@ class QueryCompiler
      * Get the mysql safe datetime format string.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_date_format()
     {
@@ -76,6 +84,8 @@ class QueryCompiler
      * @param array $values The values to insert.
      *
      * @return string The compiled insert query.
+     *
+     * @since 1.0.0
      */
     public function compile_insert(QueryBuilder $query, array $values)
     {
@@ -107,6 +117,8 @@ class QueryCompiler
      * @param array $values The values to update.
      *
      * @return string The compiled update query.
+     *
+     * @since 1.0.0
      */
     public function compile_update(QueryBuilder $query, array $values)
     {
@@ -128,6 +140,8 @@ class QueryCompiler
      * @param array $values The values to update.
      *
      * @return string The compiled update columns query.
+     *
+     * @since 1.0.0
      */
     protected function compile_update_columns(QueryBuilder $query, array $values)
     {
@@ -147,6 +161,8 @@ class QueryCompiler
      * @param string $where The where clause.
      *
      * @return string The compiled update with joins query.
+     *
+     * @since 1.0.0
      */
     protected function compile_update_with_joins(QueryBuilder $query, $table, $columns, $where)
     {
@@ -170,6 +186,8 @@ class QueryCompiler
      * @param string $where The where clause.
      *
      * @return string The compiled update without joins query.
+     *
+     * @since 1.0.0
      */
     protected function compile_update_without_joins(QueryBuilder $query, $table, $columns, $where)
     {
@@ -197,6 +215,8 @@ class QueryCompiler
      * @param QueryBuilder $query The query builder instance.
      *
      * @return string The compiled delete query.
+     *
+     * @since 1.0.0
      */
     public function compile_delete(QueryBuilder $query)
     {
@@ -219,6 +239,8 @@ class QueryCompiler
      * @param string $where The where clause.
      *
      * @return string The compiled delete with joins query.
+     *
+     * @since 1.0.0
      */
     protected function compile_delete_with_joins(QueryBuilder $query, $table, $where)
     {
@@ -244,6 +266,8 @@ class QueryCompiler
      * @param string $where The where clause.
      *
      * @return string The compiled delete without joins query.
+     *
+     * @since 1.0.0
      */
     protected function compile_delete_without_joins(QueryBuilder $query, $table, $where)
     {
@@ -260,6 +284,8 @@ class QueryCompiler
      * @param QueryBuilder $query The query builder instance.
      *
      * @return string The compiled select query.
+     *
+     * @since 1.0.0
      */
     public function compile_select(QueryBuilder $query)
     {
@@ -286,6 +312,8 @@ class QueryCompiler
      * @param QueryBuilder $query The query builder instance.
      *
      * @return array The compiled components.
+     *
+     * @since 1.0.0
      */
     protected function compile_components(QueryBuilder $query)
     {
@@ -308,6 +336,8 @@ class QueryCompiler
      * @param array $segments The segments to concatenate.
      *
      * @return string The concatenated segments.
+     *
+     * @since 1.0.0
      */
     protected function concatenate($segments)
     {
@@ -323,6 +353,8 @@ class QueryCompiler
      * @param array $aggregate The aggregate query.
      *
      * @return string The compiled aggregate query.
+     *
+     * @since 1.0.0
      */
     protected function compile_aggregate(QueryBuilder $query, $aggregate)
     {
@@ -348,6 +380,8 @@ class QueryCompiler
      * @param array $columns The columns query.
      *
      * @return string|null The compiled columns query.
+     *
+     * @since 1.0.0
      */
     protected function compile_columns(QueryBuilder $query, $columns)
     {
@@ -373,6 +407,8 @@ class QueryCompiler
      * @param array $table The table query.
      *
      * @return string The compiled from query.
+     *
+     * @since 1.0.0
      */
     protected function compile_from(QueryBuilder $query, $table)
     {
@@ -386,6 +422,8 @@ class QueryCompiler
      * @param array $joins The joins query.
      *
      * @return string The compiled joins query.
+     *
+     * @since 1.0.0
      */
     protected function compile_joins(QueryBuilder $query, $joins)
     {
@@ -412,6 +450,8 @@ class QueryCompiler
      * @param QueryBuilder $query The query builder instance.
      *
      * @return string The compiled wheres query.
+     *
+     * @since 1.0.0
      */
     protected function compile_wheres(QueryBuilder $query)
     {
@@ -434,6 +474,8 @@ class QueryCompiler
      * @param QueryBuilder $query The query builder instance.
      *
      * @return array The compiled wheres to array query.
+     *
+     * @since 1.0.0
      */
     protected function compile_wheres_to_array(QueryBuilder $query)
     {
@@ -452,6 +494,8 @@ class QueryCompiler
      * @param array $sql The where clauses.
      *
      * @return string The concatenated where clauses.
+     *
+     * @since 1.0.0
      */
     protected function concatenate_where_clauses($query, $sql)
     {
@@ -470,6 +514,8 @@ class QueryCompiler
      * @param string $value The value to remove the leading boolean from.
      *
      * @return string The value with the leading boolean removed.
+     *
+     * @since 1.0.0
      */
     protected function remove_leading_boolean($value)
     {
@@ -483,6 +529,8 @@ class QueryCompiler
      * @param array $groups The groups query.
      *
      * @return string The compiled groups query.
+     *
+     * @since 1.0.0
      */
     protected function compile_groups(QueryBuilder $query, $groups)
     {
@@ -495,6 +543,8 @@ class QueryCompiler
      * @param QueryBuilder $query The query builder instance.
      *
      * @return string The compiled havings query.
+     *
+     * @since 1.0.0
      */
     protected function compile_havings(QueryBuilder $query)
     {
@@ -515,6 +565,8 @@ class QueryCompiler
      * @param array $having The having query.
      *
      * @return string The compiled having query.
+     *
+     * @since 1.0.0
      */
     protected function compile_having($having)
     {
@@ -542,6 +594,8 @@ class QueryCompiler
      * @param array $having The having query.
      *
      * @return string The compiled having basic query.
+     *
+     * @since 1.0.0
      */
     protected function compile_having_basic($having)
     {
@@ -559,6 +613,8 @@ class QueryCompiler
      * @param array $having The having query.
      *
      * @return string The compiled nested havings query.
+     *
+     * @since 1.0.0
      */
     protected function compile_nested_havings($having)
     {
@@ -574,6 +630,8 @@ class QueryCompiler
      * @param array $having The having query.
      *
      * @return string The compiled having between query.
+     *
+     * @since 1.0.0
      */
     protected function compile_having_between($having)
     {
@@ -596,6 +654,8 @@ class QueryCompiler
      * @param array $having The having query.
      *
      * @return string The compiled having null query.
+     *
+     * @since 1.0.0
      */
     protected function compile_having_null($having)
     {
@@ -608,6 +668,8 @@ class QueryCompiler
      * @param array $having The having query.
      *
      * @return string The compiled having not null query.
+     *
+     * @since 1.0.0
      */
     protected function compile_having_not_null($having)
     {
@@ -620,6 +682,8 @@ class QueryCompiler
      * @param array $having The having query.
      *
      * @return string The compiled having expression query.
+     *
+     * @since 1.0.0
      */
     protected function compile_having_expression($having)
     {
@@ -633,6 +697,8 @@ class QueryCompiler
      * @param array|null $orders The orders query.
      *
      * @return string The compiled orders query.
+     *
+     * @since 1.0.0
      */
     protected function compile_orders(QueryBuilder $query, $orders)
     {
@@ -650,6 +716,8 @@ class QueryCompiler
      * @param array $orders The orders query.
      *
      * @return array The compiled orders to array query.
+     *
+     * @since 1.0.0
      */
     protected function compile_orders_to_array(QueryBuilder $query, $orders)
     {
@@ -665,6 +733,8 @@ class QueryCompiler
      * @param int $limit The limit query.
      *
      * @return string The compiled limit query.
+     *
+     * @since 1.0.0
      */
     protected function compile_limit(QueryBuilder $query, $limit)
     {
@@ -678,6 +748,8 @@ class QueryCompiler
      * @param array $offset The offset query.
      *
      * @return string The compiled offset query.
+     *
+     * @since 1.0.0
      */
     protected function compile_offset(QueryBuilder $query, $offset)
     {
@@ -690,6 +762,8 @@ class QueryCompiler
      * @param QueryBuilder $query The query builder instance.
      *
      * @return string The compiled exists query.
+     *
+     * @since 1.0.0
      */
     public function compile_exists(QueryBuilder $query)
     {
@@ -708,6 +782,8 @@ class QueryCompiler
      * @param QueryBuilder $query The query builder instance.
      *
      * @return string The compiled truncate query.
+     *
+     * @since 1.0.0
      */
     public function compile_truncate(QueryBuilder $query)
     {
@@ -725,6 +801,8 @@ class QueryCompiler
      * @param array $update The columns to update.
      *
      * @return string The compiled upsert query.
+     *
+     * @since 1.0.0
      */
     public function compile_upsert(QueryBuilder $query, array $values, array $update)
     {
@@ -748,6 +826,8 @@ class QueryCompiler
      * @param array $columns The columns query.
      *
      * @return string The compiled columnize query.
+     *
+     * @since 1.0.0
      */
     public function columnize(array $columns)
     {
@@ -760,6 +840,8 @@ class QueryCompiler
      * @param string|Expression $value The value query.
      *
      * @return string The compiled wrap query.
+     *
+     * @since 1.0.0
      */
     public function wrap($value)
     {
@@ -780,6 +862,8 @@ class QueryCompiler
      * @param array $value The value query.
      *
      * @return string The compiled is expression query.
+     *
+     * @since 1.0.0
      */
     public function is_expression($value)
     {
@@ -792,6 +876,8 @@ class QueryCompiler
      * @param string|Expression $expression The expression query.
      *
      * @return string The compiled get value query.
+     *
+     * @since 1.0.0
      */
     public function get_value($expression)
     {
@@ -808,6 +894,8 @@ class QueryCompiler
      * @param string $value The value query.
      *
      * @return string The compiled wrap value query.
+     *
+     * @since 1.0.0
      */
     public function wrap_value($value)
     {
@@ -821,6 +909,8 @@ class QueryCompiler
      * @param string|null $prefix The prefix to use for the table.
      *
      * @return string The compiled wrap table query.
+     *
+     * @since 1.0.0
      */
     public function wrap_table($table, $prefix = null)
     {
@@ -843,6 +933,8 @@ class QueryCompiler
      * @param array $segments The segments query.
      *
      * @return string The compiled wrap segments query.
+     *
+     * @since 1.0.0
      */
     protected function wrap_segments($segments)
     {
@@ -861,6 +953,8 @@ class QueryCompiler
      * @param string $value The value query.
      *
      * @return string The compiled wrap aliased value query.
+     *
+     * @since 1.0.0
      */
     protected function wrap_aliased_value($value)
     {
@@ -873,8 +967,11 @@ class QueryCompiler
      * Compile the wrap aliased table query.
      *
      * @param string $table The table query.
+     * @param mixed $prefix The prefix.
      *
      * @return string The compiled wrap aliased table query.
+     *
+     * @since 1.0.0
      */
     protected function wrap_aliased_table($table, $prefix = null)
     {
@@ -897,6 +994,8 @@ class QueryCompiler
      * @param string|Expression $value The value query.
      *
      * @return string The compiled parameter query.
+     *
+     * @since 1.0.0
      */
     public function parameter($value)
     {
@@ -911,6 +1010,8 @@ class QueryCompiler
      * @param array $values The values query.
      *
      * @return string The compiled parameterize query.
+     *
+     * @since 1.0.0
      */
     protected function parameterize(array $values)
     {
@@ -924,6 +1025,8 @@ class QueryCompiler
      * @param array $where The where query.
      *
      * @return string The compiled where raw query.
+     *
+     * @since 1.0.0
      */
     protected function where_raw(QueryBuilder $builder, $where)
     {
@@ -937,6 +1040,8 @@ class QueryCompiler
      * @param array $where The where query.
      *
      * @return string The compiled where basic query.
+     *
+     * @since 1.0.0
      */
     protected function where_basic(QueryBuilder $builder, $where)
     {
@@ -958,6 +1063,8 @@ class QueryCompiler
      * @param array $where The where query.
      *
      * @return string The compiled where like query.
+     *
+     * @since 1.0.0
      */
     protected function where_like(QueryBuilder $query, $where)
     {
@@ -973,6 +1080,8 @@ class QueryCompiler
      * @param array $where The where query.
      *
      * @return string The compiled where in query.
+     *
+     * @since 1.0.0
      */
     protected function where_in(QueryBuilder $query, $where)
     {
@@ -990,9 +1099,12 @@ class QueryCompiler
     /**
      * Compile the where not in query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where not in query.
+     *
+     * @since 1.0.0
      */
     protected function where_not_in(QueryBuilder $query, $where)
     {
@@ -1010,9 +1122,12 @@ class QueryCompiler
     /**
      * Compile the where in raw query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where in raw query.
+     *
+     * @since 1.0.0
      */
     protected function where_in_raw(QueryBuilder $query, $where)
     {
@@ -1030,9 +1145,12 @@ class QueryCompiler
     /**
      * Compile the where not in raw query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where not in raw query.
+     *
+     * @since 1.0.0
      */
     protected function where_not_in_raw(QueryBuilder $query, $where)
     {
@@ -1050,9 +1168,12 @@ class QueryCompiler
     /**
      * Compile the where null query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where null query.
+     *
+     * @since 1.0.0
      */
     protected function where_null(QueryBuilder $query, $where)
     {
@@ -1062,9 +1183,12 @@ class QueryCompiler
     /**
      * Compile the where not null query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where not null query.
+     *
+     * @since 1.0.0
      */
     protected function where_not_null(QueryBuilder $query, $where)
     {
@@ -1074,9 +1198,12 @@ class QueryCompiler
     /**
      * Compile the where between query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where between query.
+     *
+     * @since 1.0.0
      */
     protected function where_between(QueryBuilder $query, $where)
     {
@@ -1096,9 +1223,12 @@ class QueryCompiler
     /**
      * Compile the where date query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where date query.
+     *
+     * @since 1.0.0
      */
     protected function where_date(QueryBuilder $query, $where)
     {
@@ -1108,9 +1238,12 @@ class QueryCompiler
     /**
      * Compile the where time query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where time query.
+     *
+     * @since 1.0.0
      */
     protected function where_time(QueryBuilder $query, $where)
     {
@@ -1120,10 +1253,13 @@ class QueryCompiler
     /**
      * Compile the date based where query.
      *
-     * @param $type The type query.
-     * @param $where The where query.
+     * @param mixed $type The type.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled date based where query.
+     *
+     * @since 1.0.0
      */
     protected function date_based_where($type, QueryBuilder $query, $where)
     {
@@ -1141,9 +1277,12 @@ class QueryCompiler
     /**
      * Compile the where column query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where column query.
+     *
+     * @since 1.0.0
      */
     protected function where_column(QueryBuilder $query, $where)
     {
@@ -1158,9 +1297,12 @@ class QueryCompiler
     /**
      * Compile the where nested query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where nested query.
+     *
+     * @since 1.0.0
      */
     protected function where_nested(QueryBuilder $query, $where)
     {
@@ -1178,9 +1320,12 @@ class QueryCompiler
     /**
      * Compile the where subquery query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where subquery query.
+     *
+     * @since 1.0.0
      */
     protected function where_subquery(QueryBuilder $query, $where)
     {
@@ -1197,9 +1342,12 @@ class QueryCompiler
     /**
      * Compile the where exists query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where exists query.
+     *
+     * @since 1.0.0
      */
     protected function where_exists(QueryBuilder $query, $where)
     {
@@ -1212,9 +1360,12 @@ class QueryCompiler
     /**
      * Compile the where not exists query.
      *
-     * @param $where The where query.
+     * @param QueryBuilder $query The query builder instance.
+     * @param mixed $where The where.
      *
      * @return string The compiled where not exists query.
+     *
+     * @since 1.0.0
      */
     protected function where_not_exists(QueryBuilder $query, $where)
     {
@@ -1231,6 +1382,8 @@ class QueryCompiler
      * @param array $values The values to update.
      *
      * @return array The prepared bindings.
+     *
+     * @since 1.0.0
      */
     public function prepare_bindings_for_update($bindings, $values)
     {
@@ -1255,6 +1408,8 @@ class QueryCompiler
      * @param array $bindings The bindings for the query.
      *
      * @return array The prepared bindings.
+     *
+     * @since 1.0.0
      */
     public function prepare_bindings_for_delete($bindings)
     {
@@ -1272,6 +1427,8 @@ class QueryCompiler
      * @param array $bindings The bindings to substitute into the raw SQL.
      *
      * @return string The substituted raw SQL.
+     *
+     * @since 1.0.0
      */
     public function substitute_bindings_into_raw_sql($sql, array $bindings = [])
     {

@@ -24,6 +24,8 @@ class EventManager
      * The listeners array.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected array $listeners = [];
 
@@ -31,6 +33,8 @@ class EventManager
      * Create a new event manager instance.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct()
     {
@@ -41,6 +45,8 @@ class EventManager
      * Load the listeners from the cache.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     protected function load_listeners()
     {
@@ -58,8 +64,13 @@ class EventManager
     /**
      * Dispatch the event.
      *
-     * @param  mixed $event
+     * @param mixed $event The event.
+     *
      * @return void
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function dispatch($event)
     {
@@ -86,9 +97,12 @@ class EventManager
     /**
      * Dispatch the event if the boolean is true.
      *
-     * @param  Closure $boolean
-     * @param  mixed $event
+     * @param Closure $boolean The boolean.
+     * @param mixed $event The event.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function dispatch_if(Closure $boolean, $event)
     {
@@ -100,9 +114,12 @@ class EventManager
     /**
      * Dispatch the event unless the boolean is true.
      *
-     * @param  Closure $boolean
-     * @param  mixed $event
+     * @param Closure $boolean The boolean.
+     * @param mixed $event The event.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function dispatch_unless(Closure $boolean, $event)
     {
@@ -111,6 +128,18 @@ class EventManager
         }
     }
 
+    /**
+     * Resolve.
+     *
+     * @param mixed $listener The listener.
+     * @param mixed $event The event.
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
+     */
     protected function resolve($listener, $event)
     {
         if (!is_subclass_of($listener, Listener::class)) {

@@ -15,9 +15,11 @@ use Framework\Contracts\Rule;
 abstract class BaseRule implements Rule
 {
     /**
-     * check for strict data type 
-     * 
+     * Check for strict data type
+     *
      * @var bool
+     *
+     * @since 1.0.0
      */
     protected $check_strict_data_type = false;
 
@@ -26,6 +28,8 @@ abstract class BaseRule implements Rule
      * The field key being validated.
      *
      * @var string|null
+     *
+     * @since 1.0.0
      */
     protected $key;
 
@@ -33,6 +37,8 @@ abstract class BaseRule implements Rule
      * The value to validate.
      *
      * @var mixed
+     *
+     * @since 1.0.0
      */
     protected $value;
 
@@ -40,6 +46,8 @@ abstract class BaseRule implements Rule
      * The value/values for specific rule.
      *
      * @var mixed
+     *
+     * @since 1.0.0
      */
     protected $rule_value;
 
@@ -47,6 +55,8 @@ abstract class BaseRule implements Rule
      * All applied rules for validation.
      *
      * @var mixed
+     *
+     * @since 1.0.0
      */
     protected $all_applied_rules;
 
@@ -54,17 +64,23 @@ abstract class BaseRule implements Rule
      * The input data.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $data;
 
     /**
      * Create a new rule instance.
      *
-     * @param string|null $key   The field name.
-     * @param mixed       $value The value to validate.
-     * @param mixed       $rule_value The value to that can be passed to the rule.
-     * @param array       $data  The input data.
-     * @param array       $all_applied_rules  All applied rules
+     * @param string|null $key The field name.
+     * @param mixed $value The value to validate.
+     * @param mixed $rule_value The value to that can be passed to the rule.
+     * @param array $data The input data.
+     * @param array $all_applied_rules All applied rules
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct($key = null, $value = null, $rule_value = null, $data = [], $all_applied_rules = [])
     {
@@ -78,8 +94,11 @@ abstract class BaseRule implements Rule
     /**
      * Set the field key.
      *
-     * @param  string $key
+     * @param string $key The key.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function set_key(string $key)
     {
@@ -89,8 +108,11 @@ abstract class BaseRule implements Rule
     /**
      * Set the value to validate.
      *
-     * @param  mixed $value
+     * @param mixed $value The value.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function set_value($value)
     {
@@ -101,6 +123,8 @@ abstract class BaseRule implements Rule
      * Get the value.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_value()
     {
@@ -109,8 +133,10 @@ abstract class BaseRule implements Rule
 
     /**
      * Check if the rule is for a specific data type.
-     * 
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_check_strict_data_type()
     {
@@ -121,6 +147,8 @@ abstract class BaseRule implements Rule
      * Determine if the value is valid.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_valid()
     {
@@ -132,9 +160,11 @@ abstract class BaseRule implements Rule
     }
 
     /**
-     * ignore rule check if value is empty
-     * 
+     * Ignore rule check if value is empty
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function ignore_rule_check()
     {
@@ -145,6 +175,8 @@ abstract class BaseRule implements Rule
      * Get the last key segment.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function last_key_segment()
     {
@@ -157,6 +189,8 @@ abstract class BaseRule implements Rule
      * Validate the rule with desired value.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     abstract public function validate_rule();
 
@@ -164,6 +198,8 @@ abstract class BaseRule implements Rule
      * Get the error message for this rule.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {

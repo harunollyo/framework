@@ -17,6 +17,13 @@ use Framework\Wordpress\Hooks\Actions\RegisterRestApi;
 
 class HookServiceProvider extends ServiceProvider
 {
+    /**
+     * The defaults.
+     *
+     * @var string
+     *
+     * @since 1.0.0
+     */
     protected static $defaults = [
         'actions' => [RegisterRestApi::class],
         'filters' => [],
@@ -26,6 +33,8 @@ class HookServiceProvider extends ServiceProvider
      * Register the hooks to the application.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function register()
     {
@@ -39,7 +48,8 @@ class HookServiceProvider extends ServiceProvider
      * Get the hooks from the configuration file.
      *
      * @return array
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     protected function hooks()
     {
@@ -69,6 +79,8 @@ class HookServiceProvider extends ServiceProvider
      * Add the action hooks on after the application booted.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function boot()
     {

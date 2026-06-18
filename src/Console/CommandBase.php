@@ -19,27 +19,47 @@ use function Framework\collection;
 abstract class CommandBase
 {
     /**
+     * The summary.
+     *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $summary;
 
     /**
+     * The description.
+     *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $description;
 
     /**
+     * The args.
+     *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $args = [];
 
     /**
-     * @var 'after_wp_load' | 'before_wp_load'
+     * The when.
+     *
+     * @var 'after_wp_load'
+     *
+     * @since 1.0.0
      */
     protected $when;
 
     /**
+     * The synopsis.
+     *
      * @var Collection<Synopsis>
+     *
+     * @since 1.0.0
      */
     protected $synopsis;
 
@@ -47,6 +67,8 @@ abstract class CommandBase
      * Initialize the command
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct()
     {
@@ -57,10 +79,12 @@ abstract class CommandBase
     /**
      * Run the command
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     abstract protected function run($args, $assoc);
 
@@ -68,6 +92,8 @@ abstract class CommandBase
      * Prepare the command
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function prepare()
     {
@@ -77,10 +103,12 @@ abstract class CommandBase
     /**
      * Check if the command passed the validation
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function passed($args, $assoc)
     {
@@ -91,22 +119,51 @@ abstract class CommandBase
      * Get the stub path
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function stub_path()
     {
         return __DIR__ . '/stubs';
     }
 
+    /**
+     * Cli error.
+     *
+     * @param string $message The message.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     protected function cli_error(string $message): void
     {
         call_user_func(['\\WP_CLI', 'error'], $message);
     }
 
+    /**
+     * Cli success.
+     *
+     * @param string $message The message.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     protected function cli_success(string $message): void
     {
         call_user_func(['\\WP_CLI', 'success'], $message);
     }
 
+    /**
+     * Cli line.
+     *
+     * @param string $message The message.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     protected function cli_line(string $message): void
     {
         call_user_func(['\\WP_CLI', 'line'], $message);
@@ -115,9 +172,11 @@ abstract class CommandBase
     /**
      * Set the command summary
      *
-     * @param string $summary
+     * @param mixed $summary The summary.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     protected function summary($summary)
     {
@@ -129,9 +188,11 @@ abstract class CommandBase
     /**
      * Set the command description
      *
-     * @param string $description
+     * @param mixed $description The description.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     protected function description($description)
     {
@@ -143,9 +204,11 @@ abstract class CommandBase
     /**
      * Set the command synopsis
      *
-     * @param Synopsis $synopsis
+     * @param Synopsis $synopsis The synopsis.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     protected function synopsis(Synopsis $synopsis)
     {
@@ -157,9 +220,11 @@ abstract class CommandBase
     /**
      * Set the command when
      *
-     * @param 'after_wp_load' | 'before_wp_load' $when
+     * @param mixed $when The when.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     protected function when($when)
     {
@@ -172,6 +237,8 @@ abstract class CommandBase
      * Get the command arguments
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function args()
     {
@@ -199,10 +266,12 @@ abstract class CommandBase
     /**
      * Run the command
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __invoke($args, $assoc)
     {

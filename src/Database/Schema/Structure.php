@@ -24,6 +24,8 @@ class Structure
      * The name of the table (without prefix).
      *
      * @var string|null
+     *
+     * @since 1.0.0
      */
     protected $table = null;
 
@@ -31,6 +33,8 @@ class Structure
      * The database connection instance.
      *
      * @var Connection
+     *
+     * @since 1.0.0
      */
     protected $connection = null;
 
@@ -38,13 +42,17 @@ class Structure
      * The table prefix.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $prefix = '';
 
     /**
      * The columns defined for the table.
      *
-     * @var array<string, Definition>
+     * @var array<string,
+     *
+     * @since 1.0.0
      */
     protected $columns = [];
 
@@ -52,6 +60,8 @@ class Structure
      * The storage engine for the table.
      *
      * @var string|null
+     *
+     * @since 1.0.0
      */
     protected $engine = null;
 
@@ -59,6 +69,8 @@ class Structure
      * The character set for the table.
      *
      * @var string|null
+     *
+     * @since 1.0.0
      */
     protected $charset = null;
 
@@ -66,6 +78,8 @@ class Structure
      * The collation for the table.
      *
      * @var string|null
+     *
+     * @since 1.0.0
      */
     protected $collate = null;
 
@@ -73,6 +87,8 @@ class Structure
      * The commands for the table structure.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $commands = [];
 
@@ -81,6 +97,8 @@ class Structure
      *
      * @param string $table The table name (without prefix)
      * @param Connection $connection The database connection instance
+     *
+     * @return void
      *
      * @since 1.0.0
      */
@@ -123,7 +141,8 @@ class Structure
     /**
      * Wrap the table name with the query compiler.
      *
-     * @param  string $table The table name
+     * @param string $table The table name
+     *
      * @return string
      *
      * @since 1.0.0
@@ -188,7 +207,9 @@ class Structure
      *
      * @param string $engine The engine name (e.g., 'InnoDB', 'MyISAM')
      *
-     * @throws Exception If the engine is invalid
+     * @return void
+     *
+     * @throws \Exception
      *
      * @since 1.0.0
      */
@@ -208,7 +229,7 @@ class Structure
      *
      * @param string $charset The charset (e.g., 'utf8mb4', 'utf8')
      *
-     * @throws Exception If the charset is invalid
+     * @return void
      *
      * @since 1.0.0
      */
@@ -222,7 +243,7 @@ class Structure
      *
      * @param string $collate The collation (e.g., 'utf8mb4_unicode_ci', 'utf8_general_ci')
      *
-     * @throws Exception If the collation is invalid
+     * @return void
      *
      * @since 1.0.0
      */
@@ -246,6 +267,8 @@ class Structure
     /**
      * Add an auto-incrementing BIGINT primary key column named 'ID'.
      *
+     * @param string $name The name.
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -258,8 +281,9 @@ class Structure
     /**
      * Add a TIMESTAMP column.
      *
-     * @param  string $name The column name
-     * @param  int $precision The precision for the timestamp
+     * @param string $name The column name
+     * @param int $precision The precision for the timestamp
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -272,7 +296,8 @@ class Structure
     /**
      * Add 'created_at' and 'updated_at' timestamp columns.
      *
-     * @param  int $precision The precision for the timestamp columns
+     * @param int $precision The precision for the timestamp columns
+     *
      * @return void
      *
      * @since 1.0.0
@@ -286,9 +311,10 @@ class Structure
     /**
      * Add an INTEGER column.
      *
-     * @param  string $name The column name
-     * @param  bool $auto_increment Whether the column is auto-increment
-     * @param  bool $unsigned Whether the column is unsigned
+     * @param string $name The column name
+     * @param bool $auto_increment Whether the column is auto-increment
+     * @param bool $unsigned Whether the column is unsigned
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -301,9 +327,10 @@ class Structure
     /**
      * Add a TINYINT column.
      *
-     * @param  string $name The column name
-     * @param  bool $auto_increment Whether the column is auto-increment
-     * @param  bool $unsigned Whether the column is unsigned
+     * @param string $name The column name
+     * @param bool $auto_increment Whether the column is auto-increment
+     * @param bool $unsigned Whether the column is unsigned
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -316,9 +343,10 @@ class Structure
     /**
      * Add a BIGINT column.
      *
-     * @param  string $name The column name
-     * @param  bool $auto_increment Whether the column is auto-increment
-     * @param  bool $unsigned Whether the column is unsigned
+     * @param string $name The column name
+     * @param bool $auto_increment Whether the column is auto-increment
+     * @param bool $unsigned Whether the column is unsigned
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -331,8 +359,9 @@ class Structure
     /**
      * Add an unsigned BIGINT column.
      *
-     * @param  string $name The column name
-     * @param  bool $auto_increment Whether the column is auto-increment
+     * @param string $name The column name
+     * @param bool $auto_increment Whether the column is auto-increment
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -345,8 +374,9 @@ class Structure
     /**
      * Add an unsigned INTEGER column.
      *
-     * @param  string $name The column name
-     * @param  bool $auto_increment Whether the column is auto-increment
+     * @param string $name The column name
+     * @param bool $auto_increment Whether the column is auto-increment
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -359,8 +389,9 @@ class Structure
     /**
      * Add an unsigned TINYINT column.
      *
-     * @param  string $name The column name
-     * @param  bool $auto_increment Whether the column is auto-increment
+     * @param string $name The column name
+     * @param bool $auto_increment Whether the column is auto-increment
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -373,7 +404,8 @@ class Structure
     /**
      * Add an auto-incrementing unsigned INTEGER column.
      *
-     * @param  string $name The column name
+     * @param string $name The column name
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -386,7 +418,8 @@ class Structure
     /**
      * Add an auto-incrementing unsigned BIGINT column.
      *
-     * @param  string $name The column name
+     * @param string $name The column name
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -399,9 +432,10 @@ class Structure
     /**
      * Add a DECIMAL column.
      *
-     * @param  string $name The column name
-     * @param  int $total The total number of digits
-     * @param  int $places The number of decimal places
+     * @param string $name The column name
+     * @param int $total The total number of digits
+     * @param int $places The number of decimal places
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -428,8 +462,9 @@ class Structure
     /**
      * Add a STRING (VARCHAR) column.
      *
-     * @param  string $name The column name
-     * @param  int|null $length The length of the string
+     * @param string $name The column name
+     * @param int|null $length The length of the string
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -486,8 +521,9 @@ class Structure
     /**
      * Add a FLOAT column.
      *
-     * @param  string $name The column name
-     * @param  int $precision The precision for the float
+     * @param string $name The column name
+     * @param int $precision The precision for the float
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -500,7 +536,8 @@ class Structure
     /**
      * Add a DOUBLE column.
      *
-     * @param  string $name The column name
+     * @param string $name The column name
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -513,7 +550,8 @@ class Structure
     /**
      * Add a DATE column.
      *
-     * @param  string $name The column name
+     * @param string $name The column name
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -526,8 +564,9 @@ class Structure
     /**
      * Add a DATETIME column.
      *
-     * @param  string $name The column name
-     * @param  int $precision The precision for the datetime
+     * @param string $name The column name
+     * @param int $precision The precision for the datetime
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -540,8 +579,9 @@ class Structure
     /**
      * Add a TIME column.
      *
-     * @param  string $name The column name
-     * @param  int $precision The precision for the time
+     * @param string $name The column name
+     * @param int $precision The precision for the time
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -554,8 +594,9 @@ class Structure
     /**
      * Add an ENUM column.
      *
-     * @param  string $name The column name
-     * @param  array $values The values for the enum
+     * @param string $name The column name
+     * @param array $values The values for the enum
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -568,8 +609,9 @@ class Structure
     /**
      * Add a SET column.
      *
-     * @param  string $name The column name
-     * @param  array $values The values for the set
+     * @param string $name The column name
+     * @param array $values The values for the set
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -582,7 +624,8 @@ class Structure
     /**
      * Add an IP address column.
      *
-     * @param  string $name The column name
+     * @param string $name The column name
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -595,7 +638,8 @@ class Structure
     /**
      * Add a UUID column.
      *
-     * @param  string $name The column name
+     * @param string $name The column name
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -608,7 +652,8 @@ class Structure
     /**
      * Add a YEAR column.
      *
-     * @param  string $name The column name
+     * @param string $name The column name
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -621,9 +666,10 @@ class Structure
     /**
      * Add a column definition to the table.
      *
-     * @param  string $type The column type
-     * @param  string $name The column name
-     * @param  array $parameters Additional parameters for the column
+     * @param string $type The column type
+     * @param string $name The column name
+     * @param array $parameters Additional parameters for the column
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -640,7 +686,8 @@ class Structure
     /**
      * Add a column definition object to the columns array.
      *
-     * @param  Definition $definition The column definition
+     * @param Definition $definition The column definition
+     *
      * @return Definition
      *
      * @since 1.0.0
@@ -735,7 +782,8 @@ class Structure
     /**
      * Define a foreign key constraint.
      *
-     * @param string $foreign_key The column name for the foreign key
+     * @param string $column The column.
+     * @param mixed $name The name.
      *
      * @return ForeignKeyDefinition
      *

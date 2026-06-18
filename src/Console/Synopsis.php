@@ -29,10 +29,12 @@ class Synopsis extends Flex
     /**
      * Handle dynamic method calls
      *
-     * @param string $method
-     * @param array $parameters
+     * @param mixed $method The method name.
+     * @param mixed $parameters The parameters array.
      *
      * @return static
+     *
+     * @since 1.0.0
      */
     public static function __callStatic($method, $parameters)
     {

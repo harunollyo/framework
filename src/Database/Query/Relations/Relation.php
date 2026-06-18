@@ -25,6 +25,8 @@ abstract class Relation
      * The related model instance for the relationship.
      *
      * @var Model
+     *
+     * @since 1.0.0
      */
     protected $related;
 
@@ -32,6 +34,8 @@ abstract class Relation
      * The parent model instance holding the relationship.
      *
      * @var Model
+     *
+     * @since 1.0.0
      */
     protected $parent;
 
@@ -39,6 +43,8 @@ abstract class Relation
      * The query builder instance for retrieving related data.
      *
      * @var QueryBuilder
+     *
+     * @since 1.0.0
      */
     protected $query;
 
@@ -46,6 +52,8 @@ abstract class Relation
      * Whether to apply constraints to the relation query.
      *
      * @var bool
+     *
+     * @since 1.0.0
      */
     protected static $constraints = true;
 
@@ -53,6 +61,8 @@ abstract class Relation
      * The count of self joins.
      *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected static $self_join_count = 0;
 
@@ -63,10 +73,12 @@ abstract class Relation
      * the related model's table. Concrete implementations will add specific
      * constraints appropriate for the relationship type.
      *
-     * @param  Model $related The related model instance
-     * @param  Model $parent The parent model holding the relation
+     * @param Model $related The related model instance
+     * @param Model $parent The parent model holding the relation
+     *
      * @return void No return value
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function __construct(Model $related, Model $parent)
     {
@@ -83,8 +95,9 @@ abstract class Relation
      * Concrete relations should limit the query based on the relation keys so
      * that fetching returns only records related to the parent context.
      *
-     * @return void No return value
-     * @since  1.0.0
+     * @return void
+     *
+     * @since 1.0.0
      */
     abstract public function add_constraints();
 
@@ -95,7 +108,8 @@ abstract class Relation
      * type. Used when accessing the relation as a property on the parent model.
      *
      * @return mixed The relation result set
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     abstract public function get_results();
 
@@ -105,9 +119,11 @@ abstract class Relation
      * Accepts the array of parent models and scopes the query to fetch all
      * related records needed in a single query using where-in style logic.
      *
-     * @param  Collection $models The parent models to constrain by
-     * @return void No return value
-     * @since  1.0.0
+     * @param Collection $models The parent models to constrain by
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     abstract public function add_eager_constraints(Collection $models);
 
@@ -117,11 +133,13 @@ abstract class Relation
      * Accepts the query builder for the relation and the parent model and
      * returns the aggregate query for the relation.
      *
-     * @param  QueryBuilder $query The query builder for the relation
-     * @param  QueryBuilder $parent The parent model
-     * @param  mixed $columns The columns to select
+     * @param QueryBuilder $query The query builder for the relation
+     * @param QueryBuilder $parent The parent model
+     * @param mixed $columns The columns to select
+     *
      * @return QueryBuilder The aggregate query
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_relation_existence_query(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
     {
@@ -136,7 +154,8 @@ abstract class Relation
      * Get the qualified parent key name for the relation.
      *
      * @return string The qualified parent key name
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_qualified_parent_key_name()
     {
@@ -146,9 +165,12 @@ abstract class Relation
     /**
      * Summary of get_relation_existence_count_query
      *
-     * @param  QueryBuilder $query
-     * @param  QueryBuilder $parent
+     * @param QueryBuilder $query The query builder instance.
+     * @param QueryBuilder $parent The parent.
+     *
      * @return QueryBuilder
+     *
+     * @since 1.0.0
      */
     public function get_relation_existence_count_query(QueryBuilder $query, QueryBuilder $parent)
     {
@@ -165,11 +187,13 @@ abstract class Relation
      * Builds a dictionary keyed by relation keys and assigns the results to
      * the appropriate relation property on each model.
      *
-     * @param  Collection $models The parent models receiving results
-     * @param  mixed $results The retrieved related results
-     * @param  string $relation The relation name on the parent
+     * @param Collection $models The parent models receiving results
+     * @param mixed $results The retrieved related results
+     * @param string $relation The relation name on the parent
+     *
      * @return array The parent models with relations populated
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     abstract public function match(Collection $models, Collection $results, $relation);
 
@@ -179,8 +203,11 @@ abstract class Relation
      * Delegates to the underlying query builder get method. Used by concrete
      * relations to return multiple results.
      *
+     * @param mixed $columns The columns.
+     *
      * @return Collection A collection of related models
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get($columns = ['*'])
     {
@@ -193,8 +220,10 @@ abstract class Relation
      * Delegates to the query builder first method. Used by relations that
      * return a single related model instance.
      *
+     * @param mixed $columns The columns.
+     *
      * @return mixed The first related model or null when none
-     * 
+     *
      * @since 1.0.0
      */
     public function first($columns = ['*'])
@@ -212,9 +241,9 @@ abstract class Relation
      * @param mixed $operator The comparison operator or value when two args
      * @param mixed $value The value to compare against when operator provided
      * @param string $boolean The boolean operator to use
-     * 
+     *
      * @return $this The relation instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function where($column, $operator = null, $value = null, $boolean = 'and')
@@ -231,9 +260,11 @@ abstract class Relation
      *
      * @param string $column The column to filter
      * @param array $values The list of allowed values
-     * 
+     * @param mixed $boolean The boolean.
+     * @param mixed $not The not.
+     *
      * @return $this The relation instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function where_in($column, array $values, $boolean = 'and', $not = false)
@@ -250,9 +281,9 @@ abstract class Relation
      *
      * @param string $column The column to sort by
      * @param string $direction The direction, ASC or DESC
-     * 
+     *
      * @return $this The relation instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function order_by($column, $direction = 'ASC')
@@ -268,9 +299,9 @@ abstract class Relation
      * fluent chaining behavior.
      *
      * @param int $limit The maximum number of records to return
-     * 
+     *
      * @return $this The relation instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function limit($limit)
@@ -286,9 +317,9 @@ abstract class Relation
      * the relation instance to continue chaining.
      *
      * @param int $offset The number of records to skip
-     * 
+     *
      * @return $this The relation instance for method chaining
-     * 
+     *
      * @since 1.0.0
      */
     public function offset($offset)
@@ -304,7 +335,7 @@ abstract class Relation
      * cases beyond the convenience methods provided on the relation.
      *
      * @return QueryBuilder The relation's query builder instance
-     * 
+     *
      * @since 1.0.0
      */
     public function get_query()
@@ -319,7 +350,7 @@ abstract class Relation
      * constructing queries and hydrating results.
      *
      * @return Model The related model instance
-     * 
+     *
      * @since 1.0.0
      */
     public function get_related()
@@ -334,7 +365,7 @@ abstract class Relation
      * constructing custom constraints or accessing parent keys.
      *
      * @return Model The parent model instance
-     * 
+     *
      * @since 1.0.0
      */
     public function get_parent()
@@ -349,7 +380,7 @@ abstract class Relation
      * This is used by with_count() to match count results back to parent models.
      *
      * @return string The local key name
-     * 
+     *
      * @since 1.0.0
      */
     abstract public function get_local_key();
@@ -358,9 +389,9 @@ abstract class Relation
      * Get a hash for the relation count query.
      *
      * @param bool $increment_join_count Whether to increment the join count
-     * 
+     *
      * @return string The hash for the relation count query
-     * 
+     *
      * @since 1.0.0
      */
     public function get_relation_count_hash($increment_join_count = false)
@@ -372,9 +403,9 @@ abstract class Relation
      * Qualify a column name with the related table name.
      *
      * @param string $key The column name to qualify
-     * 
+     *
      * @return string The qualified column name
-     * 
+     *
      * @since 1.0.0
      */
     public function qualify_column(string $key)
@@ -386,9 +417,9 @@ abstract class Relation
      * Temporarily disable constraints for the duration of the callback.
      *
      * @param Closure $callback The callback to execute with constraints disabled
-     * 
+     *
      * @return mixed The return value of the callback
-     * 
+     *
      * @since 1.0.0
      */
     public static function without_constraints(Closure $callback)
@@ -409,9 +440,11 @@ abstract class Relation
      *
      * @param string $method The method name
      * @param array $parameters The method parameters
-     * 
+     *
      * @return mixed The result of the method call
-     * 
+     *
+     * @throws \BadMethodCallException
+     *
      * @since 1.0.0
      */
     public function __call($method, $parameters)

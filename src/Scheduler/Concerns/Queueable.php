@@ -23,6 +23,8 @@ trait Queueable
      * The arguments that will be passed to the job's handle method.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $args = [];
 
@@ -30,6 +32,8 @@ trait Queueable
      * The priority of the job. Lower numbers indicate higher priority.
      *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected $priority = 10;
 
@@ -37,6 +41,8 @@ trait Queueable
      * The delay in seconds before the job should be processed.
      *
      * @var int|null
+     *
+     * @since 1.0.0
      */
     protected $delay = null;
 
@@ -44,6 +50,8 @@ trait Queueable
      * The number of jobs to process in a single batch.
      *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected $batch = Config::DEFAULT_BATCH_SIZE;
 
@@ -51,6 +59,8 @@ trait Queueable
      * Get the class name of the job resolver.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_resolver()
     {
@@ -60,8 +70,11 @@ trait Queueable
     /**
      * Set the arguments for the job.
      *
-     * @param  array|mixed $values
+     * @param mixed $values The values.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function args($values = [])
     {
@@ -75,6 +88,8 @@ trait Queueable
      * Get the arguments assigned to the job.
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function get_args()
     {
@@ -84,8 +99,11 @@ trait Queueable
     /**
      * Set the job priority.
      *
-     * @param  int $priority
+     * @param int $priority The priority.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function priority(int $priority)
     {
@@ -98,6 +116,8 @@ trait Queueable
      * Get the job priority, clamped between 0 and 255.
      *
      * @return int
+     *
+     * @since 1.0.0
      */
     public function get_priority()
     {
@@ -107,8 +127,11 @@ trait Queueable
     /**
      * Set the delay for the job execution.
      *
-     * @param  int|null $moment
+     * @param mixed $moment The moment.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function delay($moment = null)
     {
@@ -121,6 +144,8 @@ trait Queueable
      * Get the delay before the job is executed.
      *
      * @return int|null
+     *
+     * @since 1.0.0
      */
     public function get_delay()
     {
@@ -130,8 +155,11 @@ trait Queueable
     /**
      * Set the number of items per batch.
      *
-     * @param  int $size
+     * @param int $size The size.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function batch(int $size)
     {
@@ -144,6 +172,8 @@ trait Queueable
      * Get the batch size.
      *
      * @return int
+     *
+     * @since 1.0.0
      */
     public function get_batch()
     {
@@ -153,8 +183,11 @@ trait Queueable
     /**
      * Set the number of times the job should be retried on failure.
      *
-     * @param  int $attempts
+     * @param int $attempts The attempts.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function retry(int $attempts)
     {
@@ -167,6 +200,8 @@ trait Queueable
      * Get the number of times the job should be retried on failure.
      *
      * @return int
+     *
+     * @since 1.0.0
      */
     public function get_retry()
     {

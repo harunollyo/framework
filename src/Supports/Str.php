@@ -27,6 +27,8 @@ class Str
      * The increment styles.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected static $increment_styles = [
         'dash' => [
@@ -42,8 +44,11 @@ class Str
     /**
      * Convert a numeric string to a corresponding number.
      *
-     * @param  string $value
+     * @param mixed $value The value.
+     *
      * @return string|int|float
+     *
+     * @since 1.0.0
      */
     public static function to_number($value)
     {
@@ -62,8 +67,11 @@ class Str
      * This function sanitizes the input string according to the Sanitizer::TITLE rule,
      * which is used to sanitize title strings.
      *
-     * @param  string $value The string to sanitize.
+     * @param string $value The string to sanitize.
+     *
      * @return string The sanitized string.
+     *
+     * @since 1.0.0
      */
     public static function slug($value)
     {
@@ -77,7 +85,7 @@ class Str
      * @param string $style The style of the increment. Available styles are 'dash' and 'regular'.
      *
      * @return string The incremented string.
-     * 
+     *
      * @since 1.0.0
      */
     public static function increment($value, $style = 'dash')
@@ -114,7 +122,7 @@ class Str
      * @param string $charlist The characters to trim.
      *
      * @return string The trimmed string.
-     * 
+     *
      * @since 1.0.0
      */
     public static function trim($value, $charlist = null)
@@ -137,7 +145,7 @@ class Str
      * @param string $charlist The characters to left trim.
      *
      * @return string The left trimmed string.
-     * 
+     *
      * @since 1.0.0
      */
     public static function ltrim($value, $charlist = null)
@@ -160,7 +168,7 @@ class Str
      * @param string $charlist The characters to right trim.
      *
      * @return string The right trimmed string.
-     * 
+     *
      * @since 1.0.0
      */
     public static function rtrim($value, $charlist = null)
@@ -182,7 +190,7 @@ class Str
      * @param string $value The string to squish.
      *
      * @return string The squished string.
-     * 
+     *
      * @since 1.0.0
      */
     public static function squish($value)
@@ -199,7 +207,7 @@ class Str
      * @param string $encoding The encoding of the string.
      *
      * @return string The substring.
-     * 
+     *
      * @since 1.0.0
      */
     public static function substr($value, $start, $length = null, $encoding = 'UTF-8')
@@ -214,7 +222,7 @@ class Str
      * @param int $limit The limit of the substring.
      *
      * @return string The substring.
-     * 
+     *
      * @since 1.0.0
      */
     public static function take($value, int $limit)
@@ -232,7 +240,7 @@ class Str
      * @param string $value The string to convert to base64.
      *
      * @return string The base64 string.
-     * 
+     *
      * @since 1.0.0
      */
     public static function to_base64($value)
@@ -240,6 +248,13 @@ class Str
         return base64_encode($value);
     }
 
+    /**
+     * Uuid.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public static function uuid()
     {
         return wp_generate_uuid4();
@@ -254,7 +269,7 @@ class Str
      * @param bool $case_sensitive Whether to perform a case-sensitive search.
      *
      * @return string The replaced string.
-     * 
+     *
      * @since 1.0.0
      */
     public static function replace($search, $replace, $subject, $case_sensitive = true)
@@ -282,7 +297,7 @@ class Str
      * @param string $value The string to convert to uppercase.
      *
      * @return string The uppercase string.
-     * 
+     *
      * @since 1.0.0
      */
     public static function upper($value)
@@ -296,7 +311,7 @@ class Str
      * @param string $value The string to convert to lowercase.
      *
      * @return string The lowercase string.
-     * 
+     *
      * @since 1.0.0
      */
     public static function lower($value)
@@ -310,7 +325,7 @@ class Str
      * @param string $value The string to convert.
      *
      * @return string The string with the first character converted to uppercase.
-     * 
+     *
      * @since 1.0.0
      */
     public static function ucfirst($value)
@@ -324,7 +339,7 @@ class Str
      * @param string $value The string to convert.
      *
      * @return string The string with the first character converted to lowercase.
-     * 
+     *
      * @since 1.0.0
      */
     public static function lcfirst($value)
@@ -339,7 +354,7 @@ class Str
      * @param string $separators The characters to consider as word separators.
      *
      * @return string The string with the first character of each word converted to uppercase.
-     * 
+     *
      * @since 1.0.0
      */
     public static function ucwords($value, $separators = " \t\r\n\f\v")
@@ -357,7 +372,7 @@ class Str
      * @param string $value The string to convert.
      *
      * @return string The pascal case string.
-     * 
+     *
      * @since 1.0.0
      */
     public static function pascal($value)
@@ -375,7 +390,7 @@ class Str
      * @param string $value The string to convert.
      *
      * @return string The camel case string.
-     * 
+     *
      * @since 1.0.0
      */
     public static function camel($value)
@@ -389,7 +404,7 @@ class Str
      * @param string $value The string to convert.
      *
      * @return string The snake case string.
-     * 
+     *
      * @since 1.0.0
      */
     public static function snake($value)
@@ -404,7 +419,7 @@ class Str
      * @param string|array $needles The substring to search for.
      *
      * @return bool Whether the string starts with the substring.
-     * 
+     *
      * @since 1.0.0
      */
     public static function starts_with($haystack, $needles)
@@ -432,7 +447,7 @@ class Str
      * @param bool $case_sensitive Whether to perform a case-sensitive search.
      *
      * @return array The array of strings.
-     * 
+     *
      * @since 1.0.0
      */
     public static function split(string $separator, string $value, bool $case_sensitive = false)
@@ -443,6 +458,16 @@ class Str
         return preg_split($pattern, $value);
     }
 
+    /**
+     * After.
+     *
+     * @param string $subject The subject.
+     * @param string $search The search.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public static function after(string $subject, string $search)
     {
         if (empty($search)) {
@@ -458,6 +483,16 @@ class Str
         return substr($subject, $position + strlen($search));
     }
 
+    /**
+     * Before.
+     *
+     * @param string $subject The subject.
+     * @param string $search The search.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public static function before(string $subject, string $search)
     {
         if (empty($search)) {
@@ -473,6 +508,16 @@ class Str
         return substr($subject, 0, $position);
     }
 
+    /**
+     * After last.
+     *
+     * @param string $subject The subject.
+     * @param string $search The search.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public static function after_last(string $subject, string $search)
     {
         if (empty($search)) {
@@ -488,6 +533,16 @@ class Str
         return substr($subject, $position + strlen($search));
     }
 
+    /**
+     * Before last.
+     *
+     * @param string $subject The subject.
+     * @param string $search The search.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public static function before_last(string $subject, string $search)
     {
         if (empty($search)) {

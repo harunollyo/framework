@@ -25,10 +25,12 @@ trait DependencyResolvable
     /**
      * Resolve the dependencies for the given parameters.
      *
-     * @param array<ReflectionParameter> $parameters
-     * @param array<mixed> $primitives
+     * @param array $parameters The parameters array.
+     * @param array $primitives The primitives.
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     protected function resolve_dependencies(array $parameters, array $primitives = []): array
     {
@@ -50,6 +52,18 @@ trait DependencyResolvable
         return $dependencies;
     }
 
+    /**
+     * Resolve primitive.
+     *
+     * @param ReflectionParameter $parameter The parameter.
+     * @param array $primitives The primitives.
+     *
+     * @return void
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
+     */
     protected function resolve_primitive(ReflectionParameter $parameter, array $primitives = [])
     {
         $param_name = $parameter->getName();
@@ -72,10 +86,13 @@ trait DependencyResolvable
     /**
      * Resolve the dependencies for the given method.
      *
-     * @param  string|object $class
-     * @param  string $method
+     * @param mixed $class The class.
+     * @param string $method The method name.
+     * @param array $primitives The primitives.
+     *
      * @return array<mixed>
-     * @throws ReflectionException
+     *
+     * @since 1.0.0
      */
     protected function resolve_method_dependencies($class, string $method, array $primitives = [])
     {

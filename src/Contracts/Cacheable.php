@@ -17,7 +17,11 @@ interface Cacheable
     /**
      * Get the cache key.
      *
+     * @param ?string $path The path.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function cache(?string $path = null);
 }

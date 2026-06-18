@@ -166,30 +166,40 @@ class Sanitizer
 
     /**
      * Input data.
-     * 
+     *
      * @var array<key:int,value:mixed>
+     *
+     * @since 1.0.0
      */
     protected $data;
 
     /**
      * Sanitized data.
-     * 
+     *
      * @var array<key:int,value:mixed>
+     *
+     * @since 1.0.0
      */
     protected $sanitized_data = [];
 
     /**
      * Sanitization rules.
-     * 
+     *
      * @var array<key:int,value:mixed>
+     *
+     * @since 1.0.0
      */
     protected $rules;
 
     /**
      * Create a new Sanitizer instance.
-     * 
-     * @param array $data
-     * @param array $rules
+     *
+     * @param array $data The data payload.
+     * @param array $rules The rules.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct(array $data = [], array $rules = [])
     {
@@ -201,8 +211,10 @@ class Sanitizer
 
     /**
      * Get the sanitized data.
-     * 
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function get_sanitized_data()
     {
@@ -212,10 +224,12 @@ class Sanitizer
     /**
      * Sanitize the data.
      *
-     * @param array $data
-     * @param array $rules
-     * 
+     * @param array $data The data payload.
+     * @param array $rules The rules.
+     *
      * @return static
+     *
+     * @since 1.0.0
      */
     public static function make(array $data = [], array $rules = [])
     {
@@ -226,6 +240,8 @@ class Sanitizer
      * Run sanitizer
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function run_sanitizer()
     {
@@ -239,19 +255,14 @@ class Sanitizer
      * Recursively traverses the input data structure according to a dot-notated rule key,
      * handling wildcard segments (e.g., *) to apply sanitization rules at dynamic levels.
      *
-     * @param mixed $current_data               The current level of data being inspected. This is a portion
-     *                                          of the original data array.
+     * @param mixed $current_data The current level of data being inspected. This is a portion
+     * @param array $key_segments The remaining parts (split by '.') of the rule key that
+     * @param array $traversed_path_stack The stack of key_segments already traversed so far. This is used
+     * @param string $rule A sanitization rule to apply on the current data.
      *
-     * @param array $key_segments               The remaining parts (split by '.') of the rule key that
-     *                                          still need to be resolved. e.g. 'items.*.id' would be  ['items', '*', 'id']
-     *
-     * @param array $traversed_path_stack       The stack of key_segments already traversed so far. This is used
-     *                                          to reconstruct the current dot-notated key (e.g., 'items.0.id')
-     *                                          for both error messages and setting validated values.
-     *
-     * @param string $rule                      A sanitization rule to apply on the current data.
-     * 
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function traverse_and_sanitize($current_data, $key_segments, $traversed_path_stack, $rule)
     {
@@ -293,6 +304,8 @@ class Sanitizer
      * @param mixed $value The value to set at the specified path in the sanitized data array.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function set_sanitized_data($keys, $value)
     {
@@ -310,11 +323,14 @@ class Sanitizer
 
     /**
      * Apply sanitization.
-     * 
-     * @param  mixed $value
-     * @param  string|callable|null $type
-     * @param  array $data
+     *
+     * @param mixed $value The value.
+     * @param mixed $type The type.
+     * @param array $data The data payload.
+     *
      * @return mixed
+     *
+     * @since 1.0.0
      */
     public static function apply_rule($value, $type, array $data = [])
     {

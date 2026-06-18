@@ -15,32 +15,36 @@ interface Rule
     /**
      * Check the validity.
      *
-     * @since 1.0.0
-     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_valid();
 
     /**
      * Get the error message.
      *
-     * @since 1.0.0
-     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message();
 
     /**
      * Get the value.
      *
-     * @since 1.0.0
-     *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_value();
 
     /**
-     * Check if the rule is for a specific data type. 
+     * Check if the rule is for a specific data type.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
      */
     public function is_check_strict_data_type();
 }

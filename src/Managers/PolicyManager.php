@@ -33,6 +33,8 @@ class PolicyManager
      * The array of registered policies or the policies data from cache.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $policies = [];
 
@@ -40,6 +42,8 @@ class PolicyManager
      * The currently resolved user.
      *
      * @var mixed
+     *
+     * @since 1.0.0
      */
     protected $user;
 
@@ -47,6 +51,10 @@ class PolicyManager
      * PolicyManager constructor.
      *
      * Loads and registers policies from the cache file.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct()
     {
@@ -58,6 +66,8 @@ class PolicyManager
      * Load the policies from the cached policies file.
      *
      * @return $this|null
+     *
+     * @since 1.0.0
      */
     protected function load_policies()
     {
@@ -76,6 +86,8 @@ class PolicyManager
      * Register the loaded policies for each model.
      *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function register_policies()
     {
@@ -89,9 +101,12 @@ class PolicyManager
     /**
      * Register an individual model-policy mapping.
      *
-     * @param  string $model
-     * @param  string $policy
+     * @param string $model The model instance.
+     * @param string $policy The policy.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function register_policy(string $model, string $policy)
     {
@@ -101,8 +116,11 @@ class PolicyManager
     /**
      * Resolve the policy object for a given model.
      *
-     * @param  mixed $model
+     * @param mixed $model The model instance.
+     *
      * @return mixed|null
+     *
+     * @since 1.0.0
      */
     protected function resolve_policy($model)
     {
@@ -118,8 +136,11 @@ class PolicyManager
     /**
      * Determine if a policy exists for the given model.
      *
-     * @param  string $model
+     * @param mixed $model The model instance.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function has_policy($model)
     {
@@ -129,8 +150,11 @@ class PolicyManager
     /**
      * Get the class name of the policy for the given model.
      *
-     * @param  string $model
+     * @param mixed $model The model instance.
+     *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function policy($model)
     {
@@ -140,10 +164,16 @@ class PolicyManager
     /**
      * Authorize an ability against a model instance or class.
      *
-     * @param  string $ability
-     * @param  mixed $model
+     * @param string $ability The ability.
+     * @param mixed $model The model instance.
+     * @param array $arguments The method arguments.
+     *
      * @return bool|mixed
-     * @throws AuthorizationException
+     *
+     * @throws \AuthorizationException
+     * @throws \InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function authorize(string $ability, $model = null, array $arguments = [])
     {
@@ -202,9 +232,13 @@ class PolicyManager
     /**
      * Determine if the current user is allowed to perform the given ability.
      *
-     * @param  string $ability
-     * @param  mixed $model
+     * @param string $ability The ability.
+     * @param mixed $model The model instance.
+     * @param array $arguments The method arguments.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function allows(string $ability, $model = null, array $arguments = [])
     {
@@ -218,9 +252,13 @@ class PolicyManager
     /**
      * Determine if the current user is denied from performing the given ability.
      *
-     * @param  string $ability
-     * @param  mixed $model
+     * @param string $ability The ability.
+     * @param mixed $model The model instance.
+     * @param array $arguments The method arguments.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function denies(string $ability, $model = null, array $arguments = [])
     {
@@ -231,6 +269,8 @@ class PolicyManager
      * Get the current user object.
      *
      * @return mixed
+     *
+     * @since 1.0.0
      */
     protected function get_current_user()
     {

@@ -33,6 +33,8 @@ class DB extends Facade
      * Get the accessor for the DB facade
      *
      * @return string The accessor name
+     *
+     * @since 1.0.0
      */
     public static function get_accessor()
     {

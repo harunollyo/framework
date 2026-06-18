@@ -29,11 +29,13 @@ class Scheduler
      * It generates a unique security key for asynchronous worker authentication if one does not exist,
      * clears any previously scheduled cron events to avoid conflicts or duplicate executions,
      * and registers the primary cron schedule to handle background tasks.
-     * 
+     *
      * Note: This method is intended to be called once during the plugin activation or initialization phase.
      * For themeum/framework app we can call this at app installation or activation hooks.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public static function setup()
     {
@@ -49,10 +51,12 @@ class Scheduler
      *
      * This key serves as a shared secret to authenticate internal asynchronous HTTP requests
      * sent to the background worker. It prevents unauthorized parties from triggering task
-     * execution. If no key is found in the persistent options storage, a new unique 
+     * execution. If no key is found in the persistent options storage, a new unique
      * identifier (UUID) is generated and saved.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected static function create_async_worker_key()
     {
@@ -67,12 +71,14 @@ class Scheduler
      *
      * This method is crucial for maintaining a clean state within the WordPress cron system.
      * It first checks if there is a pending execution for the scheduler's specific cron event
-     * using the event name defined in the configuration. If an event is found, it retrieves 
-     * its next scheduled timestamp and proceeds to unschedule it. This prevents the 
-     * accumulation of multiple identical cron events and ensures that when the scheduler 
+     * using the event name defined in the configuration. If an event is found, it retrieves
+     * its next scheduled timestamp and proceeds to unschedule it. This prevents the
+     * accumulation of multiple identical cron events and ensures that when the scheduler
      * is re-initialized, it doesn't conflict with previously set tasks or stale schedules.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected static function reset_scheduled_cron()
     {
@@ -88,13 +94,15 @@ class Scheduler
     /**
      * Schedules the primary background cron event if it hasn't been registered yet.
      *
-     * This method acts as the entry point for registering the recurring scheduler task within 
-     * the WordPress cron system. It first checks for the existence of the event to ensure 
-     * idempotency and avoid duplicate scheduling. If the event is not present, it 
-     * schedules a new recurring event starting immediately, using the customized event 
+     * This method acts as the entry point for registering the recurring scheduler task within
+     * the WordPress cron system. It first checks for the existence of the event to ensure
+     * idempotency and avoid duplicate scheduling. If the event is not present, it
+     * schedules a new recurring event starting immediately, using the customized event
      * name and execution interval defined in the configuration.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected static function schedule_cron()
     {
@@ -110,14 +118,16 @@ class Scheduler
     /**
      * Registers a custom cron execution interval within the WordPress environment.
      *
-     * This method hooks into the 'cron_schedules' filter to inject a new recurring interval 
-     * definition. Since WordPress does not provide a one-minute interval by default, this 
-     * function explicitly defines it using the unique identifier from the configuration. 
-     * By adding this custom schedule, the system can then utilize it to trigger the 
-     * background scheduler at a higher frequency, ensuring that tasks are processed 
+     * This method hooks into the 'cron_schedules' filter to inject a new recurring interval
+     * definition. Since WordPress does not provide a one-minute interval by default, this
+     * function explicitly defines it using the unique identifier from the configuration.
+     * By adding this custom schedule, the system can then utilize it to trigger the
+     * background scheduler at a higher frequency, ensuring that tasks are processed
      * promptly every minute.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected static function create_cron_interval()
     {
@@ -134,13 +144,15 @@ class Scheduler
     /**
      * Hooks the main scheduler execution logic to the recurring cron event.
      *
-     * This method attaches the 'run' method to the specific WordPress cron action 
-     * hook defined in the configuration. This linkage is what allows the WordPress 
-     * cron system to actually trigger the scheduler's task processing logic at 
-     * the defined intervals (e.g., every minute). Without this hook, the 
+     * This method attaches the 'run' method to the specific WordPress cron action
+     * hook defined in the configuration. This linkage is what allows the WordPress
+     * cron system to actually trigger the scheduler's task processing logic at
+     * the defined intervals (e.g., every minute). Without this hook, the
      * scheduled event would fire but no code would be executed.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected static function trigger_event_every_minute()
     {
@@ -150,13 +162,15 @@ class Scheduler
     /**
      * Hooks the cleanup logic to the daily cron event.
      *
-     * This method attaches the 'handle_cleanup' method to the specific WordPress cron action 
-     * hook defined in the configuration. This linkage is what allows the WordPress 
-     * cron system to actually trigger the scheduler's cleanup logic at 
-     * the defined intervals (e.g., daily). Without this hook, the 
+     * This method attaches the 'handle_cleanup' method to the specific WordPress cron action
+     * hook defined in the configuration. This linkage is what allows the WordPress
+     * cron system to actually trigger the scheduler's cleanup logic at
+     * the defined intervals (e.g., daily). Without this hook, the
      * scheduled event would fire but no code would be executed.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected static function trigger_event_daily_cleanup()
     {
@@ -168,15 +182,17 @@ class Scheduler
      * Registers AJAX actions for the async worker, allowing it to be triggered
      * via both authenticated and non-authenticated requests.
      *
-     * This method hooks into WordPress's AJAX system to provide a secure endpoint 
-     * for the background worker to initiate task processing. It registers two 
-     * distinct AJAX actions: one for authenticated users and another for guests. 
-     * Both actions are linked to the 'run_async_worker' method, which validates 
-     * the authentication token (using the stored secret key) before allowing 
-     * execution. This ensures that only authorized internal processes can trigger 
+     * This method hooks into WordPress's AJAX system to provide a secure endpoint
+     * for the background worker to initiate task processing. It registers two
+     * distinct AJAX actions: one for authenticated users and another for guests.
+     * Both actions are linked to the 'run_async_worker' method, which validates
+     * the authentication token (using the stored secret key) before allowing
+     * execution. This ensures that only authorized internal processes can trigger
      * the background worker, enhancing security and preventing unauthorized access.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected static function trigger_event_by_async_worker()
     {
@@ -187,12 +203,14 @@ class Scheduler
     /**
      * Executes the scheduler runner to process pending tasks.
      *
-     * This method is the entry point for processing scheduled tasks. It creates a new 
-     * instance of the Runner class and calls its run() method, which handles the 
-     * execution of scheduled jobs. The result of this operation is returned to the 
+     * This method is the entry point for processing scheduled tasks. It creates a new
+     * instance of the Runner class and calls its run() method, which handles the
+     * execution of scheduled jobs. The result of this operation is returned to the
      * caller, allowing for potential error handling or additional processing.
      *
      * @return mixed The result of the runner's execution.
+     *
+     * @since 1.0.0
      */
     public static function run()
     {
@@ -203,6 +221,8 @@ class Scheduler
      * Returns the scheduler runner instance.
      *
      * @return Runner The scheduler runner instance.
+     *
+     * @since 1.0.0
      */
     protected static function runner()
     {
@@ -213,12 +233,14 @@ class Scheduler
      * Handles the async worker request. Validates the secret key provided in the POST request
      * before executing the scheduler. Terminates the request after execution.
      *
-     * This method is the entry point for processing scheduled tasks. It creates a new 
-     * instance of the Runner class and calls its run() method, which handles the 
-     * execution of scheduled jobs. The result of this operation is returned to the 
+     * This method is the entry point for processing scheduled tasks. It creates a new
+     * instance of the Runner class and calls its run() method, which handles the
+     * execution of scheduled jobs. The result of this operation is returned to the
      * caller, allowing for potential error handling or additional processing.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public static function run_async_worker()
     {
@@ -236,10 +258,12 @@ class Scheduler
      * Handles the cleanup of failed and completed jobs to maintain database health.
      *
      * This method invokes the runner's cleanup routines to remove records of jobs
-     * that have either failed or successfully completed, preventing the task 
+     * that have either failed or successfully completed, preventing the task
      * tables from becoming bloated over time.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public static function handle_cleanup()
     {
@@ -259,6 +283,8 @@ class Scheduler
      *   to ensure high-frequency processing independent of standard WordPress cron triggers.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public static function boot()
     {

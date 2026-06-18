@@ -14,6 +14,13 @@ defined('ABSPATH') || exit;
 
 class Expression
 {
+    /**
+     * The value.
+     *
+     * @var mixed
+     *
+     * @since 1.0.0
+     */
     protected $value;
 
     /**
@@ -22,7 +29,7 @@ class Expression
      * @param string|int|float $value The value to wrap in the expression
      *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     public function __construct($value)

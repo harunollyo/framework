@@ -24,13 +24,17 @@ class DTO implements JsonSerializable, Arrayable
      * Fields that are considered not part of "meta" data.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected static $base_fields = ['id', 'title', 'description', 'slug'];
 
     /**
      * Fields that are considered to cast data when serialized.
-     * 
+     *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $casts = [];
 
@@ -38,6 +42,8 @@ class DTO implements JsonSerializable, Arrayable
      * Tracks which attributes have been prepared for display
      *
      * @var bool
+     *
+     * @since 1.0.0
      */
     protected $preparedForDisplay = false;
 
@@ -46,6 +52,8 @@ class DTO implements JsonSerializable, Arrayable
      * Fields to exclude from public attributes.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected array $excluded_keys = [];
 
@@ -53,13 +61,19 @@ class DTO implements JsonSerializable, Arrayable
      * Fields to pick from public attributes.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected array $picked_keys = [];
 
     /**
      * Dto constructor.
      *
-     * @param array $data
+     * @param array $data The data payload.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct(array $data = [])
     {
@@ -73,8 +87,11 @@ class DTO implements JsonSerializable, Arrayable
     /**
      * Create DTO from array
      *
-     * @param  array $data
+     * @param array $data The data payload.
+     *
      * @return static
+     *
+     * @since 1.0.0
      */
     public static function from_array(array $data)
     {
@@ -84,9 +101,11 @@ class DTO implements JsonSerializable, Arrayable
     /**
      * Create DTO from Request
      *
-     * @param  Request $request
+     * @param Request $request The request instance.
+     *
      * @return static
-     * @throws ValidationException
+     *
+     * @since 1.0.0
      */
     public static function from_request(Request $request)
     {
@@ -99,8 +118,11 @@ class DTO implements JsonSerializable, Arrayable
     /**
      * Create DTO from list
      *
-     * @param  array $items
+     * @param array $items The items.
+     *
      * @return static[]
+     *
+     * @since 1.0.0
      */
     public static function from_list(array $items)
     {
@@ -113,8 +135,10 @@ class DTO implements JsonSerializable, Arrayable
 
     /**
      * Return an array representation of the object
-     * 
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function jsonSerialize(): array
     {
@@ -127,6 +151,8 @@ class DTO implements JsonSerializable, Arrayable
      * Convert DTO to array
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function to_array()
     {
@@ -144,7 +170,11 @@ class DTO implements JsonSerializable, Arrayable
     /**
      * Extract metadata fields only
      *
+     * @param array $except The except.
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function get_meta(array $except = [])
     {
@@ -165,6 +195,8 @@ class DTO implements JsonSerializable, Arrayable
      * Get all fields
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function all()
     {
@@ -174,10 +206,13 @@ class DTO implements JsonSerializable, Arrayable
     }
 
     /**
-     * get all excluded fields
+     * Get all excluded fields
      *
-     * @param  array $keys
+     * @param array $keys The keys.
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function except(array $keys)
     {
@@ -187,10 +222,13 @@ class DTO implements JsonSerializable, Arrayable
     }
 
     /**
-     * set all excluded fields
+     * Set all excluded fields
      *
-     * @param  array $keys
+     * @param array $keys The keys.
+     *
      * @return static
+     *
+     * @since 1.0.0
      */
     public function exclude(array $keys)
     {
@@ -200,10 +238,13 @@ class DTO implements JsonSerializable, Arrayable
     }
 
     /**
-     * get all only included fields
+     * Get all only included fields
      *
-     * @param  array $keys
-     * @return array 
+     * @param array $keys The keys.
+     *
+     * @return array
+     *
+     * @since 1.0.0
      */
     public function only(array $keys)
     {
@@ -213,10 +254,13 @@ class DTO implements JsonSerializable, Arrayable
     }
 
     /**
-     * set all included fields
+     * Set all included fields
      *
-     * @param  array $except keys
+     * @param array $keys The keys.
+     *
      * @return static
+     *
+     * @since 1.0.0
      */
     public function pick(array $keys)
     {
@@ -227,8 +271,10 @@ class DTO implements JsonSerializable, Arrayable
 
     /**
      * Get public properties with values
-     * 
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     protected function get_public_vars(): array
     {
@@ -245,8 +291,10 @@ class DTO implements JsonSerializable, Arrayable
 
     /**
      * Get casts
-     * 
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     protected function get_casts()
     {
@@ -255,8 +303,10 @@ class DTO implements JsonSerializable, Arrayable
 
     /**
      * Cast all attributes
-     * 
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     protected function cast_attributes()
     {
@@ -286,12 +336,16 @@ class DTO implements JsonSerializable, Arrayable
 
     /**
      * Traverse and cast attribute
-     * 
-     * @param mixed $current_field_value
-     * @param array $key_segments
-     * @param CastAttribute|callable $cast
-     * 
+     *
+     * @param mixed $current_field_value The current field value.
+     * @param array $key_segments The key segments.
+     * @param mixed $cast The cast.
+     *
      * @return mixed
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
     protected function traverse_and_cast_attribute($current_field_value, array $key_segments, $cast)
     {
@@ -337,6 +391,13 @@ class DTO implements JsonSerializable, Arrayable
         return $current_field_value;
     }
 
+    /**
+     * Get the values.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     public function get_values()
     {
         return $this->cast_attributes();

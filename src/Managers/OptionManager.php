@@ -26,6 +26,8 @@ class OptionManager
      * The cache of the options.
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected static array $cache = [];
 
@@ -37,8 +39,11 @@ class OptionManager
      * @param string $name The option key to set.
      * @param mixed $value The value to store for the option.
      * @param bool|null $autoload Whether to autoload the option.
+     * @param mixed $with_prefix The with prefix.
      *
      * @return bool True if the value was updated, false otherwise.
+     *
+     * @since 1.0.0
      */
     public function set(string $name, $value, $autoload = null, $with_prefix = true)
     {
@@ -62,9 +67,10 @@ class OptionManager
      *
      * @param string|array $name The option key to retrieve.
      * @param mixed|null $default The default value to return if the option does not exist.
+     * @param mixed $with_prefix The with prefix.
      *
      * @return mixed The value of the option or the default value.
-     * 
+     *
      * @since 1.0.0
      */
     public function get($name, $default = null, $with_prefix = true)
@@ -120,8 +126,10 @@ class OptionManager
      * Get the options from the cache.
      *
      * @param Collection $options The options to get.
-     * 
+     *
      * @return Collection The options from the cache.
+     *
+     * @since 1.0.0
      */
     protected function get_options_from_cache(Collection $options)
     {
@@ -138,8 +146,10 @@ class OptionManager
      * Get the value of the option.
      *
      * @param mixed $value The value of the option.
-     * 
+     *
      * @return mixed The value of the option.
+     *
+     * @since 1.0.0
      */
     protected function value($value)
     {
@@ -150,9 +160,9 @@ class OptionManager
      * Sync the cache with the options.
      *
      * @param Collection $options The options to sync.
-     * 
+     *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     protected function sync_cache(Collection $options)
@@ -166,9 +176,9 @@ class OptionManager
      * Update the cache with the option name and value.
      *
      * @param object $option The option object.
-     * 
+     *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     protected function update_cache($option)
@@ -180,9 +190,9 @@ class OptionManager
      * Remove the option from the cache.
      *
      * @param string $option_name The name of the option.
-     * 
+     *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     protected function remove_from_cache($option_name)
@@ -194,7 +204,7 @@ class OptionManager
      * Clear the cache.
      *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     protected function clear_cache()
@@ -206,9 +216,9 @@ class OptionManager
      * Check if the option is cached.
      *
      * @param string $option_name The name of the option.
-     * 
+     *
      * @return bool
-     * 
+     *
      * @since 1.0.0
      */
     protected function is_cached($option_name)
@@ -222,9 +232,11 @@ class OptionManager
      * @param array $results The results to refill.
      * @param array $names The names to refill.
      * @param mixed $default The default value to refill.
-     * @param bool $with_prefix
+     * @param mixed $with_prefix The with prefix.
      *
      * @return array The refilled results.
+     *
+     * @since 1.0.0
      */
     protected function refill_missing_keys_with_defaults(array $results, array $names, $default, $with_prefix)
     {
@@ -241,9 +253,12 @@ class OptionManager
     /**
      * Rebase the keys of the results.
      *
-     * @param  array $results The results to rebase.
-     * @param  bool $with_prefix
+     * @param array $results The results to rebase.
+     * @param mixed $with_prefix The with prefix.
+     *
      * @return array The rebased results.
+     *
+     * @since 1.0.0
      */
     protected function rebase_keys(array $results, $with_prefix)
     {
@@ -258,8 +273,12 @@ class OptionManager
      *
      * Removes the option from the WordPress options table using a namespaced option name.
      *
-     * @param  string $name The option key to delete.
+     * @param string $name The option key to delete.
+     * @param mixed $with_prefix The with prefix.
+     *
      * @return bool True if the option was deleted, false otherwise.
+     *
+     * @since 1.0.0
      */
     public function delete(string $name, $with_prefix = true)
     {
@@ -274,8 +293,12 @@ class OptionManager
      *
      * Prepends the app prefix to the given option key.
      *
-     * @param  string|array<string> $name The base option key.
+     * @param string|array<string> $name The base option key.
+     * @param mixed $with_prefix The with prefix.
+     *
      * @return array The namespaced option key.
+     *
+     * @since 1.0.0
      */
     protected function get_option_name($name, $with_prefix = true)
     {
@@ -291,8 +314,10 @@ class OptionManager
      *
      * @param string $name The name of the option.
      * @param bool $with_prefix Whether to prefix the name.
-     * 
+     *
      * @return string The prepared option name.
+     *
+     * @since 1.0.0
      */
     protected function prepare_option_name(string $name, bool $with_prefix = true)
     {

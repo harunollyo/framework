@@ -16,10 +16,12 @@ class MediaAttachment
 {
     /**
      * Make a video attachment.
-     * 
+     *
      * @param array|null $video The video data.
-     * 
+     *
      * @return array|null
+     *
+     * @since 1.0.0
      */
     public static function make_video($video)
     {
@@ -52,6 +54,8 @@ class MediaAttachment
      * @param int|null $id Attachment ID.
      *
      * @return array|null Array of image metadata, or null if attachment is invalid.
+     *
+     * @since 1.0.0
      */
     public static function make($id)
     {
@@ -97,8 +101,11 @@ class MediaAttachment
     /**
      * Generate an array of metadata about multiple image attachments.
      *
-     * @param  array $ids
+     * @param array $ids The ids.
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public static function make_many(array $ids)
     {
@@ -117,10 +124,12 @@ class MediaAttachment
     /**
      * Get the formatted image sizes.
      *
-     * @param int   $attachment_id The attachment ID.
-     * @param array $sizes         An array of size data from attachment metadata.
+     * @param int $attachment_id The attachment ID.
+     * @param array $sizes An array of size data from attachment metadata.
      *
      * @return array An associative array of formatted image sizes with height, width, URL, and orientation.
+     *
+     * @since 1.0.0
      */
     protected static function get_formatted_sizes($attachment_id, array $sizes)
     {

@@ -22,13 +22,19 @@ class Migrator
      * The migration repository instance.
      *
      * @var MigrationRepository|null
+     *
+     * @since 1.0.0
      */
     protected $repository = null;
 
     /**
      * Create a new migrator instance.
      *
+     * @param MigrationRepository $repository The repository.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct(MigrationRepository $repository)
     {
@@ -39,6 +45,10 @@ class Migrator
      * Run the migrations.
      *
      * @return void
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
     public function run()
     {
@@ -86,6 +96,10 @@ class Migrator
      * Rollback the migrations.
      *
      * @return void
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
     public function rollback()
     {
@@ -142,6 +156,8 @@ class Migrator
      * Refresh the database schema.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function fresh()
     {

@@ -14,15 +14,22 @@ defined('ABSPATH') || exit;
 abstract class ServiceProvider
 {
     /**
- * @var Application 
-*/
+     * The app.
+     *
+     * @var Application
+     *
+     * @since 1.0.0
+     */
     protected $app;
 
     /**
      * Create a new service provider constructor
      *
-     * @param  Application $app
+     * @param Application $app The app.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct(Application $app)
     {
@@ -33,6 +40,8 @@ abstract class ServiceProvider
      * Register the service provider.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     abstract public function register();
 
@@ -40,6 +49,8 @@ abstract class ServiceProvider
      * Boot the service provider.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function boot()
     {

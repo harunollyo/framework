@@ -16,6 +16,8 @@ class ProhibitedIfRule extends BaseRule
      * Determine if the value is present.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -42,12 +44,21 @@ class ProhibitedIfRule extends BaseRule
      * Get the error message for the prohibited field.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {
         return sprintf('The %s field is prohibited.', $this->last_key_segment());
     }
 
+    /**
+     * Ignore rule check.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     protected function ignore_rule_check()
     {
         return false;

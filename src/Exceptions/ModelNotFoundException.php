@@ -16,15 +16,19 @@ class ModelNotFoundException extends NotFoundException
 {
     /**
      * The model class name being queried.
-     * 
+     *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $model;
 
     /**
      * The IDs or route keys that were searched for.
-     * 
+     *
      * @var mixed
+     *
+     * @since 1.0.0
      */
     protected $ids;
 
@@ -33,6 +37,10 @@ class ModelNotFoundException extends NotFoundException
      *
      * @param string $model The model class name.
      * @param mixed $ids The ID(s) or route key(s) searched for.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct($model, $ids = [])
     {
@@ -44,8 +52,11 @@ class ModelNotFoundException extends NotFoundException
     /**
      * Set the model class name for the exception.
      *
-     * @param  string $model The model class name.
+     * @param string $model The model class name.
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function set_model($model)
     {
@@ -56,8 +67,11 @@ class ModelNotFoundException extends NotFoundException
     /**
      * Set the IDs or route keys that were searched for.
      *
-     * @param  mixed $ids The ID(s) or route key(s).
+     * @param mixed $ids The ID(s) or route key(s).
+     *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function set_ids($ids)
     {
@@ -69,6 +83,8 @@ class ModelNotFoundException extends NotFoundException
      * Get the model class name.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_model()
     {
@@ -79,6 +95,8 @@ class ModelNotFoundException extends NotFoundException
      * Get the ID(s) or route key(s).
      *
      * @return mixed
+     *
+     * @since 1.0.0
      */
     public function get_ids()
     {
@@ -89,6 +107,8 @@ class ModelNotFoundException extends NotFoundException
      * Prepare the exception message using the model and ids.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function prepare_message()
     {

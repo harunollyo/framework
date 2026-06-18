@@ -26,6 +26,8 @@ class MakeClassCommand extends CommandBase
      * The arguments
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $args;
 
@@ -33,6 +35,8 @@ class MakeClassCommand extends CommandBase
      * The arguments
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $assoc;
 
@@ -40,12 +44,16 @@ class MakeClassCommand extends CommandBase
      * The base path for the models
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $output_dir;
 
     /**
      * Initialize the command
-     * 
+     *
+     * @return void
+     *
      * @since 1.0.0
      */
     public function __construct()
@@ -58,10 +66,12 @@ class MakeClassCommand extends CommandBase
     /**
      * Run the command
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function run($args, $assoc)
     {
@@ -75,6 +85,8 @@ class MakeClassCommand extends CommandBase
      * Get data for seeder file
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     protected function data()
     {
@@ -93,10 +105,12 @@ class MakeClassCommand extends CommandBase
     /**
      * Check if the command passed the validation
      *
-     * @param array $args
-     * @param array $assoc
+     * @param mixed $args The positional arguments.
+     * @param mixed $assoc The associative arguments.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     protected function passed($args, $assoc)
     {
@@ -107,6 +121,8 @@ class MakeClassCommand extends CommandBase
      * Create a new model file
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function create()
     {
@@ -134,6 +150,8 @@ class MakeClassCommand extends CommandBase
      * Get the output directory
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function output_dir()
     {
@@ -146,6 +164,8 @@ class MakeClassCommand extends CommandBase
      * Get the namespace for the class
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function namespace()
     {
@@ -165,6 +185,8 @@ class MakeClassCommand extends CommandBase
      * Get the stub content
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function get_stub()
     {
@@ -180,9 +202,11 @@ class MakeClassCommand extends CommandBase
     /**
      * Populate the stub content
      *
-     * @param array $data
+     * @param mixed $data The data payload.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     protected function populate_stub($data)
     {
@@ -197,6 +221,8 @@ class MakeClassCommand extends CommandBase
      * Prepare the command's synopsis and other metadata
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function prepare()
     {

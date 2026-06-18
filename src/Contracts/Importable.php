@@ -16,10 +16,10 @@ interface Importable
 {
     /**
      * Import data from an external source.
-     * 
+     *
      * @return mixed
-     * 
-     * @throws \Exception
+     *
+     * @since 1.0.0
      */
     public function import();
 }

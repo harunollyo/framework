@@ -14,16 +14,37 @@ defined('ABSPATH') || exit;
 
 trait HasConstants
 {
+    /**
+     * Get the constants.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
     public static function get_constants(): array
     {
         return (new \ReflectionClass(static::class))->getConstants();
     }
 
+    /**
+     * Get the constant values.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
     public static function get_constant_values(): array
     {
         return array_values(static::get_constants());
     }
 
+    /**
+     * Get the constant keys.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
     public static function get_constant_keys(): array
     {
         return array_keys(static::get_constants());

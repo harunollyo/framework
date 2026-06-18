@@ -20,10 +20,14 @@ class AuthMiddleware implements Middleware
     /**
      * Handle the incoming request and determine if the user is authenticated.
      *
-     * @since 1.0.0
+     * @param Request $request The incoming request instance.
+     * @param callable $next The next middleware callback.
      *
-     * @param  Request $request The incoming request instance.
      * @return mixed The result of the next middleware or a response.
+     *
+     * @throws \AuthorizationException
+     *
+     * @since 1.0.0
      */
     public function handle(Request $request, callable $next)
     {

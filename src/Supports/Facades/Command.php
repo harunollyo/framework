@@ -21,6 +21,13 @@ use Framework\Facade;
 
 class Command extends Facade
 {
+    /**
+     * Get the accessor.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     public static function get_accessor()
     {
         return 'command';

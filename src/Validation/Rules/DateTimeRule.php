@@ -20,6 +20,8 @@ class DateTimeRule extends BaseRule
      * Determine if the value is a valid date in the given format.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -32,6 +34,8 @@ class DateTimeRule extends BaseRule
      * Get the error message for invalid date format.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {

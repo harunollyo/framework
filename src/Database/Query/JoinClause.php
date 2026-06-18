@@ -19,6 +19,8 @@ class JoinClause extends QueryBuilder
      * The type of join (e.g., INNER, LEFT, RIGHT).
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     public $type;
 
@@ -26,6 +28,8 @@ class JoinClause extends QueryBuilder
      * The table to be joined.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     public $table;
 
@@ -33,6 +37,8 @@ class JoinClause extends QueryBuilder
      * The parent QueryBuilder instance.
      *
      * @var \Framework\Database\Query\QueryBuilder
+     *
+     * @since 1.0.0
      */
     public $parent;
 
@@ -40,6 +46,8 @@ class JoinClause extends QueryBuilder
      * The query compiler from the parent builder.
      *
      * @var \Framework\Database\Query\QueryCompiler
+     *
+     * @since 1.0.0
      */
     protected $parent_compiler;
 
@@ -47,6 +55,8 @@ class JoinClause extends QueryBuilder
      * The database connection from the parent builder.
      *
      * @var \Framework\Database\Connection\Connection
+     *
+     * @since 1.0.0
      */
     protected $parent_connection;
 
@@ -56,6 +66,8 @@ class JoinClause extends QueryBuilder
      * @param QueryBuilder $parent The parent query builder instance.
      * @param string $type The join type (INNER, LEFT, etc.).
      * @param string $table The table being joined.
+     *
+     * @return void
      *
      * @since 1.0.0
      */
@@ -79,9 +91,9 @@ class JoinClause extends QueryBuilder
      * @param string|null $operator The comparison operator (=, >, etc.).
      * @param string|null $second The second column for the ON condition.
      * @param string $boolean The boolean operator (AND/OR) for the condition.
-     * 
+     *
      * @return JoinClause
-     * 
+     *
      * @since 1.0.0
      */
     public function on($first, $operator = null, $second = null, $boolean = 'and')
@@ -96,11 +108,13 @@ class JoinClause extends QueryBuilder
     /**
      * Add an OR ON condition to the join.
      *
-     * @param  string|\Closure $first The first column or closure.
-     * @param  string|null $operator The operator (optional).
-     * @param  string|null $second The second column (optional).
+     * @param string|\Closure $first The first column or closure.
+     * @param string|null $operator The operator (optional).
+     * @param string|null $second The second column (optional).
+     *
      * @return JoinClause
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function or_on($first, $operator = null, $second = null)
     {
@@ -111,7 +125,8 @@ class JoinClause extends QueryBuilder
      * Create a new JoinClause instance for building nested join conditions.
      *
      * @return static
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function new_query()
     {
@@ -124,7 +139,8 @@ class JoinClause extends QueryBuilder
      * Used to generate a fresh parent builder for subqueries or nested clauses.
      *
      * @return QueryBuilder
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     protected function new_parent_query()
     {
@@ -141,7 +157,8 @@ class JoinClause extends QueryBuilder
      * Create a new parent query instance for subqueries within join clauses.
      *
      * @return QueryBuilder
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     protected function for_subquery()
     {

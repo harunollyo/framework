@@ -33,7 +33,7 @@ class CoreServiceProvider extends ServiceProvider
      * Register the hooks to the application.
      *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     public function register()
@@ -57,7 +57,7 @@ class CoreServiceProvider extends ServiceProvider
      * Boot the service provider.
      *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     public function boot()
@@ -77,7 +77,7 @@ class CoreServiceProvider extends ServiceProvider
      * Register the framework Carbon subclass for date operations.
      *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     protected function register_carbon()
@@ -91,7 +91,7 @@ class CoreServiceProvider extends ServiceProvider
      * Register the managers.
      *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     protected function register_managers()
@@ -109,7 +109,7 @@ class CoreServiceProvider extends ServiceProvider
      * Register the discoveries.
      *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     protected function register_discoveries()
@@ -122,7 +122,7 @@ class CoreServiceProvider extends ServiceProvider
      * Register the database singletons.
      *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     protected function register_database_services()
@@ -135,7 +135,7 @@ class CoreServiceProvider extends ServiceProvider
      * Register the migrations tags.
      *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     protected function register_migrations()

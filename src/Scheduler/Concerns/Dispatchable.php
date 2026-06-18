@@ -23,8 +23,11 @@ trait Dispatchable
     /**
      * Dispatch the job with the given arguments.
      *
-     * @param  mixed $values
+     * @param mixed $values The values.
+     *
      * @return DeferredDispatcher
+     *
+     * @since 1.0.0
      */
     public static function dispatch($values = [])
     {
@@ -37,6 +40,8 @@ trait Dispatchable
      * Get the queue repository instance.
      *
      * @return QueueRepository
+     *
+     * @since 1.0.0
      */
     public function queue_repository()
     {
@@ -46,8 +51,11 @@ trait Dispatchable
     /**
      * Create a new deferred dispatcher instance.
      *
-     * @param  array $values
+     * @param array $values The values.
+     *
      * @return DeferredDispatcher
+     *
+     * @since 1.0.0
      */
     protected static function new_deferred_dispatcher(array $values)
     {
@@ -61,6 +69,8 @@ trait Dispatchable
      * Store the job into the storage via the queue repository.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function store()
     {

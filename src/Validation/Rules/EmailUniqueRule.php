@@ -17,14 +17,19 @@ class EmailUniqueRule extends BaseRule
      * The user ID to exclude from uniqueness check (for updates).
      *
      * @var int|null
+     *
+     * @since 1.0.0
      */
     protected $exclude_user_id;
 
     /**
      * Set the user ID to exclude from uniqueness check.
      *
-     * @param  int $user_id
+     * @param mixed $user_id The user id.
+     *
      * @return $this
+     *
+     * @since 1.0.0
      */
     public function exclude_user($user_id)
     {
@@ -36,6 +41,8 @@ class EmailUniqueRule extends BaseRule
      * Determine if the email is unique in the users table.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -60,6 +67,8 @@ class EmailUniqueRule extends BaseRule
      * Get the error message for a non-unique email.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {

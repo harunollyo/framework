@@ -16,6 +16,8 @@ class EmailRule extends BaseRule
      * Determine if the value is an email.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function validate_rule()
     {
@@ -26,6 +28,8 @@ class EmailRule extends BaseRule
      * Get the error message for invalid email.
      *
      * @return string
+     *
+     * @since 1.0.0
      */
     public function get_error_message()
     {

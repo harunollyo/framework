@@ -19,6 +19,8 @@ class InvalidCastException extends RuntimeException
      * The model class name.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $model;
     
@@ -26,6 +28,8 @@ class InvalidCastException extends RuntimeException
      * The attribute key.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $key;
     
@@ -34,6 +38,8 @@ class InvalidCastException extends RuntimeException
      * The cast type.
      *
      * @var string
+     *
+     * @since 1.0.0
      */
     protected $cast_type;
 
@@ -43,6 +49,10 @@ class InvalidCastException extends RuntimeException
      * @param object $model The model instance.
      * @param string $key The attribute key.
      * @param string $cast_type The cast type.
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct($model, $key, $cast_type)
     {

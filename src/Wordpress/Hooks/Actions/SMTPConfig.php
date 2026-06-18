@@ -21,16 +21,39 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 class SMTPConfig extends BaseHook
 {
+    /**
+     * Get the name.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
     public function get_name(): string
     {
         return HookNames::WP_PHP_MAILER_INIT;
     }
 
+    /**
+     * Get the type.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
     public function get_type(): string
     {
         return HookTypes::ACTION;
     }
 
+    /**
+     * Handle.
+     *
+     * @param mixed $args The positional arguments.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function handle(...$args)
     {
         if (empty($args)) {

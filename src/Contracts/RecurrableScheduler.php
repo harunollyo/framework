@@ -15,14 +15,20 @@ defined('ABSPATH') || exit;
 interface RecurrableScheduler extends Action
 {
     /**
-     * @since  1.0.0
+     * Should stop.
+     *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function should_stop();
 
     /**
-     * @since  1.0.0
+     * Get the additional args.
+     *
      * @return array|false
+     *
+     * @since 1.0.0
      */
     public function get_additional_args();
 }

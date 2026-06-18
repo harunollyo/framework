@@ -34,6 +34,8 @@ class Connection
      * The database connection instance.
      *
      * @var \wpdb
+     *
+     * @since 1.0.0
      */
     protected $db;
 
@@ -41,6 +43,8 @@ class Connection
      * The last inserted ID.
      *
      * @var int
+     *
+     * @since 1.0.0
      */
     protected $last_insert_id = 0;
 
@@ -48,6 +52,8 @@ class Connection
      * Whether to log the queries
      *
      * @var bool
+     *
+     * @since 1.0.0
      */
     protected $is_logging_queries = false;
 
@@ -55,6 +61,8 @@ class Connection
      * The query log
      *
      * @var array
+     *
+     * @since 1.0.0
      */
     protected $query_log = [];
 
@@ -62,6 +70,8 @@ class Connection
      * The total duration of the queries
      *
      * @var float
+     *
+     * @since 1.0.0
      */
     protected $total_query_duration = 0.0;
 
@@ -88,8 +98,11 @@ class Connection
      * then creates the PDO with exceptions enabled and native prepared
      * statements. Throws an exception when connection fails.
      *
-     * @return void No return value; sets internal PDO instance
-     * @since  1.0.0
+     * @return void
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
     protected function connect()
     {
@@ -108,7 +121,8 @@ class Connection
      * require direct database access beyond the ORM's query builder.
      *
      * @return \wpdb The active PDO connection object
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function get_db()
     {
@@ -122,7 +136,8 @@ class Connection
      * Transactions allow grouping multiple statements into an atomic unit.
      *
      * @return bool True on success; false on failure
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function begin_transaction()
     {
@@ -136,7 +151,8 @@ class Connection
      * boolean result indicating success.
      *
      * @return bool True on success; false on failure
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function commit()
     {
@@ -150,7 +166,8 @@ class Connection
      * boolean result indicating whether the rollback succeeded.
      *
      * @return bool True on success; false on failure
-     * @since  1.0.0
+     *
+     * @since 1.0.0
      */
     public function rollback()
     {
@@ -164,6 +181,8 @@ class Connection
      * @param string|null $as The alias of the table.
      *
      * @return QueryBuilder
+     *
+     * @since 1.0.0
      */
     public function table($table, $as = null)
     {
@@ -177,6 +196,8 @@ class Connection
      * @param array $bindings The bindings for the query.
      *
      * @return bool True if the insert was successful, false otherwise.
+     *
+     * @since 1.0.0
      */
     public function insert($query, $bindings = [])
     {
@@ -190,6 +211,8 @@ class Connection
      * @param array $bindings The bindings for the query.
      *
      * @return int The number of rows updated.
+     *
+     * @since 1.0.0
      */
     public function update($query, $bindings = [])
     {
@@ -203,6 +226,8 @@ class Connection
      * @param array $bindings The bindings for the query.
      *
      * @return int The number of rows deleted.
+     *
+     * @since 1.0.0
      */
     public function delete($query, $bindings = [])
     {
@@ -216,6 +241,8 @@ class Connection
      * @param array $bindings The bindings for the query.
      *
      * @return bool True if the statement was successful, false otherwise.
+     *
+     * @since 1.0.0
      */
     protected function statement($query, $bindings = [])
     {
@@ -233,6 +260,8 @@ class Connection
      * @param array $bindings The bindings for the query.
      *
      * @return int The number of affected rows.
+     *
+     * @since 1.0.0
      */
     public function affecting_statement($query, $bindings = [])
     {
@@ -256,6 +285,8 @@ class Connection
      * @param array $bindings The bindings for the query.
      *
      * @return array The results of the query.
+     *
+     * @since 1.0.0
      */
     public function select($query, $bindings = [])
     {
@@ -275,6 +306,8 @@ class Connection
      * @param Closure $callback The callback function to execute.
      *
      * @return mixed The results of the query.
+     *
+     * @since 1.0.0
      */
     protected function run($query, $bindings, Closure $callback)
     {
@@ -299,6 +332,12 @@ class Connection
      * @param Closure $callback The callback function to execute.
      *
      * @return mixed The results of the query.
+     *
+     * @throws \Exception
+     * @throws \UniqueConstraintViolationException
+     * @throws \QueryException
+     *
+     * @since 1.0.0
      */
     protected function run_query_callback($query, array $bindings, Closure $callback)
     {
@@ -337,10 +376,13 @@ class Connection
     /**
      * Log a query error
      *
-     * @param QueryException $error The query exception to log.
+     * @param mixed $query The query builder instance.
+     * @param mixed $bindings The bindings.
      * @param float $time The time the query took.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     protected function log_query($query, $bindings, $time = 0.0)
     {
@@ -359,6 +401,8 @@ class Connection
      * @param float $start The start time.
      *
      * @return float The elapsed time.
+     *
+     * @since 1.0.0
      */
     protected function get_elapsed_time($start)
     {
@@ -371,6 +415,8 @@ class Connection
      * @param Exception $exception The exception to check.
      *
      * @return bool True if the exception is a unique constraint error, false otherwise.
+     *
+     * @since 1.0.0
      */
     protected function is_unique_constraint_error(Exception $exception)
     {
@@ -383,6 +429,8 @@ class Connection
      * @param array $bindings The bindings for the query.
      *
      * @return array The prepared bindings.
+     *
+     * @since 1.0.0
      */
     public function prepare_bindings(array $bindings)
     {
@@ -408,6 +456,8 @@ class Connection
      * @param array $bindings The bindings for the query.
      *
      * @return string The prepared query.
+     *
+     * @since 1.0.0
      */
     protected function prepare_query(string $query, array $bindings = [])
     {
@@ -427,6 +477,8 @@ class Connection
      * @param array $bindings The bindings for the query.
      *
      * @return array The cleaned bindings.
+     *
+     * @since 1.0.0
      */
     protected function clean_null_bindings(array $bindings)
     {
@@ -439,6 +491,8 @@ class Connection
      * Get a new query builder instance.
      *
      * @return \Framework\Database\Query\QueryBuilder
+     *
+     * @since 1.0.0
      */
     public function query()
     {
@@ -453,6 +507,8 @@ class Connection
      * Get a new query compiler instance.
      *
      * @return QueryCompiler
+     *
+     * @since 1.0.0
      */
     public function get_query_compiler()
     {
@@ -465,6 +521,8 @@ class Connection
      * @param mixed $value The value to check
      *
      * @return bool True if the value is an expression, false otherwise
+     *
+     * @since 1.0.0
      */
     public function is_expression($value)
     {
@@ -475,6 +533,8 @@ class Connection
      * Get the table prefix
      *
      * @return string The table prefix
+     *
+     * @since 1.0.0
      */
     public function get_table_prefix()
     {
@@ -487,6 +547,8 @@ class Connection
      * @param string $value The value to quote.
      *
      * @return string The quoted value.
+     *
+     * @since 1.0.0
      */
     public function quote_string($value)
     {
@@ -503,6 +565,10 @@ class Connection
      * @param mixed $value The value to escape.
      *
      * @return string The escaped value.
+     *
+     * @throws \RuntimeException
+     *
+     * @since 1.0.0
      */
     public function escape($value)
     {
@@ -533,6 +599,8 @@ class Connection
      * @param mixed $value The value to get a placeholder for.
      *
      * @return string The placeholder.
+     *
+     * @since 1.0.0
      */
     public function placeholder($value)
     {
@@ -557,6 +625,8 @@ class Connection
      * @param bool $value The value to escape.
      *
      * @return string The escaped value.
+     *
+     * @since 1.0.0
      */
     protected function escape_bool($value)
     {
@@ -569,6 +639,8 @@ class Connection
      * @param mixed $expression The expression to get the value of
      *
      * @return mixed The value of the expression
+     *
+     * @since 1.0.0
      */
     public function get_value($expression)
     {
@@ -585,27 +657,57 @@ class Connection
      * @param string|int|float $value The value to wrap in the expression
      *
      * @return Expression
+     *
+     * @since 1.0.0
      */
     public function raw($value)
     {
         return new Expression($value);
     }
 
+    /**
+     * Enable query log.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function enable_query_log()
     {
         $this->is_logging_queries = true;
     }
 
+    /**
+     * Disable query log.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function disable_query_log()
     {
         $this->is_logging_queries = false;
     }
 
+    /**
+     * Flush query log.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function flush_query_log()
     {
         $this->query_log = [];
     }
 
+    /**
+     * Get the query log.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
     public function get_query_log()
     {
         return $this->query_log;
