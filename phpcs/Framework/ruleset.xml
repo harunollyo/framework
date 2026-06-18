@@ -4,7 +4,10 @@
 
     <autoload>./autoload.php</autoload>
 
-    <rule ref="Generic.Commenting.DocComment"/>
+    <rule ref="Generic.Commenting.DocComment">
+        <exclude name="Generic.Commenting.DocComment.NonParamGroup"/>
+        <exclude name="Generic.Commenting.DocComment.ParamNotFirst"/>
+    </rule>
 
     <rule ref="Framework.NamingConventions.SnakeCaseMethod"/>
     <rule ref="Framework.NamingConventions.SnakeCaseVariable"/>

@@ -19,7 +19,7 @@ class DocblockTagOrderSniff implements Sniff
      * @var string[]
      * @since 1.0.0
      */
-    protected $tag_order = ['param', 'return', 'throws', 'since'];
+    protected $tag_order = ['template', 'param', 'return', 'throws', 'since'];
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -144,7 +144,7 @@ class DocblockTagOrderSniff implements Sniff
 
             if ($position < $last_position) {
                 $phpcs_file->addError(
-                    'Docblock tags must appear in order: @param, @return, @throws, @since.',
+                    'Docblock tags must appear in order: @template, @param, @return, @throws, @since.',
                     $docblock_ptr,
                     'InvalidTagOrder'
                 );
@@ -196,7 +196,7 @@ class DocblockTagOrderSniff implements Sniff
             }
         }
 
-        $groups = ['param', 'return', 'throws', 'since'];
+        $groups = ['template', 'param', 'return', 'throws', 'since'];
         $previous_group_line = null;
 
         foreach ($groups as $group) {

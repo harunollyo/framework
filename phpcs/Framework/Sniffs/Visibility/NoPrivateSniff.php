@@ -34,10 +34,16 @@ class NoPrivateSniff implements Sniff
      */
     public function process(File $phpcs_file, $stack_ptr)
     {
-        $phpcs_file->addError(
+        $fix = $phpcs_file->addFixableError(
             'Private members are not allowed; use protected or public instead.',
             $stack_ptr,
             'PrivateNotAllowed'
         );
+
+        if ($fix !== true) {
+            return;
+        }
+
+        $phpcs_file->fixer->replaceToken($stack_ptr, 'protected');
     }
 }
