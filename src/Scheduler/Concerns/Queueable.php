@@ -16,7 +16,8 @@ use Framework\Scheduler\Constants\Config;
 
 trait Queueable
 {
-    use Dispatchable, HasAsyncWorker;
+    use Dispatchable;
+    use HasAsyncWorker;
 
     /**
      * The arguments that will be passed to the job's handle method.
@@ -59,7 +60,7 @@ trait Queueable
     /**
      * Set the arguments for the job.
      *
-     * @param array|mixed $values
+     * @param  array|mixed $values
      * @return $this
      */
     public function args($values = [])
@@ -83,7 +84,7 @@ trait Queueable
     /**
      * Set the job priority.
      *
-     * @param int $priority
+     * @param  int $priority
      * @return $this
      */
     public function priority(int $priority)
@@ -106,7 +107,7 @@ trait Queueable
     /**
      * Set the delay for the job execution.
      *
-     * @param int|null $moment
+     * @param  int|null $moment
      * @return $this
      */
     public function delay($moment = null)
@@ -129,7 +130,7 @@ trait Queueable
     /**
      * Set the number of items per batch.
      *
-     * @param int $size
+     * @param  int $size
      * @return $this
      */
     public function batch(int $size)
@@ -152,7 +153,7 @@ trait Queueable
     /**
      * Set the number of times the job should be retried on failure.
      *
-     * @param int $attempts
+     * @param  int $attempts
      * @return $this
      */
     public function retry(int $attempts)

@@ -24,7 +24,7 @@ interface Capability
     /**
      * Get the capabilities .
      *
-     * @param string $role
+     * @param  string $role
      * @return array
      */
     public function get_capabilities($role = null);

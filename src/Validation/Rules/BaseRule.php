@@ -78,7 +78,7 @@ abstract class BaseRule implements Rule
     /**
      * Set the field key.
      *
-     * @param string $key
+     * @param  string $key
      * @return void
      */
     public function set_key(string $key)
@@ -89,7 +89,7 @@ abstract class BaseRule implements Rule
     /**
      * Set the value to validate.
      *
-     * @param mixed $value
+     * @param  mixed $value
      * @return void
      */
     public function set_value($value)
@@ -143,6 +143,7 @@ abstract class BaseRule implements Rule
 
     /**
      * Get the last key segment.
+     *
      * @return string
      */
     protected function last_key_segment()
@@ -154,6 +155,7 @@ abstract class BaseRule implements Rule
 
     /**
      * Validate the rule with desired value.
+     *
      * @return bool
      */
     abstract public function validate_rule();

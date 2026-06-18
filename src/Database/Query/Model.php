@@ -33,11 +33,11 @@ use function Framework\Polyfill\str_contains;
 
 abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializable
 {
-    use Macroable,
-        HasAttributes,
-        GuardAttributes,
-        HasRelationships,
-        HasTimestamps;
+    use Macroable;
+    use HasAttributes;
+    use GuardAttributes;
+    use HasRelationships;
+    use HasTimestamps;
 
     /**
      * The shared database connection instance for all models.
@@ -123,9 +123,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * attributes for dirty tracking. The instance starts in a non-persisted
      * state until saved for the first time.
      *
-     * @param array $attributes The initial attribute values
+     * @param  array $attributes The initial attribute values
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function __construct(array $attributes = [])
     {
@@ -139,7 +139,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Boot the model if it has not been booted yet.
      *
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function boot_if_not_booted()
     {
@@ -155,7 +155,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * The booting event.
      *
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function booting()
     {
@@ -166,7 +166,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * The boot event.
      *
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function boot()
     {
@@ -177,7 +177,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * The booted event.
      *
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function booted()
     {
@@ -190,9 +190,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Allows applications and tests to inject a specific connection instance
      * for use when building and executing queries across model operations.
      *
-     * @param Connection $connection The connection to assign
+     * @param  Connection $connection The connection to assign
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public static function setConnection(Connection $connection)
     {
@@ -207,7 +207,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * is used throughout the application lifecycle.
      *
      * @return Connection The active database connection
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected static function get_connection()
     {
@@ -221,7 +221,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * table by lowercasing the class base name and appending an "s" suffix.
      *
      * @return string The table name associated with the model
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_table()
     {
@@ -239,7 +239,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Get the table name for the model class.
      *
      * @return string The table name for the model class
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public static function get_table_name()
     {
@@ -249,9 +249,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Set the database table name for the model.
      *
-     * @param string $table The table name to assign
+     * @param  string $table The table name to assign
      * @return static The model instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function set_table($table)
     {
@@ -276,7 +276,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Get the primary key name for the model.
      *
      * @return string The primary key name
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_primary_key()
     {
@@ -287,7 +287,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Get the type of the primary key.
      *
      * @return string The type of the primary key
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_key_type()
     {
@@ -298,7 +298,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Get the fillable attributes for the model.
      *
      * @return array The fillable attributes
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_fillable()
     {
@@ -308,9 +308,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Prepare the column name for the query.
      *
-     * @param string $column The column name to prepare
+     * @param  string $column The column name to prepare
      * @return string The prepared column name
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function prepare_column($column)
     {
@@ -325,7 +325,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Get the prepared primary key name for the query.
      *
      * @return string The prepared primary key name
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_prepared_key_name()
     {
@@ -335,9 +335,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Prepare the columns for the query.
      *
-     * @param array $columns The columns to prepare
+     * @param  array $columns The columns to prepare
      * @return array The prepared columns
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function prepare_columns($columns)
     {
@@ -353,7 +353,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Create a new instance of the model.
      *
-     * @param array $attributes The attributes to set
+     * @param  array $attributes The attributes to set
      * @return static The new instance
      *
      * @since 1.0.0
@@ -374,14 +374,14 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Create a new instance of the model with fillable attributes.
      *
-     * @param array $attributes The attributes to set
+     * @param  array $attributes The attributes to set
      * @return static The new instance
      *
      * @since 1.0.0
      */
     public function new_fillable_instance($attributes = [])
     {
-        $model = new static;
+        $model = new static();
 
         $model->set_table($this->get_table());
         $model->merge_casts($this->casts);
@@ -398,7 +398,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * construction and result hydration.
      *
      * @return QueryBuilder The query builder targeting this model's table
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public static function query()
     {
@@ -417,7 +417,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * construction and result hydration.
      *
      * @return QueryBuilder The query builder targeting this model's table
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function new_query()
     {
@@ -435,7 +435,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * instances representing all rows in the corresponding table.
      *
      * @return Collection A collection of model instances
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public static function all($columns = ['*'])
     {
@@ -447,9 +447,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Retrieve a model instance by its primary key.
      *
-     * @param int $id The primary key of the record to find
+     * @param  int $id The primary key of the record to find
      * @return Model The hydrated model instance
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public static function find(int $id)
     {
@@ -462,9 +462,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Mass assigns the provided attributes, saves the model, and returns the
      * fresh instance. Fillable and guarded rules apply during assignment.
      *
-     * @param array $attributes The attributes to assign and persist
+     * @param  array $attributes The attributes to assign and persist
      * @return static The newly created, persisted model instance
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public static function create(array $attributes)
     {
@@ -482,7 +482,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * indicate success.
      *
      * @return bool True when the operation succeeds; false otherwise
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function save()
     {
@@ -512,7 +512,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      *
      * @return bool True when the insert completes successfully
      * @throws Exception When the insert fails
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function perform_insert()
     {
@@ -545,7 +545,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * indicate no action was required.
      *
      * @return bool True on success or when no changes are present
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function perform_update()
     {
@@ -580,9 +580,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * perform the appropriate persistence action. Returns the boolean result
      * of the save operation.
      *
-     * @param array $attributes The attributes to assign prior to saving
+     * @param  array $attributes The attributes to assign prior to saving
      * @return bool True when the model is saved successfully
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function update(array $attributes = [])
     {
@@ -600,7 +600,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * delete query constrained by the primary key and returns its result.
      *
      * @return bool True when deletion succeeds; false if not persisted
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function delete()
     {
@@ -621,7 +621,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Delete the model's record from the database.
      *
      * @return void
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function perform_delete_on_model()
     {
@@ -640,9 +640,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Accepts a single id or multiple, finds each, and deletes them when
      * present. Returns the count of successfully deleted records.
      *
-     * @param mixed $ids One id, array of ids, or variadic list of ids
+     * @param  mixed $ids One id, array of ids, or variadic list of ids
      * @return int The number of records deleted
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public static function destroy($ids)
     {
@@ -666,9 +666,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Iterates through provided attributes, only setting those permitted by the
      * model's configuration. Returns the model instance for chaining.
      *
-     * @param array $attributes The attributes to attempt to assign
+     * @param  array $attributes The attributes to attempt to assign
      * @return $this The model instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function fill(array $attributes)
     {
@@ -688,7 +688,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * model is configured to manage timestamps automatically.
      *
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function update_timestamps()
     {
@@ -708,9 +708,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * sets both current and original states. Used by query results to produce
      * model instances.
      *
-     * @param array $items The source attributes as object or array
+     * @param  array $items The source attributes as object or array
      * @return Collection The hydrated model instance
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function hydrate(array $items)
     {
@@ -724,9 +724,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Create a new collection instance.
      *
-     * @param array $items The items to seed the collection
+     * @param  array $items The items to seed the collection
      * @return Collection The new collection instance
-     * @since 1.0.0
+     * @since  1.0.0
      */ 
     public function new_collection(array $items = [])
     {
@@ -736,9 +736,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Create a new model instance from a builder.
      *
-     * @param array $attributes The item to create the model from
+     * @param  array $attributes The item to create the model from
      * @return Model The new model instance
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function new_for_hydration($attributes = [])
     {
@@ -757,9 +757,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Accepts a single relation or multiple and assigns the retrieved results
      * to the model's relations array for later access and serialization.
      *
-     * @param mixed $relations The relation name(s) to load
+     * @param  mixed $relations The relation name(s) to load
      * @return static The model instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function load($relations)
     {
@@ -782,7 +782,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * construction and result hydration.
      *
      * @return QueryBuilder The query builder targeting this model's table
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function new_query_without_relations()
     {
@@ -796,7 +796,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * conventional foreign key column name used on related tables.
      *
      * @return string The inferred foreign key column name
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function get_foreign_key()
     {
@@ -809,10 +809,10 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Sorts the provided table names alphabetically and joins them with an
      * underscore to produce a deterministic pivot table name.
      *
-     * @param string $table1 The first table name
-     * @param string $table2 The second table name
+     * @param  string $table1 The first table name
+     * @param  string $table2 The second table name
      * @return string The generated pivot table name
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function get_pivot_table_name($table1, $table2)
     {
@@ -824,9 +824,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Get a fresh model instance from the database.
      *
-     * @param array|string $with The relations to load
+     * @param  array|string $with The relations to load
      * @return static|null The fresh model instance
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function fresh($with = [])
     {
@@ -843,7 +843,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Refresh the model instance from the database.
      *
      * @return static The refreshed model instance
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function refresh()
     {
@@ -869,9 +869,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Set the where clause for a fresh query.
      *
-     * @param QueryBuilder $query The query builder instance
+     * @param  QueryBuilder $query The query builder instance
      * @return QueryBuilder The query builder instance
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function set_where_for_fresh_query(QueryBuilder $query)
     {
@@ -888,7 +888,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Get the primary key value.
      *
      * @return mixed The primary key value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_primary_key_value()
     {
@@ -902,7 +902,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * to produce a structure suitable for JSON encoding or API responses.
      *
      * @return array The array representation of the model
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function to_array()
     {
@@ -915,9 +915,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Determine if the model has a named scope.
      *
-     * @param string $scope The scope name to check
+     * @param  string $scope The scope name to check
      * @return bool True when the scope exists; false otherwise
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function has_named_scope(string $scope)
     {
@@ -927,10 +927,10 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Call a named scope on the model.
      *
-     * @param string $scope The scope name to call
-     * @param array $parameters The parameters to pass to the scope
+     * @param  string $scope The scope name to call
+     * @param  array $parameters The parameters to pass to the scope
      * @return mixed The result of the scope call
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function call_named_scope(string $scope, ...$parameters)
     {
@@ -946,7 +946,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * and simple serialization needs without a dedicated resource layer.
      *
      * @return string The JSON-encoded representation of the model
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function to_json($options = 0)
     {
@@ -956,9 +956,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Get an attribute or relation.
      *
-     * @param string $offset The attribute or relation key to get
+     * @param  string $offset The attribute or relation key to get
      * @return mixed The value of the attribute or relation
-     * @since 1.0.0
+     * @since  1.0.0
      */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
@@ -969,10 +969,10 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Set an attribute or relation.
      *
-     * @param string $offset The attribute or relation key to set
-     * @param mixed $value The value to assign to the attribute or relation
+     * @param  string $offset The attribute or relation key to set
+     * @param  mixed $value The value to assign to the attribute or relation
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
@@ -983,9 +983,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Check if an attribute or relation is set.
      *
-     * @param string $offset The attribute or relation key to check
+     * @param  string $offset The attribute or relation key to check
      * @return bool True when a value is present; false otherwise
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function offsetExists($offset): bool
     {
@@ -995,9 +995,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Unset an attribute or relation.
      *
-     * @param string $offset The attribute or relation key to unset
+     * @param  string $offset The attribute or relation key to unset
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function offsetUnset($offset): void
     {
@@ -1011,7 +1011,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Convert the model to a JSON serializable array.
      *
      * @return mixed The model's attributes and relations
-     * @since 1.0.0
+     * @since  1.0.0
      */
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
@@ -1025,9 +1025,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Forwards to get_attribute to keep behavior consistent with explicit
      * accessor calls while supporting PHP's magic access pattern.
      *
-     * @param string $key The attribute or relation name
+     * @param  string $key The attribute or relation name
      * @return mixed The resolved value or null when absent
-     * @since 1.0.0
+     * @since  1.0.0
      */
     #[\ReturnTypeWillChange]
     public function __get($key)
@@ -1041,10 +1041,10 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Forwards to set_attribute to ensure consistent mutation behavior and
      * chaining semantics when used programmatically.
      *
-     * @param string $key The attribute name
-     * @param mixed $value The value to assign
+     * @param  string $key The attribute name
+     * @param  mixed $value The value to assign
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function __set($key, $value)
     {
@@ -1057,9 +1057,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      * Checks both the attributes and relations arrays to report whether the
      * given key currently resolves to a non-null value.
      *
-     * @param string $key The attribute or relation key to test
+     * @param  string $key The attribute or relation key to test
      * @return bool True when a value is present; false otherwise
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function __isset($key)
     {
@@ -1069,9 +1069,9 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Unset an attribute or relation.
      *
-     * @param string $key The attribute or relation key to unset
+     * @param  string $key The attribute or relation key to unset
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function __unset($key)
     {
@@ -1082,10 +1082,10 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Dynamically call a method on the query builder.
      *
-     * @param string $method The method name to call
-     * @param array $arguments The arguments to pass to the method
+     * @param  string $method The method name to call
+     * @param  array $arguments The arguments to pass to the method
      * @return mixed The result of the method call
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function __call($method, $arguments)
     {
@@ -1095,10 +1095,10 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Dynamically call a static method on the model.
      *
-     * @param string $method The method name to call
-     * @param array $arguments The arguments to pass to the method
+     * @param  string $method The method name to call
+     * @param  array $arguments The arguments to pass to the method
      * @return mixed The result of the method call
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public static function __callStatic($method, $arguments)
     {

@@ -42,7 +42,7 @@ use Framework\Facade;
  * @method static int|false last_modified(string $path)
  * @method static bool make(string $path)
  * @method static bool make_dir(string $path)
- * @see \Framework\Filesystem\Filesystem
+ * @see    \Framework\Filesystem\Filesystem
  */
 
 class File extends Facade

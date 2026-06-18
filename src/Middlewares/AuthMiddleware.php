@@ -22,7 +22,7 @@ class AuthMiddleware implements Middleware
      *
      * @since 1.0.0
      *
-     * @param Request $request The incoming request instance.
+     * @param  Request $request The incoming request instance.
      * @return mixed The result of the next middleware or a response.
      */
     public function handle(Request $request, callable $next)

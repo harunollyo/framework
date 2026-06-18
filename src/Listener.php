@@ -4,8 +4,8 @@
  * Subclasses override priority to control dispatch order relative to other listeners.
  * Keeps listener configuration minimal while supporting ordered execution.
  *
- * @package    Framework
- * @since      1.0.0
+ * @package Framework
+ * @since   1.0.0
  */
 namespace Framework;
 

@@ -72,7 +72,7 @@ class Runner
      * Validates the raw job object and converts it into a structured JobDTO 
      * instance. It also handles decoding the JSON-encoded arguments for the job.
      *
-     * @param object $job The raw job record from the database.
+     * @param  object $job The raw job record from the database.
      * @return JobDTO
      * @throws Exception If validation of the job data fails.
      */
@@ -94,7 +94,7 @@ class Runner
      * Ensures that the job object is not empty and that a resolver class 
      * has been specified for processing the job.
      *
-     * @param object|null $job The raw job record to validate.
+     * @param  object|null $job The raw job record to validate.
      * @throws Exception If the job is invalid or missing a resolver class.
      * @return void
      */
@@ -116,8 +116,8 @@ class Runner
      * and marks the job as completed in the database. If an error occurs, 
      * it marks the job as failed and logs the error.
      *
-     * @param JobDTO $job The job data transfer object.
-     * @param QueueRepository $repository The queue repository for status updates.
+     * @param  JobDTO $job The job data transfer object.
+     * @param  QueueRepository $repository The queue repository for status updates.
      * @return void
      */
     protected function resolve(JobDTO $job, QueueRepository $repository)
@@ -144,7 +144,7 @@ class Runner
      * Checks if the resolver class exists and if it implements the required 
      * handle method before attempting to create the instance.
      *
-     * @param string $resolver The fully qualified class name of the resolver.
+     * @param  string $resolver The fully qualified class name of the resolver.
      * @return object The instantiated resolver.
      * @throws Exception If the class is missing or does not have a handle method.
      */
@@ -164,8 +164,8 @@ class Runner
     /**
      * Cleanup jobs that have been completed or failed for a specific status.
      *
-     * @param string $status
-     * @param int $days
+     * @param  string $status
+     * @param  int $days
      * @return bool
      */
     public function cleanup(string $status, int $days = 7)

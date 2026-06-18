@@ -24,6 +24,7 @@ defined('ABSPATH') || exit;
 class Response implements ArrayAccess
 {
     use DeepGettable;
+
     /**
      * The raw response data.
      * 
@@ -68,8 +69,8 @@ class Response implements ArrayAccess
     /**
      * Get the JSON decoded body of the response as an associative array.
      * 
-     * @param string|null $key
-     * @param mixed $default
+     * @param  string|null $key
+     * @param  mixed $default
      * @return mixed
      */
     public function json($key = null, $default = null)
@@ -98,7 +99,7 @@ class Response implements ArrayAccess
     /**
      * Get the JSON decoded body of the response as a collection.
      * 
-     * @param string|null $key
+     * @param  string|null $key
      * @return \Framework\Collections\Collection
      */
     public function collect($key = null)
@@ -109,7 +110,7 @@ class Response implements ArrayAccess
     /**
      * Get a header from the response.
      * 
-     * @param string $name
+     * @param  string $name
      * @return string
      */
     public function header($name)
@@ -210,7 +211,7 @@ class Response implements ArrayAccess
     /**
      * Execute the given callback if the response has a failed status code.
      * 
-     * @param callable $callback
+     * @param  callable $callback
      * @return $this
      */
     public function on_error(callable $callback)
@@ -225,7 +226,7 @@ class Response implements ArrayAccess
     /**
      * Determine if the given offset exists in the JSON response.
      * 
-     * @param mixed $offset
+     * @param  mixed $offset
      * @return bool
      */
     public function offsetExists($offset): bool
@@ -236,7 +237,7 @@ class Response implements ArrayAccess
     /**
      * Get the value at the given offset from the JSON response.
      * 
-     * @param mixed $offset
+     * @param  mixed $offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -247,8 +248,8 @@ class Response implements ArrayAccess
     /**
      * Set the value at the given offset.
      * 
-     * @param mixed $offset
-     * @param mixed $value
+     * @param  mixed $offset
+     * @param  mixed $value
      * @return void
      * @throws \Exception
      */
@@ -260,7 +261,7 @@ class Response implements ArrayAccess
     /**
      * Unset the value at the given offset.
      * 
-     * @param mixed $offset
+     * @param  mixed $offset
      * @return void
      * @throws \Exception
      */

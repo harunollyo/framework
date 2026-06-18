@@ -4,8 +4,8 @@
  * Maps ValidationException and ModelNotFoundException to appropriate HTTP status codes with structured error payloads.
  * Falls back to a generic JSON error using the exception code when no specialized handler applies.
  *
- * @package    Framework
- * @since      1.0.0
+ * @package Framework
+ * @since   1.0.0
  */
 namespace Framework;
 
@@ -20,6 +20,15 @@ use function Framework\response;
 
 class ApiExceptionHandler
 {
+    /**
+     * Get the response for the exception.
+     *
+     * @param Exception $exception The exception to get the response for.
+     * 
+     * @return Response The response for the exception.
+     * 
+     * @since 1.0.0
+     */
     public static function get_response(Exception $exception)
     {
         if ($exception instanceof ValidationException) {
@@ -42,6 +51,15 @@ class ApiExceptionHandler
         return static::fallback_response($exception);
     }
 
+    /**
+     * Get the fallback response for the exception.
+     *
+     * @param Exception $exception The exception to get the fallback response for.
+     * 
+     * @return Response The fallback response for the exception.
+     * 
+     * @since 1.0.0
+     */
     protected static function fallback_response(Exception $exception)
     {
         $status_code = (int) $exception->getCode();

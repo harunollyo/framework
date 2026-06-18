@@ -63,10 +63,10 @@ abstract class Relation
      * the related model's table. Concrete implementations will add specific
      * constraints appropriate for the relationship type.
      *
-     * @param Model $related The related model instance
-     * @param Model $parent The parent model holding the relation
+     * @param  Model $related The related model instance
+     * @param  Model $parent The parent model holding the relation
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function __construct(Model $related, Model $parent)
     {
@@ -84,7 +84,7 @@ abstract class Relation
      * that fetching returns only records related to the parent context.
      *
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     abstract public function add_constraints();
 
@@ -95,7 +95,7 @@ abstract class Relation
      * type. Used when accessing the relation as a property on the parent model.
      *
      * @return mixed The relation result set
-     * @since 1.0.0
+     * @since  1.0.0
      */
     abstract public function get_results();
 
@@ -105,9 +105,9 @@ abstract class Relation
      * Accepts the array of parent models and scopes the query to fetch all
      * related records needed in a single query using where-in style logic.
      *
-     * @param Collection $models The parent models to constrain by
+     * @param  Collection $models The parent models to constrain by
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     abstract public function add_eager_constraints(Collection $models);
 
@@ -117,11 +117,11 @@ abstract class Relation
      * Accepts the query builder for the relation and the parent model and
      * returns the aggregate query for the relation.
      *
-     * @param QueryBuilder $query The query builder for the relation
-     * @param QueryBuilder $parent The parent model
-     * @param mixed $columns The columns to select
+     * @param  QueryBuilder $query The query builder for the relation
+     * @param  QueryBuilder $parent The parent model
+     * @param  mixed $columns The columns to select
      * @return QueryBuilder The aggregate query
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_relation_existence_query(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
     {
@@ -136,7 +136,7 @@ abstract class Relation
      * Get the qualified parent key name for the relation.
      *
      * @return string The qualified parent key name
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_qualified_parent_key_name()
     {
@@ -146,8 +146,8 @@ abstract class Relation
     /**
      * Summary of get_relation_existence_count_query
      *
-     * @param QueryBuilder $query
-     * @param QueryBuilder $parent
+     * @param  QueryBuilder $query
+     * @param  QueryBuilder $parent
      * @return QueryBuilder
      */
     public function get_relation_existence_count_query(QueryBuilder $query, QueryBuilder $parent)
@@ -165,11 +165,11 @@ abstract class Relation
      * Builds a dictionary keyed by relation keys and assigns the results to
      * the appropriate relation property on each model.
      *
-     * @param Collection $models The parent models receiving results
-     * @param mixed $results The retrieved related results
-     * @param string $relation The relation name on the parent
+     * @param  Collection $models The parent models receiving results
+     * @param  mixed $results The retrieved related results
+     * @param  string $relation The relation name on the parent
      * @return array The parent models with relations populated
-     * @since 1.0.0
+     * @since  1.0.0
      */
     abstract public function match(Collection $models, Collection $results, $relation);
 
@@ -180,7 +180,7 @@ abstract class Relation
      * relations to return multiple results.
      *
      * @return Collection A collection of related models
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get($columns = ['*'])
     {

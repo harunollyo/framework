@@ -23,7 +23,7 @@ class EmailUniqueRule extends BaseRule
     /**
      * Set the user ID to exclude from uniqueness check.
      *
-     * @param int $user_id
+     * @param  int $user_id
      * @return $this
      */
     public function exclude_user($user_id)

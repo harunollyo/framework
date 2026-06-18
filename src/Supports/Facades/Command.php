@@ -16,7 +16,7 @@ use Framework\Facade;
 
 /**
  * @method static void register(string $command_name, $callback)
- * @see \Framework\Core\Console\CommandManager
+ * @see    \Framework\Core\Console\CommandManager
  */
 
 class Command extends Facade

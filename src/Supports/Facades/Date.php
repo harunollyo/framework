@@ -15,7 +15,7 @@ defined('ABSPATH') || exit;
 use Framework\Facade;
 
 /**
- * @see https://carbon.nesbot.com/docs/
+ * @see    https://carbon.nesbot.com/docs/
  * @method static bool can_be_created_from_format(?string $date, string $format)
  * @method static \Framework\Supports\Carbon|null create($year = 0, $month = 1, $day = 1, $hour = 0, $minute = 0, $second = 0, $timezone = null)
  * @method static \Framework\Supports\Carbon create_from_date($year = null, $month = null, $day = null, $timezone = null)
@@ -108,7 +108,7 @@ use Framework\Facade;
  * @method static \Framework\Supports\Carbon yesterday(\DateTimeZone|string|int|null $timezone = null)
  * @method static bool is_valid_date($value)
  * @method static string to_sql_datetime_string()
- * @see \Framework\Managers\DateManager
+ * @see    \Framework\Managers\DateManager
  */
 
 class Date extends Facade

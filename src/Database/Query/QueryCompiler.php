@@ -22,7 +22,6 @@ use function Framework\Polyfill\array_last;
 
 class QueryCompiler
 {
-
     /**
      * The database connection instance used to execute queries.
      *

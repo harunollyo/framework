@@ -22,7 +22,7 @@ trait Dispatchable
     /**
      * Dispatch the event.
      *
-     * @param mixed $arguments
+     * @param  mixed $arguments
      * @return void
      */
     public static function dispatch()
@@ -33,8 +33,8 @@ trait Dispatchable
     /**
      * Dispatch the event if the boolean is true.
      *
-     * @param mixed $boolean
-     * @param mixed $arguments
+     * @param  mixed $boolean
+     * @param  mixed $arguments
      * @return void
      */
     public static function dispatch_if($boolean, ...$arguments)
@@ -49,8 +49,8 @@ trait Dispatchable
     /**
      * Dispatch the event unless the boolean is true.
      *
-     * @param mixed $boolean
-     * @param mixed $arguments
+     * @param  mixed $boolean
+     * @param  mixed $arguments
      * @return void
      */
     public static function dispatch_unless($boolean, ...$arguments)

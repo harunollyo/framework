@@ -28,8 +28,8 @@ class CommandManager
     /**
      * Register a command
      *
-     * @param string $name
-     * @param mixed $command
+     * @param  string $name
+     * @param  mixed $command
      * @return void
      */
     public function register(string $name, $command)
@@ -43,7 +43,7 @@ class CommandManager
     /**
      * Resolve the command
      *
-     * @param mixed $command
+     * @param  mixed $command
      * @return CommandBase
      */
     protected function resolve($command)
@@ -66,7 +66,7 @@ class CommandManager
     /**
      * Make the command name
      *
-     * @param string $command
+     * @param  string $command
      * @return string
      */
     protected function make($command)

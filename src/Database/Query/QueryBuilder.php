@@ -340,7 +340,7 @@ class QueryBuilder
     public function from($table, $as = null)
     {
         if (is_subclass_of($table, Model::class)) {
-            $table = (new $table)->get_table();
+            $table = (new $table())->get_table();
         }
 
         if ($this->is_queryable($table)) {
@@ -2316,9 +2316,9 @@ class QueryBuilder
     /**
      * Parse relations into a normalized nested structure.
      *
-     * @param array $relations The relations to parse
+     * @param  array $relations The relations to parse
      * @return array The parsed relations
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function parse_relations($relations)
     {
@@ -2354,11 +2354,11 @@ class QueryBuilder
     /**
      * Parse a nested relation string or array into the parsed structure.
      *
-     * @param string $relation The relation string (may contain dots)
-     * @param array &$parsed The parsed relations array to update
-     * @param mixed $nested The nested relations if any
+     * @param  string $relation The relation string (may contain dots)
+     * @param  array &$parsed The parsed relations array to update
+     * @param  mixed $nested The nested relations if any
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function parse_nested_relation($relation, &$parsed, $nested = null)
     {
@@ -2434,10 +2434,10 @@ class QueryBuilder
     /**
      * Add new wheres from the given query to the current query within a new group
      *
-     * @param QueryBuilder $query The query to get new wheres from
-     * @param int $original_with_count The original count of wheres in the current query
+     * @param  QueryBuilder $query The query to get new wheres from
+     * @param  int $original_with_count The original count of wheres in the current query
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function add_new_wheres_within_groups(QueryBuilder $query, int $original_with_count)
     {
@@ -2462,9 +2462,11 @@ class QueryBuilder
     {
         $where_booleans = collection($where_slice)->pluck('boolean');
 
-        if ($where_booleans->contains(function ($operator) {
-            return str_contains($operator, 'or');
-        })) {
+        if (
+            $where_booleans->contains(function ($operator) {
+                return str_contains($operator, 'or');
+            })
+        ) {
             $query->wheres[] = $this->create_nested_where(
                 $where_slice,
                 str_replace(' not', '', $where_booleans->first())
@@ -2520,7 +2522,7 @@ class QueryBuilder
      * Convert the binding values into prepare statement ready placeholders.
      * This is mainly generating %s,%d,%f placeholders for the query.
      *
-     * @param array $bindings
+     * @param  array $bindings
      * @return array
      *
      * @since 1.0.0
@@ -2576,9 +2578,9 @@ class QueryBuilder
     /**
      * Eager load the relationships for the collection.
      *
-     * @param Collection $models The models to eager load
+     * @param  Collection $models The models to eager load
      * @return Collection A new collection containing the eager loaded items
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function eager_load_relations(Collection $models)
     {
@@ -2596,9 +2598,9 @@ class QueryBuilder
     /**
      * Temporarily disable resolving relations for the duration of the callback.
      *
-     * @param Closure $callback The callback to execute with resolving relations disabled
+     * @param  Closure $callback The callback to execute with resolving relations disabled
      * @return mixed The return value of the callback
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected static function without_resolving_relations(Closure $callback)
     {
@@ -2669,7 +2671,7 @@ class QueryBuilder
     /**
      * Execute the query and return the first matching record or throw an exception if no record is found.
      *
-     * @param array $columns The columns to select
+     * @param  array $columns The columns to select
      * @return mixed The first model instance or raw data record
      * @throws ModelNotFoundException If no record is found
      * 
@@ -3016,7 +3018,7 @@ class QueryBuilder
     /**
      * Create a new model instance and save it to the database
      *
-     * @param array $attributes The attributes to set
+     * @param  array $attributes The attributes to set
      * @return Model The new model instance
      *
      * @since 1.0.0
@@ -3094,8 +3096,8 @@ class QueryBuilder
     /**
      * Get the first record or create a new record.
      * 
-     * @param array $attributes
-     * @param Closure|array $values
+     * @param  array $attributes
+     * @param  Closure|array $values
      * @return mixed
      */
     public function first_or_create(array $attributes, $values = [])
@@ -3122,7 +3124,7 @@ class QueryBuilder
     public function create_or_first(array $attributes, $values = [])
     {
         try {
-            return $this->create(array_merge($attributes,  value($values)));
+            return $this->create(array_merge($attributes, value($values)));
         } catch (UniqueConstraintViolationException $exception) {
             $result = $this->where($attributes)->first();
 
@@ -3854,7 +3856,7 @@ class QueryBuilder
     /**
      * Create a new model instance
      *
-     * @param array $attributes The attributes to set
+     * @param  array $attributes The attributes to set
      * @return Model The new model instance
      *
      * @since 1.0.0
@@ -4057,9 +4059,9 @@ class QueryBuilder
     /**
      * Check if the query has a named scope.
      *
-     * @param string $scope The scope name to check
+     * @param  string $scope The scope name to check
      * @return bool True when the scope exists; false otherwise
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function has_named_scope(string $scope)
     {
@@ -4069,10 +4071,10 @@ class QueryBuilder
     /**
      * Call a named scope on the model.
      *
-     * @param string $scope The scope name to call
-     * @param array $parameters The parameters to pass to the scope
+     * @param  string $scope The scope name to call
+     * @param  array $parameters The parameters to pass to the scope
      * @return mixed The result of the scope call
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function call_named_scope(string $scope, array $parameters = [])
     {

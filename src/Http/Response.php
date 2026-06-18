@@ -16,7 +16,7 @@ class Response
      * HTTP status code for a successful request.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const OK = 200;
 
@@ -24,7 +24,7 @@ class Response
      * HTTP status code for a successfully created resource.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const CREATED = 201;
 
@@ -32,7 +32,7 @@ class Response
      * HTTP status code for a successful request with no content.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const NO_CONTENT = 204;
 
@@ -40,7 +40,7 @@ class Response
      * HTTP status code for a multi-status response.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const MULTI_STATUS = 207;
 
@@ -48,7 +48,7 @@ class Response
      * HTTP status code for a bad request.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const BAD_REQUEST = 400;
 
@@ -56,7 +56,7 @@ class Response
      * HTTP status code for an unauthorized request.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const UNAUTHORIZED = 401;
 
@@ -64,7 +64,7 @@ class Response
      * HTTP status code when authentication is required and has failed or has not yet been provided.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const FORBIDDEN = 403;
 
@@ -72,7 +72,7 @@ class Response
      * HTTP status code when a requested resource is not found.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const NOT_FOUND = 404;
 
@@ -80,7 +80,7 @@ class Response
      * HTTP status code when a request method is not allowed.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const METHOD_NOT_ALLOWED = 405;
 
@@ -88,7 +88,7 @@ class Response
      * HTTP status code when a conflict occurs.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const CONFLICT = 409;
 
@@ -96,7 +96,7 @@ class Response
      * HTTP status code when a request is unprocessable.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const UNPROCESSABLE_ENTITY = 422;
 
@@ -104,7 +104,7 @@ class Response
      * HTTP status code for too many requests (rate limiting).
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const TOO_MANY_REQUESTS = 429;
 
@@ -112,7 +112,7 @@ class Response
      * HTTP status code for internal server error.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const INTERNAL_SERVER_ERROR = 500;
 
@@ -120,7 +120,7 @@ class Response
      * HTTP status code for not implemented.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const NOT_IMPLEMENTED = 501;
 
@@ -128,13 +128,14 @@ class Response
      * HTTP status code for service unavailable.
      *
      * @since 1.0.0
-     * @var int
+     * @var   int
      */
     const SERVICE_UNAVAILABLE = 503;
 
 
     /**
      * The request headers
+     *
      * @var array
      */
     protected $headers = [];
@@ -144,10 +145,10 @@ class Response
      *
      * @since 1.0.0
      *
-     * @param array $data The data to send.
-     * @param int $status The HTTP status code.
-     * @param array $headers The headers to send.
-     * @param int $options The options to use when encoding the data.
+     * @param  array $data The data to send.
+     * @param  int $status The HTTP status code.
+     * @param  array $headers The headers to send.
+     * @param  int $options The options to use when encoding the data.
      * @return JsonResponse
      */
     public function json($data = [], $status = 200, array $headers = [], int $options = 0)
@@ -160,7 +161,7 @@ class Response
      *
      * @since 1.0.0
      *
-     * @param array $headers The headers to set.
+     * @param  array $headers The headers to set.
      * @return $this
      */
     public function with_headers(array $headers)

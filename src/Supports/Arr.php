@@ -41,7 +41,7 @@ class Arr
      * @return array
      *
      * @throws InvalidArgumentException If the items cannot be represented by a scalar value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public static function from($items)
     {

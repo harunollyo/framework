@@ -42,7 +42,7 @@ class Str
     /**
      * Convert a numeric string to a corresponding number.
      *
-     * @param string $value
+     * @param  string $value
      * @return string|int|float
      */
     public static function to_number($value)
@@ -62,7 +62,7 @@ class Str
      * This function sanitizes the input string according to the Sanitizer::TITLE rule,
      * which is used to sanitize title strings.
      *
-     * @param string $value The string to sanitize.
+     * @param  string $value The string to sanitize.
      * @return string The sanitized string.
      */
     public static function slug($value)

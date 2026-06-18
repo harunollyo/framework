@@ -147,7 +147,7 @@ class Request
     /**
      * Set the base URL for the request.
      *
-     * @param string $url
+     * @param  string $url
      * @return $this
      */
     public function base_url(string $url)
@@ -170,7 +170,7 @@ class Request
     /**
      * Set the headers for the request.
      *
-     * @param array $headers
+     * @param  array $headers
      * @return $this
      */
     public function with_headers(array $headers)
@@ -185,7 +185,7 @@ class Request
     /**
      * Replace the headers for the request.
      *
-     * @param array $headers
+     * @param  array $headers
      * @return $this
      */
     public function replace_headers(array $headers)
@@ -201,8 +201,8 @@ class Request
     /**
      * Set the token for the request.
      *
-     * @param string $token
-     * @param string $type
+     * @param  string $token
+     * @param  string $type
      * @return $this
      */
     public function with_token(string $token, $type = 'Bearer')
@@ -215,7 +215,7 @@ class Request
     /**
      * Set the user agent for the request.
      *
-     * @param string $user_agent
+     * @param  string $user_agent
      * @return $this
      */
     public function with_user_agent($user_agent)
@@ -240,7 +240,7 @@ class Request
     /**
      * Set the method for the request.
      *
-     * @param string $method
+     * @param  string $method
      * @return $this
      */
     public function method($method)
@@ -253,7 +253,7 @@ class Request
     /**
      * Set the accept header for the request.
      *
-     * @param string $value
+     * @param  string $value
      * @return $this
      */
     public function accept($value)
@@ -276,7 +276,7 @@ class Request
     /**
      * Set the body format for the request.
      *
-     * @param string $format
+     * @param  string $format
      * @return $this
      */
     public function body_format(string $format)
@@ -289,8 +289,8 @@ class Request
     /**
      * Set the body for the request.
      *
-     * @param mixed $content
-     * @param string $type
+     * @param  mixed $content
+     * @param  string $type
      * @return $this
      */
     public function with_body($content, $type = 'application/json')
@@ -337,9 +337,9 @@ class Request
     /**
      * Attach a file to the request.
      *
-     * @param string $name
-     * @param string $path
-     * @param string $filename
+     * @param  string $name
+     * @param  string $path
+     * @param  string $filename
      * @return $this
      */
     public function attach($name, $contents = '', $filename = null, array $headers = [])
@@ -367,7 +367,7 @@ class Request
     /**
      * Set the content type for the request.
      *
-     * @param string $type
+     * @param  string $type
      * @return $this
      */
     public function content_type($type)
@@ -381,7 +381,7 @@ class Request
     /**
      * Set the timeout for the request.
      *
-     * @param int $seconds
+     * @param  int $seconds
      * @return $this
      */
     public function timeout($seconds)
@@ -394,7 +394,7 @@ class Request
     /**
      * Set the options for the request.
      *
-     * @param array $options
+     * @param  array $options
      * @return $this
      */
     public function with_options(array $options)
@@ -410,7 +410,7 @@ class Request
     /**
      * Set the body for the request.
      *
-     * @param mixed $data
+     * @param  mixed $data
      * @return $this
      */
     protected function with_data($data)
@@ -423,8 +423,8 @@ class Request
     /**
      * Send a GET request.
      *
-     * @param string $url
-     * @param array $query
+     * @param  string $url
+     * @param  array $query
      * @return Response
      */
     public function get(string $url, $query = null)
@@ -437,8 +437,8 @@ class Request
     /**
      * Send a HEAD request.
      *
-     * @param string $url
-     * @param array $query
+     * @param  string $url
+     * @param  array $query
      * @return Response
      */
     public function head(string $url, $query = null)
@@ -451,8 +451,8 @@ class Request
     /**
      * Send a POST request.
      *
-     * @param string $url
-     * @param array $data
+     * @param  string $url
+     * @param  array $data
      * @return Response
      */
     public function post(string $url, $data = [])
@@ -465,8 +465,8 @@ class Request
     /**
      * Send a PUT request.
      *
-     * @param string $url
-     * @param array $data
+     * @param  string $url
+     * @param  array $data
      * @return Response
      */
     public function put(string $url, $data = [])
@@ -479,8 +479,8 @@ class Request
     /**
      * Send a PATCH request.
      *
-     * @param string $url
-     * @param array $data
+     * @param  string $url
+     * @param  array $data
      * @return Response
      */
     public function patch(string $url, $data = [])
@@ -493,8 +493,8 @@ class Request
     /**
      * Send a DELETE request.
      *
-     * @param string $url
-     * @param array $data
+     * @param  string $url
+     * @param  array $data
      * @return Response
      */
     public function delete(string $url, $data = [])
@@ -507,8 +507,8 @@ class Request
     /**
      * Send an OPTIONS request.
      *
-     * @param string $url
-     * @param array $data
+     * @param  string $url
+     * @param  array $data
      * @return Response
      */
     public function options(string $url, $data = [])
@@ -521,9 +521,9 @@ class Request
     /**
      * Send a request.
      *
-     * @param string $method
-     * @param string $url
-     * @param array $options
+     * @param  string $method
+     * @param  string $url
+     * @param  array $options
      * @return Response
      */
     public function send(string $method, string $url, array $options = [])
@@ -543,9 +543,9 @@ class Request
     /**
      * Send a request.
      *
-     * @param string $method
-     * @param string $url
-     * @param array $options
+     * @param  string $method
+     * @param  string $url
+     * @param  array $options
      * @return Response
      */
     protected function send_request(string $method, string $url, array $options = [])
@@ -580,7 +580,7 @@ class Request
     /**
      * Create a new response instance.
      *
-     * @param array $response
+     * @param  array $response
      * @return Response
      */
     protected function new_response($response)
@@ -591,9 +591,9 @@ class Request
     /**
      * Parse the request data.
      *
-     * @param string $method
-     * @param string $url
-     * @param array $options
+     * @param  string $method
+     * @param  string $url
+     * @param  array $options
      * @return array
      */
     protected function parse_request_data(string $method, string $url, array $options = [])
@@ -619,7 +619,7 @@ class Request
     /**
      * Prepare the request body.
      *
-     * @param array $data
+     * @param  array $data
      * @return string|array
      */
     protected function prepare_request_body(string $method, array $data)
@@ -647,7 +647,7 @@ class Request
     /**
      * Make a multipart body.
      *
-     * @param array $data
+     * @param  array $data
      * @return string
      */
     protected function make_multipart_body(array $data)
@@ -666,7 +666,7 @@ class Request
     /**
      * Prepare the multipart data.
      *
-     * @param array $data
+     * @param  array $data
      * @return array
      */
     protected function prepare_multipart_data(array $data)
@@ -698,7 +698,7 @@ class Request
     /**
      * Prepare the request arguments.
      *
-     * @param array $data
+     * @param  array $data
      * @return array
      */
     protected function prepare_request_args($data)
@@ -711,7 +711,7 @@ class Request
     /**
      * Check if the method is valid.
      *
-     * @param string $method
+     * @param  string $method
      * @return bool
      */
     protected function is_valid_method(string $method)
@@ -722,8 +722,8 @@ class Request
     /**
      * Call a macro.
      *
-     * @param string $method
-     * @param array $parameters
+     * @param  string $method
+     * @param  array $parameters
      * @return mixed
      */
     public function __call($method, $parameters)

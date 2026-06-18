@@ -4,8 +4,8 @@
  * Resolves controller actions via reflection and dependency injection from the container.
  * Registers routes on rest_api_init through RegisterRestApi.
  *
- * @package    Framework
- * @since      1.0.0
+ * @package Framework
+ * @since   1.0.0
  */
 namespace Framework;
 
@@ -35,7 +35,7 @@ class Route
      * REST API namespace.
      *
      * @since 1.0.0
-     * @var string
+     * @var   string
      */
     protected static $namespace = '';
 
@@ -43,7 +43,7 @@ class Route
      * Array of registered routes.
      *
      * @since 1.0.0
-     * @var array
+     * @var   array
      */
     protected static $routes = [];
 
@@ -51,7 +51,7 @@ class Route
      * Group stack to hold the group options.
      *
      * @since 1.0.0
-     * @var array
+     * @var   array
      */
     protected static $group_stack = [];
 
@@ -59,7 +59,7 @@ class Route
      * HTTP method for the route.
      *
      * @since 1.0.0
-     * @var string
+     * @var   string
      */
     protected $method;
 
@@ -67,7 +67,7 @@ class Route
      * The endpoint path for the route.
      *
      * @since 1.0.0
-     * @var string
+     * @var   string
      */
     protected $endpoint;
 
@@ -75,7 +75,7 @@ class Route
      * Controller class and method for handling the route.
      *
      * @since 1.0.0
-     * @var array
+     * @var   array
      */
     protected $action;
 
@@ -83,7 +83,7 @@ class Route
      * Array of middleware classes.
      *
      * @since 1.0.0
-     * @var array
+     * @var   array
      */
     protected $middlewares = [];
 
@@ -91,7 +91,7 @@ class Route
      * Regex patterns.
      *
      * @since 1.0.0
-     * @var array
+     * @var   array
      */
     protected $patterns = [];
 
@@ -99,7 +99,7 @@ class Route
      * Array of class instances.
      *
      * @since 1.0.0
-     * @var array
+     * @var   array
      */
     protected static $instances = [];
 
@@ -108,7 +108,7 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string $namespace The namespace for REST API routes.
+     * @param  string $namespace The namespace for REST API routes.
      * @return void
      */
     public static function set_namespace(string $namespace)
@@ -119,7 +119,7 @@ class Route
     /**
      * Get the API namespace.
      *
-     * @since 1.0.0
+     * @since  1.0.0
      * @return string
      */
     public static function get_namespace()
@@ -132,7 +132,7 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string $path The route path.
+     * @param  string $path The route path.
      * @return string The URL for the route.
      */
     public static function url(string $path)
@@ -145,7 +145,7 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string|array $middleware The fully qualified class name of the middleware.
+     * @param  string|array $middleware The fully qualified class name of the middleware.
      * @return $this
      */
     public function middleware($middleware)
@@ -166,8 +166,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string $name
-     * @param string $regex
+     * @param  string $name
+     * @param  string $regex
      * @return static
      */
     public function where(string $name, string $regex)
@@ -196,8 +196,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string        $endpoint The route endpoint.
-     * @param array|Closure $action   The controller and method to handle the route.
+     * @param  string        $endpoint The route endpoint.
+     * @param  array|Closure $action   The controller and method to handle the route.
      * @return static
      */
     public static function get(string $endpoint, $action)
@@ -219,8 +219,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string        $endpoint   The route endpoint.
-     * @param array|Closure $action     The controller and method to handle the route.
+     * @param  string        $endpoint   The route endpoint.
+     * @param  array|Closure $action     The controller and method to handle the route.
      * @return static
      */
     public static function post(string $endpoint, $action)
@@ -242,8 +242,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string        $endpoint   The route endpoint.
-     * @param array|Closure $action     The controller and method to handle the route.
+     * @param  string        $endpoint   The route endpoint.
+     * @param  array|Closure $action     The controller and method to handle the route.
      * @return static
      */
     public static function put(string $endpoint, $action)
@@ -265,8 +265,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string        $endpoint   The route endpoint.
-     * @param array|Closure $action     The controller and method to handle the route.
+     * @param  string        $endpoint   The route endpoint.
+     * @param  array|Closure $action     The controller and method to handle the route.
      * @return static
      */
     public static function patch(string $endpoint, $action)
@@ -288,8 +288,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string        $endpoint   The route endpoint.
-     * @param array|Closure $action     The controller and method to handle the route.
+     * @param  string        $endpoint   The route endpoint.
+     * @param  array|Closure $action     The controller and method to handle the route.
      * @return static
      */
     public static function delete(string $endpoint, $action)
@@ -387,8 +387,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string $abstract The class name to bind
-     * @param object $instance The instance of the class
+     * @param  string $abstract The class name to bind
+     * @param  object $instance The instance of the class
      * @return void
      */
     protected function cache(string $abstract, $instance)
@@ -401,7 +401,7 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string $abstract The class name to check
+     * @param  string $abstract The class name to check
      * @return bool
      */
     protected function is_cached(string $abstract)
@@ -414,7 +414,7 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string $abstract The class name to get
+     * @param  string $abstract The class name to get
      * @return object
      */
     protected function get_cached(string $abstract)
@@ -495,8 +495,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string $abstract The class name to make the dependencies.
-     * @param string $method The method name to make the dependencies.
+     * @param  string $abstract The class name to make the dependencies.
+     * @param  string $method The method name to make the dependencies.
      * @return array
      */
     protected function resolve_method_dependencies($abstract, $method)
@@ -551,9 +551,9 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string $type The type of the dependency.
-     * @param string $variable The variable name of the dependency.
-     * @param int $position The position of the dependency.
+     * @param  string $type The type of the dependency.
+     * @param  string $variable The variable name of the dependency.
+     * @param  int $position The position of the dependency.
      * @return array
      */
     protected function add_dependency($type, $variable, $position)
@@ -566,8 +566,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param mixed $resolved The resolved dependency.
-     * @param int $position The position of the dependency.
+     * @param  mixed $resolved The resolved dependency.
+     * @param  int $position The position of the dependency.
      * @return array
      */
     protected function add_resolved_dependency($resolved, int $position)
@@ -580,8 +580,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param array $requests The requests to resolve.
-     * @param WP_REST_Request $rest_request The REST request object.
+     * @param  array $requests The requests to resolve.
+     * @param  WP_REST_Request $rest_request The REST request object.
      * @return array
      */
     protected function resolve_requests(array $requests, WP_REST_Request $rest_request)
@@ -605,8 +605,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param array $models The models to resolve.
-     * @param Request $request The request object.
+     * @param  array $models The models to resolve.
+     * @param  Request $request The request object.
      * @return array
      */
     protected function resolve_models(array $models, Request $request)
@@ -631,8 +631,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param array $builtins The built-in types to resolve.
-     * @param Request $request The request object.
+     * @param  array $builtins The built-in types to resolve.
+     * @param  Request $request The request object.
      * @return array
      */
     protected function resolve_builtins(array $builtins, Request $request)
@@ -655,8 +655,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param array $abstracts The abstracts to resolve.
-     * @param Request $request The request object.
+     * @param  array $abstracts The abstracts to resolve.
+     * @param  Request $request The request object.
      * @return array
      */
 
@@ -678,8 +678,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param string $model The model class name
-     * @param mixed $value The value of the model
+     * @param  string $model The model class name
+     * @param  mixed $value The value of the model
      * @throws ModelNotFoundException
      *
      * @return Model
@@ -758,7 +758,7 @@ class Route
                     array_reverse($this->middlewares),
                     function ($next, $middleware) {
                         return function ($request) use ($next, $middleware) {
-                            return (new $middleware)->handle($request, $next);
+                            return (new $middleware())->handle($request, $next);
                         };
                     },
                     function ($request) use ($controller_instance, $method, $dependency_array, $request_position) {
@@ -810,8 +810,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param array $dependencies The dependencies of the route.
-     * @param Request $request The request object.
+     * @param  array $dependencies The dependencies of the route.
+     * @param  Request $request The request object.
      * @return array
      * @throws Exception When the dependencies are not valid.
      */
@@ -837,8 +837,8 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param array $dependencies The dependencies of the route.
-     * @param array $resolved_request The resolved request.
+     * @param  array $dependencies The dependencies of the route.
+     * @param  array $resolved_request The resolved request.
      * @return array
      */
     protected function update_request(array $dependencies, array $resolved_request)
@@ -854,7 +854,7 @@ class Route
      *
      * @since 1.0.0
      *
-     * @param array $dependencies The dependencies of the route.
+     * @param  array $dependencies The dependencies of the route.
      * @return array
      */
     protected function sort_dependencies(array $dependencies)

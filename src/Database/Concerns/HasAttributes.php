@@ -112,9 +112,9 @@ trait HasAttributes
      * relations, then attempts to resolve relation methods dynamically. Null
      * is returned when no value can be resolved.
      *
-     * @param string $key The attribute or relation name
+     * @param  string $key The attribute or relation name
      * @return mixed The resolved value or null when absent
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_attribute($key)
     {
@@ -137,9 +137,9 @@ trait HasAttributes
      * Attempts to call the relation method and retrieve its results if the
      * method exists, returning null when it does not.
      *
-     * @param string $key The relation method name
+     * @param  string $key The relation method name
      * @return mixed The relation results or null
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function get_relation_value($key)
     {
@@ -156,9 +156,9 @@ trait HasAttributes
      * Ensures the returned value is a valid Relation instance, then queries
      * and assigns the results to the relations array under the method name.
      *
-     * @param string $method The relation method name to invoke
+     * @param  string $method The relation method name to invoke
      * @return mixed The loaded relation results or null when not a relation
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function get_relationship_from_method($method)
     {
@@ -174,9 +174,9 @@ trait HasAttributes
     /**
      * Check if the attribute is a relation.
      *
-     * @param string $key The attribute key
+     * @param  string $key The attribute key
      * @return bool Whether the attribute is a relation
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function is_relation($key)
     {
@@ -192,9 +192,9 @@ trait HasAttributes
     /**
      * Check if the attribute exists.
      *
-     * @param string $key The attribute key
+     * @param  string $key The attribute key
      * @return bool Whether the attribute exists
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function has_attribute($key)
     {
@@ -211,9 +211,9 @@ trait HasAttributes
     /**
      * Get the attribute value.
      *
-     * @param string $key The attribute key
+     * @param  string $key The attribute key
      * @return mixed The attribute value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_attribute_value($key)
     {
@@ -223,9 +223,9 @@ trait HasAttributes
     /**
      * Get the attribute value from the array.
      *
-     * @param string $key The attribute key
+     * @param  string $key The attribute key
      * @return mixed The attribute value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function get_attribute_from_array($key)
     {
@@ -268,7 +268,7 @@ trait HasAttributes
      * @param mixed $value The value to mutate
      * 
      * @return mixed The mutated value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function mutate_attribute($key, $value)
     {
@@ -283,7 +283,7 @@ trait HasAttributes
      * Get the attributes array.
      *
      * @return array
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_attributes(): array
     {
@@ -310,10 +310,10 @@ trait HasAttributes
      * Assigns the provided value without casting and returns the model instance
      * for fluent chaining during construction or updates.
      *
-     * @param string $key The attribute name to set
-     * @param mixed $value The value to assign
+     * @param  string $key The attribute name to set
+     * @param  mixed $value The value to assign
      * @return $this The model instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function set_attribute($key, $value)
     {
@@ -362,7 +362,7 @@ trait HasAttributes
      * 
      * @return string The JSON string
      * 
-     * @since 1.0.0
+     * @since  1.0.0
      * @throws InvalidCastException If the value cannot be cast to a JSON string
      */
     protected function cast_attribute_as_json($key, $value)
@@ -379,10 +379,10 @@ trait HasAttributes
     /**
      * Convert the value to a JSON string.
      *
-     * @param mixed $value The value to convert
-     * @param int $flags The flags to use for JSON encoding
+     * @param  mixed $value The value to convert
+     * @param  int $flags The flags to use for JSON encoding
      * @return string The JSON string
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function as_json($value, $flags = 0)
     {
@@ -415,7 +415,7 @@ trait HasAttributes
      * Merge the attributes from the casts array into the attributes array.
      *
      * @return void
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function merge_attributes_from_cached_class_casts()
     {
@@ -445,10 +445,10 @@ trait HasAttributes
      * Assigns the provided attributes without casting and returns the model instance
      * for fluent chaining during construction or updates.
      *
-     * @param array $attributes The attributes to set
-     * @param bool $sync Whether to sync the original attributes
+     * @param  array $attributes The attributes to set
+     * @param  bool $sync Whether to sync the original attributes
      * @return $this The model instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function set_raw_attributes(array $attributes, $sync = false)
     {
@@ -465,7 +465,7 @@ trait HasAttributes
      * Sync the original attributes with the current attributes.
      *
      * @return static The model instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function sync_original()
     {
@@ -478,7 +478,7 @@ trait HasAttributes
      * Sync the changes with the original attributes.
      *
      * @return $this The model instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function sync_changes()
     {
@@ -521,9 +521,9 @@ trait HasAttributes
     /**
      * Merge the given casts with the existing casts.
      *
-     * @param array $casts The casts to merge
+     * @param  array $casts The casts to merge
      * @return $this The model instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function merge_casts($casts)
     {
@@ -535,9 +535,9 @@ trait HasAttributes
     /**
      * Check if the model has a set mutator for the given attribute.
      *
-     * @param string $key The attribute name to check
+     * @param  string $key The attribute name to check
      * @return bool Whether the model has a set mutator for the attribute
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function has_set_mutator($key)
     {
@@ -547,10 +547,10 @@ trait HasAttributes
     /**
      * Set a mutated attribute value on the model.
      *
-     * @param string $key The attribute name to set
-     * @param mixed $value The value to assign
+     * @param  string $key The attribute name to set
+     * @param  mixed $value The value to assign
      * @return mixed The set value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function set_mutated_attribute_value($key, $value)
     {
@@ -585,9 +585,9 @@ trait HasAttributes
     /**
      * Get the mutator method name for setting an attribute.
      *
-     * @param string $key The attribute name to get the mutator method for
+     * @param  string $key The attribute name to get the mutator method for
      * @return string The mutator method name
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function make_set_mutator_method($key)
     {
@@ -597,9 +597,9 @@ trait HasAttributes
     /**
      * Get the mutator method name for getting an attribute.
      *
-     * @param string $key The attribute name to get the mutator method for
+     * @param  string $key The attribute name to get the mutator method for
      * @return string The mutator method name
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function make_get_mutator_method($key)
     {
@@ -609,9 +609,9 @@ trait HasAttributes
     /**
      * Check if the model has a get mutator for the given attribute.
      *
-     * @param string $key The attribute name to check
+     * @param  string $key The attribute name to check
      * @return bool Whether the model has a get mutator for the attribute
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function has_get_mutator($key)
     {
@@ -680,7 +680,7 @@ trait HasAttributes
      * 
      * @return mixed The casted value
      * 
-     * @since 1.0.0
+     * @since  1.0.0
      * @throws InvalidCastException If the value cannot be cast to a class
      */
     protected function cast_attribute_from_class($key, $value, $method = 'get')
@@ -706,10 +706,10 @@ trait HasAttributes
      * Applies casting rules defined on the model to normalize values retrieved
      * from the database into their expected PHP types or structures.
      *
-     * @param string $key The attribute name being cast
-     * @param mixed $value The raw value to cast
+     * @param  string $key The attribute name being cast
+     * @param  mixed $value The raw value to cast
      * @return mixed The casted value according to the model's rules
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function cast_attribute($key, $value)
     {
@@ -733,9 +733,9 @@ trait HasAttributes
     /**
      * Check if the attribute is a class castable attribute.
      *
-     * @param string $key The attribute key
+     * @param  string $key The attribute key
      * @return bool Whether the attribute is a class castable attribute
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function is_class_castable($key)
     {
@@ -798,7 +798,7 @@ trait HasAttributes
 
         if (class_exists($cast_type)) {
             $converted_cast_type = new $cast_type();
-        } elseif(is_string($cast_type) && strpos($cast_type, ':') !== false) {
+        } elseif (is_string($cast_type) && strpos($cast_type, ':') !== false) {
             $converted_cast_type = substr($cast_type, 0, strpos($cast_type, ':'));
         } else {
             $converted_cast_type = trim(strtolower($cast_type));
@@ -810,8 +810,8 @@ trait HasAttributes
     /**
      * Convert a JSON string to a PHP value.
      *
-     * @param string $value The JSON string to convert
-     * @param bool $as_object Whether to convert the JSON string to an object
+     * @param  string $value The JSON string to convert
+     * @param  bool $as_object Whether to convert the JSON string to an object
      * @return mixed The PHP value
      */
     #[\ReturnTypeWillChange]
@@ -828,7 +828,7 @@ trait HasAttributes
     /**
      * Convert a value to a date.
      *
-     * @param mixed $value The value to convert
+     * @param  mixed $value The value to convert
      * @return DateTime The date value
      */
     protected function as_date($value)
@@ -839,7 +839,7 @@ trait HasAttributes
     /**
      * Convert a value to a date time.
      *
-     * @param mixed $value The value to convert
+     * @param  mixed $value The value to convert
      * @return DateTime The date time value
      */
     #[\ReturnTypeWillChange]
@@ -886,7 +886,7 @@ trait HasAttributes
     /**
      * Check if a value is in the standard date format.
      *
-     * @param mixed $value The value to check
+     * @param  mixed $value The value to check
      * @return bool Whether the value is in the standard date format
      */
     protected function is_standard_date_format($value)
@@ -910,7 +910,7 @@ trait HasAttributes
     /**
      * Convert a value to a timestamp.
      *
-     * @param mixed $value The value to convert
+     * @param  mixed $value The value to convert
      * @return int The timestamp value
      */
     protected function as_timestamp($value)
@@ -925,7 +925,7 @@ trait HasAttributes
      * key-value array of changed fields to be persisted during update.
      *
      * @return array The changed attributes keyed by column name
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function get_dirty()
     {
@@ -943,7 +943,7 @@ trait HasAttributes
     /**
      * Check if the original value is equivalent to the current value.
      *
-     * @param string $key The attribute key
+     * @param  string $key The attribute key
      * @return bool Whether the original value is equivalent to the current value
      */
     public function original_is_equivalent($key)
@@ -989,7 +989,7 @@ trait HasAttributes
     /**
      * Check if the attribute is a date attribute.
      *
-     * @param string $key The attribute key
+     * @param  string $key The attribute key
      * @return bool Whether the attribute is a date attribute
      */
     protected function is_date_attribute($key)
@@ -1001,7 +1001,7 @@ trait HasAttributes
     /**
      * Check if the attribute is a date castable attribute.
      *
-     * @param string $key The attribute key
+     * @param  string $key The attribute key
      * @return bool Whether the attribute is a date castable attribute
      */
     protected function is_date_castable($key)
@@ -1025,8 +1025,8 @@ trait HasAttributes
     /**
      * Check if the attribute has a cast.
      *
-     * @param string $key The attribute key
-     * @param mixed $types The cast types
+     * @param  string $key The attribute key
+     * @param  mixed $types The cast types
      * @return bool Whether the attribute has a cast
      */
     protected function has_cast($key, $types = null)
@@ -1041,7 +1041,7 @@ trait HasAttributes
     /**
      * Convert a value to a date time string for storage.
      *
-     * @param mixed $value The value to convert
+     * @param  mixed $value The value to convert
      * @return mixed The formatted date time string or the original empty value
      */
     public function from_date_time($value)
@@ -1060,7 +1060,7 @@ trait HasAttributes
      * if the instance corresponds to an existing database row.
      *
      * @return bool True when the model exists in the database
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function exists()
     {
@@ -1070,9 +1070,9 @@ trait HasAttributes
     /**
      * Determine whether the model has been modified.
      *
-     * @param mixed $attributes The attributes to check
+     * @param  mixed $attributes The attributes to check
      * @return bool True when the model has been modified
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function is_dirty($attributes = null)
     {
@@ -1085,9 +1085,9 @@ trait HasAttributes
     /**
      * Determine whether the model has not been modified.
      *
-     * @param mixed $attributes The attributes to check
+     * @param  mixed $attributes The attributes to check
      * @return bool True when the model has not been modified
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function is_clean($attributes = null)
     {
@@ -1096,8 +1096,9 @@ trait HasAttributes
 
     /**
      * Summary of has_changed
-     * @param mixed $changes
-     * @param mixed $attributes
+     *
+     * @param  mixed $changes
+     * @param  mixed $attributes
      * @return bool
      */
     protected function has_changed($changes, $attributes = null)
@@ -1138,7 +1139,7 @@ trait HasAttributes
     /**
      * Resolve date attributes.
      *
-     * @param array $attributes The attributes to resolve
+     * @param  array $attributes The attributes to resolve
      * @return array The resolved attributes
      */
     protected function resolve_date_attributes(array $attributes)
@@ -1159,7 +1160,7 @@ trait HasAttributes
     /**
      * Resolve casted attributes.
      *
-     * @param array $attributes The attributes to resolve
+     * @param  array $attributes The attributes to resolve
      * @return array The resolved attributes
      */
     protected function resolve_casted_attributes(array $attributes)
@@ -1194,7 +1195,7 @@ trait HasAttributes
     /**
      * Resolve mutated attributes.
      *
-     * @param array $attributes The attributes to resolve
+     * @param  array $attributes The attributes to resolve
      * @return array The resolved attributes
      */
     protected function resolve_mutated_attributes(array $attributes)
@@ -1211,7 +1212,7 @@ trait HasAttributes
     /**
      * Serialize a date.
      *
-     * @param DateTimeInterface $date The date to serialize
+     * @param  DateTimeInterface $date The date to serialize
      * @return string The serialized date
      */
     protected function serialize_date(DateTimeInterface $date)

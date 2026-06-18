@@ -22,54 +22,63 @@ class Menu
 {
     /**
      * The page menu type i.e. main menu or submenu
+     *
      * @var MenuTypes
      */
     protected $menu_type = MenuTypes::MAIN_MENU;
 
     /**
      * The page title
+     *
      * @var string
      */
     protected $page_title = null;
 
     /**
      * The menu title
+     *
      * @var string
      */
     protected $menu_title = null;
 
     /**
      * The capabilities
+     *
      * @var string
      */
     protected $capabilities = null;
 
     /**
      * The menu slug
+     *
      * @var string
      */
     protected $menu_slug = null;
 
     /**
      * The callback
+     *
      * @var string
      */
     protected $callback = '__return_false';
 
     /**
      * The icon url
+     *
      * @var string
      */
     protected $icon_url = null;
 
     /**
      * The position
+     *
      * @var int
      */
     protected $position = null;
 
     /**
      * The parent slug
+     *
      * @var string
      */
     protected $parent_slug = null;
@@ -107,6 +116,7 @@ class Menu
 
     /**
      * Render the menu
+     *
      * @return void
      */
     public function render()

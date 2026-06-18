@@ -15,11 +15,17 @@ use Exception;
 
 class ValidationException extends Exception
 {
-    /** @var array<string> */
+    /**
+     * @var array<string> The errors.
+     *
+     * @since 1.0.0
+    */
     protected $errors;
 
     /**
      * @return static
+     * 
+     * @since 1.0.0
      */
     public static function with_errors(array $errors, string $message = 'Validation failed!')
     {

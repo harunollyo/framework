@@ -58,7 +58,7 @@ class EventManager
     /**
      * Dispatch the event.
      *
-     * @param mixed $event
+     * @param  mixed $event
      * @return void
      */
     public function dispatch($event)
@@ -86,8 +86,8 @@ class EventManager
     /**
      * Dispatch the event if the boolean is true.
      *
-     * @param Closure $boolean
-     * @param mixed $event
+     * @param  Closure $boolean
+     * @param  mixed $event
      * @return void
      */
     public function dispatch_if(Closure $boolean, $event)
@@ -100,8 +100,8 @@ class EventManager
     /**
      * Dispatch the event unless the boolean is true.
      *
-     * @param Closure $boolean
-     * @param mixed $event
+     * @param  Closure $boolean
+     * @param  mixed $event
      * @return void
      */
     public function dispatch_unless(Closure $boolean, $event)

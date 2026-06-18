@@ -28,7 +28,7 @@ class Request implements RequestContract, Arrayable
      * The request's input attributes.
      *
      * @since 1.0.0
-     * @var array
+     * @var   array
      */
     protected $attributes = [];
 
@@ -36,7 +36,7 @@ class Request implements RequestContract, Arrayable
      * The HTTP method used for the request (e.g. GET, POST).
      *
      * @since 1.0.0
-     * @var string
+     * @var   string
      */
     protected $method;
 
@@ -44,7 +44,7 @@ class Request implements RequestContract, Arrayable
      * The route URI for the request.
      *
      * @since 1.0.0
-     * @var string
+     * @var   string
      */
     protected $route;
 
@@ -52,7 +52,7 @@ class Request implements RequestContract, Arrayable
      * The headers associated with the request.
      *
      * @since 1.0.0
-     * @var array
+     * @var   array
      */
     protected $headers;
 
@@ -60,7 +60,7 @@ class Request implements RequestContract, Arrayable
      * The sanitized data.
      *
      * @since 1.0.0
-     * @var array
+     * @var   array
      */ 
     protected array $sanitized = [];
 
@@ -68,7 +68,7 @@ class Request implements RequestContract, Arrayable
      * The validated data.
      *
      * @since 1.0.0
-     * @var array
+     * @var   array
      */
     protected array $validated = [];
 
@@ -77,7 +77,7 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $name The name of the attribute.
+     * @param  string $name The name of the attribute.
      * @return mixed|null The attribute value or null if not set.
      */
     public function __get(string $name)
@@ -90,8 +90,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $name  The name of the attribute.
-     * @param mixed  $value The value to assign.
+     * @param  string $name  The name of the attribute.
+     * @param  mixed  $value The value to assign.
      * @return void
      */
     public function __set(string $name, $value)
@@ -104,12 +104,12 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param WP_REST_Request $request The WordPress REST request object.
+     * @param  WP_REST_Request $request The WordPress REST request object.
      * @return self
      */
     public static function from_wp_rest_request(WP_REST_Request $request)
     {
-        return (new static)->make_request($request);
+        return (new static())->make_request($request);
     }
 
     /**
@@ -117,7 +117,7 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param WP_REST_Request $request The WordPress REST request object.
+     * @param  WP_REST_Request $request The WordPress REST request object.
      * @return self
      */
     public function make_request(WP_REST_Request $request)
@@ -185,9 +185,8 @@ class Request implements RequestContract, Arrayable
     /**
      * Run the sanitization on the data.
      *
-     *
-     * @param array $data The data to sanitize.
-     * @param array $filters The filters to apply.
+     * @param  array $data The data to sanitize.
+     * @param  array $filters The filters to apply.
      * @return array
      *
      * @since 1.0.0
@@ -250,8 +249,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $name
-     * @param mixed $default
+     * @param  string $name
+     * @param  mixed $default
      * @return mixed
      */
     public function get_header(string $name, $default = null)
@@ -383,7 +382,7 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param array $input The input to merge.
+     * @param  array $input The input to merge.
      * @return static
      */
     public function merge(array $input)
@@ -402,7 +401,7 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key of the attribute.
+     * @param  string $key The key of the attribute.
      * @return bool
      */
     public function has(string $key)
@@ -415,7 +414,7 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key of the attribute.
+     * @param  string $key The key of the attribute.
      * @return void
      */
     public function remove(string $key)
@@ -428,7 +427,7 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param array $attributes The attribute keys to exclude.
+     * @param  array $attributes The attribute keys to exclude.
      * @return array
      */
     public function except(array $attributes)
@@ -441,7 +440,7 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key of the attribute.
+     * @param  string $key The key of the attribute.
      * @return mixed|null
      */
     public function only(string $key)
@@ -454,7 +453,7 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key of the attribute.
+     * @param  string $key The key of the attribute.
      * @return mixed|null
      */
     public function input(string $key)
@@ -467,9 +466,9 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param mixed $default Default value if the key doesn't exist.
-     * @param string|null $type Optional type to cast the result to: int, float, bool, string, array with proper sanitization.
+     * @param  string $key The key to retrieve.
+     * @param  mixed $default Default value if the key doesn't exist.
+     * @param  string|null $type Optional type to cast the result to: int, float, bool, string, array with proper sanitization.
      * @return mixed|null
      */
     public function get(string $key, $default = null, $type = null)
@@ -486,9 +485,9 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param mixed $default Default value if the key doesn't exist.
-     * @param array $whitelist Optional whitelist of allowed values.
+     * @param  string $key The key to retrieve.
+     * @param  mixed $default Default value if the key doesn't exist.
+     * @param  array $whitelist Optional whitelist of allowed values.
      * @return mixed
      */
     public function get_whitelisted(string $key, $default = null, array $whitelist = [])
@@ -507,8 +506,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param string|null $default Default value if the key doesn't exist.
+     * @param  string $key The key to retrieve.
+     * @param  string|null $default Default value if the key doesn't exist.
      * @return string|null
      */
     public function get_string(string $key, $default = null)
@@ -521,8 +520,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key     The key to retrieve.
-     * @param string|null  $default Default value if the key doesn't exist.
+     * @param  string $key     The key to retrieve.
+     * @param  string|null  $default Default value if the key doesn't exist.
      * @return string
      */
     public function get_date(string $key, $default = null)
@@ -535,8 +534,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key     The key to retrieve.
-     * @param string|null  $default Default value if the key doesn't exist.
+     * @param  string $key     The key to retrieve.
+     * @param  string|null  $default Default value if the key doesn't exist.
      * @return string
      */
     public function get_datetime(string $key, $default = null)
@@ -549,8 +548,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param string|null $default Default value if the key doesn't exist.
+     * @param  string $key The key to retrieve.
+     * @param  string|null $default Default value if the key doesn't exist.
      * @return string|null
      */
     public function get_text(string $key, $default = null)
@@ -563,8 +562,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key     The key to retrieve.
-     * @param string|null  $default Default value if the key doesn't exist.
+     * @param  string $key     The key to retrieve.
+     * @param  string|null  $default Default value if the key doesn't exist.
      * @return string|null
      */
     public function get_html(string $key, $default = null)
@@ -577,8 +576,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param string|null $default Default value if the key doesn't exist.
+     * @param  string $key The key to retrieve.
+     * @param  string|null $default Default value if the key doesn't exist.
      * @return string|null
      */
     public function get_email(string $key, $default = null)
@@ -591,8 +590,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param string|null $default Default value if the key doesn't exist.
+     * @param  string $key The key to retrieve.
+     * @param  string|null $default Default value if the key doesn't exist.
      * @return string|null
      */
     public function get_url(string $key, $default = null)
@@ -605,8 +604,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param string|null $default Default value if the key doesn't exist.
+     * @param  string $key The key to retrieve.
+     * @param  string|null $default Default value if the key doesn't exist.
      * @return string|null
      */
     public function get_key(string $key, $default = null)
@@ -619,8 +618,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param string|null $default Default value if the key doesn't exist.
+     * @param  string $key The key to retrieve.
+     * @param  string|null $default Default value if the key doesn't exist.
      * @return string|null
      */
     public function get_title(string $key, $default = null)
@@ -633,8 +632,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param string|null $default Default value if the key doesn't exist.
+     * @param  string $key The key to retrieve.
+     * @param  string|null $default Default value if the key doesn't exist.
      * @return string|null
      */
     public function get_file_name(string $key, $default = null)
@@ -647,8 +646,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param string|null $default Default value if the key doesn't exist.
+     * @param  string $key The key to retrieve.
+     * @param  string|null $default Default value if the key doesn't exist.
      * @return string|null
      */
     public function get_mime_type(string $key, $default = null)
@@ -661,8 +660,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param int|null $default Default value if the key doesn't exist.
+     * @param  string $key The key to retrieve.
+     * @param  int|null $default Default value if the key doesn't exist.
      * @return int|null
      */
     public function get_int(string $key, $default = null)
@@ -675,8 +674,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param bool $default Default value if the key doesn't exist.
+     * @param  string $key The key to retrieve.
+     * @param  bool $default Default value if the key doesn't exist.
      * @return bool
      */
     public function get_bool(string $key, bool $default = false)
@@ -689,8 +688,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param float|null $default Default value if the key doesn't exist.
+     * @param  string $key The key to retrieve.
+     * @param  float|null $default Default value if the key doesn't exist.
      * @return float|null
      */
     public function get_float(string $key, $default = null)
@@ -703,8 +702,8 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      *
-     * @param string $key The key to retrieve.
-     * @param array|null $default Default value if the key doesn't exist.
+     * @param  string $key The key to retrieve.
+     * @param  array|null $default Default value if the key doesn't exist.
      * @return array|null
      */
     public function get_array(string $key, $default = null)

@@ -36,8 +36,8 @@ class SchemaManager
     /**
      * Create a new table in the database.
      *
-     * @param string $table The name of the table to create.
-     * @param Closure $callback The callback to define the table structure.
+     * @param  string $table The name of the table to create.
+     * @param  Closure $callback The callback to define the table structure.
      * @return void
      */
     public function create($table, Closure $callback)
@@ -76,7 +76,7 @@ class SchemaManager
     /**
      * Drop a table if it exists.
      *
-     * @param string $table The name of the table to drop.
+     * @param  string $table The name of the table to drop.
      * @return void
      */
     public function drop_if_exists(string $table)
@@ -94,7 +94,7 @@ class SchemaManager
     /**
      * Drop a table.
      *
-     * @param string $table The name of the table to drop.
+     * @param  string $table The name of the table to drop.
      * @return void
      */
     public function drop(string $table)

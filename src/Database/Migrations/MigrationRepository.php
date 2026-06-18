@@ -32,7 +32,7 @@ class MigrationRepository
     /**
      * Update the migrations.
      *
-     * @param array $migrations
+     * @param  array $migrations
      * @return void
      */
     public function update_migrations(array $migrations)

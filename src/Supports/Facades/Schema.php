@@ -20,7 +20,7 @@ use Framework\Facade;
  * @method static void drop(string $table)
  * @method static void enabled_checking_foreign_key_constraints()
  * @method static void disabled_checking_foreign_key_constraints()
- * @see \Framework\Database\Schema\SchemaManager
+ * @see    \Framework\Database\Schema\SchemaManager
  */
 
 class Schema extends Facade

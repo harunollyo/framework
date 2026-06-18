@@ -19,8 +19,8 @@ interface Container
     /**
      * Bind a class to the container.
      *
-     * @param string $name
-     * @param Closure $resolver
+     * @param  string $name
+     * @param  Closure $resolver
      * @return void
      */
     public function bind(string $name, Closure $resolver);
@@ -28,8 +28,8 @@ interface Container
     /**
      * Bind a class to the container as a singleton (lazy loaded).
      *
-     * @param string $name
-     * @param Closure $resolver
+     * @param  string $name
+     * @param  Closure $resolver
      * @return void
      */
     public function singleton(string $name, Closure $resolver);
@@ -37,8 +37,8 @@ interface Container
     /**
      * Bind an existing instance to the container.
      *
-     * @param string $name
-     * @param mixed $instance
+     * @param  string $name
+     * @param  mixed $instance
      * @return void
      */
     public function instance(string $name, $instance);
@@ -46,8 +46,8 @@ interface Container
     /**
      * Create an alias for a service.
      *
-     * @param string $alias
-     * @param string $abstract
+     * @param  string $alias
+     * @param  string $abstract
      * @return void
      */
     public function alias(string $alias, string $abstract);
@@ -55,8 +55,8 @@ interface Container
     /**
      * Tag services for grouped resolution.
      *
-     * @param array $services
-     * @param string $tag
+     * @param  array $services
+     * @param  string $tag
      * @return void
      */
     public function tag(array $services, string $tag);
@@ -64,7 +64,7 @@ interface Container
     /**
      * Get all services with a given tag.
      *
-     * @param string $tag
+     * @param  string $tag
      * @return array
      */
     public function tagged(string $tag): array;
@@ -72,8 +72,8 @@ interface Container
     /**
      * Make a class from the container.
      *
-     * @param string $name
-     * @param array $parameters
+     * @param  string $name
+     * @param  array $parameters
      * @return mixed
      */
     public function make(string $name, array $parameters = []);
@@ -81,7 +81,7 @@ interface Container
     /**
      * Check if a class exists in the container.
      *
-     * @param string $name
+     * @param  string $name
      * @return bool
      */
     public function has(string $name): bool;

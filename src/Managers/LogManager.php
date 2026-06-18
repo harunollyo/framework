@@ -29,7 +29,7 @@ class LogManager
     /**
      * Log a debug message.
      *
-     * @param string $message
+     * @param  string $message
      * @return void
      */
     public function debug($message)
@@ -40,7 +40,7 @@ class LogManager
     /**
      * Log an info message.
      *
-     * @param string $message
+     * @param  string $message
      * @return void
      */
     public function info($message)
@@ -51,7 +51,7 @@ class LogManager
     /**
      * Log a warning message.
      *
-     * @param string $message
+     * @param  string $message
      * @return void
      */
     public function warning($message)
@@ -62,7 +62,7 @@ class LogManager
     /**
      * Log an error message.
      *
-     * @param string $message
+     * @param  string $message
      * @return void
      */
     public function error($message)
@@ -73,7 +73,7 @@ class LogManager
     /**
      * Log an emergency message.
      *
-     * @param string $message
+     * @param  string $message
      * @return void
      */
     public function emergency($message)
@@ -84,7 +84,7 @@ class LogManager
     /**
      * Log a critical message.
      *
-     * @param string $message
+     * @param  string $message
      * @return void
      */
     public function critical($message)
@@ -95,7 +95,7 @@ class LogManager
     /**
      * Log an alert message.
      *
-     * @param string $message
+     * @param  string $message
      * @return void
      */
     public function alert($message)
@@ -116,8 +116,8 @@ class LogManager
     /**
      * Format the message.
      *
-     * @param string $message
-     * @param string $type
+     * @param  string $message
+     * @param  string $type
      * @return string
      */
     protected function format($message, $type)
@@ -133,8 +133,8 @@ class LogManager
     /**
      * Write the message to the log file.
      *
-     * @param string $message
-     * @param string $type
+     * @param  string $message
+     * @param  string $type
      * @return void
      */
     protected function write($message, $type)

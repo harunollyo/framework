@@ -19,8 +19,8 @@ class DataCaster
     /**
      * Cast a value to the given type.
      *
-     * @param mixed $value
-     * @param string|null $type
+     * @param  mixed $value
+     * @param  string|null $type
      * @return mixed
      */
     public static function cast_value($value, $type = null)
@@ -71,8 +71,8 @@ class DataCaster
     /**
      * Cast an array or object using a type map.
      *
-     * @param array|object $data
-     * @param array $map
+     * @param  array|object $data
+     * @param  array $map
      * @return array
      * @throws Exception
      */

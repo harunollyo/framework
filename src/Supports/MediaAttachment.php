@@ -96,7 +96,8 @@ class MediaAttachment
 
     /**
      * Generate an array of metadata about multiple image attachments.
-     * @param array $ids
+     *
+     * @param  array $ids
      * @return array
      */
     public static function make_many(array $ids)
@@ -121,7 +122,7 @@ class MediaAttachment
      *
      * @return array An associative array of formatted image sizes with height, width, URL, and orientation.
      */
-    private static function get_formatted_sizes($attachment_id, array $sizes)
+    protected static function get_formatted_sizes($attachment_id, array $sizes)
     {
         $formatted_sizes = [];
 

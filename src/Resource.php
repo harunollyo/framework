@@ -4,8 +4,8 @@
  * Offers static make, collection, and paginated helpers for batch serialization.
  * Delegates property access to the underlying resource via magic methods.
  *
- * @package    Framework
- * @since      1.0.0
+ * @package Framework
+ * @since   1.0.0
  */
 namespace Framework;
 
@@ -123,7 +123,7 @@ abstract class Resource implements Arrayable, Jsonable
      * logging purposes.
      *
      * @return string The JSON-encoded paginator representation
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function to_json($options = 0)
     {
@@ -171,7 +171,6 @@ abstract class Resource implements Arrayable, Jsonable
      *
      * @param string $name The name of the property to access.
      * @param mixed $value The value to set.
-     *
      *
      * @return $this The current instance.
      */

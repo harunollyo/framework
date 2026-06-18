@@ -22,7 +22,7 @@ class QueueRepository
     /**
      * Create a new job in the queue.
      *
-     * @param array $data
+     * @param  array $data
      * @return SchedulerQueue
      */
     public function create(array $data)
@@ -33,7 +33,7 @@ class QueueRepository
     /**
      * Get jobs associated with a specific claim ID.
      *
-     * @param string $claim_id
+     * @param  string $claim_id
      * @return \Framework\Collections\Collection
      */
     public function get_claimed_jobs(string $claim_id)
@@ -46,8 +46,8 @@ class QueueRepository
     /**
      * Lock pending jobs for a specific claim ID.
      *
-     * @param string $claim_id
-     * @param int $batch
+     * @param  string $claim_id
+     * @param  int $batch
      * @return int
      */
     public function lock_jobs(string $claim_id, int $batch)
@@ -68,8 +68,8 @@ class QueueRepository
     /**
      * Update the status of a specific job.
      *
-     * @param int $id
-     * @param string $status
+     * @param  int $id
+     * @param  string $status
      * @return int
      */
     protected function update_status(int $id, string $status)
@@ -83,7 +83,7 @@ class QueueRepository
     /**
      * Mark a job as completed.
      *
-     * @param int $id
+     * @param  int $id
      * @return int
      */
     public function mark_as_completed(int $id)
@@ -94,8 +94,8 @@ class QueueRepository
     /**
      * Mark a job as failed and handle retry logic.
      *
-     * @param int $id
-     * @param int $retry
+     * @param  int $id
+     * @param  int $retry
      * @return int|void
      */
     public function mark_as_failed(int $id, int $retry = 3)
@@ -126,8 +126,8 @@ class QueueRepository
     /**
      * Reset jobs that have been stuck in processing status.
      *
-     * @param int $timeout
-     * @param int $max_retries
+     * @param  int $timeout
+     * @param  int $max_retries
      * @return int
      */
     public function reset_stuck_jobs(int $timeout, int $max_retries = 3)
@@ -176,8 +176,8 @@ class QueueRepository
      * and deletes them in batches. It also includes a sleep delay to prevent 
      * overwhelming the database with too many queries.
      *
-     * @param string $status
-     * @param int $days
+     * @param  string $status
+     * @param  int $days
      * @return bool
      */
     public function cleanup($status, $days)

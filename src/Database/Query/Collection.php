@@ -27,9 +27,9 @@ class Collection extends BaseCollection
     /**
      * Merge the items into the collection.
      *
-     * @param Collection|array<string, Model> $items The items to merge
+     * @param  Collection|array<string, Model> $items The items to merge
      * @return static The merged collection
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function merge($items)
     {
@@ -49,9 +49,9 @@ class Collection extends BaseCollection
     /**
      * Get the dictionary for the collection.
      *
-     * @param Collection|array<string, Model> $items The items to get the dictionary for
+     * @param  Collection|array<string, Model> $items The items to get the dictionary for
      * @return array The dictionary
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_dictionary($items = null)
     {

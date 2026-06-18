@@ -52,10 +52,10 @@ trait DependencyResolvable
 
     protected function resolve_primitive(ReflectionParameter $parameter, array $primitives = [])
     {
-        $paramName = $parameter->getName();
+        $param_name = $parameter->getName();
 
-        if (array_key_exists($paramName, $primitives)) {
-            return $primitives[$paramName];
+        if (array_key_exists($param_name, $primitives)) {
+            return $primitives[$param_name];
         }
 
         if ($parameter->isDefaultValueAvailable()) {
@@ -64,7 +64,7 @@ trait DependencyResolvable
 
         throw new ReflectionException(sprintf(
             'Unable to resolve primitive parameter "%s" in class "%s".',
-            $paramName,
+            $param_name,
             $parameter->getDeclaringClass()->getName()
         ));
     }
@@ -72,8 +72,8 @@ trait DependencyResolvable
     /**
      * Resolve the dependencies for the given method.
      *
-     * @param string|object $class
-     * @param string $method
+     * @param  string|object $class
+     * @param  string $method
      * @return array<mixed>
      * @throws ReflectionException
      */

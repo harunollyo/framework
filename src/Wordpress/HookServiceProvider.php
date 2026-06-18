@@ -39,7 +39,7 @@ class HookServiceProvider extends ServiceProvider
      * Get the hooks from the configuration file.
      *
      * @return array
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function hooks()
     {

@@ -38,7 +38,7 @@ class Seeder
     /**
      * Call the seeders
      *
-     * @param string|string[] $class
+     * @param  string|string[] $class
      * @return Seeder
      */
     public function call($class)
@@ -57,7 +57,7 @@ class Seeder
     /**
      * Resolve the seeder
      *
-     * @param string $class
+     * @param  string $class
      * @return Seeder
      */
     protected function resolve($class)

@@ -106,7 +106,6 @@ class MakeClassCommand extends CommandBase
     /**
      * Create a new model file
      *
-     *
      * @return void
      */
     protected function create()

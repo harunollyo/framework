@@ -67,7 +67,7 @@ class JsonResponse extends WP_REST_Response
     /**
      * Set the encoding options for the response.
      *
-     * @param int $option The JSON encoding options
+     * @param  int $option The JSON encoding options
      * @return $this The response instance for method chaining
      */
     public function set_encoding_options($option)
@@ -90,8 +90,8 @@ class JsonResponse extends WP_REST_Response
     /**
      * Get the content of the response.
      *
-     * @param bool $assoc Whether to return the content as an associative array
-     * @param int $depth The maximum depth of the content
+     * @param  bool $assoc Whether to return the content as an associative array
+     * @param  int $depth The maximum depth of the content
      * @return mixed The content of the response
      */
     public function get_content($assoc = false, $depth = 512)
@@ -112,7 +112,7 @@ class JsonResponse extends WP_REST_Response
     /**
      * Set the content of the response.
      *
-     * @param mixed $data The data to be encoded as JSON
+     * @param  mixed $data The data to be encoded as JSON
      * @return $this The response instance for method chaining
      */
     public function set_content($data)
@@ -147,7 +147,7 @@ class JsonResponse extends WP_REST_Response
     /**
      * Check if the JSON is valid.
      *
-     * @param int $json_error The JSON error code
+     * @param  int $json_error The JSON error code
      * @return bool Whether the JSON is valid
      */
     protected function is_valid_json($json_error)
@@ -167,7 +167,7 @@ class JsonResponse extends WP_REST_Response
     /**
      * Check if the encoding options have a specific option set.
      *
-     * @param int $option The option to check
+     * @param  int $option The option to check
      * @return bool Whether the option is set
      */
     protected function has_encoding_options($option)

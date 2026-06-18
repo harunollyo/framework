@@ -24,8 +24,8 @@ trait ExecuteQueries
     /**
      * Chunk the results of the query into a set of smaller collections.
      *
-     * @param int $count The number of items to include in each chunk
-     * @param Closure $callback The callback to execute for each chunk
+     * @param  int $count The number of items to include in each chunk
+     * @param  Closure $callback The callback to execute for each chunk
      * @return bool True if the callback returns true for all chunks, false otherwise
      */
     public function chunk(int $count, Closure $callback): bool
@@ -71,10 +71,10 @@ trait ExecuteQueries
     /**
      * Chunk the results of the query into a set of smaller collections and map the results using a callback.
      *
-     * @param Closure $callback The callback to execute for each chunk
-     * @param int $count The number of items to include in each chunk
+     * @param  Closure $callback The callback to execute for each chunk
+     * @param  int $count The number of items to include in each chunk
      * @return Collection A new collection of mapped results
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function chunk_map(Closure $callback, $count = 1000)
     {
@@ -92,8 +92,8 @@ trait ExecuteQueries
     /**
      * Iterate over the results of the query and execute a callback for each result.
      *
-     * @param Closure $callback The callback to execute for each result
-     * @param int $count The number of items to include in each chunk
+     * @param  Closure $callback The callback to execute for each result
+     * @param  int $count The number of items to include in each chunk
      * @return bool True if the callback returns true for all results, false otherwise
      */
     public function each(Closure $callback, int $count = 1000)
@@ -110,10 +110,10 @@ trait ExecuteQueries
     /**
      * Chunk the results of the query into a set of smaller collections by the given column in ascending order.
      *
-     * @param int $count The number of items to include in each chunk
-     * @param Closure $callback The callback to execute for each chunk
-     * @param string $column The column to chunk by
-     * @param string $alias The alias of the column
+     * @param  int $count The number of items to include in each chunk
+     * @param  Closure $callback The callback to execute for each chunk
+     * @param  string $column The column to chunk by
+     * @param  string $alias The alias of the column
      * @return bool True if the callback returns true for all chunks, false otherwise
      */
     public function chunk_by_id(int $count, Closure $callback, $column = null, $alias = null)
@@ -124,10 +124,10 @@ trait ExecuteQueries
     /**
      * Chunk the results of the query into a set of smaller collections by the given column in descending order.
      *
-     * @param int $count The number of items to include in each chunk
-     * @param Closure $callback The callback to execute for each chunk
-     * @param string $column The column to chunk by
-     * @param string $alias The alias of the column
+     * @param  int $count The number of items to include in each chunk
+     * @param  Closure $callback The callback to execute for each chunk
+     * @param  string $column The column to chunk by
+     * @param  string $alias The alias of the column
      * @return bool True if the callback returns true for all chunks, false otherwise
      */
     public function chunk_by_id_desc(int $count, Closure $callback, $column = null, $alias = null)
@@ -138,11 +138,11 @@ trait ExecuteQueries
     /**
      * Chunk the results of the query into a set of smaller collections by the given column in the given order.
      *
-     * @param int $count The number of items to include in each chunk
-     * @param Closure $callback The callback to execute for each chunk
-     * @param string $column The column to chunk by
-     * @param string $alias The alias of the column
-     * @param bool $descending The order to chunk by
+     * @param  int $count The number of items to include in each chunk
+     * @param  Closure $callback The callback to execute for each chunk
+     * @param  string $column The column to chunk by
+     * @param  string $alias The alias of the column
+     * @param  bool $descending The order to chunk by
      * @return bool True if the callback returns true for all chunks, false otherwise
      */
     public function ordered_chunk_by_id(int $count, Closure $callback, $column = null, $alias = null, $descending = false)
@@ -156,7 +156,6 @@ trait ExecuteQueries
         $page = 1;
 
         do {
-
             $clone = clone $this;
 
             if ($skip && $page > 1) {
@@ -208,9 +207,9 @@ trait ExecuteQueries
     /**
      * Lazily iterate over the results of the query.
      *
-     * @param int $chunk_size The number of items to include in each chunk
+     * @param  int $chunk_size The number of items to include in each chunk
      * @return \Generator
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function lazy($chunk_size = 1000)
     {
@@ -270,12 +269,12 @@ trait ExecuteQueries
     /**
      * Lazily iterate over the results of the query by the given column in the given order.
      *
-     * @param int $chunk_size The number of items to include in each chunk
-     * @param string $column The column to iterate by
-     * @param string $alias The alias of the column
-     * @param bool $descending The order to iterate by
+     * @param  int $chunk_size The number of items to include in each chunk
+     * @param  string $column The column to iterate by
+     * @param  string $alias The alias of the column
+     * @param  bool $descending The order to iterate by
      * @return \Generator
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function ordered_lazy_by_id($chunk_size = 1000, $column = null, $alias = null, $descending = false)
     {

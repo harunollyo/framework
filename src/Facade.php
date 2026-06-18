@@ -4,8 +4,8 @@
  * Caches resolved instances per accessor and forwards __callStatic to the underlying object.
  * Enables Facade::method() syntax throughout the framework.
  *
- * @package    Framework
- * @since      1.0.0
+ * @package Framework
+ * @since   1.0.0
  */
 namespace Framework;
 
@@ -47,7 +47,7 @@ abstract class Facade
      * If the name is already an object, it is returned directly. Otherwise,
      * the service is resolved from the application container and cached.
      *
-     * @param string|object $name The accessor name or an object instance
+     * @param  string|object $name The accessor name or an object instance
      * @return object The resolved service instance
      */
     protected static function resolved_facade_instance($name)
@@ -75,8 +75,8 @@ abstract class Facade
      * Forwards the static call to the resolved service instance, passing all arguments.
      * Throws a RuntimeException if the service instance cannot be resolved.
      *
-     * @param string $method The method name being called
-     * @param array $arguments The arguments passed to the method
+     * @param  string $method The method name being called
+     * @param  array $arguments The arguments passed to the method
      * @return mixed The result of the underlying method call
      * @throws \RuntimeException If the service instance is not set
      */

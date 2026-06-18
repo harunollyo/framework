@@ -74,7 +74,7 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Get the filename of the policy.
      *
-     * @param string $path
+     * @param  string $path
      * @return string
      */
     protected function filename(string $path)
@@ -85,8 +85,8 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Add a policy to the policies array.
      *
-     * @param string $model
-     * @param string $policy
+     * @param  string $model
+     * @param  string $policy
      * @return void
      */
     protected function add_policy(string $model, string $policy)
@@ -107,7 +107,7 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Get the policy class from the policy name.
      *
-     * @param string $policy_name
+     * @param  string $policy_name
      * @return string
      */
     protected function policy_class(string $policy_name)
@@ -121,7 +121,7 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Get the model class from the policy name.
      *
-     * @param string $policy_name
+     * @param  string $policy_name
      * @return string
      */
     protected function associated_model(string $policy_name)
@@ -136,7 +136,7 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Check if the policy name is valid.
      *
-     * @param string $policy_name
+     * @param  string $policy_name
      * @return bool
      */
     protected function is_valid_policy_name(string $policy_name)
@@ -157,7 +157,7 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Cache the policies.
      *
-     * @param string|null $path
+     * @param  string|null $path
      * @return $this
      */
     public function cache(?string $path = null)
@@ -179,7 +179,7 @@ class PolicyDiscovery implements Discoverable, Cacheable
     /**
      * Check if the policies are cacheable.
      *
-     * @param string $path
+     * @param  string $path
      * @return bool
      */
     public function is_cacheable(string $path)

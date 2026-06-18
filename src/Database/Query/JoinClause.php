@@ -96,11 +96,11 @@ class JoinClause extends QueryBuilder
     /**
      * Add an OR ON condition to the join.
      *
-     * @param string|\Closure $first The first column or closure.
-     * @param string|null $operator The operator (optional).
-     * @param string|null $second The second column (optional).
+     * @param  string|\Closure $first The first column or closure.
+     * @param  string|null $operator The operator (optional).
+     * @param  string|null $second The second column (optional).
      * @return JoinClause
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function or_on($first, $operator = null, $second = null)
     {
@@ -111,7 +111,7 @@ class JoinClause extends QueryBuilder
      * Create a new JoinClause instance for building nested join conditions.
      *
      * @return static
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function new_query()
     {
@@ -124,7 +124,7 @@ class JoinClause extends QueryBuilder
      * Used to generate a fresh parent builder for subqueries or nested clauses.
      *
      * @return QueryBuilder
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function new_parent_query()
     {
@@ -141,7 +141,7 @@ class JoinClause extends QueryBuilder
      * Create a new parent query instance for subqueries within join clauses.
      *
      * @return QueryBuilder
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function for_subquery()
     {

@@ -97,7 +97,7 @@ class ListenerDiscovery implements Discoverable, Cacheable
     /**
      * Get the priority of the listener.
      *
-     * @param string $listener
+     * @param  string $listener
      * @return int
      */
     protected function priority(string $listener)
@@ -113,7 +113,7 @@ class ListenerDiscovery implements Discoverable, Cacheable
     /**
      * Get the event class of the listener.
      *
-     * @param string $listener
+     * @param  string $listener
      * @return string|null
      */
     protected function event_class(string $listener)
@@ -139,7 +139,7 @@ class ListenerDiscovery implements Discoverable, Cacheable
     /**
      * Get the filename of the listener.
      *
-     * @param string $file
+     * @param  string $file
      * @return string
      */
     protected function filename(string $file)
@@ -150,7 +150,7 @@ class ListenerDiscovery implements Discoverable, Cacheable
     /**
      * Get the listener class of the filename.
      *
-     * @param string $filename
+     * @param  string $filename
      * @return string
      */
     protected function listener_class(string $filename)
@@ -164,7 +164,7 @@ class ListenerDiscovery implements Discoverable, Cacheable
     /**
      * Check if the listener is valid.
      *
-     * @param string $listener
+     * @param  string $listener
      * @return bool
      */
     protected function is_valid_listener(string $listener)
@@ -185,7 +185,7 @@ class ListenerDiscovery implements Discoverable, Cacheable
     /**
      * Cache the listeners.
      *
-     * @param string|null $path
+     * @param  string|null $path
      * @return $this
      */
     public function cache(?string $path = null)
@@ -207,7 +207,7 @@ class ListenerDiscovery implements Discoverable, Cacheable
     /**
      * Check if the listeners are cacheable.
      *
-     * @param string $path
+     * @param  string $path
      * @return bool
      */
     public function is_cacheable(string $path)
@@ -218,7 +218,7 @@ class ListenerDiscovery implements Discoverable, Cacheable
     /**
      * Prioritize the listeners.
      *
-     * @param array $listeners
+     * @param  array $listeners
      * @return array
      */
     protected function prioritize(array $listeners)
@@ -233,7 +233,7 @@ class ListenerDiscovery implements Discoverable, Cacheable
     /**
      * Prepare the listeners.
      *
-     * @param array $listeners
+     * @param  array $listeners
      * @return array
      */
     protected function prepare(array $listeners)

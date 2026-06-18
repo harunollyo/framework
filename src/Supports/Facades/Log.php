@@ -22,7 +22,7 @@ use Framework\Facade;
  * @method static void emergency($message)
  * @method static void critical($message)
  * @method static void alert($message)
- * @see \Framework\Managers\LogManager
+ * @see    \Framework\Managers\LogManager
  */
 
 class Log extends Facade

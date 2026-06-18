@@ -62,9 +62,9 @@ trait EnumeratesValues
     /**
      * Determine if the value is callable.
      *
-     * @param mixed $value The value to check
+     * @param  mixed $value The value to check
      * @return bool True when callable; false otherwise
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function is_callable($value)
     {
@@ -74,9 +74,9 @@ trait EnumeratesValues
     /**
      * Get the value of the item.
      *
-     * @param callable|string|null $value The value to get
+     * @param  callable|string|null $value The value to get
      * @return callable The value of the item
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function value_retriever($value)
     {
@@ -92,7 +92,7 @@ trait EnumeratesValues
     /**
      * Get the value of the property.
      *
-     * @param string $key The key of the property.
+     * @param  string $key The key of the property.
      * @return mixed
      * 
      * @throws Exception If the property does not exist on the collection.

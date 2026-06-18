@@ -184,7 +184,7 @@ class HasOne extends Relation
      * Collects parent local keys and scopes the query using a where_in to fetch
      * all related records in a single query.
      *
-     * @param Collection $models The array of parent models
+     * @param  Collection $models The array of parent models
      * @return void No return value
      * 
      * @since 1.0.0

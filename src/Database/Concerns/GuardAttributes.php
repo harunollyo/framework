@@ -50,7 +50,7 @@ trait GuardAttributes
     /**
      * Set the fillable attributes for the model.
      *
-     * @param array $fillable
+     * @param  array $fillable
      * @return $this
      */
     public function fillable(array $fillable)
@@ -63,7 +63,7 @@ trait GuardAttributes
     /**
      * Merge the given fillable attributes with the existing fillable attributes.
      *
-     * @param array $fillable
+     * @param  array $fillable
      * @return $this
      */
     public function merge_fillable(array $fillable)
@@ -90,7 +90,7 @@ trait GuardAttributes
     /**
      * Set the guarded attributes for the model.
      *
-     * @param array $guarded
+     * @param  array $guarded
      * @return $this
      */
     public function guard(array $guarded)
@@ -103,7 +103,7 @@ trait GuardAttributes
     /**
      * Merge the given guarded attributes with the existing guarded attributes.
      *
-     * @param array $guarded
+     * @param  array $guarded
      * @return $this
      */
     public function merge_guarded(array $guarded)
@@ -120,7 +120,7 @@ trait GuardAttributes
     /**
      * Enable mass assignment for all attributes.
      *
-     * @param bool $state
+     * @param  bool $state
      * @return void
      */
     public static function unguard($state = true)
@@ -151,7 +151,7 @@ trait GuardAttributes
     /**
      * Execute the given callback while mass assignment is enabled for all attributes.
      *
-     * @param callable $callback
+     * @param  callable $callback
      * @return mixed
      */
     public static function unguarded(callable $callback)
@@ -172,7 +172,7 @@ trait GuardAttributes
     /**
      * Determine if the given key is fillable.
      *
-     * @param string $key
+     * @param  string $key
      * @return bool
      */
     public function is_fillable($key)
@@ -195,7 +195,7 @@ trait GuardAttributes
     /**
      * Determine if the given key is guarded.
      *
-     * @param string $key
+     * @param  string $key
      * @return bool
      */
     public function is_guarded($key)

@@ -24,18 +24,21 @@ class MakeMigrationCommand extends CommandBase
 {
     /**
      * Command's positional arguments
+     *
      * @var array
      */
     protected $args;
 
     /**
      * Command's associative arguments
+     *
      * @var array
      */
     protected $assoc;
 
     /**
      * Migration base path
+     *
      * @var string
      */
     protected $output_dir;

@@ -30,7 +30,7 @@ trait RelationshipQueries
      * @param string|array $relations The relations to count
      * 
      * @return $this The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function with_count($relations)
     {
@@ -44,7 +44,7 @@ trait RelationshipQueries
      * @param string $column The column to max
      * 
      * @return $this The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function with_max($relation, $column)
     {
@@ -58,7 +58,7 @@ trait RelationshipQueries
      * @param string $column The column to min
      * 
      * @return $this The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function with_min($relation, $column)
     {
@@ -72,7 +72,7 @@ trait RelationshipQueries
      * @param string $column The column to avg
      * 
      * @return $this The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function with_avg($relation, $column)
     {
@@ -86,7 +86,7 @@ trait RelationshipQueries
      * @param string $column The column to sum
      * 
      * @return $this The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function with_sum($relation, $column)
     {
@@ -99,7 +99,7 @@ trait RelationshipQueries
      * @param string|array $relation The relation to exists
      * 
      * @return $this The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function with_exists($relation)
     {
@@ -116,7 +116,7 @@ trait RelationshipQueries
      * @param Closure $callback The callback to use
      * 
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function where_has($relation, ?Closure $callback = null, $operator = '>=', $count = 1)
     {
@@ -132,7 +132,7 @@ trait RelationshipQueries
      * @param int $count The count to use
      * 
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function with_where_has($relation, ?Closure $callback = null, $operator = '>=', $count = 1)
     {
@@ -151,7 +151,7 @@ trait RelationshipQueries
      * @param int $count The count to use
      * 
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function or_where_has($relation, ?Closure $callback = null, $operator = '>=', $count = 1)
     {
@@ -166,7 +166,7 @@ trait RelationshipQueries
      * @param Closure $callback The callback to use
      * 
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function not_has($relation, $boolean = 'and', ?Closure $callback = null)
     {
@@ -179,7 +179,7 @@ trait RelationshipQueries
      * @param string|array $relation The relation to check
      * 
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function or_not_has($relation)
     {
@@ -193,7 +193,7 @@ trait RelationshipQueries
      * @param Closure $callback The callback to use
      * 
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function where_not_has($relation, ?Closure $callback = null)
     {
@@ -207,7 +207,7 @@ trait RelationshipQueries
      * @param Closure $callback The callback to use
      * 
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function or_where_not_has($relation, ?Closure $callback = null)
     {
@@ -223,7 +223,7 @@ trait RelationshipQueries
      * @param mixed|null $value The value to check
      * 
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function where_relation($relation, $column, $operator = null, $value = null)
     {
@@ -245,7 +245,7 @@ trait RelationshipQueries
      * @param mixed|null $value The value to check
      * 
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function with_where_relation($relation, $column, $operator = null, $value = null)
     {
@@ -268,7 +268,7 @@ trait RelationshipQueries
      * @param mixed|null $value The value to check
      * 
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function or_where_relation($relation, $column, $operator = null, $value = null)
     {
@@ -290,7 +290,7 @@ trait RelationshipQueries
      * @param mixed|null $value The value to check
      * 
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function where_not_has_relation($relation, $column, $operator = null, $value = null)
     {
@@ -312,7 +312,7 @@ trait RelationshipQueries
      * @param mixed|null $value The value to check
      * 
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function or_where_not_has_relation($relation, $column, $operator = null, $value = null)
     {
@@ -333,7 +333,7 @@ trait RelationshipQueries
      * @param string $function The aggregate function
      * 
      * @return $this The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function with_aggregate($relations, $column, $function = null)
     {
@@ -415,7 +415,7 @@ trait RelationshipQueries
      * @param string $relation The relation name
      * 
      * @return Relation The relation instance
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function get_relation_without_constraints($relation)
     {
@@ -434,7 +434,7 @@ trait RelationshipQueries
      * @param Closure $callback The callback to use
      *
      * @return QueryBuilder The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function has($relation, $operator = '>=', $count = 1, $boolean = 'and', ?Closure $callback = null)
     {
@@ -473,7 +473,7 @@ trait RelationshipQueries
      * @param string $boolean The boolean to use
      *
      * @return $this The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function add_has_where(QueryBuilder $query, Relation $relation, $operator, $count, $boolean)
     {
@@ -493,7 +493,7 @@ trait RelationshipQueries
      * @param string $boolean The boolean to use
      *
      * @return $this The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function add_where_count_query(QueryBuilder $query, $operator = '>=', $count = 1, $boolean = 'and')
     {
@@ -513,7 +513,7 @@ trait RelationshipQueries
      * @param QueryBuilder $from The query builder to merge from
      *
      * @return $this The query builder instance for method chaining
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function merge_constraints_from(QueryBuilder $from)
     {
@@ -537,7 +537,7 @@ trait RelationshipQueries
      * @param string $to The to table
      *
      * @return array The re-qualified wheres
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function re_qualify_where_tables(array $wheres, string $from, string $to)
     {
@@ -557,7 +557,7 @@ trait RelationshipQueries
      * @param int $count The count to use
      *
      * @return bool Whether the query is an existence query
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function is_existence_query($operator, $count)
     {

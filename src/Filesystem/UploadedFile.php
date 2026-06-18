@@ -79,7 +79,7 @@ class UploadedFile extends File implements JsonSerializable
     /**
      * Create a new uploaded file instance from a base file.
      *
-     * @param static|array $file
+     * @param  static|array $file
      * @return static
      */
     public static function create_from_base($file)
@@ -168,8 +168,8 @@ class UploadedFile extends File implements JsonSerializable
     /**
      * Store the uploaded file in a specified directory.
      *
-     * @param string $path
-     * @param array $options
+     * @param  string $path
+     * @param  array $options
      * @return string
      * 
      * @since 1.0.0
@@ -182,9 +182,9 @@ class UploadedFile extends File implements JsonSerializable
     /**
      * Store the uploaded file in a specified directory with a specific name.
      *
-     * @param string $path
-     * @param string|null $name
-     * @param array $options
+     * @param  string $path
+     * @param  string|null $name
+     * @param  array $options
      * @return string
      * 
      * @throws AuthorizationException If the current user is not authorized to upload files.
@@ -192,14 +192,17 @@ class UploadedFile extends File implements JsonSerializable
      * 
      * @since 1.0.0
      */
-    public function store_as(string $path,  $name = null, array $options = [])
+    public function store_as(string $path, $name = null, array $options = [])
     {
         if (is_null($name)) {
             $name = $this->get_client_original_name();
         }
 
         return Container::get_instance()->make(Filesystem::class)->upload(
-            $path, $this, $name, $options
+            $path,
+            $this,
+            $name,
+            $options
         );
     }
 
@@ -234,7 +237,9 @@ class UploadedFile extends File implements JsonSerializable
         if ($this->is_valid()) {
             $target = $this->get_target_file($directory, $name);
 
-            set_error_handler(static function ($type, $msg) use (&$error) {$error = $msg; });
+            set_error_handler(static function ($type, $msg) use (&$error) {
+                $error = $msg;
+            });
 
             try {
                 $moved = move_uploaded_file($this->getPathname(), $target);
@@ -310,7 +315,7 @@ class UploadedFile extends File implements JsonSerializable
     /**
      * Parse the file size.
      *
-     * @param string $size
+     * @param  string $size
      * @return int
      * 
      * @since 1.0.0
@@ -334,10 +339,14 @@ class UploadedFile extends File implements JsonSerializable
         }
 
         switch (substr($size, -1)) {
-            case 't': $max *= 1024;
-            case 'g': $max *= 1024;
-            case 'm': $max *= 1024;
-            case 'k': $max *= 1024;
+            case 't': 
+                $max *= 1024;
+            case 'g': 
+                $max *= 1024;
+            case 'm': 
+                $max *= 1024;
+            case 'k': 
+                $max *= 1024;
         }
 
         return $max;

@@ -34,7 +34,7 @@ class DeferredDispatcher
     /**
      * Specify the delay (time or interval) before the job should be executed.
      *
-     * @param mixed $moment
+     * @param  mixed $moment
      * @return $this
      */
     public function delay($moment)
@@ -47,7 +47,7 @@ class DeferredDispatcher
     /**
      * Set the execution priority level for the job.
      *
-     * @param int $priority
+     * @param  int $priority
      * @return $this
      */
     public function priority(int $priority)
@@ -72,8 +72,8 @@ class DeferredDispatcher
     /**
      * Proxy method calls to the underlying job instance to allow fluent configuration.
      *
-     * @param string $method
-     * @param array $parameters
+     * @param  string $method
+     * @param  array $parameters
      * @return $this
      */
     public function __call($method, $parameters)

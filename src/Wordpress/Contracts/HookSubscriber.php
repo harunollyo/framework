@@ -44,7 +44,7 @@ interface HookSubscriber
     /**
      * Handle the hook logic. Will be called when the hook is fired.
      *
-     * @param mixed ...$args All arguments passed to the hook.
+     * @param  mixed ...$args All arguments passed to the hook.
      * @return mixed Return value is only used for filters. Actions can return void.
      */
     public function handle(...$args);

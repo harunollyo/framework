@@ -63,8 +63,8 @@ class Validator
     /**
      * Static factory method for creating a Validator instance.
      *
-     * @param array $data
-     * @param array $rules
+     * @param  array $data
+     * @param  array $rules
      * @return static
      */
     public static function make(array $data, array $rules)
@@ -190,7 +190,7 @@ class Validator
      *                                          to reconstruct the current dot-notated key (e.g., 'items.0.id')
      *                                          for both error messages and setting validated values.
      *
-     * @param array $rules                      An array of validation rules to apply (e.g., ['required', 'string']).
+     * @param  array $rules                      An array of validation rules to apply (e.g., ['required', 'string']).
      *                                          These are parsed from the rule string and passed into the validation
      *                                          functions.
      * @return void
@@ -318,7 +318,7 @@ class Validator
      * Validate strict rules.
      * check is there any rule is true then return true otherwise false and set errors
      * 
-     * @param array $strict_validations
+     * @param  array $strict_validations
      * @return bool
      */
     protected function validate_strict_rules(array $strict_validations)
@@ -389,8 +389,8 @@ class Validator
      * Set the error message for a given key in the errors array.
      * The key can be a dot-notated string, e.g. `user.email`.
      *
-     * @param string $key   The key to set the error
-     * @param string $error_msg The error message
+     * @param  string $key   The key to set the error
+     * @param  string $error_msg The error message
      * @return void
      */
     public function add_error($key, $error_msg)

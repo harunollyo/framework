@@ -17,7 +17,7 @@ use Framework\Supports\Carbon;
 use Framework\Supports\Str;
 
 /**
- * @see https://carbon.nesbot.com/docs/
+ * @see    https://carbon.nesbot.com/docs/
  * @method bool can_be_created_from_format(?string $date, string $format)
  * @method \Framework\Supports\Carbon|null create($year = 0, $month = 1, $day = 1, $hour = 0, $minute = 0, $second = 0, $timezone = null)
  * @method \Framework\Supports\Carbon create_from_date($year = null, $month = null, $day = null, $timezone = null)

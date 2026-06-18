@@ -4,8 +4,8 @@
  * Defines constants for text, email, url, rich-text, and structured types with a dispatch method per rule name.
  * Shared by validation and request sanitization pipelines.
  *
- * @package    Framework
- * @since      1.0.0
+ * @package Framework
+ * @since   1.0.0
  */
 namespace Framework;
 
@@ -224,6 +224,7 @@ class Sanitizer
 
     /**
      * Run sanitizer
+     *
      * @return void
      */
     protected function run_sanitizer()
@@ -310,9 +311,9 @@ class Sanitizer
     /**
      * Apply sanitization.
      * 
-     * @param mixed $value
-     * @param string|callable|null $type
-     * @param array $data
+     * @param  mixed $value
+     * @param  string|callable|null $type
+     * @param  array $data
      * @return mixed
      */
     public static function apply_rule($value, $type, array $data = [])

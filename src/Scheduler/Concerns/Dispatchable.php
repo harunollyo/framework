@@ -23,7 +23,7 @@ trait Dispatchable
     /**
      * Dispatch the job with the given arguments.
      *
-     * @param mixed $values
+     * @param  mixed $values
      * @return DeferredDispatcher
      */
     public static function dispatch($values = [])
@@ -46,7 +46,7 @@ trait Dispatchable
     /**
      * Create a new deferred dispatcher instance.
      *
-     * @param array $values
+     * @param  array $values
      * @return DeferredDispatcher
      */
     protected static function new_deferred_dispatcher(array $values)

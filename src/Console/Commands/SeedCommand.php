@@ -101,7 +101,7 @@ class SeedCommand extends CommandBase
     /**
      * Get the seeder classes
      *
-     * @param string $class
+     * @param  string $class
      * @return array
      */
     protected function seeder_classes($class)
@@ -122,7 +122,7 @@ class SeedCommand extends CommandBase
     /**
      * Get the filename of the seeder
      *
-     * @param string $path
+     * @param  string $path
      * @return string
      */
     protected function filename($path)
@@ -133,7 +133,7 @@ class SeedCommand extends CommandBase
     /**
      * Get the classname of the seeder
      *
-     * @param string $filename
+     * @param  string $filename
      * @return string
      */
     protected function classname($filename)
@@ -146,7 +146,7 @@ class SeedCommand extends CommandBase
     /**
      * Check if the seeder exists
      *
-     * @param string $class
+     * @param  string $class
      * @return bool
      */
     protected function exists($class)

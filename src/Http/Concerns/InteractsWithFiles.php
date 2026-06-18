@@ -150,7 +150,7 @@ trait InteractsWithFiles
     /**
      * Create a new uploaded file instance.
      *
-     * @param array $file The file array from the $_FILES superglobal.
+     * @param  array $file The file array from the $_FILES superglobal.
      * @return UploadedFile
      */
     protected function create_uploaded_file(array $file)

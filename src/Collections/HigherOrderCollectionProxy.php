@@ -45,7 +45,7 @@ class HigherOrderCollectionProxy
     /**
      * Get the value of the property.
      *
-     * @param string $key The key of the property.
+     * @param  string $key The key of the property.
      * @return mixed
      * 
      * @since 1.0.0
@@ -60,8 +60,8 @@ class HigherOrderCollectionProxy
     /**
      * Call the method on the collection.
      *
-     * @param string $method The method to call on the collection.
-     * @param array $parameters The parameters to pass to the method.
+     * @param  string $method The method to call on the collection.
+     * @param  array $parameters The parameters to pass to the method.
      * @return mixed
      * 
      * @since 1.0.0

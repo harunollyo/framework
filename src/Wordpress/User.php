@@ -111,7 +111,7 @@ class User
     /**
      * Sync the user by provided user id.
      *
-     * @param int $user_id
+     * @param  int $user_id
      * @return static
      */
     public function sync(int $user_id)
@@ -253,7 +253,7 @@ class User
     /**
      * Set the current user role
      *
-     * @param string $role
+     * @param  string $role
      * @return bool
      */
     public function set_role($role)
@@ -264,7 +264,7 @@ class User
     /**
      * Check if the current user has a specific role
      *
-     * @param string $role
+     * @param  string $role
      * @return bool
      */
     public function has_role(string $role)
@@ -285,8 +285,8 @@ class User
     /**
      * Get the current user meta
      *
-     * @param string $key
-     * @param mixed $default
+     * @param  string $key
+     * @param  mixed $default
      * @return mixed
      */
     public function get_meta(string $key, $default = null)
@@ -297,8 +297,8 @@ class User
     /**
      * Check if the user can perform an action on a model
      *
-     * @param string $ability
-     * @param mixed $model
+     * @param  string $ability
+     * @param  mixed $model
      * @return bool
      */
     public function can($ability, $model = null)
@@ -311,8 +311,8 @@ class User
     /**
      * Check if the user cannot perform an action on a model
      *
-     * @param string $ability
-     * @param mixed $model
+     * @param  string $ability
+     * @param  mixed $model
      * @return bool
      */
     public function cannot($ability, $model = null)
@@ -325,8 +325,8 @@ class User
      * Allows calling methods like can_edit_posts(), can_manage_options(), etc.
      * The method name must start with 'can_' followed by a valid capability from Capabilities class.
      *
-     * @param string $name The method name being called
-     * @param array $arguments Arguments passed to the method (unused)
+     * @param  string $name The method name being called
+     * @param  array $arguments Arguments passed to the method (unused)
      * @throws Exception If method doesn't start with 'can_' or capability doesn't exist
      * @return bool Whether the user has the requested capability
      */

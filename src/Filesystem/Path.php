@@ -21,7 +21,7 @@ class Path
      * @param string ...$paths
      *
      * @return string
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public static function join($base, ...$paths)
     {
@@ -42,7 +42,7 @@ class Path
      * @param string $path
      *
      * @return string
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public static function normalize($path)
     {

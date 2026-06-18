@@ -89,8 +89,8 @@ class PolicyManager
     /**
      * Register an individual model-policy mapping.
      *
-     * @param string $model
-     * @param string $policy
+     * @param  string $model
+     * @param  string $policy
      * @return void
      */
     public function register_policy(string $model, string $policy)
@@ -101,7 +101,7 @@ class PolicyManager
     /**
      * Resolve the policy object for a given model.
      *
-     * @param mixed $model
+     * @param  mixed $model
      * @return mixed|null
      */
     protected function resolve_policy($model)
@@ -118,7 +118,7 @@ class PolicyManager
     /**
      * Determine if a policy exists for the given model.
      *
-     * @param string $model
+     * @param  string $model
      * @return bool
      */
     protected function has_policy($model)
@@ -129,7 +129,7 @@ class PolicyManager
     /**
      * Get the class name of the policy for the given model.
      *
-     * @param string $model
+     * @param  string $model
      * @return string
      */
     protected function policy($model)
@@ -140,8 +140,8 @@ class PolicyManager
     /**
      * Authorize an ability against a model instance or class.
      *
-     * @param string $ability
-     * @param mixed $model
+     * @param  string $ability
+     * @param  mixed $model
      * @return bool|mixed
      * @throws AuthorizationException
      */
@@ -202,8 +202,8 @@ class PolicyManager
     /**
      * Determine if the current user is allowed to perform the given ability.
      *
-     * @param string $ability
-     * @param mixed $model
+     * @param  string $ability
+     * @param  mixed $model
      * @return bool
      */
     public function allows(string $ability, $model = null, array $arguments = [])
@@ -218,8 +218,8 @@ class PolicyManager
     /**
      * Determine if the current user is denied from performing the given ability.
      *
-     * @param string $ability
-     * @param mixed $model
+     * @param  string $ability
+     * @param  mixed $model
      * @return bool
      */
     public function denies(string $ability, $model = null, array $arguments = [])

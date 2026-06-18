@@ -4,8 +4,8 @@
  * Supports attribute casting, field picking/exclusion, and meta field extraction.
  * Bridges validated HTTP input and API output with a typed property bag.
  *
- * @package    Framework
- * @since      1.0.0
+ * @package Framework
+ * @since   1.0.0
  */
 namespace Framework;
 
@@ -73,7 +73,7 @@ class DTO implements JsonSerializable, Arrayable
     /**
      * Create DTO from array
      *
-     * @param array $data
+     * @param  array $data
      * @return static
      */
     public static function from_array(array $data)
@@ -84,7 +84,7 @@ class DTO implements JsonSerializable, Arrayable
     /**
      * Create DTO from Request
      *
-     * @param Request $request
+     * @param  Request $request
      * @return static
      * @throws ValidationException
      */
@@ -99,7 +99,7 @@ class DTO implements JsonSerializable, Arrayable
     /**
      * Create DTO from list
      *
-     * @param array $items
+     * @param  array $items
      * @return static[]
      */
     public static function from_list(array $items)
@@ -175,7 +175,8 @@ class DTO implements JsonSerializable, Arrayable
 
     /**
      * get all excluded fields
-     * @param array $keys
+     *
+     * @param  array $keys
      * @return array
      */
     public function except(array $keys)
@@ -187,7 +188,8 @@ class DTO implements JsonSerializable, Arrayable
 
     /**
      * set all excluded fields
-     * @param array $keys
+     *
+     * @param  array $keys
      * @return static
      */
     public function exclude(array $keys)
@@ -200,7 +202,7 @@ class DTO implements JsonSerializable, Arrayable
     /**
      * get all only included fields
      *
-     * @param array $keys
+     * @param  array $keys
      * @return array 
      */
     public function only(array $keys)
@@ -212,7 +214,8 @@ class DTO implements JsonSerializable, Arrayable
 
     /**
      * set all included fields
-     * @param array $except keys
+     *
+     * @param  array $except keys
      * @return static
      */
     public function pick(array $keys)

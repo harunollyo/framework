@@ -89,7 +89,7 @@ class Connection
      * statements. Throws an exception when connection fails.
      *
      * @return void No return value; sets internal PDO instance
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function connect()
     {
@@ -108,7 +108,7 @@ class Connection
      * require direct database access beyond the ORM's query builder.
      *
      * @return \wpdb The active PDO connection object
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function get_db()
     {
@@ -122,7 +122,7 @@ class Connection
      * Transactions allow grouping multiple statements into an atomic unit.
      *
      * @return bool True on success; false on failure
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function begin_transaction()
     {
@@ -136,7 +136,7 @@ class Connection
      * boolean result indicating success.
      *
      * @return bool True on success; false on failure
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function commit()
     {
@@ -150,7 +150,7 @@ class Connection
      * boolean result indicating whether the rollback succeeded.
      *
      * @return bool True on success; false on failure
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function rollback()
     {

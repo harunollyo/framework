@@ -50,7 +50,7 @@ class Fileable
     /**
      * Create a new file instance.
      *
-     * @param string $path
+     * @param  string $path
      * @return void
      */
     public function __construct(string $path)
@@ -61,7 +61,7 @@ class Fileable
     /**
      * Create a new file instance.
      *
-     * @param string $path
+     * @param  string $path
      * @return static
      */
     public static function make(string $path)
@@ -72,8 +72,8 @@ class Fileable
     /**
      * Get the parameters for the given method.
      *
-     * @param string $method
-     * @param array $parameters
+     * @param  string $method
+     * @param  array $parameters
      * @return array
      */
     protected function parameters($method, $parameters)
@@ -90,8 +90,8 @@ class Fileable
     /**
      * Handle dynamic method calls into the filesystem.
      *
-     * @param string $method
-     * @param array $parameters
+     * @param  string $method
+     * @param  array $parameters
      * @return mixed
      */
     public function __call($method, $parameters)

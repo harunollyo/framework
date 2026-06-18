@@ -24,9 +24,9 @@ interface Shortcode
     /**
      * The shortcode callback function.
      *
-     * @param array $attributes
-     * @param string $content
-     * @param string $shortcode_tag
+     * @param  array $attributes
+     * @param  string $content
+     * @param  string $shortcode_tag
      * @return string
      */
     public function callback($attributes, string $content = '', string $shortcode_tag = '');

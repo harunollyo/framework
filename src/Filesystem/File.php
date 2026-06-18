@@ -21,7 +21,7 @@ class File extends SplFileInfo
     /**
      * Create a new file instance.
      *
-     * @param string $path
+     * @param  string $path
      * @return void
      */
     public function __construct(string $path, bool $check_path = true)
@@ -48,7 +48,9 @@ class File extends SplFileInfo
     {
         $target = $this->get_target_file($directory, $name);
 
-        set_error_handler(static function ($type, $msg) use (&$error) {$error = $msg; });
+        set_error_handler(static function ($type, $msg) use (&$error) {
+            $error = $msg;
+        });
 
         try {
             $renamed = rename($this->getPathname(), $target);
@@ -117,7 +119,7 @@ class File extends SplFileInfo
     /**
      * Get the name of the file.
      *
-     * @param string $name
+     * @param  string $name
      * @return string
      * 
      * @since 1.0.0

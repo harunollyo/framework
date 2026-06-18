@@ -44,7 +44,7 @@ class ModelNotFoundException extends NotFoundException
     /**
      * Set the model class name for the exception.
      *
-     * @param string $model The model class name.
+     * @param  string $model The model class name.
      * @return void
      */
     public function set_model($model)
@@ -56,7 +56,7 @@ class ModelNotFoundException extends NotFoundException
     /**
      * Set the IDs or route keys that were searched for.
      *
-     * @param mixed $ids The ID(s) or route key(s).
+     * @param  mixed $ids The ID(s) or route key(s).
      * @return void
      */
     public function set_ids($ids)

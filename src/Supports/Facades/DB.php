@@ -24,7 +24,7 @@ use Framework\Facade;
  * @method static void disable_query_log()
  * @method static void flush_query_log()
  * @method static array get_query_log()
- * @see \Framework\Database\Connection\DatabaseManager
+ * @see    \Framework\Database\Connection\DatabaseManager
  */
 
 class DB extends Facade

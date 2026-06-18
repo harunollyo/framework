@@ -21,8 +21,8 @@ trait Macroable
     /**
      * Register a macro.
      *
-     * @param string $name
-     * @param callable $macro
+     * @param  string $name
+     * @param  callable $macro
      * @return void
      */
     public static function macro($name, callable $macro)
@@ -33,7 +33,7 @@ trait Macroable
     /**
      * Check if a macro is registered.
      *
-     * @param string $name
+     * @param  string $name
      * @return bool
      */
     public static function has_macro($name)
@@ -44,8 +44,8 @@ trait Macroable
     /**
      * Dynamically handle calls to the class.
      *
-     * @param string $method
-     * @param array $arguments
+     * @param  string $method
+     * @param  array $arguments
      * @return mixed
      */
     public function __call(string $method, array $arguments)
@@ -65,8 +65,8 @@ trait Macroable
     /**
      * Dynamically handle calls to the class.
      *
-     * @param string $method
-     * @param array $arguments
+     * @param  string $method
+     * @param  array $arguments
      * @return mixed
      */
     public static function __callStatic(string $method, array $arguments)

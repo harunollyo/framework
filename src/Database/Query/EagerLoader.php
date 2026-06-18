@@ -44,10 +44,10 @@ class EagerLoader
      * Instances are typically constructed by the query builder when handling
      * with() calls to prefetch related data efficiently.
      *
-     * @param Collection $models The models that will receive related data
-     * @param array $relations The relation method names to eager load
+     * @param  Collection $models The models that will receive related data
+     * @param  array $relations The relation method names to eager load
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function __construct(Collection $models, array $relations)
     {
@@ -63,7 +63,7 @@ class EagerLoader
      * instance under their respective relation keys.
      *
      * @return array The array of models with loaded relations
-     * @since 1.0.0
+     * @since  1.0.0
      */
     public function load()
     {
@@ -82,10 +82,10 @@ class EagerLoader
      * their parents. No operation occurs when models are empty or the method
      * is missing.
      *
-     * @param string $relation_name The relation method name to load
-     * @param mixed $nested_relations Nested relations to load on the related models
+     * @param  string $relation_name The relation method name to load
+     * @param  mixed $nested_relations Nested relations to load on the related models
      * @return void No return value; updates models in place
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function load_relation($relation_name, $nested_relations = null)
     {
@@ -99,7 +99,9 @@ class EagerLoader
             return;
         }
 
-        /** @var  Relation */
+        /**
+ * @var Relation 
+*/
         $relation = $first_model->$relation_name();
 
         $relation->add_eager_constraints($this->models);
@@ -122,10 +124,10 @@ class EagerLoader
     /**
      * Load nested relations on the related models.
      *
-     * @param string $relation_name The parent relation name
-     * @param array $nested_relations The nested relations to load
+     * @param  string $relation_name The parent relation name
+     * @param  array $nested_relations The nested relations to load
      * @return void No return value
-     * @since 1.0.0
+     * @since  1.0.0
      */
     protected function load_nested_relations($relation_name, $nested_relations)
     {

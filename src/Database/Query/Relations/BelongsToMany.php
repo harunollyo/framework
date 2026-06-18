@@ -400,7 +400,6 @@ class BelongsToMany extends Relation
                 $dictionary[$attribute][] = $this->migrate_pivot_attributes($result);
                 $dictionary[$attribute] ??= [];
             }
-
         }
 
         return $dictionary;
@@ -646,7 +645,7 @@ class BelongsToMany extends Relation
     /**
      * Add an "or where null" clause on the pivot table.
      *
-     * @param string $column
+     * @param  string $column
      * @return $this
      * 
      * @since 1.0.0

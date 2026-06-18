@@ -103,7 +103,7 @@ class OptionManager
         }
 
         // Fill with defaults for the missing keys
-        $results =  $options->map(function($value, $key) use ($default) {
+        $results =  $options->map(function ($value, $key) use ($default) {
             if (is_array($default)) {
                 return !is_null($value) ? $value : ($default[$key] ?? null);
             }
@@ -241,13 +241,13 @@ class OptionManager
     /**
      * Rebase the keys of the results.
      *
-     * @param array $results The results to rebase.
-     * @param bool $with_prefix
+     * @param  array $results The results to rebase.
+     * @param  bool $with_prefix
      * @return array The rebased results.
      */
     protected function rebase_keys(array $results, $with_prefix)
     {
-        return collection($results)->map(function($value, $key) use ($with_prefix) {
+        return collection($results)->map(function ($value, $key) use ($with_prefix) {
             $key_without_prefix = $with_prefix ? without_prefix($key) : $key;
             return [$key_without_prefix => $value];
         })->collapse()->all();
@@ -258,7 +258,7 @@ class OptionManager
      *
      * Removes the option from the WordPress options table using a namespaced option name.
      *
-     * @param string $name The option key to delete.
+     * @param  string $name The option key to delete.
      * @return bool True if the option was deleted, false otherwise.
      */
     public function delete(string $name, $with_prefix = true)
@@ -274,7 +274,7 @@ class OptionManager
      *
      * Prepends the app prefix to the given option key.
      *
-     * @param string|array<string> $name The base option key.
+     * @param  string|array<string> $name The base option key.
      * @return array The namespaced option key.
      */
     protected function get_option_name($name, $with_prefix = true)

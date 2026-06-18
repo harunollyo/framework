@@ -123,7 +123,7 @@ class Structure
     /**
      * Wrap the table name with the query compiler.
      *
-     * @param string $table The table name
+     * @param  string $table The table name
      * @return string
      *
      * @since 1.0.0
@@ -258,8 +258,8 @@ class Structure
     /**
      * Add a TIMESTAMP column.
      *
-     * @param string $name The column name
-     * @param int $precision The precision for the timestamp
+     * @param  string $name The column name
+     * @param  int $precision The precision for the timestamp
      * @return Definition
      *
      * @since 1.0.0
@@ -272,7 +272,7 @@ class Structure
     /**
      * Add 'created_at' and 'updated_at' timestamp columns.
      *
-     * @param int $precision The precision for the timestamp columns
+     * @param  int $precision The precision for the timestamp columns
      * @return void
      *
      * @since 1.0.0
@@ -286,9 +286,9 @@ class Structure
     /**
      * Add an INTEGER column.
      *
-     * @param string $name The column name
-     * @param bool $auto_increment Whether the column is auto-increment
-     * @param bool $unsigned Whether the column is unsigned
+     * @param  string $name The column name
+     * @param  bool $auto_increment Whether the column is auto-increment
+     * @param  bool $unsigned Whether the column is unsigned
      * @return Definition
      *
      * @since 1.0.0
@@ -301,9 +301,9 @@ class Structure
     /**
      * Add a TINYINT column.
      *
-     * @param string $name The column name
-     * @param bool $auto_increment Whether the column is auto-increment
-     * @param bool $unsigned Whether the column is unsigned
+     * @param  string $name The column name
+     * @param  bool $auto_increment Whether the column is auto-increment
+     * @param  bool $unsigned Whether the column is unsigned
      * @return Definition
      *
      * @since 1.0.0
@@ -316,9 +316,9 @@ class Structure
     /**
      * Add a BIGINT column.
      *
-     * @param string $name The column name
-     * @param bool $auto_increment Whether the column is auto-increment
-     * @param bool $unsigned Whether the column is unsigned
+     * @param  string $name The column name
+     * @param  bool $auto_increment Whether the column is auto-increment
+     * @param  bool $unsigned Whether the column is unsigned
      * @return Definition
      *
      * @since 1.0.0
@@ -331,8 +331,8 @@ class Structure
     /**
      * Add an unsigned BIGINT column.
      *
-     * @param string $name The column name
-     * @param bool $auto_increment Whether the column is auto-increment
+     * @param  string $name The column name
+     * @param  bool $auto_increment Whether the column is auto-increment
      * @return Definition
      *
      * @since 1.0.0
@@ -345,8 +345,8 @@ class Structure
     /**
      * Add an unsigned INTEGER column.
      *
-     * @param string $name The column name
-     * @param bool $auto_increment Whether the column is auto-increment
+     * @param  string $name The column name
+     * @param  bool $auto_increment Whether the column is auto-increment
      * @return Definition
      *
      * @since 1.0.0
@@ -359,8 +359,8 @@ class Structure
     /**
      * Add an unsigned TINYINT column.
      *
-     * @param string $name The column name
-     * @param bool $auto_increment Whether the column is auto-increment
+     * @param  string $name The column name
+     * @param  bool $auto_increment Whether the column is auto-increment
      * @return Definition
      *
      * @since 1.0.0
@@ -373,7 +373,7 @@ class Structure
     /**
      * Add an auto-incrementing unsigned INTEGER column.
      *
-     * @param string $name The column name
+     * @param  string $name The column name
      * @return Definition
      *
      * @since 1.0.0
@@ -386,7 +386,7 @@ class Structure
     /**
      * Add an auto-incrementing unsigned BIGINT column.
      *
-     * @param string $name The column name
+     * @param  string $name The column name
      * @return Definition
      *
      * @since 1.0.0
@@ -399,9 +399,9 @@ class Structure
     /**
      * Add a DECIMAL column.
      *
-     * @param string $name The column name
-     * @param int $total The total number of digits
-     * @param int $places The number of decimal places
+     * @param  string $name The column name
+     * @param  int $total The total number of digits
+     * @param  int $places The number of decimal places
      * @return Definition
      *
      * @since 1.0.0
@@ -428,8 +428,8 @@ class Structure
     /**
      * Add a STRING (VARCHAR) column.
      *
-     * @param string $name The column name
-     * @param int|null $length The length of the string
+     * @param  string $name The column name
+     * @param  int|null $length The length of the string
      * @return Definition
      *
      * @since 1.0.0
@@ -486,8 +486,8 @@ class Structure
     /**
      * Add a FLOAT column.
      *
-     * @param string $name The column name
-     * @param int $precision The precision for the float
+     * @param  string $name The column name
+     * @param  int $precision The precision for the float
      * @return Definition
      *
      * @since 1.0.0
@@ -500,7 +500,7 @@ class Structure
     /**
      * Add a DOUBLE column.
      *
-     * @param string $name The column name
+     * @param  string $name The column name
      * @return Definition
      *
      * @since 1.0.0
@@ -513,7 +513,7 @@ class Structure
     /**
      * Add a DATE column.
      *
-     * @param string $name The column name
+     * @param  string $name The column name
      * @return Definition
      *
      * @since 1.0.0
@@ -526,8 +526,8 @@ class Structure
     /**
      * Add a DATETIME column.
      *
-     * @param string $name The column name
-     * @param int $precision The precision for the datetime
+     * @param  string $name The column name
+     * @param  int $precision The precision for the datetime
      * @return Definition
      *
      * @since 1.0.0
@@ -540,8 +540,8 @@ class Structure
     /**
      * Add a TIME column.
      *
-     * @param string $name The column name
-     * @param int $precision The precision for the time
+     * @param  string $name The column name
+     * @param  int $precision The precision for the time
      * @return Definition
      *
      * @since 1.0.0
@@ -554,8 +554,8 @@ class Structure
     /**
      * Add an ENUM column.
      *
-     * @param string $name The column name
-     * @param array $values The values for the enum
+     * @param  string $name The column name
+     * @param  array $values The values for the enum
      * @return Definition
      *
      * @since 1.0.0
@@ -568,8 +568,8 @@ class Structure
     /**
      * Add a SET column.
      *
-     * @param string $name The column name
-     * @param array $values The values for the set
+     * @param  string $name The column name
+     * @param  array $values The values for the set
      * @return Definition
      *
      * @since 1.0.0
@@ -582,7 +582,7 @@ class Structure
     /**
      * Add an IP address column.
      *
-     * @param string $name The column name
+     * @param  string $name The column name
      * @return Definition
      *
      * @since 1.0.0
@@ -595,7 +595,7 @@ class Structure
     /**
      * Add a UUID column.
      *
-     * @param string $name The column name
+     * @param  string $name The column name
      * @return Definition
      *
      * @since 1.0.0
@@ -608,7 +608,7 @@ class Structure
     /**
      * Add a YEAR column.
      *
-     * @param string $name The column name
+     * @param  string $name The column name
      * @return Definition
      *
      * @since 1.0.0
@@ -621,9 +621,9 @@ class Structure
     /**
      * Add a column definition to the table.
      *
-     * @param string $type The column type
-     * @param string $name The column name
-     * @param array $parameters Additional parameters for the column
+     * @param  string $type The column type
+     * @param  string $name The column name
+     * @param  array $parameters Additional parameters for the column
      * @return Definition
      *
      * @since 1.0.0
@@ -640,7 +640,7 @@ class Structure
     /**
      * Add a column definition object to the columns array.
      *
-     * @param Definition $definition The column definition
+     * @param  Definition $definition The column definition
      * @return Definition
      *
      * @since 1.0.0
