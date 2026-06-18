@@ -24,6 +24,7 @@ jobs:
           php-version: '7.4'
           coverage: none
           tools: composer
+          extensions: tokenizer, xmlwriter, simplexml
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress

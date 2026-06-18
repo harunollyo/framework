@@ -66,8 +66,8 @@
 		"link-ide-stubs": "php scripts/link-ide-stubs.php",
 		"test": "vendor/bin/phpunit --testdox",
 		"test:unit": "vendor/bin/phpunit --testsuite Unit --testdox",
-		"phpcs": "@php -n -d auto_prepend_file= scripts/run-phpcs.php",
-		"phpcbf": "@php -n -d auto_prepend_file= scripts/run-phpcs.php phpcbf",
-		"phpcs:fix": "@php -n -d auto_prepend_file= scripts/phpcs-fix.php"
+		"phpcs": "@php -d auto_prepend_file= scripts/run-phpcs.php",
+		"phpcbf": "@php -d auto_prepend_file= scripts/run-phpcs.php phpcbf",
+		"phpcs:fix": "@php -d auto_prepend_file= scripts/phpcs-fix.php"
 	}
 }

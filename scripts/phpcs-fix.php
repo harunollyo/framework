@@ -17,7 +17,7 @@ while ($pass < $max_passes) {
 
     ob_start();
     passthru(
-        'php -n -d auto_prepend_file= ' . escapeshellarg($runner) . ' phpcbf' . $args,
+        'php -d auto_prepend_file= ' . escapeshellarg($runner) . ' phpcbf' . $args,
         $exit_code
     );
     $output = ob_get_clean();
