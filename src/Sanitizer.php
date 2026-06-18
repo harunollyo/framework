@@ -22,147 +22,147 @@ class Sanitizer
      *
      * @var string
      */
-    const ANY = 'any';
+    public const ANY = 'any';
 
     /**
      * Trim the value.
      *
      * @var string
      */
-    const TRIM = 'trim';
+    public const TRIM = 'trim';
 
     /**
      * Sanitize the value as text.
      *
      * @var string
      */
-    const TEXT = 'text';
+    public const TEXT = 'text';
 
     /**
      * Sanitize the rich text content.
      *
      * @var string
      */
-    const RICH_TEXT = 'rich-text';
+    public const RICH_TEXT = 'rich-text';
 
     /**
      * Sanitize the value as textarea.
      *
      * @var string
      */
-    const TEXTAREA = 'textarea';
+    public const TEXTAREA = 'textarea';
 
     /**
      * Sanitize the value as email.
      *
      * @var string
      */
-    const EMAIL = 'email';
+    public const EMAIL = 'email';
 
     /**
      * Sanitize the value as username.
      *
      * @var string
      */
-    const USERNAME = 'username';
+    public const USERNAME = 'username';
 
     /**
      * Sanitize the value as url.
      *
      * @var string
      */
-    const URL = 'url';
+    public const URL = 'url';
 
     /**
      * Sanitize the value as key.
      *
      * @var string
      */
-    const KEY = 'key';
+    public const KEY = 'key';
 
     /**
      * Sanitize the value as title.
      *
      * @var string
      */
-    const TITLE = 'title';
+    public const TITLE = 'title';
 
     /**
      * Sanitize the value as file name.
      *
      * @var string
      */
-    const FILE_NAME = 'file-name';
+    public const FILE_NAME = 'file-name';
 
     /**
      * Sanitize the value as mime type.
      *
      * @var string
      */
-    const MIME_TYPE = 'mime-type';
+    public const MIME_TYPE = 'mime-type';
 
     /**
      * Sanitize the value as int.
      *
      * @var string
      */
-    const INT = 'int';
+    public const INT = 'int';
 
     /**
      * Sanitize the value as int.
      *
      * @var string
      */
-    const FLOAT = 'float';
+    public const FLOAT = 'float';
 
     /**
      * Sanitize the value as double.
      *
      * @var string
      */
-    const DOUBLE = 'double';
+    public const DOUBLE = 'double';
 
     /**
      * Sanitize the value as boolean.
      *
      * @var string
      */
-    const BOOL = 'bool';
+    public const BOOL = 'bool';
 
     /**
      * Sanitize the value as array.
      *
      * @var string
      */
-    const ARRAY = 'array';
+    public const ARRAY = 'array';
 
     /**
      * Sanitize the value as date.
      *
      * @var string
      */
-    const DATE = 'date';
+    public const DATE = 'date';
 
     /**
      * Sanitize the value as datetime.
      *
      * @var string
      */
-    const DATETIME = 'datetime';
+    public const DATETIME = 'datetime';
 
     /**
      * Sanitize the value as serialized.
      *
      * @var string
      */
-    const SERIALIZED = 'serialized';
+    public const SERIALIZED = 'serialized';
 
     /**
      * Sanitize the value as unserialized.
      *
      * @var string
      */
-    const UNSERIALIZED = 'unserialized';
+    public const UNSERIALIZED = 'unserialized';
 
     /**
      * Input data.
@@ -275,7 +275,10 @@ class Sanitizer
         $segment = array_shift($key_segments);
         if ($segment === '*') {
             if (!is_array($current_data)) {
-                $this->set_sanitized_data($traversed_path_stack, static::apply_rule($current_data, static::ARRAY, $this->data));
+                $this->set_sanitized_data(
+                    $traversed_path_stack,
+                    static::apply_rule($current_data, static::ARRAY, $this->data)
+                );
                 return;
             }
 

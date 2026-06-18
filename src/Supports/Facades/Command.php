@@ -15,16 +15,17 @@ defined('ABSPATH') || exit;
 use Framework\Facade;
 
 /**
+ * Facade proxy for the CommandManager WP-CLI registration service.
+ *
  * @method static void register(string $command_name, $callback)
  * @see    \Framework\Core\Console\CommandManager
  */
-
 class Command extends Facade
 {
     /**
      * Get the accessor.
      *
-     * @return mixed
+     * @return string
      *
      * @since 1.0.0
      */

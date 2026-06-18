@@ -1,7 +1,8 @@
 <?php
 /**
  * Manage a shared PDO database connection.
- * Provide a singleton-style access point to a configured PDO instance used by the ORM for executing queries and transactions.
+ * Provide a singleton-style access point to a configured PDO instance 
+ * used by the ORM for executing queries and transactions.
  * Handles DSN construction, error mode configuration, and connection lifecycle.
  * Consumers request the instance rather than constructing connections directly.
  *

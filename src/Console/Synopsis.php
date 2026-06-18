@@ -15,6 +15,8 @@ defined('ABSPATH') || exit;
 use Framework\Supports\Flex;
 
 /**
+ * Synopsis class to describe WP-CLI command arguments, options, and positional parameters.
+ * 
  * @method $this name(string $name)
  * @method $this description(string $description)
  * @method $this optional()

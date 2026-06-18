@@ -15,6 +15,8 @@ defined('ABSPATH') || exit;
 use Framework\Facade;
 
 /**
+ * Facade proxy for the Filesystem service with read, write, exists, and directory helpers.
+ *
  * @method static bool is_file(string $file)
  * @method static array glob(string $pattern, int $flags = 0)
  * @method static string basename(string $path)

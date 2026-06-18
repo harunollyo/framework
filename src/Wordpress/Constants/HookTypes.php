@@ -19,12 +19,12 @@ class HookTypes
      *
      * @var string
      */
-    const ACTION = 'action';
+    public const ACTION = 'action';
 
     /**
      * Filter hook type.
      *
      * @var string
      */
-    const FILTER = 'filter';
+    public const FILTER = 'filter';
 }

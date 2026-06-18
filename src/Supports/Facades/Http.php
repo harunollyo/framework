@@ -14,8 +14,11 @@ defined('ABSPATH') || exit;
 
 use Framework\Facade;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
 
 /**
+ * Facade proxy for the HTTP client Request builder.
+ *
  * @method static \Framework\Http\Client\Response get(string $url, array $options = [])
  * @method static \Framework\Http\Client\Response post(string $url, array $options = [])
  * @method static \Framework\Http\Client\Response put(string $url, array $options = [])

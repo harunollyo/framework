@@ -80,8 +80,13 @@ class UploadedFile extends File implements JsonSerializable
      *
      * @since 1.0.0
      */
-    public function __construct(string $path, string $original_name, ?string $mime_type = null, ?int $error = null, ?int $size = null)
-    {
+    public function __construct(
+        string $path,
+        string $original_name,
+        ?string $mime_type = null,
+        ?int $error = null,
+        ?int $size = null
+    ) {
         $this->original_name = $this->get_name($original_name);
         $this->original_path = strtr($original_name, '\\', '/');
         $this->mime_type = $mime_type ?? 'application/octet-stream';
@@ -265,7 +270,14 @@ class UploadedFile extends File implements JsonSerializable
             }
 
             if (!$moved) {
-                throw new Exception(sprintf('Could not move the file "%s" to "%s" (%s).', $this->getPathname(), $target, strip_tags($error ?? '')));
+                throw new Exception(
+                    sprintf(
+                        'Could not move the file "%s" to "%s" (%s).',
+                        $this->getPathname(),
+                        $target,
+                        strip_tags($error ?? '')
+                    )
+                );
             }
 
             @chmod($target, 0o666 & ~umask());
@@ -357,13 +369,16 @@ class UploadedFile extends File implements JsonSerializable
         }
 
         switch (substr($size, -1)) {
-            case 't': 
+            case 't':
                 $max *= 1024;
-            case 'g': 
+                // no break
+            case 'g':
                 $max *= 1024;
-            case 'm': 
+                // no break
+            case 'm':
                 $max *= 1024;
-            case 'k': 
+                // no break
+            case 'k':
                 $max *= 1024;
         }
 

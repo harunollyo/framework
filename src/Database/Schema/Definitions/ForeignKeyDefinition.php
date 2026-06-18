@@ -14,6 +14,8 @@ namespace Framework\Database\Schema\Definitions;
 defined('ABSPATH') || exit;
 
 /**
+ * Define the foreign key constraint of the database schema.
+ *
  * @method $this on(string $table)
  * @method $this on_update(string $action)
  * @method $this on_delete(string $action)

@@ -33,7 +33,11 @@ class RequiredIfSiblingRule extends BaseRule
         $parent_key = substr($this->key, 0, strrpos($this->key, '.'));
         $parent_value = deep_get($this->data, $parent_key);
 
-        if (is_array($parent_value) && array_key_exists($field, $parent_value) && in_array($parent_value[$field], $values, true)) {
+        if (
+            is_array($parent_value)
+            && array_key_exists($field, $parent_value)
+            && in_array($parent_value[$field], $values, true)
+        ) {
             if (is_array($this->value) && empty($this->value)) {
                 return false;
             }

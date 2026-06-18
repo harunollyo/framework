@@ -268,7 +268,7 @@ class Filesystem
      *
      * @return string
      *
-     * @throws \NotFoundException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -506,7 +506,8 @@ class Filesystem
      * Upload an {@see UploadedFile} instance to a specified directory.
      *
      * This method validates that the current user has permission to upload files, applies file name sanitization,
-     * ensures the upload directory exists (creating it if necessary), and then moves the uploaded file to the target location.
+     * ensures the upload directory exists (creating it if necessary),
+     * and then moves the uploaded file to the target location.
      *
      * @param string $path The relative subdirectory within the upload root to store the file.
      * @param UploadedFile $file The uploaded file instance to store.
@@ -514,7 +515,7 @@ class Filesystem
      *
      * @return string Absolute path to the stored file on success.
      *
-     * @throws \AuthorizationException
+     * @throws AuthorizationException
      *
      * @since 1.0.0
      */
@@ -549,7 +550,7 @@ class Filesystem
      * @return string
      *
      * @throws \Exception
-     * @throws \AuthorizationException
+     * @throws AuthorizationException
      *
      * @since 1.0.0
      */

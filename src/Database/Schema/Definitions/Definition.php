@@ -15,6 +15,8 @@ defined('ABSPATH') || exit;
 use Framework\Supports\Flex;
 
 /**
+ * Define the definition of the database schema columns.
+ *
  * @method $this comment(string $comment)
  * @method $this default($value)
  * @method $this nullable()
@@ -28,7 +30,6 @@ use Framework\Supports\Flex;
  * @method $this unique()
  * @method $this use_current()
  */
-
 class Definition extends Flex
 {
     // Column definition

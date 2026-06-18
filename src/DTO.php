@@ -45,8 +45,7 @@ class DTO implements JsonSerializable, Arrayable
      *
      * @since 1.0.0
      */
-    protected $preparedForDisplay = false;
-
+    protected $prepare_for_display = false;
 
     /**
      * Fields to exclude from public attributes.
@@ -310,7 +309,7 @@ class DTO implements JsonSerializable, Arrayable
      */
     protected function cast_attributes()
     {
-        if ($this->preparedForDisplay) {
+        if ($this->prepare_for_display) {
             return $this;
         }
 
@@ -329,7 +328,7 @@ class DTO implements JsonSerializable, Arrayable
         }
 
         // Mark as prepared for display
-        $this->preparedForDisplay = true;
+        $this->prepare_for_display = true;
 
         return $this;
     }

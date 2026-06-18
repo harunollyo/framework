@@ -1,7 +1,8 @@
 <?php
 /**
  * A utility class for string manipulation and formatting.
- * Provides various static methods to handle common string operations such as type conversion, slug generation, and string incrementation.
+ * Provides various static methods to handle common string operations such as type conversion,
+ * slug generation, and string incrementation.
  *
  * @package    Framework
  * @subpackage Supports
@@ -130,7 +131,11 @@ class Str
         if (is_null($charlist)) {
             $trim_default_chars = " \n\r\t\v\0";
             $quoted_chars = preg_quote($trim_default_chars, '~');
-            $regex = '~^[\s\x{FEFF}\x{200B}\x{200E}' . $quoted_chars . ']+|[\s\x{FEFF}\x{200B}\x{200E}' . $quoted_chars . ']+$~u';
+            $regex = '~^[\s\x{FEFF}\x{200B}\x{200E}'
+                . $quoted_chars
+                . ']+|[\s\x{FEFF}\x{200B}\x{200E}'
+                . $quoted_chars
+                . ']+$~u';
 
             return preg_replace($regex, '', $value) ?? trim($value);
         }

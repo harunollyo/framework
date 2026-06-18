@@ -38,7 +38,9 @@ trait HasDictionary
                 return $attribute->__toString();
             }
 
-            throw new InvalidArgumentException('Attribute must be a string, integer, or object with a __toString method.');
+            throw new InvalidArgumentException(
+                'Attribute must be a string, integer, or object with a __toString method.'
+            );
         }
 
         return (string) $attribute;

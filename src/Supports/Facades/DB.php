@@ -15,6 +15,8 @@ defined('ABSPATH') || exit;
 use Framework\Facade;
 
 /**
+ * Static proxy for the database manager resolved from the application container.
+ *
  * @method static void begin_transaction()
  * @method static void commit()
  * @method static void rollback()
@@ -26,7 +28,6 @@ use Framework\Facade;
  * @method static array get_query_log()
  * @see    \Framework\Database\Connection\DatabaseManager
  */
-
 class DB extends Facade
 {
     /**

@@ -15,107 +15,149 @@ defined('ABSPATH') || exit;
 class ColumnTypes
 {
     /**
-     * @var string BIGINT Big integer column type.
+     * Big integer column type.
+     *
+     * @since 1.0.0
      */
-    const BIGINT = 'big_integer';
+    public const BIGINT = 'big_integer';
 
     /**
-     * @var string STRING String column type.
+     * String column type.
+     *
+     * @since 1.0.0
      */
-    const STRING = 'string';
+    public const STRING = 'string';
 
     /**
-     * @var string TEXT Text column type.
+     * Text column type.
+     *
+     * @since 1.0.0
      */
-    const TEXT = 'text';
+    public const TEXT = 'text';
 
     /**
-     * @var string MEDIUM_TEXT Medium text column type.
+     * Medium text column type.
+     *
+     * @since 1.0.0
      */
-    const MEDIUM_TEXT = 'medium_text';
+    public const MEDIUM_TEXT = 'medium_text';
 
     /**
-     * @var string LONG_TEXT Long text column type.
+     * Long text column type.
+     *
+     * @since 1.0.0
      */
-    const LONG_TEXT = 'long_text';
+    public const LONG_TEXT = 'long_text';
 
     /**
-     * @var string INTEGER Integer column type.
+     * Integer column type.
+     *
+     * @since 1.0.0
      */
-    const INTEGER = 'integer';
+    public const INTEGER = 'integer';
 
     /**
-     * @var string FLOAT Float column type.
+     * Float column type.
+     *
+     * @since 1.0.0
      */
-    const FLOAT = 'float';
+    public const FLOAT = 'float';
 
     /**
-     * @var string DOUBLE Double column type.
+     * Double column type.
+     *
+     * @since 1.0.0
      */
-    const DOUBLE = 'double';
+    public const DOUBLE = 'double';
 
     /**
-     * @var string DECIMAL Decimal column type.
+     * Decimal column type.
+     *
+     * @since 1.0.0
      */
-    const DECIMAL = 'decimal';
+    public const DECIMAL = 'decimal';
 
     /**
-     * @var string BOOLEAN Boolean column type.
+     * Boolean column type.
+     *
+     * @since 1.0.0
      */
-    const BOOLEAN = 'boolean';
+    public const BOOLEAN = 'boolean';
 
     /**
-     * @var string DATETIME Datetime column type.
+     * Datetime column type.
+     *
+     * @since 1.0.0
      */
-    const DATETIME = 'datetime';
+    public const DATETIME = 'datetime';
 
     /**
-     * @var string DATE Date column type.
+     * Date column type.
+     *
+     * @since 1.0.0
      */
-    const DATE = 'date';
+    public const DATE = 'date';
 
     /**
-     * @var string TIME Time column type.
+     * Time column type.
+     *
+     * @since 1.0.0
      */
-    const TIME = 'time';
+    public const TIME = 'time';
 
     /**
-     * @var string TIMESTAMP Timestamp column type.
+     * Timestamp column type.
+     *
+     * @since 1.0.0
      */
-    const TIMESTAMP = 'timestamp';
+    public const TIMESTAMP = 'timestamp';
 
     /**
-     * @var string TINYINT Tiny integer column type.
+     * Tiny integer column type.
+     *
+     * @since 1.0.0
      */
-    const TINYINT = 'tinyint';
+    public const TINYINT = 'tinyint';
 
     /**
-     * @var string ENUM Enum column type.
+     * Enum column type.
+     *
+     * @since 1.0.0
      */
-    const ENUM = 'enum';
+    public const ENUM = 'enum';
 
     /**
-     * @var string SET Set column type.
+     * Set column type.
+     *
+     * @since 1.0.0
      */
-    const SET = 'set';
+    public const SET = 'set';
 
     /**
-     * @var string IP_ADDRESS IP address column type.
+     * IP address column type.
+     *
+     * @since 1.0.0
      */
-    const IP_ADDRESS = 'ip_address';
+    public const IP_ADDRESS = 'ip_address';
 
     /**
-     * @var string JSON JSON column type.
+     * JSON column type.
+     *
+     * @since 1.0.0
      */
-    const JSON = 'json';
+    public const JSON = 'json';
 
     /**
-     * @var string UUID UUID column type.
+     * UUID column type.
+     *
+     * @since 1.0.0
      */
-    const UUID = 'uuid';
+    public const UUID = 'uuid';
 
     /**
-     * @var string YEAR Year column type.
+     * Year column type.
+     *
+     * @since 1.0.0
      */
-    const YEAR = 'year';
+    public const YEAR = 'year';
 }

@@ -66,7 +66,14 @@ class File extends SplFileInfo
         }
 
         if (!$renamed) {
-            throw new Exception(sprintf('Could not move the file "%s" to "%s" (%s).', $this->getPathname(), $target, strip_tags($error ?? '')));
+            throw new Exception(
+                sprintf(
+                    'Could not move the file "%s" to "%s" (%s).',
+                    $this->getPathname(),
+                    $target,
+                    strip_tags($error ?? '')
+                )
+            );
         }
 
         @chmod($target, 0o666 & ~umask());
@@ -110,7 +117,9 @@ class File extends SplFileInfo
     {
         if (!is_dir($directory) && !@mkdir($directory, 0o777, true) && !is_dir($directory)) {
             if (is_file($directory)) {
-                throw new Exception(sprintf('Unable to create the "%s" directory. A similar named file exists.', $directory));
+                throw new Exception(
+                    sprintf('Unable to create the "%s" directory. A similar named file exists.', $directory)
+                );
             }
 
             throw new Exception(sprintf('Unable to create the "%s" directory.', $directory));
@@ -118,7 +127,9 @@ class File extends SplFileInfo
             throw new Exception(sprintf('Unable to write in the "%s" directory.', $directory));
         }
 
-        $target = rtrim($directory, '/\\') . \DIRECTORY_SEPARATOR . ($name === null ? $this->getBasename() : $this->get_name($name));
+        $target = rtrim($directory, '/\\')
+            . \DIRECTORY_SEPARATOR
+            . ($name === null ? $this->getBasename() : $this->get_name($name));
 
         return new self($target, false);
     }

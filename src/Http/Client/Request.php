@@ -468,7 +468,10 @@ class Request
     public function with_options(array $options)
     {
         $this->options = array_replace_recursive(
-            array_merge_recursive($this->options, Arr::only($options, ['headers', 'json', 'multipart', 'query', 'cookies'])),
+            array_merge_recursive(
+                $this->options,
+                Arr::only($options, ['headers', 'json', 'multipart', 'query', 'cookies'])
+            ),
             $options
         );
 

@@ -11,6 +11,8 @@ namespace Framework\Filesystem;
 defined('ABSPATH') || exit;
 
 /**
+ * Fileable interface for filesystem operations.
+ *
  * @method bool is_file()
  * @method array glob($pattern, int $flags = 0)
  * @method string basename()
@@ -37,7 +39,6 @@ defined('ABSPATH') || exit;
  * @method bool is_writable()
  * @method int|false last_modified()
  */
-
 class Fileable
 {
     /**

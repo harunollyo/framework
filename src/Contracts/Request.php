@@ -117,7 +117,8 @@ interface Request
      *
      * @param string $key The key to retrieve.
      * @param mixed $default Default value if the key doesn't exist.
-     * @param string|null $type Optional type to cast the result to: int, float, bool, string, array with proper sanitization.
+     * @param string|null $type Optional type to cast the result to: 
+     * int, float, bool, string, array with proper sanitization.
      *
      * @return mixed
      *

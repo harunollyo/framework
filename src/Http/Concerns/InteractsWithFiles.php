@@ -67,6 +67,7 @@ trait InteractsWithFiles
      */
     protected function load_files_from_global()
     {
+        // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
         $files = $_FILES ?? [];
         $keys = array_keys($files);
 
@@ -76,7 +77,7 @@ trait InteractsWithFiles
             }
 
             return UploadedFile::create_from_base($file);
-        }, $_FILES ?? []);
+        }, $files);
 
         return $this->files = array_combine($keys, $files);
     }

@@ -106,8 +106,14 @@ trait HasRelationships
      *
      * @since 1.0.0
      */
-    protected function belongs_to_many($related, $pivot_table = null, $foreign_pivot_key = null, $related_pivot_key = null, $parent_key = null, $related_key = null)
-    {
+    protected function belongs_to_many(
+        $related,
+        $pivot_table = null,
+        $foreign_pivot_key = null,
+        $related_pivot_key = null,
+        $parent_key = null,
+        $related_key = null
+    ) {
         $instance = new $related();
 
         $foreign_pivot_key = $foreign_pivot_key ?? $this->get_foreign_key();

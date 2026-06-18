@@ -1,7 +1,8 @@
 <?php
 /**
  * The QueryBuilder class provides a fluent interface for building SQL queries.
- * This class allows you to construct complex SQL queries using a chainable method syntax, making it easier to write and maintain database queries.
+ * This class allows you to construct complex SQL queries using a chainable method syntax,
+ * making it easier to write and maintain database queries.
  *
  * @package    Framework
  * @subpackage Database\Query
@@ -39,10 +40,11 @@ use function Framework\tap;
 use function Framework\value;
 
 /**
+ * The QueryBuilder class provides a fluent interface for building SQL queries.
+ *
  * @method QueryBuilder when($value, callable $callback, $default)
  * @method QueryBuilder unless($value, callable $callback, $default)
  */
-
 class QueryBuilder
 {
     use ExecuteQueries, RelationshipQueries, Conditionable, Macroable {
@@ -54,7 +56,7 @@ class QueryBuilder
      *
      * @var int
      */
-    const PAGINATION_LIMIT = 20;
+    public const PAGINATION_LIMIT = 20;
 
     /**
      * The database connection instance used to execute queries.

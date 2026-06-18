@@ -485,7 +485,9 @@ class Route
         }
 
         if (!$constructor->isPublic()) {
-            throw new Exception(sprintf('Class "%s" has a non-public constructor and cannot be instantiated.', $abstract));
+            throw new Exception(
+                sprintf('Class "%s" has a non-public constructor and cannot be instantiated.', $abstract)
+            );
         }
 
         $dependencies = [];
@@ -495,11 +497,21 @@ class Route
             $type = $parameter->getType();
 
             if (!$type) {
-                throw new Exception(sprintf('Parameter "%s" is missing a type hint in the constructor. Please add a class type hint.', $parameter->getName()));
+                throw new Exception(
+                    sprintf(
+                        'Parameter "%s" is missing a type hint in the constructor. Please add a class type hint.',
+                        $parameter->getName()
+                    )
+                );
             }
 
             if ($type->isBuiltin()) {
-                throw new Exception(sprintf('Parameter "%s" must be a class type, not a built-in type. Please specify a valid class dependency.', $parameter->getName()));
+                throw new Exception(
+                    sprintf(
+                        'Parameter "%s" must be a class type, not a built-in type. Please specify a valid class dependency.', // phpcs:ignore Generic.Files.LineLength.TooLong
+                        $parameter->getName()
+                    )
+                );
             }
 
             $dependencies[] = $this->is_cached($type->getName())
@@ -553,7 +565,7 @@ class Route
 
             if ($type === 'string' || $type->isBuiltin()) {
                 $dependencies['builtins'][] = $this->add_dependency($type_name, $variable, $position);
-            } elseif ($type_name === Request::class || $type_name === RequestContract::class || is_subclass_of($type_name, Request::class)) {
+            } elseif ($type_name === Request::class || $type_name === RequestContract::class || is_subclass_of($type_name, Request::class)) { // phpcs:ignore Generic.Files.LineLength.TooLong
                 $dependencies['requests'][] = $this->add_dependency($type_name, $variable, $position);
             } elseif (is_subclass_of($type_name, Model::class)) {
                 $dependencies['models'][] = $this->add_dependency($type_name, $variable, $position);
@@ -563,11 +575,15 @@ class Route
         }
 
         if (count($dependencies['requests']) < 1) {
-            throw new InvalidArgumentException(sprintf('The method "%s" must have at least one request dependency.', $method));
+            throw new InvalidArgumentException(
+                sprintf('The method "%s" must have at least one request dependency.', $method)
+            );
         }
 
         if (count($dependencies['requests']) > 1) {
-            throw new InvalidArgumentException(sprintf('The method "%s" must have only one request dependency.', $method));
+            throw new InvalidArgumentException(
+                sprintf('The method "%s" must have only one request dependency.', $method)
+            );
         }
 
         return $dependencies;
@@ -758,11 +774,15 @@ class Route
         // Resolving the controller route handler.
         return function ($rest_request) {
             if (!is_array($this->action)) {
-                throw new InvalidRoutActionException(sprintf('Invalid method registered for the route %s', $this->endpoint));
+                throw new InvalidRoutActionException(
+                    sprintf('Invalid method registered for the route %s', $this->endpoint)
+                );
             }
 
             if (count($this->action) !== 2) {
-                throw new InvalidRoutActionException(sprintf('Invalid controller syntax for the route %s', $this->endpoint));
+                throw new InvalidRoutActionException(
+                    sprintf('Invalid controller syntax for the route %s', $this->endpoint)
+                );
             }
 
             [$controller, $method] = $this->action;
@@ -774,7 +794,9 @@ class Route
             $controller_instance = $this->make($controller);
 
             if (!method_exists($controller_instance, $method)) {
-                throw new InvalidRoutActionException(sprintf('The method %s is missing in the controller %s', $method, $controller));
+                throw new InvalidRoutActionException(
+                    sprintf('The method %s is missing in the controller %s', $method, $controller)
+                );
             }
 
             try {

@@ -20,6 +20,8 @@ use function Framework\Polyfill\str_starts_with;
 use function Framework\with_prefix;
 
 /**
+ * Wrapper around WP_User providing fluent capability checks via can_* magic methods.
+ *
  * @method bool can_switch_themes() Check if user can switch themes
  * @method bool can_edit_themes() Check if user can edit themes
  * @method bool can_activate_plugins() Check if user can activate plugins
@@ -82,7 +84,6 @@ use function Framework\with_prefix;
  * @method bool can_delete_themes() Check if user can delete themes
  * @method bool can_export() Check if user can export
  */
-
 class User
 {
     /**

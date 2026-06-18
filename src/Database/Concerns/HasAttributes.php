@@ -1079,7 +1079,9 @@ trait HasAttributes
                 return false;
             }
 
-            return abs($this->cast_attribute($key, $attribute) - $this->cast_attribute($key, $original)) < PHP_FLOAT_EPSILON * 4;
+            return abs(
+                $this->cast_attribute($key, $attribute) - $this->cast_attribute($key, $original)
+            ) < PHP_FLOAT_EPSILON * 4;
         }
 
         if (is_numeric($attribute) && is_numeric($original)) {

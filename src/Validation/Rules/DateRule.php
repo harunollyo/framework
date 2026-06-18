@@ -25,6 +25,7 @@ class DateRule extends BaseRule
     public function validate_rule()
     {
         $date = DateTime::createFromFormat(DateTimeFormats::DB_DATE, $this->value);
+
         return $date && $date->format(DateTimeFormats::DB_DATE) === $this->value;
     }
 
@@ -37,6 +38,10 @@ class DateRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must be a valid date time in the format %s.', $this->last_key_segment(), DateTimeFormats::DB_DATE);
+        return sprintf(
+            'The %s field must be a valid date time in the format %s.',
+            $this->last_key_segment(),
+            DateTimeFormats::DB_DATE
+        );
     }
 }

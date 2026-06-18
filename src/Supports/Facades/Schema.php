@@ -15,6 +15,8 @@ defined('ABSPATH') || exit;
 use Framework\Facade;
 
 /**
+ * Facade proxy for SchemaManager database schema operations.
+ *
  * @method static void create(string $table, \Closure $callback)
  * @method static void drop_if_exists(string $table)
  * @method static void drop(string $table)
@@ -22,7 +24,6 @@ use Framework\Facade;
  * @method static void disabled_checking_foreign_key_constraints()
  * @see    \Framework\Database\Schema\SchemaManager
  */
-
 class Schema extends Facade
 {
     /**

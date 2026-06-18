@@ -42,9 +42,17 @@ class MaxRule extends BaseRule
     public function get_error_message()
     {
         if ($this->is_string_value()) {
-            return sprintf('The %s field must be less than or equal to %s characters.', $this->last_key_segment(), $this->rule_value);
+            return sprintf(
+                'The %s field must be less than or equal to %s characters.',
+                $this->last_key_segment(),
+                $this->rule_value
+            );
         } elseif ($this->is_array_value()) {
-            return sprintf('The %s field must be less than or equal to %s items.', $this->last_key_segment(), $this->rule_value);
+            return sprintf(
+                'The %s field must be less than or equal to %s items.',
+                $this->last_key_segment(),
+                $this->rule_value
+            );
         }
 
         return sprintf('The %s field must be less than or equal %s.', $this->last_key_segment(), $this->rule_value);
@@ -59,9 +67,11 @@ class MaxRule extends BaseRule
      */
     protected function is_string_value()
     {
-        $is_string = in_array('string', $this->all_applied_rules, true) || in_array(Validation::RULE_MAP['string'], $this->all_applied_rules, true);
+        $is_string = in_array('string', $this->all_applied_rules, true)
+            || in_array(Validation::RULE_MAP['string'], $this->all_applied_rules, true);
 
-        return $is_string || (is_string($this->value) && !is_numeric($this->value));
+        return $is_string
+            || (is_string($this->value) && !is_numeric($this->value));
     }
 
     /**
@@ -73,8 +83,10 @@ class MaxRule extends BaseRule
      */
     protected function is_array_value()
     {
-        $is_array = in_array('array', $this->all_applied_rules, true) || in_array(Validation::RULE_MAP['array'], $this->all_applied_rules, true);
+        $is_array = in_array('array', $this->all_applied_rules, true)
+            || in_array(Validation::RULE_MAP['array'], $this->all_applied_rules, true);
 
-        return $is_array || is_array($this->value);
+        return $is_array
+            || is_array($this->value);
     }
 }

@@ -197,8 +197,11 @@ class BelongsToMany extends Relation
      *
      * @since 1.0.0
      */
-    public function get_relation_existence_query_for_self_join(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
-    {
+    public function get_relation_existence_query_for_self_join(
+        QueryBuilder $query,
+        QueryBuilder $parent,
+        $columns = ['*']
+    ) {
         $query->select($columns);
         $query->from($this->related->get_table() . ' as ' . $hash = $this->get_relation_count_hash());
         $this->related->set_table($hash);
@@ -873,7 +876,7 @@ class BelongsToMany extends Relation
      *
      * @since 1.0.0
      */
-    public function syncWithoutDetaching($ids)
+    public function sync_without_detaching($ids)
     {
         return $this->sync($ids, false);
     }
@@ -985,24 +988,6 @@ class BelongsToMany extends Relation
         if (!isset($record['updated_at'])) {
             $record['updated_at'] = $timestamp;
         }
-    }
-
-    /**
-     * Public wrapper for updating attributes on an existing pivot row.
-     *
-     * Provides a stable external API while delegating to the internal update
-     * method to perform the constrained update against the pivot table.
-     *
-     * @param mixed $id The related id to update on the pivot
-     * @param array $attributes The attributes to write to the pivot row
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function updateExistingPivot($id, array $attributes)
-    {
-        return $this->update_existing_pivot($id, $attributes);
     }
 
     /**

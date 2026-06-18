@@ -60,7 +60,9 @@ class CommandManager
     {
         if (is_object($command)) {
             if (!$command instanceof CommandBase) {
-                throw new RuntimeException(sprintf("Command [%s] must extend [%s]", get_class($command), CommandBase::class));
+                throw new RuntimeException(
+                    sprintf("Command [%s] must extend [%s]", get_class($command), CommandBase::class)
+                );
             }
 
             return $command;

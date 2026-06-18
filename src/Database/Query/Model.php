@@ -2,7 +2,8 @@
 /**
  * Provide an active record style base model for the Query Builder.
  * Encapsulate table naming, attribute handling, persistence operations, and relationship definitions.
- * Models interact with the query builder to perform CRUD operations, handle casting, timestamps, hydration, and eager loading of related records for a cohesive developer experience.
+ * Models interact with the query builder to perform CRUD operations, 
+ * handle casting, timestamps, hydration, and eager loading of related records for a cohesive developer experience.
  *
  * @package    Framework
  * @subpackage Database\Query
@@ -125,14 +126,14 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      *
      * @var string|null
      */
-    const CREATED_AT = 'created_at';
+    public const CREATED_AT = 'created_at';
 
     /**
      * The name of the "updated at" column.
      *
      * @var string|null
      */
-    const UPDATED_AT = 'updated_at';
+    public const UPDATED_AT = 'updated_at';
 
     /**
      * Construct a new model instance optionally seeded with attributes.
@@ -220,7 +221,7 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      *
      * @since 1.0.0
      */
-    public static function setConnection(Connection $connection)
+    public static function set_connection(Connection $connection)
     {
         static::$connection = $connection;
     }

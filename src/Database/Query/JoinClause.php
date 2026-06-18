@@ -1,7 +1,8 @@
 <?php
 /**
  * Represents a JOIN clause sub-builder for building join conditions fluently.
- * This class extends the QueryBuilder and is used internally for building complex JOIN ON conditions, including nested and dynamic join clauses, for SQL queries.
+ * This class extends the QueryBuilder and is used internally for building complex JOIN ON conditions,
+ * including nested and dynamic join clauses, for SQL queries.
  *
  * @package    Framework
  * @subpackage Database\Query

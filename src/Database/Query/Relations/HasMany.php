@@ -118,8 +118,11 @@ class HasMany extends Relation
      *
      * @since 1.0.0
      */
-    public function get_relation_existence_query_for_self_relation(QueryBuilder $query, QueryBuilder $parent, $columns = ['*'])
-    {
+    public function get_relation_existence_query_for_self_relation(
+        QueryBuilder $query,
+        QueryBuilder $parent,
+        $columns = ['*']
+    ) {
         $query->from($query->get_model()->get_table() . ' as ' . $hash = $this->get_relation_count_hash());
 
         $query->get_model()->set_table($hash);

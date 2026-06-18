@@ -12,7 +12,6 @@ namespace Framework\Concerns;
 
 defined('ABSPATH') || exit;
 
-use Exception;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -44,7 +43,9 @@ trait DependencyResolvable
                 $dependencies[] = $this->resolve_primitive($parameter, $primitives);
             } else {
                 // Handle class parameters
-                $dependency_name = $dependency instanceof ReflectionNamedType ? $dependency->getName() : (string) $dependency;
+                $dependency_name = $dependency instanceof ReflectionNamedType
+                    ? $dependency->getName()
+                    : (string) $dependency;
                 $dependencies[] = app()->make($dependency_name);
             }
         }
@@ -58,7 +59,7 @@ trait DependencyResolvable
      * @param ReflectionParameter $parameter The parameter.
      * @param array $primitives The primitives.
      *
-     * @return void
+     * @return mixed
      *
      * @throws \ReflectionException
      *

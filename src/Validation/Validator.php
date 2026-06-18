@@ -282,7 +282,7 @@ class Validator
      *
      * @return void
      *
-     * @throws \InvalidValidationRuleException
+     * @throws InvalidValidationRuleException
      *
      * @since 1.0.0
      */
@@ -337,7 +337,7 @@ class Validator
 
         if ($is_valid && !$is_field_missing) {
             $key_segments = explode('.', $traversed_key);
-            $this->set_validated_data($key_segments, $value, $is_field_missing);
+            $this->set_validated_data($key_segments, $value);
         }
     }
 
@@ -399,7 +399,7 @@ class Validator
      *
      * @return Rule
      *
-     * @throws \InvalidValidationRuleException
+     * @throws InvalidValidationRuleException
      *
      * @since 1.0.0
      */
@@ -418,7 +418,9 @@ class Validator
             return new $rule_name($key, $value, $rule_value, $this->data, $all_applied_rules);
         }
 
-        throw new InvalidValidationRuleException(sprintf('The validation rule %s does not exist or is invalid', $rule_name));
+        throw new InvalidValidationRuleException(
+            sprintf('The validation rule %s does not exist or is invalid', $rule_name)
+        );
     }
 
     /**

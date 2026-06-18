@@ -15,16 +15,18 @@ class OptionKeys
     /**
      * Option key for storing applied migration class names.
      *
-     * @var   string
+     * @var string
+     *
      * @since 1.0.0
      */
-    const MIGRATIONS = 'migrations';
+    public const MIGRATIONS = 'migrations';
 
     /**
      * Option key for email and SMTP settings.
      *
-     * @var   string
+     * @var string
+     *
      * @since 1.0.0
      */
-    const EMAIL_SETTINGS = 'email_settings';
+    public const EMAIL_SETTINGS = 'email_settings';
 }

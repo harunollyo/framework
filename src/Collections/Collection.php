@@ -1,8 +1,10 @@
 <?php
 /**
  * Represent a simple iterable collection of items.
- * Provide a lightweight wrapper around arrays with common helper methods such as mapping, filtering, iteration, and JSON/array conversion.
- * Used throughout the ORM to return sets of models or raw records while offering a consistent API for traversal and transformation.
+ * Provide a lightweight wrapper around arrays with common helper methods
+ * such as mapping, filtering, iteration, and JSON/array conversion.
+ * Used throughout the ORM to return sets of models
+ * or raw records while offering a consistent API for traversal and transformation.
  *
  * @package    Framework
  * @subpackage Collections
@@ -941,11 +943,11 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * Returns null when the offset is not present. This enables array-like
      * access to collection items while keeping behavior predictable.
      *
-     * @param  mixed $offset The array index to retrieve
+     * @param mixed $offset The array index to retrieve
      * 
      * @return mixed The value at the offset or null if not set
      * 
-     * @since  1.0.0
+     * @since 1.0.0
      */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)

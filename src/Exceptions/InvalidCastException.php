@@ -10,7 +10,6 @@ namespace Framework\Exceptions;
 
 defined('ABSPATH') || exit;
 
-use Exception;
 use RuntimeException;
 
 class InvalidCastException extends RuntimeException
@@ -58,7 +57,9 @@ class InvalidCastException extends RuntimeException
     {
         $class_name = get_class($model);
 
-        parent::__construct(sprintf('Invalid cast type for attribute %s on model %s: %s', $key, $class_name, $cast_type));
+        parent::__construct(
+            sprintf('Invalid cast type for attribute %s on model %s: %s', $key, $class_name, $cast_type)
+        );
 
         $this->model = $class_name;
         $this->key = $key;

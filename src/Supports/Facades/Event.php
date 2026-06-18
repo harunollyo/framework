@@ -12,15 +12,17 @@ namespace Framework\Supports\Facades;
 
 defined('ABSPATH') || exit;
 
+use Closure;
 use Framework\Facade;
 
 /**
+ * Facade proxy for EventManager dispatch operations.
+ * 
  * @method static void dispatch($event)
  * @method static void dispatch_if(Closure $boolean, $event)
  * @method static void dispatch_unless(Closure $boolean, $event)
  * @see    \Framework\Core\Managers\EventManager
  */
-
 class Event extends Facade
 {
     /**

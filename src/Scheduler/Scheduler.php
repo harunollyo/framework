@@ -197,7 +197,10 @@ class Scheduler
     protected static function trigger_event_by_async_worker()
     {
         add_action('wp_ajax_' . with_prefix(Config::ASYNC_WORKER_ACTION_NAME), [static::class, 'run_async_worker']);
-        add_action('wp_ajax_nopriv_' . with_prefix(Config::ASYNC_WORKER_ACTION_NAME), [static::class, 'run_async_worker']);
+        add_action(
+            'wp_ajax_nopriv_' . with_prefix(Config::ASYNC_WORKER_ACTION_NAME),
+            [static::class, 'run_async_worker']
+        );
     }
 
     /**
@@ -246,6 +249,7 @@ class Scheduler
     {
         $secret = Option::get(Config::ASYNC_WORKER_SECRET_KEY_NAME);
 
+        // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
         if (!isset($_POST['secret']) || $_POST['secret'] !== $secret) {
             wp_die('Access Denied!');
         }

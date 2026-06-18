@@ -18,7 +18,7 @@ use DateTimeInterface;
 
 class Carbon extends BaseCarbon
 {
-    const BASE_FORMAT = 'Y-m-d H:i:s';
+    public const BASE_FORMAT = 'Y-m-d H:i:s';
 
     /**
      * Check if the value is a valid date.
@@ -29,7 +29,7 @@ class Carbon extends BaseCarbon
      *
      * @since 1.0.0
      */
-    public static function isValidDate($value)
+    public static function isValidDate($value) // phpcs:ignore Framework.NamingConventions.SnakeCaseMethod.NotSnakeCase
     {
         if ($value instanceof DateTimeInterface) {
             return true;
@@ -51,7 +51,7 @@ class Carbon extends BaseCarbon
      *
      * @since 1.0.0
      */
-    public function toBaseDateString()
+    public function toBaseDateString() // phpcs:ignore Framework.NamingConventions.SnakeCaseMethod.NotSnakeCase
     {
         return $this->format(static::BASE_FORMAT);
     }
@@ -63,7 +63,7 @@ class Carbon extends BaseCarbon
      *
      * @since 1.0.0
      */
-    public function toSqlDatetimeString()
+    public function toSqlDatetimeString() // phpcs:ignore Framework.NamingConventions.SnakeCaseMethod.NotSnakeCase
     {
         return $this->toBaseDateString();
     }

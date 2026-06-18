@@ -16,11 +16,15 @@ class MenuTypes
 {
     /**
      * Wordpress admin menu type main menu
+     * 
+     * @since 1.0.0
      */
-    const MAIN_MENU = 'main-menu';
+    public const MAIN_MENU = 'main-menu';
 
     /**
      * Wordpress admin menu type sub menu
+     * 
+     * @since 1.0.0
      */
-    const SUB_MENU = 'sub-menu';
+    public const SUB_MENU = 'sub-menu';
 }

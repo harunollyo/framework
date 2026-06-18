@@ -1,7 +1,8 @@
 <?php
 /**
  * Eager load one or more relations for a set of models.
- * Accept an array of models and a list of relation method names, then fetch and match related records in as few queries as possible.
+ * Accept an array of models and a list of relation method names,
+ * then fetch and match related records in as few queries as possible.
  * This reduces N+1 query patterns by batching lookups and hydrating relation data onto the provided models.
  *
  * @package    Framework

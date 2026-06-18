@@ -16,6 +16,8 @@ use Framework\Collections\HigherOrderCollectionProxy;
 use function Framework\deep_get;
 
 /**
+ * Trait to enumerate values of the collection.
+ *
  * @template TKey of array-key
  * @template TValue
  *
@@ -43,7 +45,7 @@ trait EnumeratesValues
     /**
      * The proxies.
      *
-     * @var string
+     * @var array
      *
      * @since 1.0.0
      */

@@ -15,6 +15,8 @@ defined('ABSPATH') || exit;
 use Framework\Facade;
 
 /**
+ * Facade proxy for LogManager leveled file logging.
+ *
  * @method static void debug($message)
  * @method static void info($message)
  * @method static void warning($message)
@@ -24,7 +26,6 @@ use Framework\Facade;
  * @method static void alert($message)
  * @see    \Framework\Managers\LogManager
  */
-
 class Log extends Facade
 {
     /**

@@ -18,7 +18,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const OK = 200;
+    public const OK = 200;
 
     /**
      * HTTP status code for a successfully created resource.
@@ -26,7 +26,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const CREATED = 201;
+    public const CREATED = 201;
 
     /**
      * HTTP status code for a successful request with no content.
@@ -34,7 +34,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const NO_CONTENT = 204;
+    public const NO_CONTENT = 204;
 
     /**
      * HTTP status code for a multi-status response.
@@ -42,7 +42,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const MULTI_STATUS = 207;
+    public const MULTI_STATUS = 207;
 
     /**
      * HTTP status code for a bad request.
@@ -50,7 +50,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const BAD_REQUEST = 400;
+    public const BAD_REQUEST = 400;
 
     /**
      * HTTP status code for an unauthorized request.
@@ -58,7 +58,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const UNAUTHORIZED = 401;
+    public const UNAUTHORIZED = 401;
 
     /**
      * HTTP status code when authentication is required and has failed or has not yet been provided.
@@ -66,7 +66,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const FORBIDDEN = 403;
+    public const FORBIDDEN = 403;
 
     /**
      * HTTP status code when a requested resource is not found.
@@ -74,7 +74,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const NOT_FOUND = 404;
+    public const NOT_FOUND = 404;
 
     /**
      * HTTP status code when a request method is not allowed.
@@ -82,7 +82,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const METHOD_NOT_ALLOWED = 405;
+    public const METHOD_NOT_ALLOWED = 405;
 
     /**
      * HTTP status code when a conflict occurs.
@@ -90,7 +90,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const CONFLICT = 409;
+    public const CONFLICT = 409;
 
     /**
      * HTTP status code when a request is unprocessable.
@@ -98,7 +98,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const UNPROCESSABLE_ENTITY = 422;
+    public const UNPROCESSABLE_ENTITY = 422;
 
     /**
      * HTTP status code for too many requests (rate limiting).
@@ -106,7 +106,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const TOO_MANY_REQUESTS = 429;
+    public const TOO_MANY_REQUESTS = 429;
 
     /**
      * HTTP status code for internal server error.
@@ -114,7 +114,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const INTERNAL_SERVER_ERROR = 500;
+    public const INTERNAL_SERVER_ERROR = 500;
 
     /**
      * HTTP status code for not implemented.
@@ -122,7 +122,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const NOT_IMPLEMENTED = 501;
+    public const NOT_IMPLEMENTED = 501;
 
     /**
      * HTTP status code for service unavailable.
@@ -130,7 +130,7 @@ class Response
      * @since 1.0.0
      * @var   int
      */
-    const SERVICE_UNAVAILABLE = 503;
+    public const SERVICE_UNAVAILABLE = 503;
 
 
     /**

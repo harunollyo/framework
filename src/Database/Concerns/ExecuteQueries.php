@@ -14,6 +14,7 @@ defined('ABSPATH') || exit;
 
 use Closure;
 use Framework\Collections\Collection;
+use Framework\Database\Query\QueryBuilder;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -164,8 +165,13 @@ trait ExecuteQueries
      *
      * @since 1.0.0
      */
-    public function ordered_chunk_by_id(int $count, Closure $callback, $column = null, $alias = null, $descending = false)
-    {
+    public function ordered_chunk_by_id(
+        int $count,
+        Closure $callback,
+        $column = null,
+        $alias = null,
+        $descending = false
+    ) {
         $column ??= $this->default_key_name();
         $alias ??= $column;
         $last_id = null;
@@ -175,6 +181,11 @@ trait ExecuteQueries
         $page = 1;
 
         do {
+            /**
+             * The cloned query builder instance.
+             *
+             * @var QueryBuilder $clone
+             */
             $clone = clone $this;
 
             if ($skip && $page > 1) {
@@ -316,6 +327,11 @@ trait ExecuteQueries
         $last_id = null;
 
         while (true) {
+            /**
+             * The cloned query builder instance.
+             *
+             * @var QueryBuilder $clone
+             */
             $clone = clone $this;
 
             if ($descending) {
