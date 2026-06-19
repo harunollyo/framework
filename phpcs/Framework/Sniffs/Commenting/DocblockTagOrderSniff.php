@@ -54,6 +54,10 @@ class DocblockTagOrderSniff implements Sniff
         $parsed = SniffHelper::parse_docblock($content);
         $body_lines = SniffHelper::get_docblock_body_lines($tokens, $docblock_ptr);
 
+        if (SniffHelper::uses_inherit_doc($parsed)) {
+            return;
+        }
+
         if ($parsed['description'] === '') {
             $phpcs_file->addError(
                 'Method docblock must include a description.',

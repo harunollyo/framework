@@ -493,6 +493,22 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     }
 
     /**
+     * Specify relationships to eager load with the query results.
+     *
+     * @param mixed $relations The relations to eager load
+     *
+     * @return static The query builder instance for method chaining
+     *
+     * @since 1.0.0
+     */
+    public static function with($relations)
+    {
+        return static::query()->with(
+            is_string($relations) ? func_get_args() : $relations
+        );
+    }
+
+    /**
      * Retrieve a model instance by its primary key.
      *
      * @param int $id The primary key of the record to find
@@ -827,9 +843,6 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
         return $model;
     }
 
-
-
-
     /**
      * Eager load one or more relations onto the model.
      *
@@ -844,14 +857,32 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      */
     public function load($relations)
     {
-        $relations = is_array($relations) ? $relations : func_get_args();
-
         $query = $this->new_query_without_relations()->with(
             is_string($relations) ? func_get_args() : $relations
         );
 
         $query->eager_load_relations(new Collection([$this]));
 
+        return $this;
+    }
+
+    /**
+     * Eager load the missing relationships for the model.
+     *
+     * @param mixed $relations The relations to eager load
+     *
+     * @return $this The model instance
+     *
+     * @since 1.0.0
+     */
+    public function load_missing($relations)
+    {
+        if (is_string($relations)) {
+            $relations = func_get_args();
+        }
+
+        $this->new_collection([$this])->load_missing($relations);
+        
         return $this;
     }
 

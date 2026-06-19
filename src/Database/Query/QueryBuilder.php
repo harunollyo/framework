@@ -233,7 +233,16 @@ class QueryBuilder
      *
      * @since 1.0.0
      */
-    public $relations = [];
+    public $with = [];
+
+    /**
+     * The relationships that have been eager loaded.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
+    protected $eager_loaded_relations = [];
 
     /**
      * The relationships to count with the query results.
@@ -2388,20 +2397,20 @@ class QueryBuilder
             $relations = func_get_args();
         }
 
-        if (is_null($this->relations)) {
-            $this->relations = [];
+        if (is_null($this->with)) {
+            $this->with = [];
         }
 
         if ($callback instanceof Closure) {
-            $relations = $this->parse_relations([$relations => $callback]);
+            $relations = $this->parse_with_relations([$relations => $callback]);
         } else {
-            $relations = $this->parse_relations(
+            $relations = $this->parse_with_relations(
                 is_array($relations) ? $relations : func_get_args()
             );
         }
 
 
-        $this->relations = array_merge($this->relations, $relations);
+        $this->with = array_merge($this->with, $relations);
 
         return $this;
     }
@@ -2415,18 +2424,18 @@ class QueryBuilder
      *
      * @since 1.0.0
      */
-    public function parse_relations($relations)
+    public function parse_with_relations($relations)
     {
         $parsed = [];
 
         foreach ($relations as $key => $value) {
             if (is_string($key)) {
-                $this->parse_nested_relation($key, $parsed, $value);
+                $this->parse_nested_with_relations($key, $parsed, $value);
                 continue;
             }
 
             if (is_string($value)) {
-                $this->parse_nested_relation($value, $parsed);
+                $this->parse_nested_with_relations($value, $parsed);
                 continue;
             }
 
@@ -2437,8 +2446,8 @@ class QueryBuilder
             if (is_array($value)) {
                 foreach ($value as $nested_key => $nested_value) {
                     is_numeric($nested_key)
-                        ? $this->parse_nested_relation($nested_value, $parsed)
-                        : $this->parse_nested_relation($nested_key, $parsed, $nested_value);
+                        ? $this->parse_nested_with_relations($nested_value, $parsed)
+                        : $this->parse_nested_with_relations($nested_key, $parsed, $nested_value);
                 }
             }
         }
@@ -2457,7 +2466,7 @@ class QueryBuilder
      *
      * @since 1.0.0
      */
-    public function parse_nested_relation($relation, &$parsed, $nested = null)
+    public function parse_nested_with_relations($relation, &$parsed, $nested = null)
     {
         if (strpos($relation, '.') !== false) {
             $parts = explode('.', $relation);
@@ -2468,12 +2477,12 @@ class QueryBuilder
                 $parsed[$root] = [];
             }
 
-            $this->parse_nested_relation($nested_relation, $parsed[$root], $nested);
+            $this->parse_nested_with_relations($nested_relation, $parsed[$root], $nested);
         } else {
             $parsed[$relation] ??= [];
 
             if (is_array($nested)) {
-                $nested_parsed = $this->parse_relations($nested);
+                $nested_parsed = $this->parse_with_relations($nested);
                 $parsed[$relation] = array_merge_recursive($parsed[$relation], $nested_parsed);
             } elseif (!empty($nested)) {
                 $parsed[$relation][] = $nested;
@@ -2690,10 +2699,10 @@ class QueryBuilder
      */
     public function eager_load_relations(Collection $models)
     {
-        if (!empty($this->relations) && !empty($models) && static::$should_resolve_relations) {
+        if (!empty($this->with) && !empty($models) && static::$should_resolve_relations) {
             $models = Relation::without_constraints(
                 function () use ($models) {
-                    return (new EagerLoader($models, $this->relations))->load();
+                    return (new EagerLoader($models, $this->with))->load();
                 }
             );
         }
@@ -2789,7 +2798,7 @@ class QueryBuilder
      *
      * @return mixed The first model instance or raw data record
      *
-     * @throws \ModelNotFoundException
+     * @throws ModelNotFoundException
      *
      * @since 1.0.0
      */
@@ -2925,7 +2934,7 @@ class QueryBuilder
      * @param mixed $id The primary key value to search for
      * @param string $column The column name to search (defaults to 'id')
      *
-     * @return mixed The model instance or raw data record, or null if not found
+     * @return Model|null The model instance or raw data record, or null if not found
      *
      * @since 1.0.0
      */
@@ -3858,7 +3867,7 @@ class QueryBuilder
      */
     public function get_with_relations()
     {
-        return $this->relations;
+        return $this->with;
     }
 
     /**

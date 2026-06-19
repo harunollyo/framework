@@ -19,6 +19,7 @@ use Framework\Contracts\Support\Jsonable;
 use Framework\Collections\Collection;
 use Framework\Polyfill\ArgumentCountError;
 use InvalidArgumentException;
+use JsonSerializable;
 use ReflectionFunction;
 use ReflectionMethod;
 
@@ -49,12 +50,14 @@ class Arr
         switch (true) {
             case is_array($items):
                 return $items;
+            case $items instanceof Collection:
+                return $items->all();
             case $items instanceof Arrayable:
                 return $items->to_array();
             case $items instanceof Jsonable:
                 return json_decode($items->to_json(), true);
-            case $items instanceof Collection:
-                return $items->all();
+            case $items instanceof JsonSerializable:
+                return (array) $items->jsonSerialize();
             case is_object($items):
                 return (array) $items;
             default:

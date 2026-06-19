@@ -30,6 +30,13 @@ use JsonSerializable;
 use function Framework\Polyfill\array_last;
 use function Framework\value;
 
+// phpcs:disable Generic.Commenting.DocComment.TagValueIndent
+/**
+ * Represent a simple iterable collection of items.
+ *
+ * @template    TKey of array-key 
+ * @template-covariant TValue
+ */
 class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonable, JsonSerializable
 {
     use Conditionable;
@@ -60,15 +67,15 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * storage. This is used by query results and relation loaders to wrap raw
      * arrays in a consistent interface for further processing and consumption.
      *
-     * @param array $items The items to seed the collection
+     * @param Arrayable|iterable|null $items The items to seed the collection
      *
      * @return void No return value; initializes internal state
      *
      * @since 1.0.0
      */
-    public function __construct(array $items = [])
+    public function __construct($items = [])
     {
-        $this->items = $items;
+        $this->items = $this->get_arrayable_items($items);
     }
 
     /**
@@ -214,17 +221,20 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
             : Arr::from($items);
     }
 
-    /**
+    // phpcs:ignore Framework.Commenting.DocblockTagOrder.InvalidParamDescription
+    /** 
      * Get the first item in the collection.
+     *
+     * @template TFirstDefault
      *
      * Returns null when the collection is empty. This is typically used to
      * access a single model or value from a previously constrained result set
      * without performing additional checks.
      *
-     * @param callable|null $callback The callback to use to determine the first item
-     * @param mixed|null $default The default value to return if no items exist
+     * @param (callable(TValue, TKey): bool)|null $callback The callback to use to determine the first item
+     * @param TFirstDefault|(\Closure(): TFirstDefault) $default The default value to return if no items exist
      *
-     * @return mixed The first item or null when no items exist
+     * @return TValue|TFirstDefault The first item or null when no items exist
      *
      * @since 1.0.0
      */
@@ -431,7 +441,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      *
      * @since 1.0.0
      */
-    public function filter($callback)
+    public function filter(?callable $callback = null)
     {
         if ($callback) {
             return new static(Arr::where($this->items, $callback));

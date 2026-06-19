@@ -7,6 +7,7 @@
     <rule ref="Generic.Commenting.DocComment">
         <exclude name="Generic.Commenting.DocComment.NonParamGroup"/>
         <exclude name="Generic.Commenting.DocComment.ParamNotFirst"/>
+        <exclude name="Generic.Commenting.DocComment.MissingShort"/>
     </rule>
 
     <rule ref="Framework.NamingConventions.SnakeCaseMethod"/>
@@ -21,4 +22,5 @@
     <rule ref="Framework.Commenting.RequiredMethodDocblock"/>
     <rule ref="Framework.Commenting.RequiredPropertyDocblock"/>
     <rule ref="Framework.Commenting.DocblockTagOrder"/>
+    <rule ref="Framework.Commenting.DocCommentMissingShort"/>
 </ruleset>

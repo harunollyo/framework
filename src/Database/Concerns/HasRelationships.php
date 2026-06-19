@@ -153,4 +153,104 @@ trait HasRelationships
 
         return $this;
     }
+
+    /**
+     * Check if a relation is loaded.
+     *
+     * @param string $key The relation name
+     *
+     * @return bool Whether the relation is loaded
+     *
+     * @since 1.0.0
+     */
+    public function relation_loaded($key)
+    {
+        return array_key_exists($key, $this->relations);
+    }
+
+    /**
+     * Get all relations.
+     *
+     * @return mixed The relation value
+     *
+     * @since 1.0.0
+     */
+    public function get_relations()
+    {
+        return $this->relations;
+    }
+
+    /**
+     * Get a relation.
+     *
+     * @param string $relation The relation name
+     *
+     * @return mixed The relation value
+     *
+     * @since 1.0.0
+     */
+    public function get_relation($relation)
+    {
+        return $this->relations[$relation];
+    }
+
+    /**
+     * Unset all relations.
+     *
+     * @return $this The model instance
+     *
+     * @since 1.0.0
+     */
+    public function unset_relations()
+    {
+        $this->relations = [];
+
+        return $this;
+    }
+
+    /**
+     * Unset a relation by relation name.
+     *
+     * @param string $relation The relation name
+     *
+     * @return $this The model instance
+     *
+     * @since 1.0.0
+     */
+    public function unset_relation($relation)
+    {
+        unset($this->relations[$relation]);
+
+        return $this;
+    }
+
+    /**
+     * Create a new model instance without any relations.
+     *
+     * @return $this The model instance
+     *
+     * @since 1.0.0
+     */
+    public function without_relations()
+    {
+        $model = clone $this;
+
+        return $model->unset_relations();
+    }
+
+    /**
+     * Create a new model instance without a specific relation.
+     *
+     * @param string $relation The relation name
+     *
+     * @return $this The model instance
+     *
+     * @since 1.0.0
+     */
+    public function without_relation($relation)
+    {
+        $model = clone $this;
+
+        return $model->unset_relation($relation);
+    }
 }

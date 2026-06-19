@@ -209,12 +209,32 @@ class SniffHelper
     }
 
     /**
+     * Determine whether a docblock delegates documentation via @inheritDoc.
+     *
+     * @param array $parsed Parsed docblock data.
+     *
+     * @return bool
+     * @since 1.0.0
+     */
+    public static function uses_inherit_doc(array $parsed)
+    {
+        foreach ($parsed['tags'] as $tag => $values) {
+            if (strtolower($tag) === 'inheritdoc') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Extract docblock content from token stack.
      *
      * @param array $tokens File tokens.
      * @param int   $index  Docblock open tag index.
      *
      * @return string
+     *
      * @since 1.0.0
      */
     public static function get_docblock_content(array $tokens, $index)

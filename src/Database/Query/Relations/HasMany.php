@@ -228,6 +228,18 @@ class HasMany extends Relation
     }
 
     /**
+     * @inheritDoc
+     */
+    public function init_relation(Collection $models, $relation)
+    {
+        foreach ($models as $model) {
+            $model->set_relation($relation, $this->related->new_collection());
+        }
+
+        return $models;
+    }
+
+    /**
      * Match eager loaded results back to their parents.
      *
      * Groups children by their foreign key and assigns a collection to each

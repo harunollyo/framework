@@ -201,6 +201,18 @@ class BelongsTo extends Relation
     }
 
     /**
+     * @inheritDoc
+     */
+    public function init_relation(Collection $models, $relation)
+    {
+        foreach ($models as $model) {
+            $model->set_relation($relation, null);
+        }
+
+        return $models;
+    }
+
+    /**
      * Match eager loaded owners back to their parents.
      *
      * Builds a dictionary by owner key and assigns the corresponding owner

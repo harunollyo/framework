@@ -30,4 +30,9 @@ class Event extends Model
     {
         return $this->belongs_to_many(Speaker::class, 'framework_event_speaker');
     }
+
+    public function abc()
+    {
+        return $this->belongs_to_many(Speaker::class, 'framework_event_speaker');
+    }
 }

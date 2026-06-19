@@ -364,7 +364,7 @@ trait RelationshipQueries
         }
 
         $relations = Arr::wrap($relations);
-        $relations = $this->parse_relations($relations);
+        $relations = $this->parse_with_relations($relations);
 
         foreach ($relations as $name => $constraint_callbacks) {
             $relation = $this->get_relation_without_constraints($name);

@@ -126,7 +126,11 @@ class EagerLoader
 
         $results = $relation->get();
 
-        $this->models = $relation->match($this->models, $results, $relation_name);
+        $this->models = $relation->match(
+            $relation->init_relation($this->models, $relation_name),
+            $results,
+            $relation_name
+        );
 
         if (!empty($nested_relations) && !$results->empty() && !$callback instanceof Closure) {
             $this->load_nested_relations($relation_name, $nested_relations);

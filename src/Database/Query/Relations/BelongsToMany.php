@@ -364,6 +364,18 @@ class BelongsToMany extends Relation
     }
 
     /**
+     * @inheritdoc
+     */
+    public function init_relation(Collection $models, $relation)
+    {
+        foreach ($models as $model) {
+            $model->set_relation($relation, $this->related->new_collection());
+        }
+
+        return $models;
+    }
+
+    /**
      * Match eager loaded related models back to their parents.
      *
      * Builds a dictionary keyed by the foreign pivot key and assigns a

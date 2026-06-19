@@ -182,6 +182,18 @@ abstract class Relation
     }
 
     /**
+     * Initialize the relation.
+     *
+     * @param Collection $models The models.
+     * @param string $relation The relation.
+     *
+     * @return Collection The initialized relation.
+     * 
+     * @since 1.0.0
+     */
+    abstract public function init_relation(Collection $models, $relation);
+
+    /**
      * Match eager loaded results back onto their parent models.
      *
      * Builds a dictionary keyed by relation keys and assigns the results to

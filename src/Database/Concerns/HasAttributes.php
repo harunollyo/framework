@@ -23,19 +23,19 @@ use Framework\Database\Query\Relations\Relation;
 use Framework\Exceptions\InvalidCastException;
 use Framework\Supports\Arr;
 use Framework\Supports\Facades\Date;
-use ReflectionClass;
 use ReflectionMethod;
-use Framework\Supports\Str;
+use LogicException;
 
 use function Framework\app;
 use function Framework\collection;
+use function Framework\tap;
 
 trait HasAttributes
 {
     /**
      * The model's current attribute values.
      *
-     * @var array<string,
+     * @var array<string, mixed>
      *
      * @since 1.0.0
      */
@@ -44,7 +44,7 @@ trait HasAttributes
     /**
      * The original attribute values at the time of model instantiation.
      *
-     * @var array<string,
+     * @var array<string, mixed>
      *
      * @since 1.0.0
      */
@@ -53,7 +53,7 @@ trait HasAttributes
     /**
      * The attributes that have been changed since the last sync.
      *
-     * @var array<string,
+     * @var array<string, mixed>
      *
      * @since 1.0.0
      */
@@ -62,7 +62,7 @@ trait HasAttributes
     /**
      * The previous attribute values before the last sync.
      *
-     * @var array<string,
+     * @var array<string, mixed>
      *
      * @since 1.0.0
      */
@@ -144,7 +144,7 @@ trait HasAttributes
             return $this->get_attribute_value($key);
         }
 
-        return $this->is_relation($key)
+        return $this->is_relation($key) || $this->relation_loaded($key)
             ? $this->get_relation_value($key)
             : null;
     }
@@ -163,11 +163,15 @@ trait HasAttributes
      */
     protected function get_relation_value($key)
     {
-        if (method_exists($this, $key)) {
-            return $this->get_relationship_from_method($key);
+        if ($this->relation_loaded($key)) {
+            return $this->get_relation($key);
         }
 
-        return null;
+        if (!$this->is_relation($key)) {
+            return;
+        }
+
+        return $this->get_relationship_from_method($key);
     }
 
     /**
@@ -187,10 +191,25 @@ trait HasAttributes
         $relation = $this->$method();
 
         if (!$relation instanceof Relation) {
-            return null;
+            if (is_null($relation)) {
+                throw new LogicException(sprintf(
+                    '%s::%s must return a relationship instance, ' 
+                    . 'but "null" was returned. Was the "return" keyword used?',
+                    static::class,
+                    $method,
+                ));
+            }
+
+            throw new LogicException(sprintf(
+                '%s::%s must return a relationship instance.',
+                static::class,
+                $method,
+            ));
         }
 
-        return $this->relations[$method] = $relation->get_results();
+        return tap($relation->get_results(), function ($results) use ($method) {
+            $this->set_relation($method, $results);
+        });
     }
 
     /**
@@ -406,7 +425,7 @@ trait HasAttributes
      *
      * @return string The JSON string
      *
-     * @throws \InvalidCastException
+     * @throws InvalidCastException
      *
      * @since 1.0.0
      */
@@ -802,7 +821,7 @@ trait HasAttributes
      *
      * @return bool Whether the attribute is a class castable attribute
      *
-     * @throws \InvalidCastException
+     * @throws InvalidCastException
      *
      * @since 1.0.0
      */

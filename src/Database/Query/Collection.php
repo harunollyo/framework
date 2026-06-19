@@ -15,23 +15,11 @@ defined('ABSPATH') || exit;
 use Framework\Collections\Collection as BaseCollection;
 use Framework\Database\Concerns\HasDictionary;
 
+use function Framework\value;
+
 class Collection extends BaseCollection
 {
     use HasDictionary;
-
-    /**
-     * Create a new instance.
-     *
-     * @param array $items The items.
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function __construct(array $items = [])
-    {
-        parent::__construct($items);
-    }
 
     /**
      * Merge the items into the collection.
@@ -101,9 +89,114 @@ class Collection extends BaseCollection
 
             $query = $this->first()->new_query_without_relations()->with($relations);
 
-            $this->items = $query->eager_load_relations($this->items);
+            $this->items = $query->eager_load_relations($this->new_instance($this->items));
         }
 
         return $this;
+    }
+
+    /**
+     * Eager load the missing relationships for the collection.
+     *
+     * @param mixed $relations The relations to eager load
+     *
+     * @return static A new collection containing the eager loaded items
+     *
+     * @since 1.0.0
+     */
+    public function load_missing($relations)
+    {
+        if (is_string($relations)) {
+            $relations = func_get_args();
+        }
+
+        if ($this->not_empty()) {
+            $query = $this->first()->new_query_without_relations()->with($relations);
+
+            $with_relations = $query->get_with_relations();
+
+            foreach ($with_relations as $key => $value) {
+                $path = $this->flatten_relations($key, $value);
+
+                $this->load_missing_relation($this, $path);
+            }
+        }
+    }
+
+    /**
+     * Load the missing relation.
+     *
+     * @param self $models The models
+     * @param array $path The path
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    protected function load_missing_relation(self $models, array $path)
+    {
+        $relation = array_shift($path);
+
+        $name = key($relation);
+
+        if (is_string(reset($relation))) {
+            $relation = reset($relation);
+        }
+
+        $not_loaded = $models->filter(function ($model) use ($name) {
+            if (is_null($model)) {
+                return false;
+            }
+
+            return !$model->relation_loaded($name);
+        });
+
+        // $models->filter(fn ($model) => !is_null($model) && !$model->relation_loaded($name))->load($relation);
+        $not_loaded->load($relation);
+
+        if (empty($path)) {
+            return;
+        }
+
+        $models = $models->pluck($name)->filter();
+
+        if ($models->first() instanceof BaseCollection) {
+            $models = $models->collapse();
+        }
+
+        $this->load_missing_relation(new static($models), $path);
+    }
+
+    /**
+     * Flatten the relations.
+     *
+     * @param array $relations The relations to flatten
+     *
+     * @return array The flattened relations
+     *
+     * @since 1.0.0
+     */
+    protected function flatten_relations($parent, array $relations)
+    {
+        $result ??= [];
+
+        if (is_string($parent)) {
+            $result = array_merge($result, [[$parent => $parent]]);
+        }
+
+        if (empty($relations)) {
+            return $result;
+        }
+
+        foreach ($relations as $key => $value) {
+            if (is_callable($value)) {
+                $result[count($result) - 1][key($result[count($result) - 1])] = $value;
+                continue;
+            }
+
+            $result = array_merge($result, $this->flatten_relations($key, $value));
+        }
+
+        return $result;
     }
 }
