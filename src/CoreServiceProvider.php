@@ -70,7 +70,8 @@ class CoreServiceProvider extends ServiceProvider
             ->discover()
             ->cache();
 
-        Scheduler::boot();
+        // @todo: Scheduler will be handled later
+        // Scheduler::boot();
     }
 
     /**
