@@ -870,28 +870,6 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     }
 
     /**
-     * Eager load the relationships for the collection.
-     *
-     * @param mixed $relations The relations to eager load
-     *
-     * @return static A new collection containing the eager loaded items
-     *
-     * @since 1.0.0
-     */
-    public function load($relations)
-    {
-        if ($this->not_empty()) {
-            $query = $this->first()->new_query_without_relations()->with(
-                is_string($relations) ? func_get_args() : $relations
-            );
-
-            $this->items = $query->eager_load_relations($this->items);
-        }
-
-        return $this;
-    }
-
-    /**
      * Convert the collection to an array.
      *
      * @return array The array representation of the collection

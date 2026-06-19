@@ -82,4 +82,28 @@ class Collection extends BaseCollection
 
         return $dictionary;
     }
+
+    /**
+     * Eager load the relationships for the collection.
+     *
+     * @param mixed $relations The relations to eager load
+     *
+     * @return static A new collection containing the eager loaded items
+     *
+     * @since 1.0.0
+     */
+    public function load($relations)
+    {
+        if ($this->not_empty()) {
+            if (is_string($relations)) {
+                $relations = func_get_args();
+            }
+
+            $query = $this->first()->new_query_without_relations()->with($relations);
+
+            $this->items = $query->eager_load_relations($this->items);
+        }
+
+        return $this;
+    }
 }
