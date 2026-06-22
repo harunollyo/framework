@@ -12,7 +12,11 @@ namespace Framework\Database\Concerns;
 
 defined('ABSPATH') || exit;
 
+use Framework\Database\Connection\Connection;
+use Framework\Supports\Facades\Schema;
+
 use function Framework\Polyfill\str_contains;
+use function Framework\Polyfill\str_starts_with;
 
 trait GuardAttributes
 {
@@ -44,6 +48,24 @@ trait GuardAttributes
     protected static $unguarded = false;
 
     /**
+     * The guardable columns for the model.
+     *
+     * @var array<class-string, list<string>>
+     *
+     * @since 1.0.0
+     */
+    protected static $guardable_columns = [];
+
+    /**
+     * Get the connection for the model.
+     *
+     * @return Connection
+     *
+     * @since 1.0.0
+     */
+    abstract protected static function get_connection();
+
+    /**
      * Get the fillable attributes for the model.
      *
      * @return array
@@ -66,7 +88,7 @@ trait GuardAttributes
      */
     public function fillable(array $fillable)
     {
-        $this->$fillable = $fillable;
+        $this->fillable = $fillable;
 
         return $this;
     }
@@ -82,6 +104,10 @@ trait GuardAttributes
      */
     public function merge_fillable(array $fillable)
     {
+        if ($fillable === []) {
+            return $this;
+        }
+
         $this->fillable = array_values(
             array_unique(
                 array_merge($this->fillable, $fillable)
@@ -180,7 +206,9 @@ trait GuardAttributes
     /**
      * Execute the given callback while mass assignment is enabled for all attributes.
      *
-     * @param callable $callback The callback to invoke.
+     * @template TReturn
+     * 
+     * @param (callable(): TReturn) $callback The callback to invoke.
      *
      * @return mixed
      *
@@ -224,7 +252,9 @@ trait GuardAttributes
             return false;
         }
 
-        return empty($this->get_fillable()) && !str_contains($key, '.') && !str_contains($key, '_');
+        return empty($this->get_fillable())
+            && !str_contains($key, '.')
+            && !str_starts_with($key, '_');
     }
 
     /**
@@ -242,7 +272,36 @@ trait GuardAttributes
             return false;
         }
 
-        return $this->get_guarded() === ['*'] ||
-            empty(preg_grep('/^' . preg_quote($key, '/') . '$/i', $this->get_guarded()));
+        return $this->get_guarded() === ['*']
+            || !empty(preg_grep('/^' . preg_quote($key, '/') . '$/i', $this->get_guarded()))
+            || !$this->is_guardable_column($key);
+    }
+
+    /**
+     * Determine if the given key is guardable.
+     *
+     * @param mixed $key The key.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function is_guardable_column($key)
+    {
+        if ($this->has_set_mutator($key) || $this->is_class_castable($key)) {
+            return true;
+        }
+
+        if (!isset(static::$guardable_columns[get_class($this)])) {
+            $columns = Schema::get_column_listing($this->get_table());
+
+            if (empty($columns)) {
+                return true;
+            }
+
+            static::$guardable_columns[get_class($this)] = $columns;
+        }
+
+        return in_array($key, static::$guardable_columns[get_class($this)]);
     }
 }

@@ -131,4 +131,41 @@ class SchemaManager
         );
         $this->enabled_checking_foreign_key_constraints();
     }
+
+    /**
+     * Get the column list for a table.
+     *
+     * @param string $table The name of the table.
+     *
+     * @return array
+     * 
+     * @throws Exception
+     *
+     * @since 1.0.0
+     */
+    public function get_column_listing($table)
+    {
+        return array_column($this->get_columns($table), 'name');
+    }
+
+    /**
+     * Get the columns for a table.
+     *
+     * @param string $table The name of the table.
+     *
+     * @return array
+     *
+     * @throws Exception
+     * 
+     * @since 1.0.0
+     */
+    public function get_columns($table)
+    {
+        $table = $this->connection->get_table_prefix() . $table;
+
+        return $this->connection->get_db()->get_results(
+            $this->connection->get_schema_compiler()->compile_database_columns($table),
+            ARRAY_A
+        );
+    }
 }

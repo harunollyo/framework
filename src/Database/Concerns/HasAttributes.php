@@ -22,12 +22,15 @@ use Framework\Database\Contracts\CastsAttributes;
 use Framework\Database\Query\Relations\Relation;
 use Framework\Exceptions\InvalidCastException;
 use Framework\Supports\Arr;
+use Framework\Supports\Carbon;
 use Framework\Supports\Facades\Date;
+use InvalidArgumentException;
 use ReflectionMethod;
 use LogicException;
 
 use function Framework\app;
 use function Framework\collection;
+use function Framework\Polyfill\str_contains;
 use function Framework\tap;
 
 trait HasAttributes
@@ -119,7 +122,7 @@ trait HasAttributes
      *
      * @since 1.0.0
      */
-    protected static $cast_type_cache = [];
+    protected $cast_type_cache = [];
 
     /**
      * Retrieve an attribute or loaded relation value.
@@ -467,12 +470,45 @@ trait HasAttributes
      */
     protected function set_class_castable_attribute($key, $value)
     {
-        $caster = $this->get_cast_type($key);
+        $caster = $this->resolve_caster_class($key);
 
         $this->attributes = array_merge(
             $this->attributes,
             [$key => $caster->set($this, $key, $value, $this->attributes)]
         );
+    }
+
+    /**
+     * Resolve the caster class.
+     *
+     * @param string $key The attribute key
+     *
+     * @return mixed The caster class
+     *
+     * @since 1.0.0
+     */
+    protected function resolve_caster_class($key)
+    {
+        $cast_type = $this->get_casts()[$key] ?? null;
+
+        $arguments = [];
+
+        if (is_string($cast_type) && str_contains($cast_type, ':')) {
+            $segments = explode(':', $cast_type);
+
+            $cast_type = $segments[0];
+            $arguments = explode(',', $segments[1]);
+        }
+
+        if (is_subclass_of($cast_type, CastsAttributes::class)) {
+            $cast_type = new $cast_type(...$arguments);
+        }
+
+        if (is_object($cast_type)) {
+            return $cast_type;
+        }
+
+        return new $cast_type(...$arguments);
     }
 
     /**
@@ -858,7 +894,7 @@ trait HasAttributes
      */
     protected function get_class_castable_attribute_value($key, $value)
     {
-        $caster = $this->get_cast_type($key);
+        $caster = $this->resolve_caster_class($key);
 
         if ($caster instanceof CastsAttributes) {
             $value = $caster->get($this, $key, $value, $this->attributes);
@@ -880,29 +916,21 @@ trait HasAttributes
     {
         $cast_type = $this->get_casts()[$key] ?? null;
 
-        if (isset(static::$cast_type_cache[$key])) {
-            return static::$cast_type_cache[$key];
+        if (isset($this->cast_type_cache[$key])) {
+            return $this->cast_type_cache[$key];
         }
 
-        if (class_exists($cast_type)) {
-            $converted_cast_type = new $cast_type();
-        } elseif (is_string($cast_type) && strpos($cast_type, ':') !== false) {
+        if (is_string($cast_type) && strpos($cast_type, ':') !== false) {
             $converted_cast_type = substr($cast_type, 0, strpos($cast_type, ':'));
+        } elseif (class_exists($cast_type)) {
+            $converted_cast_type = $cast_type;
         } else {
             $converted_cast_type = trim(strtolower($cast_type));
         }
 
-        return static::$cast_type_cache[$key] = $converted_cast_type;
+        return $this->cast_type_cache[$key] = $converted_cast_type;
     }
 
-    /**
-     * Convert a JSON string to a PHP value.
-     *
-     * @param  string $value The JSON string to convert
-     * @param  bool $as_object Whether to convert the JSON string to an object
-     * @return mixed The PHP value
-     */
-    #[\ReturnTypeWillChange]
     /**
      * From json.
      *
@@ -913,6 +941,7 @@ trait HasAttributes
      *
      * @since 1.0.0
      */
+    #[\ReturnTypeWillChange]
     protected function from_json($value, $as_object = false)
     {
         if (empty($value)) {
@@ -928,69 +957,55 @@ trait HasAttributes
      *
      * @param mixed $value The value to convert
      *
-     * @return DateTime The date value
+     * @return Carbon The date value
      *
      * @since 1.0.0
      */
     protected function as_date($value)
     {
-        return $this->as_date_time($value)->setTime(0, 0, 0);
+        return $this->as_date_time($value)->startOfDay();
     }
 
-    /**
-     * Convert a value to a date time.
-     *
-     * @param  mixed $value The value to convert
-     * @return DateTime The date time value
-     */
-    #[\ReturnTypeWillChange]
     /**
      * As date time.
      *
      * @param mixed $value The value.
      *
-     * @return void
+     * @return Carbon The date time value
      *
      * @since 1.0.0
      */
+    #[\ReturnTypeWillChange]
     protected function as_date_time($value)
     {
-        if ($value instanceof DateTimeInterface) {
-            if ($value instanceof DateTime) {
-                return clone $value;
-            }
+        if ($value instanceof Carbon) {
+            return Date::instance($value);
+        }
 
-            return new DateTime(
+        if ($value instanceof DateTimeInterface) {
+            return Date::parse(
                 $value->format('Y-m-d H:i:s.u'),
                 $value->getTimezone()
             );
         }
 
         if (is_numeric($value)) {
-            $date = new DateTime('@' . (int) $value);
-            $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
-
-            return $date;
+            return Date::createFromTimestamp($value, date_default_timezone_get());
         }
 
         if ($this->is_standard_date_format($value)) {
-            $date = DateTime::createFromFormat('Y-m-d', $value);
-
-            if ($date !== false) {
-                $date->setTime(0, 0, 0);
-
-                return $date;
-            }
+            return Date::instance(Carbon::createFromFormat('Y-m-d', $value)->startOfDay());
         }
 
         $format = $this->get_date_format();
-        $date = DateTime::createFromFormat($format, $value);
 
-        if ($date !== false) {
-            return $date;
+        try {
+            $date = Date::createFromFormat($format, $value);
+        } catch (InvalidArgumentException $exception) {
+            $date = false;
         }
 
-        return new DateTime($value);
+        return $date ?: Date::parse($value);
     }
 
     /**
@@ -1326,20 +1341,22 @@ trait HasAttributes
                 continue;
             }
 
-            $value = $attributes[$key];
+            $attributes[$key] = $this->cast_attribute($key, $attributes[$key]);
 
-            $attributes[$key] = $this->cast_attribute($key, $value);
-
-            if (in_array($value, ['date', 'datetime'], true) || $value instanceof DateTimeInterface) {
-                $attributes[$key] = $this->serialize_date($value);
+            if (isset($attributes[$key]) && in_array($value, ['date', 'datetime'], true)) {
+                $attributes[$key] = $this->serialize_date($attributes[$key]);
             }
 
-            if ($value instanceof Arrayable) {
-                $attributes[$key] = $value->to_array();
+            if ($attributes[$key] instanceof DateTimeInterface && $this->is_class_castable($key)) {
+                $attributes[$key] = $this->serialize_date($attributes[$key]);
             }
 
-            if ($value instanceof Jsonable) {
-                $attributes[$key] = $value->to_json();
+            if ($attributes[$key] instanceof Arrayable) {
+                $attributes[$key] = $attributes[$key]->to_array();
+            }
+
+            if ($attributes[$key] instanceof Jsonable) {
+                $attributes[$key] = $attributes[$key]->to_json();
             }
         }
 

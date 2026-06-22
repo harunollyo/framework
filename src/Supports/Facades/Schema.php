@@ -22,6 +22,8 @@ use Framework\Facade;
  * @method static void drop(string $table)
  * @method static void enabled_checking_foreign_key_constraints()
  * @method static void disabled_checking_foreign_key_constraints()
+ * @method static array get_column_listing(string $table)
+ * @method static array get_columns(string $table)
  * @see    \Framework\Database\Schema\SchemaManager
  */
 class Schema extends Facade

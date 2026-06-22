@@ -74,18 +74,40 @@ trait HasRelationships
      * @param string $related The related model class name
      * @param mixed $foreign_key The foreign key name on this model
      * @param mixed $owner_key The referenced key name on the related model
+     * @param string $relation The name of the relation
      *
      * @return BelongsTo The relation instance
      *
      * @since 1.0.0
      */
-    protected function belongs_to($related, $foreign_key = null, $owner_key = null)
+    protected function belongs_to($related, $foreign_key = null, $owner_key = null, $relation = null)
     {
         $instance = new $related();
         $foreign_key = $foreign_key ?? $instance->get_foreign_key();
         $owner_key = $owner_key ?? $instance->primary_key;
+        $relation = $relation ?? $this->guess_belongs_to_relation();
 
-        return new BelongsTo($instance, $this, $foreign_key, $owner_key);
+        return new BelongsTo(
+            $instance,
+            $this,
+            $foreign_key,
+            $owner_key,
+            $relation
+        );
+    }
+
+    /**
+     * Guess the name of the relation.
+     *
+     * @return string The name of the relation
+     *
+     * @since 1.0.0
+     */
+    protected function guess_belongs_to_relation()
+    {
+        [, , $caller] = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+
+        return $caller['function'];
     }
 
     /**

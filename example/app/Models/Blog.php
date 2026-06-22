@@ -11,25 +11,24 @@ class Blog extends Model
     protected $primary_key = 'id';
 
     protected $casts = [
-        'id' => 'integer',
-        'user_id' => 'integer',
-        'category_id' => 'integer',
+        'status' => 'bool',
         'published_at' => 'datetime',
     ];
 
-    protected $fillable = [
-        'user_id',
-        'category_id',
-        'title',
-        'slug',
-        'excerpt',
-        'body',
-        'featured_image',
-        'status',
-        'published_at',
-        'created_at',
-        'updated_at',
-    ];
+    // protected $fillable = [
+    //     'user_id',
+    //     'category_id',
+    //     'title',
+    //     'slug',
+    //     'excerpt',
+    //     'body',
+    //     'featured_image',
+    //     'status',
+    //     'published_at',
+    //     'created_at',
+    //     'updated_at',
+    // ];
+    protected $guarded = ['id'];
 
     public function category()
     {

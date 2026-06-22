@@ -16,11 +16,11 @@ defined('ABSPATH') || exit;
 
 use Closure;
 use DateTimeInterface;
-use Framework\Collections\Collection;
 use Framework\Database\Query\Expression;
 use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;
 use Framework\Database\Query\QueryCompiler;
+use Framework\Database\Schema\Compiler as SchemaCompiler;
 use Framework\Exceptions\QueryException;
 use Framework\Exceptions\UniqueConstraintViolationException;
 use Exception;
@@ -334,9 +334,9 @@ class Connection
      *
      * @return mixed The results of the query.
      *
-     * @throws \Exception
-     * @throws \UniqueConstraintViolationException
-     * @throws \QueryException
+     * @throws Exception
+     * @throws UniqueConstraintViolationException
+     * @throws QueryException
      *
      * @since 1.0.0
      */
@@ -514,6 +514,18 @@ class Connection
     public function get_query_compiler()
     {
         return new QueryCompiler($this);
+    }
+
+    /**
+     * Get a new schema compiler instance.
+     *
+     * @return SchemaCompiler
+     *
+     * @since 1.0.0
+     */
+    public function get_schema_compiler()
+    {
+        return new SchemaCompiler($this);
     }
 
     /**

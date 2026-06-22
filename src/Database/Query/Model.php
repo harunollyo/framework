@@ -19,6 +19,7 @@ use Framework\Contracts\Support\Jsonable;
 use Framework\Database\Concerns\HasAttributes;
 use Framework\Database\Concerns\HasRelationships;
 use Framework\Database\Query\Collection;
+use Framework\Collections\Collection as BaseCollection;
 use Framework\Supports\Arr;
 use Framework\Supports\Traits\Macroable;
 use Framework\Database\Concerns\GuardAttributes;
@@ -972,13 +973,11 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
 
         $this->set_raw_attributes(
             $this->set_where_for_fresh_query($this->new_query())
-                ->first()
-                ->get_attributes()
+                ->first_or_fail()
+                ->attributes
         );
 
-        if (!empty($this->relations)) {
-            $this->load($this->relations);
-        }
+        $this->load((new BaseCollection($this->relations))->keys()->all());
 
         $this->sync_original();
 
@@ -1108,22 +1107,14 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Set an attribute or relation.
      *
-     * @param  string $offset The attribute or relation key to set
-     * @param  mixed $value The value to assign to the attribute or relation
+     * @param string $offset The attribute or relation key to set
+     * @param mixed $value The value to assign to the attribute or relation
+     * 
      * @return void No return value
-     * @since  1.0.0
-     */
-    #[\ReturnTypeWillChange]
-    /**
-     * OffsetSet.
-     *
-     * @param mixed $offset The offset.
-     * @param mixed $value The value.
-     *
-     * @return void
-     *
+     * 
      * @since 1.0.0
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
     {
         $this->set_attribute($offset, $value);

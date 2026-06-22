@@ -3,6 +3,7 @@
 namespace Example\App\Http\Controllers;
 
 use Example\App\Models\Blog;
+use Example\App\Models\Category;
 use Example\App\Models\Event;
 use Example\App\Models\Speaker;
 use Framework\Http\Request;
@@ -16,15 +17,12 @@ class EventsController
 	public function index(Request $request)
 	{
 		DB::enable_query_log();
-		$blog = Blog::query()->with('comments')->find(1);
-		$blog->load_missing('comments.replies');
+		$blog = Blog::query()->find(1);
 		$queries = DB::get_query_log();
 
 		return response()->json([
-			// 'speakers' => $speaker,
-			// 'events' => $events,
-			'queries' => $queries,
 			'blog' => $blog,
+			'queries' => $queries,
 		]);
 	}
 

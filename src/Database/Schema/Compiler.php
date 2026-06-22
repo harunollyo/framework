@@ -13,17 +13,17 @@ namespace Framework\Database\Schema;
 defined('ABSPATH') || exit;
 
 use Framework\Database\Query\Expression;
-use Framework\Database\Query\QueryBuilder;
 use Framework\Database\Schema\Definitions\Definition;
 use Framework\Database\Schema\Definitions\ForeignKeyDefinition;
 use Exception;
+use Framework\Database\Connection\Connection;
 
 class Compiler
 {
     /**
      * List of column modifiers to apply.
      *
-     * @var array<int,
+     * @var list<string>
      *
      * @since 1.0.0
      */
@@ -32,11 +32,34 @@ class Compiler
     /**
      * List of table commands to generate.
      *
-     * @var array<int,
+     * @var list<string>
      *
      * @since 1.0.0
      */
     protected $commands = ['primary', 'unique', 'index', 'foreign'];
+
+    /**
+     * The database connection instance.
+     *
+     * @var Connection
+     *
+     * @since 1.0.0
+     */
+    protected $connection = null;
+
+    /**
+     * Compiler constructor.
+     *
+     * @param Connection $connection The database connection instance.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
 
     /**
      * Compile the SQL statement for creating a table.
@@ -384,6 +407,29 @@ class Compiler
         );
 
         return $this->add_modifiers($sql, $column, $structure);
+    }
+
+
+    /**
+     * Compile the columns query.
+     *
+     * @param string $table The table.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function compile_database_columns($table)
+    {
+        return sprintf(
+            'select column_name as `name`, data_type as `type_name`, column_type as `type`, '
+            . 'collation_name as `collation`, is_nullable as `nullable`, '
+            . 'column_default as `default`, column_comment as `comment`, '
+            . 'generation_expression as `expression`, extra as `extra` '
+            . 'from information_schema.columns where table_schema = schema() and table_name = %s '
+            . 'order by ordinal_position asc',
+            $this->connection->quote_string($table)
+        );
     }
 
     /**

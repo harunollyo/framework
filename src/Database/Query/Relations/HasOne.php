@@ -157,6 +157,18 @@ class HasOne extends Relation
     }
 
     /**
+     * Get the qualified foreign key name.
+     *
+     * @return string The qualified foreign key name
+     *
+     * @since 1.0.0
+     */
+    public function get_qualified_foreign_key_name()
+    {
+        return $this->foreign_key;
+    }
+
+    /**
      * Get the foreign key name.
      *
      * @return string The foreign key name
@@ -165,7 +177,7 @@ class HasOne extends Relation
      */
     public function get_foreign_key_name()
     {
-        $segments = explode('.', $this->get_qualified_parent_key_name());
+        $segments = explode('.', $this->get_qualified_foreign_key_name());
 
         return array_last($segments);
     }

@@ -16,6 +16,8 @@ use Carbon\Carbon as BaseCarbon;
 use Carbon\Exceptions\InvalidFormatException;
 use DateTimeInterface;
 
+// phpcs:disable Framework.NamingConventions.SnakeCaseMethod.NotSnakeCase
+
 class Carbon extends BaseCarbon
 {
     public const BASE_FORMAT = 'Y-m-d H:i:s';
@@ -29,7 +31,7 @@ class Carbon extends BaseCarbon
      *
      * @since 1.0.0
      */
-    public static function isValidDate($value) // phpcs:ignore Framework.NamingConventions.SnakeCaseMethod.NotSnakeCase
+    public static function isValidDate($value)
     {
         if ($value instanceof DateTimeInterface) {
             return true;
@@ -51,7 +53,7 @@ class Carbon extends BaseCarbon
      *
      * @since 1.0.0
      */
-    public function toBaseDateString() // phpcs:ignore Framework.NamingConventions.SnakeCaseMethod.NotSnakeCase
+    public function toBaseDateString()
     {
         return $this->format(static::BASE_FORMAT);
     }
@@ -63,7 +65,7 @@ class Carbon extends BaseCarbon
      *
      * @since 1.0.0
      */
-    public function toSqlDatetimeString() // phpcs:ignore Framework.NamingConventions.SnakeCaseMethod.NotSnakeCase
+    public function toSqlDatetimeString()
     {
         return $this->toBaseDateString();
     }

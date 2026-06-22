@@ -12,6 +12,7 @@ class Category extends Model
 
     protected $casts = [
         'id' => 'integer',
+        'status' => 'string',
     ];
 
     protected $fillable = [

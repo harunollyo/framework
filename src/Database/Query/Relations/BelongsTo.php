@@ -49,6 +49,15 @@ class BelongsTo extends Relation
     protected $child;
 
     /**
+     * The name of the relation.
+     *
+     * @var string
+     *
+     * @since 1.0.0
+     */
+    protected $relation_name;
+
+    /**
      * Create a new belongs-to relation instance.
      *
      * Stores the foreign and owner key names and applies constraints so the
@@ -58,15 +67,17 @@ class BelongsTo extends Relation
      * @param Model $child The parent model instance
      * @param mixed $foreign_key The foreign key on the parent model
      * @param mixed $owner_key The key on the related model being referenced
+     * @param string $relation_name The name of the relation
      *
      * @return void No return value
      *
      * @since 1.0.0
      */
-    public function __construct(Model $related, Model $child, $foreign_key, $owner_key)
+    public function __construct(Model $related, Model $child, $foreign_key, $owner_key, $relation_name)
     {
         $this->foreign_key = $foreign_key;
         $this->owner_key = $owner_key;
+        $this->relation_name = $relation_name;
 
         $this->child = $child;
 
@@ -271,20 +282,23 @@ class BelongsTo extends Relation
      * Sets the parent's foreign key to the owner's key value and updates the
      * in-memory relation reference for immediate access and serialization.
      *
-     * @param Model $model The owner model to associate
+     * @param Model|int|string|null $model The owner model to associate
      *
      * @return Model The parent model for method chaining
      *
      * @since 1.0.0
      */
-    public function associate(Model $model)
+    public function associate($model)
     {
-        $this->child->set_attribute(
-            $this->foreign_key,
-            $model->get_attribute($this->owner_key)
-        );
+        $owner_key = $model instanceof Model ? $model->get_attribute($this->owner_key) : $model;
 
-        $this->child->relations[$this->foreign_key] = $model;
+        $this->child->set_attribute($this->foreign_key, $owner_key);
+
+        if ($model instanceof Model) {
+            $this->child->set_relation($this->relation_name, $model);
+        } else {
+            $this->child->unset_relation($this->relation_name);
+        }
 
         return $this->child;
     }
@@ -303,9 +317,7 @@ class BelongsTo extends Relation
     {
         $this->child->set_attribute($this->foreign_key, null);
 
-        unset($this->child->relations[$this->foreign_key]);
-
-        return $this->child;
+        return $this->child->set_relation($this->relation_name, null);
     }
 
     /**
@@ -320,5 +332,17 @@ class BelongsTo extends Relation
     public function get_local_key()
     {
         return $this->owner_key;
+    }
+
+    /**
+     * Get the name of the relation.
+     *
+     * @return string The name of the relation
+     *
+     * @since 1.0.0
+     */
+    public function get_relation_name()
+    {
+        return $this->relation_name;
     }
 }

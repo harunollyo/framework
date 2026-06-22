@@ -742,7 +742,7 @@ class QueryBuilder
         }
 
         if ($this->is_queryable($value)) {
-            return $this->where_subquery($value, $operator, $value, $boolean);
+            return $this->where_subquery($column, $operator, $value, $boolean);
         }
 
         if (is_null($value)) {

@@ -83,7 +83,7 @@ class DocblockTagOrderSniff implements Sniff
                 );
             } else {
                 foreach ($parsed['tags']['param'] as $param_tag) {
-                    if (trim($param_tag) === '' || !preg_match('/^\S+\s+\$\S+\s+\S/', trim($param_tag))) {
+                    if (!SniffHelper::is_valid_param_tag($param_tag)) {
                         $phpcs_file->addError(
                             'Each @param tag must include a type, variable name, and description.',
                             $docblock_ptr,

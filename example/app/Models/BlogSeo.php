@@ -11,7 +11,6 @@ class BlogSeo extends Model
     protected $primary_key = 'id';
 
     protected $casts = [
-        'id' => 'integer',
         'blog_id' => 'integer',
     ];
 

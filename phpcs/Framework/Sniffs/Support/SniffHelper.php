@@ -228,6 +228,25 @@ class SniffHelper
     }
 
     /**
+     * Determine whether a @param tag includes type, variable name, and description.
+     *
+     * @param string $param_tag Parsed @param tag content.
+     *
+     * @return bool
+     * @since 1.0.0
+     */
+    public static function is_valid_param_tag($param_tag)
+    {
+        $param_tag = trim($param_tag);
+
+        if ($param_tag === '') {
+            return false;
+        }
+
+        return (bool) preg_match('/^.+\s+\$\w+\s+\S/s', $param_tag);
+    }
+
+    /**
      * Extract docblock content from token stack.
      *
      * @param array $tokens File tokens.

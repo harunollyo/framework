@@ -807,7 +807,7 @@ class Structure
      */
     protected function compiler()
     {
-        return new Compiler();
+        return new Compiler($this->connection);
     }
 
     /**

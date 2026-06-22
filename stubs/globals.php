@@ -18,6 +18,10 @@ namespace {
     if (!defined('REST_REQUEST')) {
         define('REST_REQUEST', false);
     }
+
+    if (!defined('ARRAY_A')) {
+        define('ARRAY_A', 1);
+    }
 }
 
 namespace {

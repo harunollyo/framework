@@ -752,7 +752,7 @@ class Route
      *
      * @return callable
      *
-     * @throws \InvalidRoutActionException
+     * @throws InvalidRoutActionException
      *
      * @since 1.0.0
      */

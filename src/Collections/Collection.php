@@ -221,8 +221,7 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
             : Arr::from($items);
     }
 
-    // phpcs:ignore Framework.Commenting.DocblockTagOrder.InvalidParamDescription
-    /** 
+    /**
      * Get the first item in the collection.
      *
      * @template TFirstDefault
@@ -877,6 +876,18 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     public function join(string $glue = ',')
     {
         return implode($glue, $this->items);
+    }
+
+    /**
+     * Get the keys of the collection.
+     *
+     * @return static A new collection containing the keys
+     *
+     * @since 1.0.0
+     */
+    public function keys()
+    {
+        return $this->new_instance(array_keys($this->items));
     }
 
     /**

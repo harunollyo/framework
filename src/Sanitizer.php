@@ -390,7 +390,7 @@ class Sanitizer
                 $value = (float) $value;
                 break;
             case static::BOOL:
-                $value = (bool) $value;
+                $value = rest_sanitize_boolean($value);
                 break;
             case static::ARRAY:
                 if (is_array($value)) {
