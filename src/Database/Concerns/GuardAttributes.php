@@ -304,4 +304,34 @@ trait GuardAttributes
 
         return in_array($key, static::$guardable_columns[get_class($this)]);
     }
+
+    /**
+     * Determine if the model is totally guarded.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    public function totally_guarded()
+    {
+        return count($this->get_fillable()) === 0 && $this->get_guarded() == ['*'];
+    }
+
+    /**
+     * Get the fillable attributes from the array.
+     *
+     * @param array $attributes The attributes.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    protected function fillable_from_array(array $attributes)
+    {
+        if (count($this->get_fillable()) > 0 && !static::$unguarded) {
+            return array_intersect_key($attributes, array_flip($this->get_fillable()));
+        }
+
+        return $attributes;
+    }
 }

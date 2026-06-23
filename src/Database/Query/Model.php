@@ -27,6 +27,7 @@ use Framework\Supports\Facades\Date;
 use Exception;
 use Framework\Database\Concerns\HasTimestamps;
 use Framework\Database\Connection\Connection;
+use Framework\Exceptions\MassAssignmentException;
 use JsonSerializable;
 use ReflectionClass;
 
@@ -123,6 +124,24 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     protected bool $was_recently_created = false;
 
     /**
+     * Indicates if mass assignment should be silently discarded.
+     *
+     * @var bool
+     *
+     * @since 1.0.0
+     */
+    protected static $prevent_silently_discarding_attributes = false;
+
+    /**
+     * The callback to be invoked when an attribute is silently discarded.
+     *
+     * @var callable|null
+     *
+     * @since 1.0.0
+     */
+    protected static $discarded_attribute_callback = null;
+
+    /**
      * The name of the "created at" column.
      *
      * @var string|null
@@ -208,6 +227,60 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     protected function booted()
     {
         //
+    }
+
+    /**
+     * Prevent silently discarding attributes.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    public static function is_attribute_silently_discarding_enabled()
+    {
+        return static::$prevent_silently_discarding_attributes;
+    }
+
+    /**
+     * Prevent silently discarding attributes.
+     *
+     * @param bool $state The state.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public static function prevent_silently_discarding_attributes($state = true)
+    {
+        static::$prevent_silently_discarding_attributes = $state;
+    }
+
+    /**
+     * Set the callback to be invoked when an attribute is silently discarded.
+     *
+     * @param callable|null $callback The callback to set.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public static function discarded_attribute_callback(?callable $callback = null)
+    {
+        static::$discarded_attribute_callback = $callback;
+    }
+
+    /**
+     * Set the model to be strict.
+     *
+     * @param bool $state The state.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public static function should_be_strict(bool $state = true)
+    {
+        static::prevent_silently_discarding_attributes($state);
     }
 
     /**
@@ -512,13 +585,13 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
     /**
      * Retrieve a model instance by its primary key.
      *
-     * @param int $id The primary key of the record to find
+     * @param mixed $id The primary key of the record to find
      *
      * @return Model The hydrated model instance
      *
      * @since 1.0.0
      */
-    public static function find(int $id)
+    public static function find($id)
     {
         return static::query()->find($id, (new static())->primary_key);
     }
@@ -681,14 +754,16 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      *
      * @return bool True when deletion succeeds; false if not persisted
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
      */
     public function delete()
     {
-        if (empty($this->get_primary_key())) {
-            throw new Exception(sprintf('No primary key defined for model [%s]', static::class));
+        $this->merge_attributes_from_cached_class_casts();
+
+        if (is_null($this->get_primary_key())) {
+            throw new Exception('No primary key defined on model.');
         }
 
         if (!$this->exists) {
@@ -732,13 +807,26 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      */
     public static function destroy($ids)
     {
+        if ($ids instanceof Collection) {
+            $ids = $ids->model_keys();
+        }
+
+        if ($ids instanceof BaseCollection) {
+            $ids = $ids->all();
+        }
+
         $ids = is_array($ids) ? $ids : func_get_args();
+
+        if (empty($ids)) {
+            return 0;
+        }
+
+        $key = ($instance = new static())->get_primary_key();
+
         $count = 0;
 
-        foreach ($ids as $id) {
-            $instance = static::find($id);
-            if ($instance) {
-                $instance->delete();
+        foreach ($instance->where_in($key, $ids)->get() as $model) {
+            if ($model->delete()) {
                 $count++;
             }
         }
@@ -760,9 +848,41 @@ abstract class Model implements Arrayable, Jsonable, ArrayAccess, JsonSerializab
      */
     public function fill(array $attributes)
     {
+        $totally_guarded = $this->totally_guarded();
+
+        $fillable = $this->fillable_from_array($attributes);
+
         foreach ($attributes as $key => $value) {
             if ($this->is_fillable($key)) {
                 $this->set_attribute($key, $value);
+            } elseif ($totally_guarded || static::is_attribute_silently_discarding_enabled()) {
+                if (isset(static::$discarded_attribute_callback)) {
+                    call_user_func(static::$discarded_attribute_callback, $this, [$key]);
+                } else {
+                    throw new MassAssignmentException(
+                        sprintf(
+                            'Add [%s] to fillable array to allow mass assignment on [%s].',
+                            $key,
+                            get_class($this)
+                        )
+                    );
+                }
+            }
+        }
+
+        if (count($attributes) !== count($fillable) && static::is_attribute_silently_discarding_enabled()) {
+            $keys = array_diff(array_keys($attributes), array_keys($fillable));
+
+            if (isset(static::$discarded_attribute_callback)) {
+                call_user_func(static::$discarded_attribute_callback, $this, $keys);
+            } else {
+                throw new MassAssignmentException(
+                    sprintf(
+                        'Add [%s] to fillable array to allow mass assignment on [%s].',
+                        implode(', ', $keys),
+                        get_class($this)
+                    )
+                );
             }
         }
 

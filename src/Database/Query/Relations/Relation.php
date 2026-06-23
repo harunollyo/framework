@@ -406,9 +406,9 @@ abstract class Relation
      *
      * @since 1.0.0
      */
-    public function get_relation_count_hash($increment_join_count = false)
+    public function get_relation_count_hash($increment_join_count = true)
     {
-        return 'themeum_framework_reserved_' . (
+        return 'framework_reserved_' . (
             $increment_join_count
                 ? static::$self_join_count++
                 : static::$self_join_count

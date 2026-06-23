@@ -11,6 +11,7 @@ use Framework\Supports\Facades\Option;
 
 use function Framework\app;
 use function Framework\collection;
+use function Framework\config;
 use function Framework\request;
 use function Framework\response;
 
@@ -46,7 +47,6 @@ Route::post('/check', function (Request $request) {
             ->map->store('attachments/public');
 
     return response()->json([
-        'status' => 'ok',
         'attachment' => $attachment,
     ]);
 });

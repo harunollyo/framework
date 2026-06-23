@@ -12,9 +12,7 @@ namespace Framework\Database\Concerns;
 
 defined('ABSPATH') || exit;
 
-use DateTime;
 use DateTimeInterface;
-use DateTimeZone;
 use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;
 use Framework\Database\Connection\Connection;
@@ -122,7 +120,7 @@ trait HasAttributes
      *
      * @since 1.0.0
      */
-    protected $cast_type_cache = [];
+    protected static $cast_type_cache = [];
 
     /**
      * Retrieve an attribute or loaded relation value.
@@ -782,7 +780,9 @@ trait HasAttributes
             case 'timestamp':
                 return $this->as_timestamp($value);
             case 'unserialize':
-                return maybe_unserialize($value);
+                return is_serialized($value)
+                    ? @unserialize($value, ['allowed_classes' => false])
+                    : $value;
             case 'serialize':
                 return maybe_serialize($value);
             default:
@@ -916,8 +916,8 @@ trait HasAttributes
     {
         $cast_type = $this->get_casts()[$key] ?? null;
 
-        if (isset($this->cast_type_cache[$key])) {
-            return $this->cast_type_cache[$key];
+        if (isset(static::$cast_type_cache[$cast_type])) {
+            return static::$cast_type_cache[$cast_type];
         }
 
         if (is_string($cast_type) && strpos($cast_type, ':') !== false) {
@@ -928,7 +928,7 @@ trait HasAttributes
             $converted_cast_type = trim(strtolower($cast_type));
         }
 
-        return $this->cast_type_cache[$key] = $converted_cast_type;
+        return static::$cast_type_cache[$cast_type] = $converted_cast_type;
     }
 
     /**

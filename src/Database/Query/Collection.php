@@ -199,4 +199,16 @@ class Collection extends BaseCollection
 
         return $result;
     }
+
+    /**
+     * Get the primary keys of the collection.
+     *
+     * @return array The primary keys
+     *
+     * @since 1.0.0
+     */
+    public function model_keys()
+    {
+        return array_map(fn ($model) => $model->get_primary_key_value(), $this->items);
+    }
 }
