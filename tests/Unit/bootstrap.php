@@ -1,6 +1,11 @@
 <?php
 
 $framework_dir = dirname(__DIR__, 2);
+
+if (!defined('ABSPATH')) {
+    define('ABSPATH', $framework_dir . '/');
+}
+
 $autoload = $framework_dir . '/vendor/autoload.php';
 
 if (!file_exists($autoload)) {
@@ -13,9 +18,5 @@ require_once $autoload;
 require_once dirname(__DIR__) . '/Support/StubsWordPressFunctions.php';
 
 require_once $framework_dir . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
-
-if (!defined('ABSPATH')) {
-    define('ABSPATH', $framework_dir . '/');
-}
 
 define('FRAMEWORK_UNIT_TESTS', true);

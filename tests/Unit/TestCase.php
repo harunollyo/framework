@@ -5,9 +5,12 @@ namespace Framework\Tests\Unit;
 use Framework\Application;
 use Framework\Container;
 use Framework\Database\Connection\Connection;
+use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;
 use Framework\Database\Query\QueryCompiler;
+use Framework\Database\Query\Relations\Relation;
 use Framework\Database\Schema\Structure;
+use Framework\Tests\Support\Database\ModelTestWpdb;
 use Framework\Facade;
 use Framework\Managers\DateManager;
 use Framework\Route;
@@ -80,6 +83,68 @@ abstract class TestCase extends BaseTestCase
         $wpdb = new TestWpdb($config);
 
         return new Connection();
+    }
+
+    protected function bootstrap_model_testing(array $wpdb_config = []): ModelTestWpdb
+    {
+        global $wpdb;
+
+        $wpdb = new ModelTestWpdb($wpdb_config);
+
+        $container = new Container();
+        $container->instance('app', $container);
+        $container->singleton(DateManager::class, function () {
+            return new DateManager();
+        });
+        $container->alias('date', DateManager::class);
+        $container->instance(Connection::class, new Connection());
+
+        $this->set_container_instance($container);
+
+        return $wpdb;
+    }
+
+    protected function reset_model_static_state(string $model_class): void
+    {
+        $model_class::prevent_silently_discarding_attributes(false);
+        $model_class::discarded_attribute_callback(null);
+        $model_class::unguard(false);
+
+        $reflection = new \ReflectionClass($model_class);
+
+        if ($reflection->hasProperty('guardable_columns')) {
+            $guardable_property = $reflection->getProperty('guardable_columns');
+            $guardable_property->setAccessible(true);
+            $guardable_columns = $guardable_property->getValue();
+            unset($guardable_columns[$model_class]);
+            $guardable_property->setValue(null, $guardable_columns);
+        }
+    }
+
+    protected function reset_cast_type_cache(string $model_class): void
+    {
+        $reflection = new \ReflectionClass($model_class);
+
+        if ($reflection->hasProperty('cast_type_cache')) {
+            $property = $reflection->getProperty('cast_type_cache');
+            $property->setAccessible(true);
+            $property->setValue(null, []);
+        }
+    }
+
+    protected function reset_relation_join_count(): void
+    {
+        $reflection = new \ReflectionClass(Relation::class);
+        $property = $reflection->getProperty('self_join_count');
+        $property->setAccessible(true);
+        $property->setValue(null, 0);
+    }
+
+    protected function make_existing_model(string $model_class, array $attributes): Model
+    {
+        $instance = new $model_class();
+
+        return $instance->new_for_hydration($attributes);
     }
 
     protected function make_query_compiler(array $config = []): QueryCompiler

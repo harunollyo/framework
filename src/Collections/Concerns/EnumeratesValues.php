@@ -97,9 +97,7 @@ trait EnumeratesValues
             return $value;
         }
 
-        return function ($item) use ($value) {
-            return deep_get($item, $value);
-        };
+        return fn ($item) => deep_get($item, $value);
     }
 
     /**

@@ -53,6 +53,14 @@ if (!defined('MINUTE_IN_SECONDS')) {
     define('MINUTE_IN_SECONDS', 60);
 }
 
+if (!defined('ARRAY_A')) {
+    define('ARRAY_A', 'ARRAY_A');
+}
+
+if (!defined('OBJECT')) {
+    define('OBJECT', 'OBJECT');
+}
+
 if (!function_exists('sanitize_title')) {
     function sanitize_title($title, $fallback_title = '', $context = 'save')
     {
@@ -63,5 +71,52 @@ if (!function_exists('sanitize_title')) {
         $title = trim($title, '-');
 
         return $title === '' ? $fallback_title : $title;
+    }
+}
+
+if (!function_exists('is_serialized')) {
+    function is_serialized($data, $strict = true)
+    {
+        if (!is_string($data)) {
+            return false;
+        }
+
+        $data = trim($data);
+
+        if ($data === 'N;') {
+            return true;
+        }
+
+        if (strlen($data) < 4) {
+            return false;
+        }
+
+        if ($data[1] !== ':') {
+            return false;
+        }
+
+        return (bool) preg_match('/^(a|O|s|i|d|b|N):/', $data);
+    }
+}
+
+if (!function_exists('maybe_serialize')) {
+    function maybe_serialize($data)
+    {
+        if (is_array($data) || is_object($data)) {
+            return serialize($data);
+        }
+
+        return $data;
+    }
+}
+
+if (!function_exists('maybe_unserialize')) {
+    function maybe_unserialize($data)
+    {
+        if (is_serialized($data)) {
+            return @unserialize($data, ['allowed_classes' => false]);
+        }
+
+        return $data;
     }
 }

@@ -124,7 +124,7 @@ class EagerLoader
             $callback($relation->get_query());
         }
 
-        $results = $relation->get();
+        $results = $relation->get_eager();
 
         $this->models = $relation->match(
             $relation->init_relation($this->models, $relation_name),

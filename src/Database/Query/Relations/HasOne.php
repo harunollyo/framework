@@ -78,9 +78,7 @@ class HasOne extends Relation
     public function add_constraints()
     {
         if (static::$constraints) {
-            $value = $this->parent->get_attribute($this->local_key);
-
-            $this->query->where($this->foreign_key, '=', $value);
+            $this->query->where($this->foreign_key, '=', $this->get_parent_key_value());
             $this->query->where_not_null($this->foreign_key);
         }
     }
@@ -194,7 +192,21 @@ class HasOne extends Relation
      */
     public function get_results()
     {
-        return $this->first();
+        return !is_null($this->get_parent_key_value())
+            ? $this->query->first()
+            : null;
+    }
+
+    /**
+     * Get the parent key value.
+     *
+     * @return mixed The parent key value
+     *
+     * @since 1.0.0
+     */
+    protected function get_parent_key_value()
+    {
+        return $this->parent->get_attribute($this->local_key);
     }
 
     /**
@@ -211,17 +223,11 @@ class HasOne extends Relation
      */
     public function add_eager_constraints(Collection $models)
     {
-        $keys = [];
-        foreach ($models as $model) {
-            $key = $model->get_attribute($this->local_key);
-            if ($key !== null) {
-                $keys[] = $key;
-            }
-        }
-
-        if (!empty($keys)) {
-            $this->query->where_in($this->foreign_key, array_unique($keys));
-        }
+        $this->where_in_eager(
+            $this->foreign_key,
+            $this->get_keys($models, $this->local_key),
+            $this->get_relation_query()
+        );
     }
 
     /**

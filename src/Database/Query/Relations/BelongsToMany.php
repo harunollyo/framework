@@ -107,6 +107,15 @@ class BelongsToMany extends Relation
     protected $pivot_where_nulls = [];
 
     /**
+     * The name of the relation.
+     *
+     * @var string|null
+     *
+     * @since 1.0.0
+     */
+    protected $relation_name;
+
+    /**
      * Create a new belongs-to-many relation instance.
      *
      * Stores pivot and key names, applies default join and base constraints so
@@ -131,13 +140,15 @@ class BelongsToMany extends Relation
         $foreign_pivot_key,
         $related_pivot_key,
         $parent_key,
-        $related_key
+        $related_key,
+        $relation_name = null
     ) {
         $this->pivot_table = $pivot_table;
         $this->foreign_pivot_key = $foreign_pivot_key;
         $this->related_pivot_key = $related_pivot_key;
         $this->parent_key = $parent_key;
         $this->related_key = $related_key;
+        $this->relation_name = $relation_name;
 
         parent::__construct($related, $parent);
     }
@@ -156,12 +167,32 @@ class BelongsToMany extends Relation
     {
         if (static::$constraints) {
             $this->perform_join();
-
-            $key = "{$this->pivot_table}.{$this->foreign_pivot_key}";
-            $value = $this->parent->get_attribute($this->parent_key);
-
-            $this->query->where($key, '=', $value);
+            $this->add_where_constraints();
         }
+    }
+
+    /**
+     * Add the where constraints to the query.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    protected function add_where_constraints()
+    {
+        $this->query->where($this->get_qualified_foreign_pivot_key_name(), '=', $this->parent->{$this->parent_key});
+    }
+
+    /**
+     * Get the qualified foreign pivot key name.
+     *
+     * @return string The qualified foreign pivot key name
+     *
+     * @since 1.0.0
+     */
+    public function get_qualified_foreign_pivot_key_name()
+    {
+        return $this->qualify_pivot_column($this->foreign_pivot_key);
     }
 
     /**
@@ -239,7 +270,6 @@ class BelongsToMany extends Relation
     {
         $query = $query ?: $this->query;
 
-        $related_table = $this->related->get_table();
         $related_columns = $this->related_columns();
 
         $query->select([
@@ -249,10 +279,34 @@ class BelongsToMany extends Relation
 
         $query->join(
             $this->pivot_table,
-            "{$related_table}.{$this->related_key}",
+            $this->get_qualified_related_key_name(),
             '=',
-            "{$this->pivot_table}.{$this->related_pivot_key}"
+            $this->get_qualified_related_pivot_key_name()
         );
+    }
+
+    /**
+     * Get the qualified related key name.
+     *
+     * @return string The qualified related key name
+     *
+     * @since 1.0.0
+     */
+    protected function get_qualified_related_key_name()
+    {
+        return $this->related->prepare_column($this->related_key);
+    }
+
+    /**
+     * Get the qualified related pivot key name.
+     *
+     * @return string The qualified related pivot key name
+     *
+     * @since 1.0.0
+     */
+    protected function get_qualified_related_pivot_key_name()
+    {
+        return $this->qualify_pivot_column($this->related_pivot_key);
     }
 
     /**
@@ -327,7 +381,9 @@ class BelongsToMany extends Relation
      */
     public function get_results()
     {
-        return $this->get();
+        return !is_null($this->parent->{$this->parent_key})
+            ? $this->get()
+            : $this->related->new_collection();
     }
 
     /**
@@ -344,23 +400,11 @@ class BelongsToMany extends Relation
      */
     public function add_eager_constraints(Collection $models)
     {
-        $keys = [];
-
-        foreach ($models as $model) {
-            $key = $model->get_attribute($this->parent_key);
-
-            if ($key !== null) {
-                $keys[] = $key;
-            }
-        }
-
-        if (!empty($keys)) {
-            $this->perform_join();
-            $this->query->where_in(
-                "{$this->pivot_table}.{$this->foreign_pivot_key}",
-                array_unique($keys)
-            );
-        }
+        $this->perform_join();
+        $this->where_in_eager(
+            $this->get_qualified_foreign_pivot_key_name(),
+            $this->get_keys($models, $this->parent_key)
+        );
     }
 
     /**
@@ -398,7 +442,7 @@ class BelongsToMany extends Relation
             $attribute = $this->get_dictionary_key($model->get_attribute($this->parent_key));
 
             if ($attribute !== null && isset($dictionary[$attribute])) {
-                $model->set_relation($relation, new Collection($dictionary[$attribute]));
+                $model->set_relation($relation, $this->related->new_collection($dictionary[$attribute]));
             }
         }
 
@@ -423,8 +467,8 @@ class BelongsToMany extends Relation
             $attribute = $this->get_dictionary_key($result->get_attribute($pivot_key_name));
 
             if ($attribute !== null) {
-                $dictionary[$attribute][] = $this->migrate_pivot_attributes($result);
                 $dictionary[$attribute] ??= [];
+                $dictionary[$attribute][] = $this->migrate_pivot_attributes($result);
             }
         }
 

@@ -64,8 +64,8 @@
 		"post-install-cmd": "@link-ide-stubs",
 		"post-update-cmd": "@link-ide-stubs",
 		"link-ide-stubs": "php scripts/link-ide-stubs.php",
-		"test": "vendor/bin/phpunit --testdox",
-		"test:unit": "vendor/bin/phpunit --testsuite Unit --testdox",
+		"test": "vendor/bin/phpunit --prepend tests/prepend.php --testdox",
+		"test:unit": "vendor/bin/phpunit --prepend tests/prepend.php --testsuite Unit --testdox",
 		"phpcs": "@php -d auto_prepend_file= scripts/run-phpcs.php",
 		"phpcbf": "@php -d auto_prepend_file= scripts/run-phpcs.php phpcbf",
 		"phpcs:fix": "@php -d auto_prepend_file= scripts/phpcs-fix.php"

@@ -26,6 +26,6 @@ class BlogSeo extends Model
 
     public function blog()
     {
-        return $this->belongs_to(Blog::class);
+        return $this->belongs_to(Blog::class, 'blog_id');
     }
 }

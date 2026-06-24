@@ -3,9 +3,11 @@
 namespace Example\App\Http\Controllers;
 
 use Example\App\Models\Blog;
+use Example\App\Models\BlogSeo;
 use Example\App\Models\Category;
 use Example\App\Models\Event;
 use Example\App\Models\Speaker;
+use Example\App\Models\Tag;
 use Framework\Http\Request;
 use Framework\Supports\Facades\DB;
 
@@ -17,11 +19,11 @@ class EventsController
 	public function index(Request $request)
 	{
 		DB::enable_query_log();
-		$blog = Blog::query()->find(1);
+		$tags = Blog::query()->with('comments.replies')->get();
 		$queries = DB::get_query_log();
 
 		return response()->json([
-			'blog' => $blog,
+			'blog' => $tags,
 			'queries' => $queries,
 		]);
 	}

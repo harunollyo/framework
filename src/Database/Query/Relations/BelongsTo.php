@@ -98,10 +98,9 @@ class BelongsTo extends Relation
     public function add_constraints()
     {
         if (static::$constraints) {
-            $key = $this->owner_key;
-            $value = $this->child->get_attribute($this->foreign_key);
+            $key = $this->get_qualified_owner_key_name();
 
-            $this->query->where($key, '=', $value);
+            $this->query->where($key, '=', $this->get_foreign_key_value_from($this->child));
         }
     }
 
@@ -171,6 +170,18 @@ class BelongsTo extends Relation
     }
 
     /**
+     * Get the qualified owner key name.
+     *
+     * @return string The qualified owner key name
+     *
+     * @since 1.0.0
+     */
+    public function get_qualified_owner_key_name()
+    {
+        return $this->related->prepare_column($this->owner_key);
+    }
+
+    /**
      * Get the related owner model for lazy loading.
      *
      * Returns the first (and only) result from the constrained query.
@@ -181,7 +192,11 @@ class BelongsTo extends Relation
      */
     public function get_results()
     {
-        return $this->first(['*']);
+        if (is_null($this->get_foreign_key_value_from($this->child))) {
+            return null;
+        }
+
+        return $this->first() ?? null;
     }
 
     /**
@@ -198,17 +213,61 @@ class BelongsTo extends Relation
      */
     public function add_eager_constraints(Collection $models)
     {
+        $key = $this->get_qualified_owner_key_name();
+
+        $this->where_in_eager($key, $this->get_eager_model_keys($models));
+    }
+
+    /**
+     * Get the eager model keys.
+     *
+     * @param Collection $models The models.
+     *
+     * @return array The eager model keys.
+     *
+     * @since 1.0.0
+     */
+    protected function get_eager_model_keys(Collection $models)
+    {
         $keys = [];
+
         foreach ($models as $model) {
-            $key = $model->get_attribute($this->foreign_key);
-            if ($key !== null) {
-                $keys[] = $key;
+            if (!is_null($value = $this->get_foreign_key_value_from($model))) {
+                $keys[] = $value;
             }
         }
 
-        if (!empty($keys)) {
-            $this->query->where_in($this->owner_key, array_unique($keys));
-        }
+        sort($keys);
+
+        return array_values(array_unique($keys));
+    }
+
+    /**
+     * Get the foreign key from the model.
+     *
+     * @param Model $model The model.
+     *
+     * @return mixed The foreign key.
+     *
+     * @since 1.0.0
+     */
+    protected function get_foreign_key_value_from(Model $model)
+    {
+        return $model->{$this->foreign_key};
+    }
+
+    /**
+     * Get the related key value from the model.
+     *
+     * @param Model $model The model.
+     *
+     * @return mixed The related key.
+     *
+     * @since 1.0.0
+     */
+    protected function get_related_key_value_from(Model $model)
+    {
+        return $model->{$this->owner_key};
     }
 
     /**
@@ -242,7 +301,9 @@ class BelongsTo extends Relation
         $dictionary = $this->build_dictionary($results);
 
         foreach ($models as $model) {
-            $attribute = $this->get_dictionary_key($model->get_attribute($this->foreign_key));
+            $attribute = $this->get_dictionary_key(
+                $this->get_foreign_key_value_from($model)
+            );
 
             if ($attribute !== null && isset($dictionary[$attribute])) {
                 $model->set_relation($relation, $dictionary[$attribute]);
@@ -266,7 +327,9 @@ class BelongsTo extends Relation
         $dictionary = [];
 
         foreach ($results as $result) {
-            $attribute = $this->get_dictionary_key($result->get_attribute($this->owner_key));
+            $attribute = $this->get_dictionary_key(
+                $this->get_related_key_value_from($result)
+            );
             
             if ($attribute !== null) {
                 $dictionary[$attribute] = $result;

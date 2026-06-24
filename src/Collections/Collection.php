@@ -111,6 +111,35 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     }
 
     /**
+     * Get the unique items from the collection.
+     *
+     * @param callable|string|null $key The key to use for uniqueness.
+     * @param bool $strict Whether to use strict comparison.
+     *
+     * @return static A new collection containing the unique items.
+     *
+     * @since 1.0.0
+     */
+    public function unique($key = null, $strict = false)
+    {
+        if (is_null($key) && $strict === false) {
+            return $this->new_instance(array_unique($this->items, SORT_REGULAR));
+        }
+
+        $callback = $this->value_retriever($key);
+
+        $exists = [];
+
+        return $this->reject(function ($item, $key) use ($callback, $strict, &$exists) {
+            if (in_array($id = $callback($item, $key), $exists, $strict)) {
+                return true;
+            }
+
+            $exists[] = $id;
+        });
+    }
+
+    /**
      * Get the values of the collection.
      *
      * @return static A new collection containing the values

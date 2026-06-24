@@ -17,7 +17,6 @@ use Framework\Database\Query\Collection;
 use Framework\Database\Concerns\HasDictionary;
 use Framework\Database\Query\QueryBuilder;
 
-use function Framework\collection;
 use function Framework\Polyfill\array_first;
 use function Framework\Polyfill\array_last;
 
@@ -80,11 +79,21 @@ class HasMany extends Relation
     public function add_constraints()
     {
         if (static::$constraints) {
-            $key = $this->foreign_key;
-            $value = $this->parent->get_attribute($this->local_key);
-
-            $this->query->where($key, '=', $value);
+            $this->query->where($this->foreign_key, '=', $this->get_parent_key_value());
+            $this->query->where_not_null($this->foreign_key);
         }
+    }
+
+    /**
+     * Get the parent key value.
+     *
+     * @return mixed The parent key value
+     *
+     * @since 1.0.0
+     */
+    public function get_parent_key_value()
+    {
+        return $this->parent->get_attribute($this->local_key);
     }
 
     /**
@@ -195,7 +204,9 @@ class HasMany extends Relation
      */
     public function get_results()
     {
-        return $this->get();
+        return !is_null($this->get_parent_key_value())
+            ? $this->get()
+            : $this->related->new_collection();
     }
 
     /**
@@ -212,19 +223,11 @@ class HasMany extends Relation
      */
     public function add_eager_constraints(Collection $models)
     {
-        $keys = [];
-
-        foreach ($models as $model) {
-            $key = $model->get_attribute($this->local_key);
-
-            if ($key !== null) {
-                $keys[] = $key;
-            }
-        }
-
-        if (!empty($keys)) {
-            $this->query->where_in($this->foreign_key, array_unique($keys));
-        }
+        $this->where_in_eager(
+            $this->foreign_key,
+            $this->get_keys($models, $this->local_key),
+            $this->get_relation_query()
+        );
     }
 
     /**
@@ -262,7 +265,7 @@ class HasMany extends Relation
             $attribute = $this->get_dictionary_key($model->get_attribute($this->local_key));
 
             if ($attribute !== null && isset($dictionary[$attribute])) {
-                $model->set_relation($relation, new Collection($dictionary[$attribute]));
+                $model->set_relation($relation, $this->related->new_collection($dictionary[$attribute]));
             }
         }
 

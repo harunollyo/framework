@@ -15,24 +15,11 @@ class Blog extends Model
         'published_at' => 'datetime',
     ];
 
-    // protected $fillable = [
-    //     'user_id',
-    //     'category_id',
-    //     'title',
-    //     'slug',
-    //     'excerpt',
-    //     'body',
-    //     'featured_image',
-    //     'status',
-    //     'published_at',
-    //     'created_at',
-    //     'updated_at',
-    // ];
     protected $guarded = ['id'];
 
     public function category()
     {
-        return $this->belongs_to(Category::class);
+        return $this->has_one(Category::class, 'category_id');
     }
 
     public function tags()
@@ -47,6 +34,6 @@ class Blog extends Model
 
     public function comments()
     {
-        return $this->has_many(Comment::class);
+        return $this->has_many(Comment::class, 'blog_id', 'id');
     }
 }

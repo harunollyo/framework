@@ -18,6 +18,7 @@ use Framework\Database\Query\Collection;
 use Framework\Database\Query\Expression;
 use Framework\Database\Query\Model;
 use Framework\Database\Query\QueryBuilder;
+use Framework\Collections\Collection as BaseCollection;
 
 abstract class Relation
 {
@@ -65,6 +66,15 @@ abstract class Relation
      * @since 1.0.0
      */
     protected static $self_join_count = 0;
+
+    /**
+     * Whether the eager keys were empty.
+     *
+     * @var bool
+     *
+     * @since 1.0.0
+     */
+    protected bool $eager_keys_were_empty = false;
 
     /**
      * Construct a new relation for the given models.
@@ -126,6 +136,41 @@ abstract class Relation
      * @since 1.0.0
      */
     abstract public function add_eager_constraints(Collection $models);
+
+    /**
+     * Get the eager results.
+     *
+     * @return Collection The eager results
+     *
+     * @since 1.0.0
+     */
+    public function get_eager()
+    {
+        return $this->eager_keys_were_empty
+            ? $this->related->new_collection()
+            : $this->get();
+    }
+
+    /**
+     * Where in eager.
+     *
+     * @param string $key The key.
+     * @param array $model_keys The model keys.
+     * @param QueryBuilder $query The query.
+     *
+     * @return void
+     * 
+     * @since 1.0.0
+     */
+    protected function where_in_eager(string $key, array $model_keys, ?QueryBuilder $query = null)
+    {
+        $query = $query ?? $this->query;
+        $query->where_in($key, $model_keys);
+
+        if ($model_keys === []) {
+            $this->eager_keys_were_empty = true;
+        }
+    }
 
     /**
      * Get the aggregate query for the relation.
@@ -413,6 +458,35 @@ abstract class Relation
                 ? static::$self_join_count++
                 : static::$self_join_count
         );
+    }
+
+    /**
+     * Get the keys from the models.
+     *
+     * @param Collection $models The models.
+     * @param string $key The key.
+     *
+     * @return array The keys.
+     *
+     * @since 1.0.0
+     */
+    protected function get_keys(Collection $models, $key = null)
+    {
+        return (new BaseCollection($models))->map(function ($model) use ($key) {
+            return $key ? $model->get_attribute($key) : $model->get_primary_key_value();
+        })->values()->unique(null, true)->all();
+    }
+
+    /**
+     * Get the relation query.
+     *
+     * @return QueryBuilder The relation query.
+     *
+     * @since 1.0.0
+     */
+    protected function get_relation_query()
+    {
+        return $this->query;
     }
 
     /**

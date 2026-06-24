@@ -19,6 +19,10 @@ class TestWpdb
 
     public function prepare($query, ...$args)
     {
+        if (count($args) === 1 && is_array($args[0])) {
+            $args = $args[0];
+        }
+
         if (empty($args)) {
             return $query;
         }

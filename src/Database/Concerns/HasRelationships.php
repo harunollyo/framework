@@ -16,6 +16,7 @@ use Framework\Database\Query\Relations\BelongsTo;
 use Framework\Database\Query\Relations\BelongsToMany;
 use Framework\Database\Query\Relations\HasMany;
 use Framework\Database\Query\Relations\HasOne;
+use Framework\Supports\Arr;
 
 trait HasRelationships
 {
@@ -134,19 +135,22 @@ trait HasRelationships
         $foreign_pivot_key = null,
         $related_pivot_key = null,
         $parent_key = null,
-        $related_key = null
+        $related_key = null,
+        $relation = null
     ) {
         $instance = new $related();
 
-        $foreign_pivot_key = $foreign_pivot_key ?? $this->get_foreign_key();
-        $related_pivot_key = $related_pivot_key ?? $instance->get_foreign_key();
+        $foreign_pivot_key = $foreign_pivot_key ?: $this->get_foreign_key();
+        $related_pivot_key = $related_pivot_key ?: $instance->get_foreign_key();
 
-        $parent_key = $parent_key ?? $this->primary_key;
-        $related_key = $related_key ?? $instance->primary_key;
+        $parent_key = $parent_key ?: $this->get_primary_key();
+        $related_key = $related_key ?: $instance->get_primary_key();
 
         if ($pivot_table === null) {
             $pivot_table = $this->get_pivot_table_name($this->get_table(), $instance->get_table());
         }
+
+        $relation = $relation ?? $this->guess_belongs_to_many_relation();
 
         return new BelongsToMany(
             $instance,
@@ -155,8 +159,29 @@ trait HasRelationships
             $foreign_pivot_key,
             $related_pivot_key,
             $parent_key,
-            $related_key
+            $related_key,
+            $relation
         );
+    }
+
+    /**
+     * Guess the name of the relation.
+     *
+     * @return string The name of the relation
+     *
+     * @since 1.0.0
+     */
+    protected function guess_belongs_to_many_relation()
+    {
+        $caller = Arr::first(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), function ($trace) {
+            return !in_array(
+                $trace['function'],
+                ['belongs_to_many', 'guess_belongs_to_many_relation'],
+                true
+            );
+        });
+
+        return $caller['function'] ?? null;
     }
 
     /**
