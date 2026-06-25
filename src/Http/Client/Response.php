@@ -13,7 +13,6 @@ namespace Framework\Http\Client;
 defined('ABSPATH') || exit;
 
 use ArrayAccess;
-use Framework\Collections\Collection;
 use Framework\Concerns\DeepGettable;
 use Exception;
 
@@ -290,6 +289,7 @@ class Response implements ArrayAccess
      *
      * @since 1.0.0
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->json()[$offset];

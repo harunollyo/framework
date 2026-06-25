@@ -13,9 +13,10 @@ defined('ABSPATH') || exit;
 
 use Closure;
 use Framework\Contracts\Request as RequestContract;
-use Framework\Collections\Collection;
 use Framework\Database\Query\Model;
 use Exception;
+use Framework\Collections\Collection;
+use Framework\Exceptions\AuthorizationException;
 use Framework\Exceptions\InvalidRoutActionException;
 use Framework\Exceptions\ModelNotFoundException;
 use Framework\Http\Request;
@@ -23,6 +24,7 @@ use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
+use WP_Error;
 use WP_REST_Request;
 
 use function Framework\app;
@@ -111,6 +113,15 @@ class Route
      * @since 1.0.0
      */
     protected static $instances = [];
+
+    /**
+     * The resolved request.
+     *
+     * @var Request
+     *
+     * @since 1.0.0
+     */
+    protected $resolved_request;
 
     /**
      * Set the API namespace for all registered routes.
@@ -399,7 +410,7 @@ class Route
         register_rest_route(static::$namespace, $this->get_formatted_endpoint(), [
             'methods' => strtoupper($this->method),
             'callback' => $this->resolve_route(),
-            'permission_callback' => '__return_true'
+            'permission_callback' => fn ($rest_request) => $this->resolve_permission_callback($rest_request)
         ]);
     }
 
@@ -621,32 +632,6 @@ class Route
     }
 
     /**
-     * Resolve the requests.
-     *
-     * @param array $requests The requests to resolve.
-     * @param WP_REST_Request $rest_request The REST request object.
-     *
-     * @return array
-     *
-     * @since 1.0.0
-     */
-    protected function resolve_requests(array $requests, WP_REST_Request $rest_request)
-    {
-        $resolved_requests = [];
-
-        foreach ($requests as $request) {
-            $position = $request['position'];
-            $type = $request['type'];
-            $request = app()->make($type);
-            $resolved = $request->make_request($rest_request);
-
-            $resolved_requests[] = $this->add_resolved_dependency($resolved, $position);
-        }
-
-        return $resolved_requests;
-    }
-
-    /**
      * Resolve the models.
      *
      * @param array $models The models to resolve.
@@ -725,7 +710,7 @@ class Route
     /**
      * Resolve a model from the request.
      *
-     * @param string $model The model class name
+     * @param class-string<Model> $model The model class name
      * @param mixed $value The value of the model
      *
      * @return Model
@@ -746,7 +731,6 @@ class Route
         }
     }
 
-
     /**
      * Resolve the route handler.
      *
@@ -758,84 +742,212 @@ class Route
      */
     protected function resolve_route()
     {
-        // Resolving the closure route handler.
-        if ($this->action instanceof Closure) {
-            return function ($rest_request) {
-                $callback = $this->action;
-                $request = app()->make(Request::class);
-                $resolved = $request->make_request($rest_request);
+        return $this->action instanceof Closure
+            ? $this->resolve_closure_action()
+            : $this->resolve_controller_action();
+    }
 
-                $this->expose($request);
-
-                return $callback($resolved);
-            };
-        }
-
-        // Resolving the controller route handler.
+    /**
+     * Resolve the closure route action.
+     *
+     * @return callable
+     *
+     * @since 1.0.0
+     */
+    protected function resolve_closure_action()
+    {
         return function ($rest_request) {
-            if (!is_array($this->action)) {
-                throw new InvalidRoutActionException(
-                    sprintf('Invalid method registered for the route %s', $this->endpoint)
-                );
-            }
-
-            if (count($this->action) !== 2) {
-                throw new InvalidRoutActionException(
-                    sprintf('Invalid controller syntax for the route %s', $this->endpoint)
-                );
-            }
-
-            [$controller, $method] = $this->action;
-
-            if (!class_exists($controller)) {
-                throw new InvalidRoutActionException(sprintf('Controller %s not found', $controller));
-            }
-
-            $controller_instance = $this->make($controller);
-
-            if (!method_exists($controller_instance, $method)) {
-                throw new InvalidRoutActionException(
-                    sprintf('The method %s is missing in the controller %s', $method, $controller)
-                );
-            }
-
             try {
-                $dependencies = $this->resolve_method_dependencies($controller_instance, $method);
-                $requests = $this->resolve_requests($dependencies['requests'], $rest_request);
+                $request = $this->get_resolved_request($rest_request);
 
-                $first_request = array_first($requests);
-                $request_position = $first_request['position'];
-                $request = $first_request['resolved'];
-
-                $dependency_array = $this->resolve_dependencies($dependencies, $request);
-
-                $pipeline = array_reduce(
-                    array_reverse($this->middlewares),
-                    function ($next, $middleware) {
-                        return function ($request) use ($next, $middleware) {
-                            return (new $middleware())->handle($request, $next);
-                        };
-                    },
-                    function ($request) use ($controller_instance, $method, $dependency_array, $request_position) {
-                        $dependency_array = $this->update_request(
-                            $dependency_array,
-                            $this->add_resolved_dependency($request, $request_position)
-                        );
-                        $dependency_array = $this->sort_dependencies($dependency_array);
-                        $parameters = collection($dependency_array)->pluck('resolved')->all();
-
-                        return $controller_instance->$method(...$parameters);
-                    }
-                );
-
-                $this->expose($request);
-
-                // We are passing the request only while initiating the middleware pipeline
-                return $pipeline($request);
+                return ($this->action)($request);
             } catch (Exception $exception) {
                 return ApiExceptionHandler::get_response($exception);
             }
         };
+    }
+
+    /**
+     * Resolve the controller route action.
+     *
+     * @return callable
+     *
+     * @since 1.0.0
+     */
+    protected function resolve_controller_action()
+    {
+        return function ($rest_request) {
+            try {
+                return $this->dispatch_controller($rest_request);
+            } catch (Exception $exception) {
+                return ApiExceptionHandler::get_response($exception);
+            }
+        };
+    }
+
+    /**
+     * Dispatch the controller action with the middleware-enriched request.
+     *
+     * @param WP_REST_Request $rest_request The REST request object.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    protected function dispatch_controller($rest_request)
+    {
+        $request = $this->get_resolved_request($rest_request);
+        $controller = $this->resolve_controller($request);
+        $dependecies = $this->update_request(
+            $controller['dependencies'],
+            $this->add_resolved_dependency($request, $controller['request_position'])
+        );
+        $dependecies = $this->sort_dependencies($dependecies);
+        $parameters = (new Collection($dependecies))->pluck('resolved')->all();
+
+        $instance = $controller['instance'];
+        $method = $controller['method'];
+
+        return $instance->$method(...$parameters);
+    }
+
+    /**
+     * Resolve the controller for the route.
+     *
+     * @param Request $request The middleware-enriched request object.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    protected function resolve_controller(Request $request)
+    {
+        if (!is_array($this->action)) {
+            throw new InvalidRoutActionException(
+                sprintf('Invalid method registered for the route %s', $this->endpoint)
+            );
+        }
+
+        if (count($this->action) !== 2) {
+            throw new InvalidRoutActionException(
+                sprintf('Invalid controller syntax for the route %s', $this->endpoint)
+            );
+        }
+
+        [$controller, $method] = $this->action;
+
+        if (!class_exists($controller)) {
+            throw new InvalidRoutActionException(sprintf('Controller %s not found', $controller));
+        }
+
+        $controller_instance = $this->make($controller);
+
+        if (!method_exists($controller_instance, $method)) {
+            throw new InvalidRoutActionException(
+                sprintf('The method %s is missing in the controller %s', $method, $controller)
+            );
+        }
+
+        $dependencies = $this->resolve_method_dependencies($controller_instance, $method);
+        $first_request = array_first($dependencies['requests']);
+        $request_position = $first_request['position'];
+        $dependency_array = $this->resolve_dependencies($dependencies, $request);
+
+        return [
+            'instance' => $controller_instance,
+            'method' => $method,
+            'request' => $request,
+            'dependencies' => $dependency_array,
+            'request_position' => $request_position,
+        ];
+    }
+
+    /**
+     * Build the middleware pipeline.
+     *
+     * @param callable $destination The destination callback.
+     *
+     * @return callable
+     *
+     * @since 1.0.0
+     */
+    protected function build_middleware_pipeline(callable $destination)
+    {
+        return array_reduce(
+            array_reverse($this->middlewares),
+            function ($next, $middleware) {
+                return function ($request) use ($next, $middleware) {
+                    return (new $middleware())->handle($request, $next);
+                };
+            },
+            $destination
+        );
+    }
+
+    /**
+     * Resolve the permission callback for the route.
+     *
+     * @param WP_REST_Request $rest_request The REST request object.
+     *
+     * @return bool|WP_Error
+     *
+     * @since 1.0.0
+     */
+    protected function resolve_permission_callback($rest_request)
+    {
+        $request = $this->make_framework_request($rest_request);
+
+        if (empty($this->middlewares)) {
+            $this->resolved_request = $this->expose($request);
+
+            return true;
+        }
+
+        try {
+            $pipeline = $this->build_middleware_pipeline(fn ($request) => true);
+            $pipeline($request);
+            $this->resolved_request = $this->expose($request);
+
+            return true;
+        } catch (AuthorizationException $exception) {
+            return new WP_Error(
+                'rest_forbidden',
+                $exception->getMessage(),
+                ['status' => $exception->getCode()]
+            );
+        }
+    }
+
+    /**
+     * Create a framework request from a WordPress REST request.
+     *
+     * @param WP_REST_Request $rest_request The REST request object.
+     *
+     * @return Request
+     *
+     * @since 1.0.0
+     */
+    protected function make_framework_request(WP_REST_Request $rest_request)
+    {
+        return app()->make(Request::class)->make_request($rest_request);
+    }
+
+    /**
+     * Get the request enriched by middleware during permission checking.
+     *
+     * @param WP_REST_Request $rest_request The REST request object.
+     *
+     * @return Request
+     *
+     * @since 1.0.0
+     */
+    protected function get_resolved_request(WP_REST_Request $rest_request)
+    {
+        if (!is_null($this->resolved_request)) {
+            return $this->resolved_request;
+        }
+
+        return $this->expose($this->make_framework_request($rest_request));
     }
 
     /**

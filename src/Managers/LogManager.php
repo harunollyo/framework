@@ -2,7 +2,7 @@
 /**
  * File-based logger writing leveled messages to a configurable log path.
  * Supports debug, info, warning, error, and other PSR-like severity levels with timestamps.
- * Defaults to themeum-framework.log in the application base path.
+ * Defaults to framework.log in the application base path.
  *
  * @package    Framework
  * @subpackage Managers
@@ -39,7 +39,7 @@ class LogManager
      */
     public function __construct(?string $path = null)
     {
-        $this->path = $path ?? base_path('themeum-framework.log');
+        $this->path = $path ?? base_path('framework.log');
     }
 
     /**

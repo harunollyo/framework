@@ -23,6 +23,7 @@ class EventsController
 		$queries = DB::get_query_log();
 
 		return response()->json([
+			'request' => $request->all(),
 			'blog' => $tags,
 			'queries' => $queries,
 		]);

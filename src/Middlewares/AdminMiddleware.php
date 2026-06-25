@@ -14,11 +14,13 @@ defined('ABSPATH') || exit;
 use Framework\Contracts\Middleware;
 use Framework\Contracts\Request;
 use Framework\Exceptions\AuthorizationException;
+use Framework\Http\Response;
+use Framework\Wordpress\Constants\Capabilities;
 
-class AuthMiddleware implements Middleware
+class AdminMiddleware implements Middleware
 {
     /**
-     * Handle the incoming request and determine if the user is authenticated.
+     * Handle the incoming request and determine if the user is authenticated and has admin privileges.
      *
      * @param Request $request The incoming request instance.
      * @param callable $next The next middleware callback.
@@ -31,11 +33,11 @@ class AuthMiddleware implements Middleware
      */
     public function handle(Request $request, callable $next)
     {
-        if (is_user_logged_in()) {
-            $request->from_auth_middleware = 'from_auth_middleware';
+        if (is_user_logged_in() && current_user_can(Capabilities::MANAGE_OPTIONS)) {
+            $request->from_admin_middleware = 'from_admin_middleware';
             return $next($request);
         };
 
-        throw new AuthorizationException('You have to be logged in.');
+        throw new AuthorizationException('You have to be logged in and have admin privileges.', Response::FORBIDDEN);
     }
 }

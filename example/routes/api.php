@@ -4,6 +4,8 @@ use Example\App\Http\Controllers\EventsController;
 use Example\App\Http\Controllers\SpeakersController;
 use Example\App\Models\Event;
 use Framework\Http\Request;
+use Framework\Middlewares\AdminMiddleware;
+use Framework\Middlewares\AuthMiddleware;
 use Framework\Route;
 use Framework\Supports\Arr;
 use Framework\Supports\Facades\DB;
@@ -25,7 +27,7 @@ Route::get('/ping', function (Request $request) {
     ]);
 });
 
-Route::get('/events', [EventsController::class, 'index']);
+Route::get('/events', [EventsController::class, 'index'])->middleware([AdminMiddleware::class, AuthMiddleware::class]);
 Route::post('/events', [EventsController::class, 'create']);
 
 Route::get('/speakers', [SpeakersController::class, 'index']);
@@ -48,5 +50,6 @@ Route::post('/check', function (Request $request) {
 
     return response()->json([
         'attachment' => $attachment,
+        'request' => $request->all(),
     ]);
-});
+})->middleware([AdminMiddleware::class]);

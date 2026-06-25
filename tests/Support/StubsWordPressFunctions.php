@@ -120,3 +120,82 @@ if (!function_exists('maybe_unserialize')) {
         return $data;
     }
 }
+
+if (!class_exists('WP_REST_Request')) {
+    class WP_REST_Request
+    {
+        protected $method;
+
+        protected $route;
+
+        protected $params;
+
+        protected $headers;
+
+        public function __construct(string $method = 'GET', string $route = '/test', array $params = [], array $headers = [])
+        {
+            $this->method = $method;
+            $this->route = $route;
+            $this->params = $params;
+            $this->headers = $headers;
+        }
+
+        public function get_params()
+        {
+            return $this->params;
+        }
+
+        public function get_file_params()
+        {
+            return [];
+        }
+
+        public function get_method()
+        {
+            return $this->method;
+        }
+
+        public function get_route()
+        {
+            return $this->route;
+        }
+
+        public function get_headers()
+        {
+            return $this->headers;
+        }
+    }
+}
+
+if (!class_exists('WP_Error')) {
+    class WP_Error
+    {
+        protected $code;
+
+        protected $message;
+
+        protected $data;
+
+        public function __construct($code = '', $message = '', $data = '')
+        {
+            $this->code = $code;
+            $this->message = $message;
+            $this->data = $data;
+        }
+
+        public function get_error_code()
+        {
+            return $this->code;
+        }
+
+        public function get_error_message()
+        {
+            return $this->message;
+        }
+
+        public function get_error_data($code = '')
+        {
+            return $this->data;
+        }
+    }
+}
