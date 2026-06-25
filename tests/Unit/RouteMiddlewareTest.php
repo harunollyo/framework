@@ -5,6 +5,7 @@ namespace Framework\Tests\Unit;
 use Framework\Contracts\Middleware;
 use Framework\Contracts\Request as RequestContract;
 use Framework\Exceptions\AuthorizationException;
+use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Route;
 use Framework\Tests\Support\Models\StubArticle;
@@ -137,6 +138,34 @@ class RouteMiddlewareTest extends TestCase
         $this->assertInstanceOf(RequestContract::class, $result);
     }
 
+    public function test_custom_request_class_is_resolved_for_controller(): void
+    {
+        $route = Route::get('ping', [RouteMiddlewareTestCustomRequestController::class, 'show']);
+
+        $rest_request = $this->make_rest_request();
+        $this->invoke_route_method($route, 'resolve_permission_callback', $rest_request);
+
+        $callback = $this->invoke_route_method($route, 'resolve_route');
+        $result = $callback($rest_request);
+
+        $this->assertSame('custom-request', $result);
+    }
+
+    public function test_custom_request_class_is_resolved_for_closure(): void
+    {
+        $route = Route::get('ping', function (RouteMiddlewareTestCustomRequest $request) {
+            return $request->get_marker();
+        });
+
+        $rest_request = $this->make_rest_request();
+        $this->invoke_route_method($route, 'resolve_permission_callback', $rest_request);
+
+        $callback = $this->invoke_route_method($route, 'resolve_route');
+        $result = $callback($rest_request);
+
+        $this->assertSame('custom-request', $result);
+    }
+
     protected function make_rest_request(
         string $method = 'GET',
         string $route = '/framework/v1/ping',
@@ -231,5 +260,21 @@ class RouteMiddlewareTestModelController
     public function show(RequestContract $request, StubArticle $article)
     {
         return $article;
+    }
+}
+
+class RouteMiddlewareTestCustomRequest extends Request
+{
+    public function get_marker()
+    {
+        return 'custom-request';
+    }
+}
+
+class RouteMiddlewareTestCustomRequestController
+{
+    public function show(RouteMiddlewareTestCustomRequest $request)
+    {
+        return $request->get_marker();
     }
 }

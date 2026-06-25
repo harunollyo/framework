@@ -22,6 +22,7 @@ use Framework\Exceptions\ModelNotFoundException;
 use Framework\Http\Request;
 use InvalidArgumentException;
 use ReflectionClass;
+use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionNamedType;
 use WP_Error;
@@ -929,7 +930,90 @@ class Route
      */
     protected function make_framework_request(WP_REST_Request $rest_request)
     {
-        return app()->make(Request::class)->make_request($rest_request);
+        $request_class = $this->resolve_request_class();
+
+        return app()->make($request_class)->make_request($rest_request);
+    }
+
+    /**
+     * Resolve the request class from the route action.
+     *
+     * @return class-string<Request>
+     *
+     * @since 1.0.0
+     */
+    protected function resolve_request_class()
+    {
+        if ($this->action instanceof Closure) {
+            return $this->resolve_closure_request_class($this->action);
+        }
+
+        if (!is_array($this->action) || count($this->action) !== 2) {
+            return Request::class;
+        }
+
+        [$controller, $method] = $this->action;
+
+        if (!class_exists($controller) || !method_exists($controller, $method)) {
+            return Request::class;
+        }
+
+        $dependencies = $this->resolve_method_dependencies($controller, $method);
+        $first_request = array_first($dependencies['requests']);
+
+        return $this->normalize_request_class($first_request['type']);
+    }
+
+    /**
+     * Resolve the request class from a closure route action.
+     *
+     * @param Closure $closure The closure route action.
+     *
+     * @return class-string<Request>
+     *
+     * @since 1.0.0
+     */
+    protected function resolve_closure_request_class(Closure $closure)
+    {
+        $reflection = new ReflectionFunction($closure);
+
+        foreach ($reflection->getParameters() as $parameter) {
+            $type = $parameter->getType();
+
+            if (!$type instanceof ReflectionNamedType || $type->isBuiltin()) {
+                continue;
+            }
+
+            $type_name = $type->getName();
+
+            if (
+                $type_name === Request::class
+                || $type_name === RequestContract::class
+                || is_subclass_of($type_name, Request::class)
+            ) {
+                return $this->normalize_request_class($type_name);
+            }
+        }
+
+        return Request::class;
+    }
+
+    /**
+     * Normalize a reflected request type to a concrete request class.
+     *
+     * @param string $type_name The reflected request type name.
+     *
+     * @return class-string<Request>
+     *
+     * @since 1.0.0
+     */
+    protected function normalize_request_class($type_name)
+    {
+        if ($type_name === RequestContract::class) {
+            return Request::class;
+        }
+
+        return $type_name;
     }
 
     /**
