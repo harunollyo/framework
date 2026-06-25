@@ -19,14 +19,5 @@ class OptionKeys
      *
      * @since 1.0.0
      */
-    public const MIGRATIONS = 'migrations';
-
-    /**
-     * Option key for email and SMTP settings.
-     *
-     * @var string
-     *
-     * @since 1.0.0
-     */
-    public const EMAIL_SETTINGS = 'email_settings';
+    public const MIGRATIONS = 'framework_migrations';
 }

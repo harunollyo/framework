@@ -21,7 +21,9 @@
         "/var/www/html/wp-content/plugins/framework/vendor/themeum/framework": "${workspaceFolder}"
     },
     "intelephense.environment.includePaths": [
+        "stubs/faker",
         "stubs/symfony-finder",
+        "stubs/symfony-var-dumper",
         "stubs/phpunit"
     ],
     "intelephense.files.maxSize": 10000000,

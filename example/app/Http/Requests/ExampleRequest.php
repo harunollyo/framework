@@ -14,11 +14,12 @@ class ExampleRequest extends Request
         ];
     }
 
-    // public function filters()
-    // {
-    //     return [
-    //         'data' => Sanitizer::ARRAY,
-    //         'name' => Sanitizer::TRIM,
-    //     ];
-    // }
+    public function filters()
+    {
+        return [
+            'name' => Sanitizer::TEXT,
+            'age' => Sanitizer::INT,
+            'options' => Sanitizer::ARRAY,
+        ];
+    }
 }

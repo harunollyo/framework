@@ -15,6 +15,8 @@ use Framework\Supports\Facades\Option;
 use function Framework\app;
 use function Framework\collection;
 use function Framework\config;
+use function Framework\dd;
+use function Framework\dump;
 use function Framework\request;
 use function Framework\response;
 
@@ -47,7 +49,27 @@ Route::get('/options', function (Request $request) {
 
 Route::post('/check', function (ExampleRequest $request) {
 
+    dd($request->all());
+
     return response()->json([
         'request' => $request->string('name'),
     ]);
-})->middleware([AdminMiddleware::class]);
+});
+
+
+Route::get('/check', function (Request $request) {
+    dd([
+        'name' => 'John Doe',
+        'age' => 20,
+        'options' => ['option1', 'option2', 'option3'],
+        'data' => [
+            'name' => 'John Doe',
+            'age' => 20,
+            'options' => ['option1', 'option2', 'option3'],
+        ],
+    ]);
+
+    return response()->json([
+        'request' => $request->all(),
+    ]);
+});

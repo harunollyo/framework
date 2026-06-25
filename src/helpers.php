@@ -1,21 +1,34 @@
 <?php
+/**
+ * The framework helper functions.
+ *
+ * @package    Framework
+ * @subpackage Helpers
+ * @since      1.0.0
+ */
 
 namespace Framework;
 
+defined('ABSPATH') || exit;
+
 use Closure;
+use Faker\Factory;
+use Faker\Generator;
 use Framework\Application;
-use Framework\AppSettings;
 use Framework\Collections\Collection;
 use Framework\Database\Migrations\Migrator;
 use Framework\Http\Request;
 use Framework\Wordpress\User;
 use Framework\Http\Response;
 use Framework\Supports\Arr;
-use Framework\Supports\Facades\Settings;
 use Framework\Supports\HigherOrderTapProxy;
 use Framework\Supports\Str;
 use Framework\Supports\Url;
 use Framework\Supports\Utils;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
+use Symfony\Component\VarDumper\VarDumper;
 
 use function Framework\Polyfill\array_key_first;
 use function Framework\Polyfill\array_key_last;
@@ -369,51 +382,87 @@ if (!function_exists('Framework\faker')) {
     /**
      * Get the fake instance.
      *
-     * @return \Faker\Generator
+     * @return Generator
      */
     function faker()
     {
-        return app()->make(\Faker\Factory::class);
+        return app()->make(Factory::class);
+    }
+}
+
+if (!function_exists('Framework\configure_dumper')) {
+    
+    function configure_dumper()
+    {
+        static $configured = false;
+
+        if ($configured) {
+            return;
+        }
+
+        $configured = true;
+        $is_cli = defined('WP_CLI') && WP_CLI;
+        $is_rest = defined('REST_REQUEST') && REST_REQUEST;
+
+        if ($is_cli) {
+            VarDumper::setHandler(function ($var) {
+                $dumper = new CliDumper();
+                $dumper->dump((new VarCloner())->cloneVar($var));
+            });
+            return;
+        }
+
+        if ($is_rest) {
+            VarDumper::setHandler(function ($var) {
+                header('Content-Type: application/json; charset=utf-8');
+                echo wp_json_encode($var, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+            });
+            return;
+        }
+
+        VarDumper::setHandler(function ($var) {
+            $dumper = new HtmlDumper();
+            $dumper->dump((new VarCloner())->cloneVar($var));
+        });
+    }
+}
+
+if (!function_exists('Framework\dump')) {
+    /**
+     * Dump the given arguments.
+     *
+     * @param mixed ...$args
+     * 
+     * @return void
+     * 
+     * @since 1.0.0
+     */
+    function dump(...$args)
+    {
+        if (!class_exists(VarDumper::class) || !app()->is_dev_mode()) {
+            return;
+        }
+        configure_dumper();
+        foreach ($args as $arg) {
+            VarDumper::dump($arg);
+        }
     }
 }
 
 if (!function_exists('Framework\dd')) {
     /**
-     * Dump and die
-     * 
+     * Dump the given arguments and die.
+     *
      * @param mixed ...$args
-     * @return never
+     * 
+     * @return void
+     * 
+     * @since 1.0.0
      */
     function dd(...$args)
     {
-        echo '<xmp>';
-        foreach ($args as $arg) {
-            echo "\n";
-            var_dump($arg);
-            echo "\n";
-        }
-        echo '</xmp>';
-        die();
-    }
-}
-
-if (!function_exists('Framework\pr')) {
-    /**
-     * print and die
-     * 
-     * @param mixed ...$args
-     * @return never
-     */
-    function pr(...$args)
-    {
-        echo '<xmp>';
-        foreach ($args as $arg) {
-            echo "\n";
-            print_r($arg);
-            echo "\n";
-        }
-        echo '</xmp>';
-        die();
+        dump(...$args);
+        die(1);
     }
 }
 

@@ -16,6 +16,7 @@ use Framework\Contracts\Request as RequestContract;
 use Framework\Database\Query\Model;
 use Exception;
 use Framework\Collections\Collection;
+use Framework\Contracts\Middleware;
 use Framework\Exceptions\AuthorizationException;
 use Framework\Exceptions\InvalidRoutActionException;
 use Framework\Exceptions\ModelNotFoundException;
@@ -878,6 +879,12 @@ class Route
             array_reverse($this->middlewares),
             function ($next, $middleware) {
                 return function ($request) use ($next, $middleware) {
+                    if (!is_subclass_of($middleware, Middleware::class)) {
+                        throw new InvalidArgumentException(
+                            sprintf('Middleware %s must implement the %s interface.', $middleware, Middleware::class)
+                        );
+                    }
+
                     return (new $middleware())->handle($request, $next);
                 };
             },

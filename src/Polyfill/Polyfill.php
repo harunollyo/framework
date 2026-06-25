@@ -1,6 +1,16 @@
 <?php
+/**
+ * The framework polyfill functions.
+ *
+ * @package    Framework
+ * @subpackage Polyfill
+ * @since      1.0.0
+ */
+
 
 namespace Framework\Polyfill;
+
+defined('ABSPATH') || exit;
 
 class_exists(ArgumentCountError::class);
 
