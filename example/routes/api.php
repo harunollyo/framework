@@ -2,6 +2,7 @@
 
 use Example\App\Http\Controllers\EventsController;
 use Example\App\Http\Controllers\SpeakersController;
+use Example\App\Http\Requests\ExampleRequest;
 use Example\App\Models\Event;
 use Framework\Http\Request;
 use Framework\Middlewares\AdminMiddleware;
@@ -44,12 +45,9 @@ Route::get('/options', function (Request $request) {
     ]);
 });
 
-Route::post('/check', function (Request $request) {
-    $attachment = $request->file('attachment')
-            ->map->store('attachments/public');
-
+Route::post('/check', function (ExampleRequest $request) {
+    $all = $request->validated();
     return response()->json([
-        'attachment' => $attachment,
-        'request' => $request->all(),
+        'request' => $all,
     ]);
 })->middleware([AdminMiddleware::class]);

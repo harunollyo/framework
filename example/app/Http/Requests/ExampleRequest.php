@@ -7,13 +7,12 @@ use Framework\Http\Request;
 
 class ExampleRequest extends Request
 {
-    // public function rules()
-    // {
-    //     return [
-    //         'data' => 'required|array',
-    //         'name' => 'required|string',
-    //     ];
-    // }
+    public function rules()
+    {
+        return [
+            'name' => 'required|string',
+        ];
+    }
 
     // public function filters()
     // {

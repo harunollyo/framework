@@ -80,6 +80,15 @@ class Request implements RequestContract, Arrayable
     protected array $validated = [];
 
     /**
+     * Whether the validation has been resolved.
+     *
+     * @var bool
+     *
+     * @since 1.0.0
+     */
+    protected bool $validation_resolved = false;
+
+    /**
      * Magic getter to retrieve request attributes.
      *
      * @param string $name The name of the attribute.
@@ -143,7 +152,7 @@ class Request implements RequestContract, Arrayable
         $this->route = $request->get_route();
         $this->headers = $request->get_headers();
 
-        $this->resolve_validation_and_sanitization();
+        // $this->resolve_validation_and_sanitization();
 
         return $this;
     }
@@ -329,6 +338,43 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
+     * Authorize the request.
+     *
+     * @return static
+     *
+     * @throws AuthorizationException
+     *
+     * @since 1.0.0
+     */
+    public function authorize_request()
+    {
+        if (!$this->authorize()) {
+            throw new AuthorizationException('You are not authorized to make this request.');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate the request data and sanitize the data.
+     *
+     * @return static
+     *
+     * @since 1.0.0
+     */
+    public function validate_request()
+    {
+        if ($this->validation_resolved) {
+            return $this;
+        }
+
+        $this->resolve_validation_and_sanitization();
+        $this->validation_resolved = true;
+
+        return $this;
+    }
+
+    /**
      * Resolve the validation and sanitization.
      *
      * @return void
@@ -339,10 +385,6 @@ class Request implements RequestContract, Arrayable
      */
     protected function resolve_validation_and_sanitization()
     {
-        if (!$this->authorize()) {
-            throw new AuthorizationException('You are not authorized to make this request.');
-        }
-
         $this->prepare_for_validation();
 
         $sanitized = $this->run_sanitization($this->attributes(), $this->filters());

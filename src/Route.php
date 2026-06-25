@@ -898,13 +898,15 @@ class Route
     {
         $request = $this->make_framework_request($rest_request);
 
-        if (empty($this->middlewares)) {
-            $this->resolved_request = $this->expose($request);
-
-            return true;
-        }
-
         try {
+            $request->authorize_request();
+
+            if (empty($this->middlewares)) {
+                $this->resolved_request = $this->expose($request);
+
+                return true;
+            }
+
             $pipeline = $this->build_middleware_pipeline(fn ($request) => true);
             $pipeline($request);
             $this->resolved_request = $this->expose($request);
@@ -1028,10 +1030,12 @@ class Route
     protected function get_resolved_request(WP_REST_Request $rest_request)
     {
         if (!is_null($this->resolved_request)) {
-            return $this->resolved_request;
+            return $this->resolved_request->validate_request();
         }
 
-        return $this->expose($this->make_framework_request($rest_request));
+        $request = $this->expose($this->make_framework_request($rest_request));
+
+        return $request->authorize_request()->validate_request();
     }
 
     /**

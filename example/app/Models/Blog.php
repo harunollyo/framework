@@ -2,6 +2,7 @@
 
 namespace Example\App\Models;
 
+use Example\App\Casts\AsSerialize;
 use Framework\Database\Query\Model;
 
 class Blog extends Model
@@ -13,6 +14,7 @@ class Blog extends Model
     protected $casts = [
         'status' => 'bool',
         'published_at' => 'datetime',
+        'body' => AsSerialize::class,
     ];
 
     protected $guarded = ['id'];
