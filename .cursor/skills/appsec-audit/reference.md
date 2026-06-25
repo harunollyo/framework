@@ -9,7 +9,6 @@
 | Headers | `$request->headers`, `getallheaders()` |
 | Route params | URL segments resolved in `Route.php` |
 | Referer / redirect | `wp_get_referer()`, query args from `add_query_arg()` |
-| Webhooks / cron | `Scheduler.php` secret validation, external POST bodies |
 | Options / meta | User-writable post meta, options — untrusted if editable via API |
 
 **Not untrusted by default:** hardcoded constants, env/config loaded server-side, values from authenticated DB reads *after* ownership is verified.

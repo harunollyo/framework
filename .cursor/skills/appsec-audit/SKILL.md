@@ -42,7 +42,7 @@ Copy and track progress:
 
 ```
 Audit Progress:
-- [ ] Map entry points (REST routes, hooks, CLI, scheduler)
+- [ ] Map entry points (REST routes, hooks, CLI)
 - [ ] SQLi: raw SQL + string concat sinks
 - [ ] XSS: unescaped output sinks
 - [ ] RCE: dynamic execution sinks
@@ -58,7 +58,6 @@ Search for:
 - `Route::` registrations, `register_rest_route`, `WP_REST_Request`
 - `Framework\Http\Request`, `$request->input`, `$request->get_params`
 - `$_GET`, `$_POST`, `$_REQUEST`, `get_query_var`
-- Scheduler/cron endpoints (`Scheduler.php`, background workers)
 - Admin hooks and shortcodes
 
 ### Step 2: Category scans

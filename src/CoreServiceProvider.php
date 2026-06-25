@@ -1,8 +1,8 @@
 <?php
 /**
  * Registers the framework's essential services during application bootstrap.
- * Binds database, schema, migration, discovery, manager, and scheduler components into the container.
- * Boots listener and policy discovery caching plus scheduler initialization.
+ * Binds database, schema, migration, discovery, and manager components into the container.
+ * Boots listener and policy discovery caching.
  *
  * @package Framework
  * @since   1.0.0
@@ -23,7 +23,6 @@ use Framework\Managers\LogManager;
 use Framework\Managers\PolicyManager;
 use Framework\ServiceProvider;
 use Framework\Managers\DateManager;
-use Framework\Scheduler\Scheduler;
 use Framework\Http\Response;
 use Framework\Supports\Carbon;
 
@@ -69,9 +68,6 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->make(ListenerDiscovery::class)
             ->discover()
             ->cache();
-
-        // @todo: Scheduler will be handled later
-        // Scheduler::boot();
     }
 
     /**

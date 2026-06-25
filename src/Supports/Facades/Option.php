@@ -2,7 +2,7 @@
 /**
  * Facade proxy for OptionManager WordPress option access.
  * Exposes get, set, and delete with automatic application prefixing.
- * Used throughout migrations, scheduler, and settings code.
+ * Used throughout migrations and settings code.
  *
  * @package    Framework
  * @subpackage Supports\Facades
