@@ -60,7 +60,6 @@ class RelationHashTest extends TestCase
         $sql = $query->to_sql();
 
         $this->assertStringContainsString('framework_reserved_0', $sql);
-        $this->assertStringNotContainsString('framework_reserved_', $sql);
     }
 
     /**

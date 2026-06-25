@@ -4,6 +4,39 @@ An elegant PHP framework for WordPress plugins. This guide walks through integra
 
 Contributors working on the library itself can use the local playground in [example/README.md](example/README.md).
 
+## Releasing
+
+Maintainers can cut a release with a single command that bumps [`composer.json`](composer.json), commits, tags, and pushes.
+
+**Prerequisites:** check out `main`, ensure the working tree is clean, and fix any failing unit tests before releasing.
+
+```bash
+composer release -- -v 1.0.6 -m "Fix validation handling"
+```
+
+The `--` separator is required so Composer forwards `-v` and `-m` to the release script instead of treating them as Composer flags.
+
+If `-v` or `-m` is omitted, the script prompts for the version and release message interactively:
+
+```bash
+composer release --
+```
+
+Preview the release steps without making changes:
+
+```bash
+composer release -- --dry-run -v 1.0.6 -m "Fix validation handling"
+```
+
+The script will:
+
+1. Validate the version (semver `x.y.z`, greater than the current `composer.json` version)
+2. Confirm you are on `main` with a clean working tree and no existing tag locally or on `origin`
+3. Run `composer test:unit`
+4. Update `composer.json`, commit with the release message, create an annotated tag (`v1.0.6`), and push the commit and tag to `origin`
+
+Run `composer release -- --help` for full flag reference.
+
 ## Requirements
 
 - PHP 7.0+

@@ -1035,7 +1035,7 @@ class Route
 
         $request = $this->expose($this->make_framework_request($rest_request));
 
-        return $request->authorize_request()->validate_request();
+        return $request->validate_request();
     }
 
     /**

@@ -152,8 +152,6 @@ class Request implements RequestContract, Arrayable
         $this->route = $request->get_route();
         $this->headers = $request->get_headers();
 
-        // $this->resolve_validation_and_sanitization();
-
         return $this;
     }
 
