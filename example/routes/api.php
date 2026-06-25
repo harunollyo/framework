@@ -46,8 +46,8 @@ Route::get('/options', function (Request $request) {
 });
 
 Route::post('/check', function (ExampleRequest $request) {
-    $all = $request->validated();
+
     return response()->json([
-        'request' => $all,
+        'request' => $request->string('name'),
     ]);
 })->middleware([AdminMiddleware::class]);

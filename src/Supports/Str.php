@@ -544,7 +544,7 @@ class Str
      * @param string $subject The subject.
      * @param string $search The search.
      *
-     * @return void
+     * @return string
      *
      * @since 1.0.0
      */

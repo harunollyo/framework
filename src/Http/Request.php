@@ -10,16 +10,38 @@ namespace Framework\Http;
 
 defined('ABSPATH') || exit;
 
+use BadMethodCallException;
 use Framework\Contracts\Request as RequestContract;
 use Framework\Contracts\Support\Arrayable;
 use Framework\Sanitizer;
 use Framework\Exceptions\AuthorizationException;
 use Framework\Http\Concerns\InteractsWithFiles;
+use Framework\Supports\Arr;
 use Framework\Validation\Validator;
 use WP_REST_Request;
+use Framework\Supports\Str;
 
 use function Framework\user;
 
+/**
+ * The Request class for handling HTTP requests.
+ *
+ * @method mixed|null string(string $key, $default = null)
+ * @method mixed|null date(string $key, $default = null)
+ * @method mixed|null datetime(string $key, $default = null)
+ * @method mixed|null text(string $key, $default = null)
+ * @method mixed|null html(string $key, $default = null)
+ * @method mixed|null email(string $key, $default = null)
+ * @method mixed|null url(string $key, $default = null)
+ * @method mixed|null key(string $key, $default = null)
+ * @method mixed|null title(string $key, $default = null)
+ * @method mixed|null file_name(string $key, $default = null)
+ * @method mixed|null mime_type(string $key, $default = null)
+ * @method mixed|null int(string $key, $default = null)
+ * @method mixed|null bool(string $key, $default = null)
+ * @method mixed|null float(string $key, $default = null)
+ * @method mixed|null array(string $key, $default = null)
+ */
 class Request implements RequestContract, Arrayable
 {
     use InteractsWithFiles;
@@ -67,7 +89,6 @@ class Request implements RequestContract, Arrayable
      *
      * @since 1.0.0
      */
- 
     protected array $sanitized = [];
 
     /**
@@ -89,6 +110,32 @@ class Request implements RequestContract, Arrayable
     protected bool $validation_resolved = false;
 
     /**
+     * Registered sanitizer method suffixes for typed request accessors.
+     *
+     * @var array<int, string>
+     *
+     * @since 1.0.0
+     */
+    protected static array $types = [
+        'string',
+        'date',
+        'datetime',
+        'text',
+        'html',
+        'email',
+        'url',
+        'key',
+        'title',
+        'file_name',
+        'mime_type',
+        'int',
+        'bool',
+        'float',
+        'array',
+        'whitelisted',
+    ];
+
+    /**
      * Magic getter to retrieve request attributes.
      *
      * @param string $name The name of the attribute.
@@ -99,7 +146,21 @@ class Request implements RequestContract, Arrayable
      */
     public function __get(string $name)
     {
-        return $this->attributes[$name] ?? null;
+        return Arr::get($this->all(), $name, null);
+    }
+
+    /**
+     * Magic isset to check if an attribute exists.
+     *
+     * @param string $name The name of the attribute.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    public function __isset(string $name)
+    {
+        return !is_null($this->__get($name));
     }
 
     /**
@@ -115,6 +176,31 @@ class Request implements RequestContract, Arrayable
     public function __set(string $name, $value)
     {
         $this->attributes[$name] = $value;
+    }
+
+    /**
+     * Dynamically handle calls to the class.
+     *
+     * @param string $name The name of the method.
+     * @param array $arguments The arguments of the method.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function __call(string $name, array $arguments)
+    {
+        $name = strtolower($name);
+
+        if (!in_array($name, static::$types, true)) {
+            throw new BadMethodCallException(
+                sprintf('Method %s::%s does not exist.', static::class, $name)
+            );
+        }
+
+        $method_name = 'get_' . $name;
+
+        return $this->$method_name(...$arguments);
     }
 
     /**
@@ -239,6 +325,18 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
+     * Alias of `get_method()`.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function method()
+    {
+        return $this->get_method();
+    }
+
+    /**
      * Get the route URI of the request.
      *
      * @return string
@@ -281,6 +379,21 @@ class Request implements RequestContract, Arrayable
         }
 
         return $value;
+    }
+
+    /**
+     * Alias of `get_header()`.
+     *
+     * @param string $name The name.
+     * @param mixed $default The default.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function header(string $name, $default = null)
+    {
+        return $this->get_header($name, $default);
     }
 
     /**
