@@ -13,6 +13,8 @@ defined('ABSPATH') || exit;
 use Framework\Http\Response;
 use Exception;
 
+use function Framework\message;
+
 class ValidationException extends Exception
 {
     /**
@@ -34,8 +36,12 @@ class ValidationException extends Exception
      *
      * @since 1.0.0
      */
-    public static function with_errors(array $errors, string $message = 'Validation failed!')
+    public static function with_errors(array $errors, string $message = '')
     {
+        if ($message === '') {
+            $message = message('validator.failed');
+        }
+
         $code = Response::UNPROCESSABLE_ENTITY;
         $instance = new static($message, $code);
         $instance->errors = $errors;

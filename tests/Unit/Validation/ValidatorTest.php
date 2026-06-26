@@ -157,4 +157,20 @@ class ValidatorTest extends TestCase
         $this->assertTrue($validator->is_failed());
         $this->assertArrayHasKey('items', $validator->get_errors());
     }
+
+    public function test_it_uses_custom_expected_array_message_from_request_messages(): void
+    {
+        $validator = Validator::make(
+            ['items' => 'not-an-array'],
+            ['items.*.name' => 'required|string'],
+            [
+                'items' => [
+                    'expected_array' => 'Items must be a list.',
+                ],
+            ]
+        );
+
+        $this->assertTrue($validator->is_failed());
+        $this->assertSame(['Items must be a list.'], $validator->get_errors()['items']);
+    }
 }

@@ -18,6 +18,7 @@ use Framework\Validation\Rules\BaseRule;
 use Closure;
 use InvalidArgumentException;
 
+use function Framework\message;
 use function Framework\value;
 
 class Validator
@@ -251,7 +252,7 @@ class Validator
 
             if (!is_array($current_data)) {
                 $traversed_key = implode('.', $traversed_path_stack);
-                $this->errors[$traversed_key][] = sprintf('Expected an array at "%s"', $traversed_key);
+                $this->errors[$traversed_key][] = $this->resolve_expected_array_message($traversed_key);
 
                 return;
             }
@@ -352,6 +353,24 @@ class Validator
             $key_segments = explode('.', $traversed_key);
             $this->set_validated_data($key_segments, $value);
         }
+    }
+
+    /**
+     * Resolve the expected array error message for a given key.
+     *
+     * @param string $key The key.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    protected function resolve_expected_array_message(string $key)
+    {
+        if ($this->has_custom_message('expected_array', $key)) {
+            return value($this->get_custom_message('expected_array', $key), $key, null, $this->data);
+        }
+
+        return message('validator.expected_array', $key);
     }
 
     /**

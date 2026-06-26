@@ -21,6 +21,7 @@ use Framework\Validation\Validator;
 use WP_REST_Request;
 use Framework\Supports\Str;
 
+use function Framework\message;
 use function Framework\user;
 
 /**
@@ -474,7 +475,7 @@ class Request implements RequestContract, Arrayable
     public function authorize_request()
     {
         if (!$this->authorize()) {
-            throw new AuthorizationException('You are not authorized to make this request.');
+            throw new AuthorizationException(message('auth.unauthorized_request'));
         }
 
         return $this;

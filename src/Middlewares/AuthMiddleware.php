@@ -15,6 +15,8 @@ use Framework\Contracts\Middleware;
 use Framework\Contracts\Request;
 use Framework\Exceptions\AuthorizationException;
 
+use function Framework\message;
+
 class AuthMiddleware implements Middleware
 {
     /**
@@ -36,6 +38,6 @@ class AuthMiddleware implements Middleware
             return $next($request);
         };
 
-        throw new AuthorizationException('You have to be logged in.');
+        throw new AuthorizationException(message('auth.logged_in_required'));
     }
 }

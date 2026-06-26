@@ -21,6 +21,7 @@ use Framework\Wordpress\Constants\Capabilities;
 use WP_Filesystem_Base;
 
 use function Framework\Polyfill\str_starts_with;
+use function Framework\message;
 
 class Filesystem
 {
@@ -275,13 +276,13 @@ class Filesystem
     public function get($path)
     {
         if (!$this->is_file($path)) {
-            throw new NotFoundException(sprintf("file does not exists at [%s]", $path));
+            throw new NotFoundException(message('filesystem.file_not_found', $path));
         }
 
         $contents = $this->filesystem->get_contents($path);
 
         if ($contents === false) {
-            throw new NotFoundException(sprintf("file does not exists at [%s]", $path));
+            throw new NotFoundException(message('filesystem.file_not_found', $path));
         }
 
         return $contents;
@@ -522,7 +523,7 @@ class Filesystem
     public function upload(string $path, UploadedFile $file, $name = null)
     {
         if (!current_user_can(Capabilities::UPLOAD_FILES)) {
-            throw new AuthorizationException('You are not authorized to upload files.');
+            throw new AuthorizationException(message('auth.upload_forbidden'));
         }
 
         if (is_null($name)) {
@@ -560,7 +561,7 @@ class Filesystem
         $base = realpath($upload_directory);
 
         if ($base === false) {
-            throw new Exception('Upload directory is not available.');
+            throw new Exception(message('upload.directory_unavailable'));
         }
 
         $relative = Path::normalize($path);
@@ -568,7 +569,7 @@ class Filesystem
         $base_normalized = str_replace('\\', '/', $base);
 
         if ($directory !== $base_normalized && !str_starts_with($directory, $base_normalized . '/')) {
-            throw new AuthorizationException('Invalid upload path.');
+            throw new AuthorizationException(message('auth.invalid_upload_path'));
         }
 
         return str_replace('/', DIRECTORY_SEPARATOR, $directory);

@@ -12,6 +12,8 @@ defined('ABSPATH') || exit;
 
 use Framework\Supports\Arr;
 
+use function Framework\message;
+
 class ModelNotFoundException extends NotFoundException
 {
     /**
@@ -113,8 +115,8 @@ class ModelNotFoundException extends NotFoundException
     protected function prepare_message()
     {
         $ids = Arr::wrap($this->ids);
-        $this->message = sprintf(
-            'No query results for model [%s] with ids: %s',
+        $this->message = message(
+            'model.not_found',
             $this->model,
             implode(', ', $ids)
         );

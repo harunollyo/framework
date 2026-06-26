@@ -13,6 +13,8 @@ defined('ABSPATH') || exit;
 use Framework\Http\Response;
 use RuntimeException;
 
+use function Framework\message;
+
 class AuthorizationException extends RuntimeException
 {
     /**
@@ -29,7 +31,7 @@ class AuthorizationException extends RuntimeException
     public function __construct($message = '', $code = 0, $previous = null)
     {
         if ($message === '') {
-            $message = 'You have to be logged in';
+            $message = message('auth.logged_in_required');
         }
 
         if ($code === 0) {

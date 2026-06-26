@@ -19,6 +19,7 @@ use Framework\Supports\Arr;
 use JsonSerializable;
 
 use function Framework\Polyfill\str_starts_with;
+use function Framework\message;
 
 class UploadedFile extends File implements JsonSerializable
 {
@@ -271,8 +272,8 @@ class UploadedFile extends File implements JsonSerializable
 
             if (!$moved) {
                 throw new Exception(
-                    sprintf(
-                        'Could not move the file "%s" to "%s" (%s).',
+                    message(
+                        'upload.move_failed',
                         $this->getPathname(),
                         $target,
                         strip_tags($error ?? '')
@@ -309,21 +310,45 @@ class UploadedFile extends File implements JsonSerializable
      */
     protected function get_exception_message()
     {
-        static $errors = [
-            \UPLOAD_ERR_INI_SIZE => 'The file "%s" exceeds your upload_max_filesize ini directive (limit is %d KiB).',
-            \UPLOAD_ERR_FORM_SIZE => 'The file "%s" exceeds the upload limit defined in your form.',
-            \UPLOAD_ERR_PARTIAL => 'The file "%s" was only partially uploaded.',
-            \UPLOAD_ERR_NO_FILE => 'No file was uploaded.',
-            \UPLOAD_ERR_CANT_WRITE => 'The file "%s" could not be written on disk.',
-            \UPLOAD_ERR_NO_TMP_DIR => 'File could not be uploaded: missing temporary directory.',
-            \UPLOAD_ERR_EXTENSION => 'File upload was stopped by a PHP extension.',
+        $key = $this->get_message_key_for_error($this->error);
+
+        if ($this->error === \UPLOAD_ERR_INI_SIZE) {
+            return message(
+                $key,
+                $this->get_client_original_name(),
+                $this->get_max_file_size() / 1024
+            );
+        }
+
+        if (in_array($this->error, [\UPLOAD_ERR_NO_FILE, \UPLOAD_ERR_NO_TMP_DIR, \UPLOAD_ERR_EXTENSION], true)) {
+            return message($key);
+        }
+
+        return message($key, $this->get_client_original_name());
+    }
+
+    /**
+     * Get the message key for an upload error code.
+     *
+     * @param int $error_code The upload error code.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    protected function get_message_key_for_error(int $error_code)
+    {
+        static $keys = [
+            \UPLOAD_ERR_INI_SIZE => 'upload.ini_size_exceeded',
+            \UPLOAD_ERR_FORM_SIZE => 'upload.form_size_exceeded',
+            \UPLOAD_ERR_PARTIAL => 'upload.partial',
+            \UPLOAD_ERR_NO_FILE => 'upload.no_file',
+            \UPLOAD_ERR_CANT_WRITE => 'upload.cant_write',
+            \UPLOAD_ERR_NO_TMP_DIR => 'upload.no_tmp_dir',
+            \UPLOAD_ERR_EXTENSION => 'upload.stopped_by_extension',
         ];
 
-        $error_code = $this->error;
-        $max_file_size = \UPLOAD_ERR_INI_SIZE === $error_code ? $this->get_max_file_size() / 1024 : 0;
-        $message = $errors[$error_code] ?? 'The file "%s" was not uploaded due to an unknown error.';
-
-        return sprintf($message, $this->get_client_original_name(), $max_file_size);
+        return $keys[$error_code] ?? 'upload.unknown_error';
     }
 
     /**

@@ -17,6 +17,8 @@ use Framework\Exceptions\AuthorizationException;
 use Framework\Http\Response;
 use Framework\Wordpress\Constants\Capabilities;
 
+use function Framework\message;
+
 class AdminMiddleware implements Middleware
 {
     /**
@@ -38,6 +40,6 @@ class AdminMiddleware implements Middleware
             return $next($request);
         };
 
-        throw new AuthorizationException('You have to be logged in and have admin privileges.', Response::FORBIDDEN);
+        throw new AuthorizationException(message('auth.admin_required'), Response::FORBIDDEN);
     }
 }

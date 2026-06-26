@@ -23,6 +23,7 @@ use ReflectionParameter;
 
 use function Framework\app;
 use function Framework\config_path;
+use function Framework\message;
 use function Framework\user;
 
 class PolicyManager
@@ -180,13 +181,13 @@ class PolicyManager
         $user = $this->get_current_user();
 
         if (!$user->is_logged_in()) {
-            throw new AuthorizationException('You have to be logged in');
+            throw new AuthorizationException(message('auth.logged_in_required'));
         }
 
         $policy = $this->resolve_policy($model);
 
         if (!$policy) {
-            throw new AuthorizationException('No policy found for this resource.');
+            throw new AuthorizationException(message('auth.no_policy'));
         }
 
         if (method_exists($policy, 'before')) {
@@ -198,17 +199,14 @@ class PolicyManager
 
             if ($before_result === false) {
                 throw new AuthorizationException(
-                    sprintf('You are not authorized to %s this resource.', $ability)
+                    message('auth.unauthorized_action', $ability)
                 );
             }
         }
 
         if (!method_exists($policy, $ability)) {
             throw new AuthorizationException(
-                sprintf(
-                    'The ability %s is not defined in the policy for this resource.',
-                    $ability
-                )
+                message('auth.ability_not_defined', $ability)
             );
         }
 
@@ -222,7 +220,7 @@ class PolicyManager
 
         if (!$can_perform) {
             throw new AuthorizationException(
-                sprintf('You are not authorized to %s this resource.', $ability)
+                message('auth.unauthorized_action', $ability)
             );
         }
 
