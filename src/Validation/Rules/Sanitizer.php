@@ -10,6 +10,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class Sanitizer extends BaseRule
 {
     /**
@@ -34,7 +36,7 @@ class Sanitizer extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must be sanitized.', $this->last_key_segment());
+        return message('validator.sanitize', $this->last_key_segment());
     }
 
     /**

@@ -41,6 +41,7 @@ use function Framework\user;
  * @method mixed|null bool(string $key, $default = null)
  * @method mixed|null float(string $key, $default = null)
  * @method mixed|null array(string $key, $default = null)
+ * @method mixed|null whitelisted(string $key, $default = null, array $whitelist = [])
  */
 class Request implements RequestContract, Arrayable
 {
@@ -265,7 +266,7 @@ class Request implements RequestContract, Arrayable
      */
     protected function run_validation(array $data, array $rules)
     {
-        $validator = Validator::make($data, $rules);
+        $validator = Validator::make($data, $rules, $this->messages());
 
         if ($validator->validate()) {
             return $validator->validated();
@@ -281,6 +282,19 @@ class Request implements RequestContract, Arrayable
      * @since 1.0.0
      */
     protected function filters()
+    {
+        return [];
+    }
+
+    /**
+     * Define the validation messages for the request.
+     * This will be defined into the extended request class.
+     *
+     * @return array<string,string|callable(mixed):mixed|array>
+     *
+     * @since 1.0.0
+     */
+    protected function messages()
     {
         return [];
     }

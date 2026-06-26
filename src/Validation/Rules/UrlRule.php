@@ -10,6 +10,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class UrlRule extends BaseRule
 {
     /**
@@ -33,6 +35,6 @@ class UrlRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must be of type url.', $this->last_key_segment());
+        return message('validator.url', $this->last_key_segment());
     }
 }

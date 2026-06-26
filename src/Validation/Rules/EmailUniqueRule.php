@@ -11,6 +11,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class EmailUniqueRule extends BaseRule
 {
     /**
@@ -72,6 +74,6 @@ class EmailUniqueRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The email address %s is already in use.', $this->value);
+        return message('validator.email_unique', $this->value);
     }
 }

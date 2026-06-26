@@ -10,6 +10,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class IntegerRule extends BaseRule
 {
     /**
@@ -42,6 +44,6 @@ class IntegerRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must be of type integer.', $this->last_key_segment());
+        return message('validator.integer', $this->last_key_segment());
     }
 }

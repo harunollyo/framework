@@ -10,6 +10,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class RequiredIfRule extends BaseRule
 {
     /**
@@ -48,7 +50,7 @@ class RequiredIfRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field is required.', $this->last_key_segment());
+        return message('validator.required_if', $this->last_key_segment());
     }
 
     /**

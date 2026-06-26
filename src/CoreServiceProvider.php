@@ -25,6 +25,7 @@ use Framework\ServiceProvider;
 use Framework\Managers\DateManager;
 use Framework\Http\Response;
 use Framework\Supports\Carbon;
+use Framework\Supports\MessagesBag;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -42,6 +43,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->register_discoveries();
         $this->register_managers();
         $this->register_migrations();
+        $this->register_messages();
 
         $this->app->singleton(Response::class);
 
@@ -68,6 +70,20 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->make(ListenerDiscovery::class)
             ->discover()
             ->cache();
+    }
+
+    /**
+     * Register the messages.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    protected function register_messages()
+    {
+        $this->app->singleton(MessagesBag::class, function () {
+            return new MessagesBag();
+        });
     }
 
     /**

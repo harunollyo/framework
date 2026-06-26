@@ -10,6 +10,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class UserExists extends BaseRule
 {
     /**
@@ -37,6 +39,6 @@ class UserExists extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('User with id %s does not exist.', $this->value);
+        return message('validator.user_exists', $this->value);
     }
 }

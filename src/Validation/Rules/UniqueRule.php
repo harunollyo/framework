@@ -13,6 +13,8 @@ defined('ABSPATH') || exit;
 use Framework\Supports\Facades\DB;
 use Exception;
 
+use function Framework\message;
+
 class UniqueRule extends BaseRule
 {
     /**
@@ -53,6 +55,6 @@ class UniqueRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The value for %s must be unique.', $this->last_key_segment());
+        return message('validator.unique', $this->last_key_segment());
     }
 }

@@ -13,6 +13,8 @@ defined('ABSPATH') || exit;
 use Framework\Supports\Date;
 use Framework\Supports\Str;
 
+use function Framework\message;
+
 class GreaterThanEqualRule extends BaseRule
 {
     /**
@@ -53,6 +55,6 @@ class GreaterThanEqualRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must be greater than %s.', $this->last_key_segment(), $this->rule_value);
+        return message('validator.gte', $this->last_key_segment(), $this->rule_value);
     }
 }

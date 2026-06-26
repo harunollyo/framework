@@ -11,6 +11,7 @@ namespace Framework\Validation\Rules;
 defined('ABSPATH') || exit;
 
 use function Framework\deep_get;
+use function Framework\message;
 
 class RequiredIfSiblingRule extends BaseRule
 {
@@ -57,7 +58,7 @@ class RequiredIfSiblingRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field is required.', $this->last_key_segment());
+        return message('validator.required_if_sibling', $this->last_key_segment());
     }
 
     /**

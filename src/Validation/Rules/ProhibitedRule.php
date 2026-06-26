@@ -10,6 +10,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class ProhibitedRule extends BaseRule
 {
     /**
@@ -33,8 +35,7 @@ class ProhibitedRule extends BaseRule
      */
     public function get_error_message()
     {
-        /* translators: %s: field name */
-        return sprintf('The %s field is prohibited.', str_replace(['_', '.'], ' ', $this->key));
+        return message('validator.prohibited', str_replace(['_', '.'], ' ', $this->key));
     }
 
     /**

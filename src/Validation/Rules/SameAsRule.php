@@ -10,6 +10,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class SameAsRule extends BaseRule
 {
     /**
@@ -35,6 +37,6 @@ class SameAsRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must be same as %s.', $this->last_key_segment(), $this->rule_value);
+        return message('validator.same_as', $this->last_key_segment(), $this->rule_value);
     }
 }

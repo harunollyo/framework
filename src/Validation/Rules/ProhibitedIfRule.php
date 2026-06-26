@@ -10,6 +10,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class ProhibitedIfRule extends BaseRule
 {
     /**
@@ -49,7 +51,7 @@ class ProhibitedIfRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field is prohibited.', $this->last_key_segment());
+        return message('validator.prohibited_if', $this->last_key_segment());
     }
 
     /**

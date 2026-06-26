@@ -10,6 +10,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class InRule extends BaseRule
 {
     /**
@@ -40,6 +42,6 @@ class InRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must contain a value from: %s.', $this->last_key_segment(), $this->rule_value);
+        return message('validator.in', $this->last_key_segment(), $this->rule_value);
     }
 }

@@ -10,6 +10,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class BooleanRule extends BaseRule
 {
     /**
@@ -55,6 +57,6 @@ class BooleanRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must be of type boolean.', $this->last_key_segment());
+        return message('validator.boolean', $this->last_key_segment());
     }
 }

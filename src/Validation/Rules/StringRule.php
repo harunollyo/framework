@@ -8,6 +8,8 @@
  */
 namespace Framework\Validation\Rules;
 
+use function Framework\message;
+
 defined('ABSPATH') || exit;
 
 class StringRule extends BaseRule
@@ -42,6 +44,6 @@ class StringRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must be of type string.', $this->last_key_segment());
+        return message('validator.string', $this->last_key_segment());
     }
 }

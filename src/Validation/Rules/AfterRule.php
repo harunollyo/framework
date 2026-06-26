@@ -12,6 +12,8 @@ defined('ABSPATH') || exit;
 
 use Framework\Supports\Facades\Date;
 
+use function Framework\message;
+
 class AfterRule extends BaseRule
 {
     /**
@@ -45,6 +47,6 @@ class AfterRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must be after %s.', $this->last_key_segment(), $this->rule_value);
+        return message('validator.after', $this->last_key_segment(), $this->rule_value);
     }
 }

@@ -10,6 +10,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class ObjectRule extends BaseRule
 {
     /**
@@ -33,6 +35,6 @@ class ObjectRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must be of type object.', $this->last_key_segment());
+        return message('validator.object', $this->last_key_segment());
     }
 }

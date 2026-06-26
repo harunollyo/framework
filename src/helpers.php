@@ -22,6 +22,7 @@ use Framework\Wordpress\User;
 use Framework\Http\Response;
 use Framework\Supports\Arr;
 use Framework\Supports\HigherOrderTapProxy;
+use Framework\Supports\MessagesBag;
 use Framework\Supports\Str;
 use Framework\Supports\Url;
 use Framework\Supports\Utils;
@@ -402,20 +403,11 @@ if (!function_exists('Framework\configure_dumper')) {
 
         $configured = true;
         $is_cli = defined('WP_CLI') && WP_CLI;
-        $is_rest = defined('REST_REQUEST') && REST_REQUEST;
 
         if ($is_cli) {
             VarDumper::setHandler(function ($var) {
                 $dumper = new CliDumper();
                 $dumper->dump((new VarCloner())->cloneVar($var));
-            });
-            return;
-        }
-
-        if ($is_rest) {
-            VarDumper::setHandler(function ($var) {
-                header('Content-Type: application/json; charset=utf-8');
-                echo wp_json_encode($var, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             });
             return;
         }
@@ -442,7 +434,9 @@ if (!function_exists('Framework\dump')) {
         if (!class_exists(VarDumper::class) || !app()->is_dev_mode()) {
             return;
         }
+
         configure_dumper();
+
         foreach ($args as $arg) {
             VarDumper::dump($arg);
         }
@@ -634,5 +628,20 @@ if (!function_exists('Framework\is_rest_request')) {
         $is_rest = strpos($request_uri, '/' . rest_get_url_prefix() . '/') !== false;
 
         return $is_rest;
+    }
+}
+
+if (!function_exists('Framework\message')) {
+    /**
+     * Get a message by key.
+     *
+     * @param string $key the key of the message
+     * @param mixed $args the arguments to pass to the message
+     *
+     * @return string
+     */
+    function message($key, ...$args)
+    {
+        return app()->make(MessagesBag::class)->get($key, ...$args);
     }
 }

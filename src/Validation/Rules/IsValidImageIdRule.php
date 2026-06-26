@@ -10,7 +10,7 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
-use DateTime;
+use function Framework\message;
 
 class IsValidImageIdRule extends BaseRule
 {
@@ -35,6 +35,6 @@ class IsValidImageIdRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must be a valid media image', $this->last_key_segment());
+        return message('validator.is_valid_image_id', $this->last_key_segment());
     }
 }

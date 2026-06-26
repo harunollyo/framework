@@ -18,6 +18,8 @@ use Framework\Validation\Rules\BaseRule;
 use Closure;
 use InvalidArgumentException;
 
+use function Framework\value;
+
 class Validator
 {
     /**
@@ -57,6 +59,15 @@ class Validator
     protected $errors = [];
 
     /**
+     * The messages for the validation errors.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
+    protected $messages = [];
+
+    /**
      * Create a new Validator instance.
      *
      * @param array $data The input data.
@@ -66,10 +77,11 @@ class Validator
      *
      * @since 1.0.0
      */
-    public function __construct(array $data, array $rules)
+    public function __construct(array $data, array $rules, array $messages = [])
     {
         $this->data = $data;
         $this->rules = $rules;
+        $this->messages = $messages;
     }
 
     /**
@@ -82,9 +94,9 @@ class Validator
      *
      * @since 1.0.0
      */
-    public static function make(array $data, array $rules)
+    public static function make(array $data, array $rules, array $messages = [])
     {
-        return new static($data, $rules);
+        return new static($data, $rules, $messages);
     }
 
     /**
@@ -131,6 +143,7 @@ class Validator
     public function is_valid()
     {
         $this->run_validation();
+
         return empty($this->errors);
     }
 
@@ -318,7 +331,7 @@ class Validator
             if ($rule_instance->is_check_strict_data_type()) {
                 $strict_rule_validations[$rule] = [
                     'is_valid' => $rule_instance->is_valid(),
-                    'message' => $rule_instance->get_error_message(),
+                    'message' => $this->process_error_message($rule_instance, $traversed_key),
                     'traversed_key' => $traversed_key
                 ];
 
@@ -327,7 +340,7 @@ class Validator
 
             if (!$rule_instance->is_valid()) {
                 $is_valid = false;
-                $this->errors[$traversed_key][] = $rule_instance->get_error_message();
+                $this->errors[$traversed_key][] = $this->process_error_message($rule_instance, $traversed_key);
             }
         }
 
@@ -339,6 +352,80 @@ class Validator
             $key_segments = explode('.', $traversed_key);
             $this->set_validated_data($key_segments, $value);
         }
+    }
+
+    /**
+     * Process the error message for a given rule and key.
+     *
+     * @param Rule $rule The rule.
+     * @param string $key The key.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    protected function process_error_message(Rule $rule, string $key)
+    {
+        if (is_null($rule_name = $this->rule_name_from($rule))) {
+            throw new InvalidValidationRuleException(
+                sprintf('The rule %s does not exist or is invalid', get_class($rule))
+            );
+        }
+
+        if (!$this->has_custom_message($rule_name, $key)) {
+            return $rule->get_error_message();
+        }
+
+        $message = $this->get_custom_message($rule_name, $key);
+
+        return value($message, $key, $rule->rule_value(), $this->data);
+    }
+
+    /**
+     * Get the rule name from a rule instance.
+     *
+     * @param Rule $rule The rule.
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     */
+    protected function rule_name_from(Rule $rule)
+    {
+        $class_name = get_class($rule);
+        $rule_map = array_flip(Validation::RULE_MAP);
+
+        return $rule_map[$class_name] ?? null;
+    }
+
+    /**
+     * Check if a custom message is defined for a given key.
+     *
+     * @param string $rule_name The rule name.
+     * @param string $key The key.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function has_custom_message(string $rule_name, string $key): bool
+    {
+        return isset($this->messages[$key][$rule_name]);
+    }
+
+    /**
+     * Get the custom message for a given key.
+     *
+     * @param string $rule_name The rule name.
+     * @param string $key The key.
+     *
+     * @return string|callable
+     *
+     * @since 1.0.0
+     */
+    protected function get_custom_message(string $rule_name, string $key)
+    {
+        return $this->messages[$key][$rule_name];
     }
 
 

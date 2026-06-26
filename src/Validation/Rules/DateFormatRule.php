@@ -12,6 +12,8 @@ defined('ABSPATH') || exit;
 
 use DateTime;
 
+use function Framework\message;
+
 class DateFormatRule extends BaseRule
 {
     /**
@@ -37,8 +39,8 @@ class DateFormatRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf(
-            'The %s field must be a valid date in the format %s.',
+        return message(
+            'validator.date_format',
             $this->last_key_segment(),
             $this->rule_value
         );

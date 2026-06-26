@@ -12,6 +12,8 @@ defined('ABSPATH') || exit;
 
 use Framework\Validation\Constants\Validation;
 
+use function Framework\message;
+
 class MinRule extends BaseRule
 {
     /**
@@ -42,20 +44,20 @@ class MinRule extends BaseRule
     public function get_error_message()
     {
         if ($this->is_string_value()) {
-            return sprintf(
-                'The %s field must be greater than or equal to %s characters.',
+            return message(
+                'validator.min.characters',
                 $this->last_key_segment(),
                 $this->rule_value
             );
         } elseif ($this->is_array_value()) {
-            return sprintf(
-                'The %s field must be greater than or equal to %s items.',
+            return message(
+                'validator.min.items',
                 $this->last_key_segment(),
                 $this->rule_value
             );
         }
 
-        return sprintf('The %s field must be greater than or equal %s.', $this->last_key_segment(), $this->rule_value);
+        return message('validator.min.numeric', $this->last_key_segment(), $this->rule_value);
     }
 
     /**

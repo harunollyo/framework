@@ -10,6 +10,8 @@ namespace Framework\Validation\Rules;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
+
 class RegexRule extends BaseRule
 {
     /**
@@ -33,6 +35,6 @@ class RegexRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf('The %s field must match the regex: %s.', $this->last_key_segment(), $this->rule_value);
+        return message('validator.regex', $this->last_key_segment(), $this->rule_value);
     }
 }

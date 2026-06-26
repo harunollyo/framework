@@ -40,6 +40,24 @@ interface Rule
     public function get_value();
 
     /**
+     * Get the value for the rule.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function value();
+
+    /**
+     * Get the value for the rule.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function rule_value();
+
+    /**
      * Check if the rule is for a specific data type.
      *
      * @return bool

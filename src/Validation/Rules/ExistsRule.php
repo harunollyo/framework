@@ -13,6 +13,8 @@ defined('ABSPATH') || exit;
 use Framework\Supports\Facades\DB;
 use Exception;
 
+use function Framework\message;
+
 class ExistsRule extends BaseRule
 {
     /**
@@ -46,6 +48,6 @@ class ExistsRule extends BaseRule
      */
     public function get_error_message()
     {
-        return 'Resource does not exist.';
+        return message('validator.exists');
     }
 }

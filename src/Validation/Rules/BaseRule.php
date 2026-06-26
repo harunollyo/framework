@@ -12,6 +12,8 @@ defined('ABSPATH') || exit;
 
 use Framework\Contracts\Rule;
 
+use function Framework\message;
+
 abstract class BaseRule implements Rule
 {
     /**
@@ -132,6 +134,18 @@ abstract class BaseRule implements Rule
     }
 
     /**
+     * Get the value for the rule.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function value()
+    {
+        return $this->value;
+    }
+
+    /**
      * Check if the rule is for a specific data type.
      *
      * @return bool
@@ -186,6 +200,18 @@ abstract class BaseRule implements Rule
     }
 
     /**
+     * Get the value for the rule.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function rule_value()
+    {
+        return $this->rule_value;
+    }
+
+    /**
      * Validate the rule with desired value.
      *
      * @return bool
@@ -203,6 +229,6 @@ abstract class BaseRule implements Rule
      */
     public function get_error_message()
     {
-        return sprintf('The value provided for %s is invalid.', $this->last_key_segment());
+        return message('validator.invalid', $this->last_key_segment());
     }
 }

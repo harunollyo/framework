@@ -49,8 +49,6 @@ Route::get('/options', function (Request $request) {
 
 Route::post('/check', function (ExampleRequest $request) {
 
-    dd($request->all());
-
     return response()->json([
         'request' => $request->string('name'),
     ]);

@@ -13,6 +13,8 @@ defined('ABSPATH') || exit;
 use Framework\Constants\DateTimeFormats;
 use DateTime;
 
+use function Framework\message;
+
 class DateRule extends BaseRule
 {
     /**
@@ -38,8 +40,8 @@ class DateRule extends BaseRule
      */
     public function get_error_message()
     {
-        return sprintf(
-            'The %s field must be a valid date time in the format %s.',
+        return message(
+            'validator.date',
             $this->last_key_segment(),
             DateTimeFormats::DB_DATE
         );
