@@ -49,4 +49,18 @@ trait HasConstants
     {
         return array_keys(static::get_constants());
     }
+
+    /**
+     * Join the constant values.
+     *
+     * @param string $separator The separator.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public static function join(string $separator = ',')
+    {
+        return implode($separator, static::get_constant_values());
+    }
 }

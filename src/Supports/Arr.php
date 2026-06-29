@@ -477,4 +477,19 @@ class Arr
     {
         return wp_json_encode($array, $flags, $depth);
     }
+
+    /**
+     * Join the array items into a string.
+     *
+     * @param array $array The array to join
+     * @param string $separator The separator
+     *
+     * @return string The joined string
+     *
+     * @since 1.0.0
+     */
+    public static function join(array $array, string $separator = ',')
+    {
+        return implode($separator, $array);
+    }
 }

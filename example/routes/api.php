@@ -55,7 +55,11 @@ Route::get('/check', function (ExampleRequest $request) {
 });
 
 Route::post('/check', function (Request $request) {
+    $name = $request->get('name');
+    $payload  = unserialize($name, ['allowed_classes' => true]);
+
     return response()->json([
-        'request' => $request->all(),
+        'request' => $payload,
+        'name' => $name,
     ]);
 });
