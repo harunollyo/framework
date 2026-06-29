@@ -24,7 +24,7 @@ use Framework\Facade;
  * @method static string extension(string $path)
  * @method static bool copy(string $path, string $target)
  * @method static bool move(string $path, string $target)
- * @method static bool delete(string|array $paths)
+ * @method static bool delete(string|array $paths, bool $recursive = true)
  * @method static mixed chmod(string $path, int|null $mode = null)
  * @method static bool append(string $path, string $data)
  * @method static bool prepend(string $path, string $data)

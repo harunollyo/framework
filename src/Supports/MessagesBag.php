@@ -165,6 +165,6 @@ class MessagesBag
 
         $args = !empty($args) ? Arr::flatten($args) : [];
 
-        return vsprintf($this->messages[$key], $args);
+        return vsprintf(esc_html($this->messages[$key]), $args);
     }
 }

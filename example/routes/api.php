@@ -10,6 +10,7 @@ use Framework\Middlewares\AuthMiddleware;
 use Framework\Route;
 use Framework\Supports\Arr;
 use Framework\Supports\Facades\DB;
+use Framework\Supports\Facades\File;
 use Framework\Supports\Facades\Option;
 
 use function Framework\app;
@@ -47,26 +48,13 @@ Route::get('/options', function (Request $request) {
     ]);
 });
 
-Route::post('/check', function (ExampleRequest $request) {
-
+Route::get('/check', function (ExampleRequest $request) {
     return response()->json([
         'request' => $request->string('name'),
     ]);
 });
 
-
-Route::get('/check', function (Request $request) {
-    dd([
-        'name' => 'John Doe',
-        'age' => 20,
-        'options' => ['option1', 'option2', 'option3'],
-        'data' => [
-            'name' => 'John Doe',
-            'age' => 20,
-            'options' => ['option1', 'option2', 'option3'],
-        ],
-    ]);
-
+Route::post('/check', function (Request $request) {
     return response()->json([
         'request' => $request->all(),
     ]);

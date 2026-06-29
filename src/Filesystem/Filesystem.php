@@ -172,13 +172,13 @@ class Filesystem
      *
      * @since 1.0.0
      */
-    public function delete($paths)
+    public function delete($paths, bool $recursive = true)
     {
         $paths = is_array($paths) ? $paths : func_get_args();
         $success = true;
 
         foreach ($paths as $path) {
-            if (!$this->filesystem->delete($path)) {
+            if (!$this->filesystem->delete($path, $recursive)) {
                 $success = false;
             }
         }
