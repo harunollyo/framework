@@ -14,6 +14,7 @@ defined('ABSPATH') || exit;
 
 use Framework\Collections\Collection as BaseCollection;
 use Framework\Database\Concerns\HasDictionary;
+use Override;
 
 use function Framework\value;
 
@@ -143,16 +144,7 @@ class Collection extends BaseCollection
             $relation = reset($relation);
         }
 
-        $not_loaded = $models->filter(function ($model) use ($name) {
-            if (is_null($model)) {
-                return false;
-            }
-
-            return !$model->relation_loaded($name);
-        });
-
-        // $models->filter(fn ($model) => !is_null($model) && !$model->relation_loaded($name))->load($relation);
-        $not_loaded->load($relation);
+        $models->filter(fn ($model) => !is_null($model) && !$model->relation_loaded($name))->load($relation);
 
         if (empty($path)) {
             return;
@@ -210,5 +202,40 @@ class Collection extends BaseCollection
     public function model_keys()
     {
         return array_map(fn ($model) => $model->get_primary_key_value(), $this->items);
+    }
+
+    /**
+     * Map the collection items using a callback.
+     *
+     * @param callable $callback The callback to map the items
+     *
+     * @return Collection The mapped collection
+     *
+     * @since 1.0.0
+     */
+    public function map(callable $callback)
+    {
+        $result = parent::map($callback);
+
+        return $result->contains(fn ($item) => !$item instanceof Model) ? $result->to_base() : $result;
+    }
+
+    /**
+     * Get the unique items from the collection.
+     *
+     * @param callable|string|null $key The key to use for uniqueness.
+     * @param bool $strict Whether to use strict comparison.
+     *
+     * @return static A new collection containing the unique items.
+     *
+     * @since 1.0.0
+     */
+    public function unique($key = null, $strict = false)
+    {
+        if (!is_null($key)) {
+            return parent::unique($key, $strict);
+        }
+
+        return new static(array_values($this->get_dictionary()));
     }
 }

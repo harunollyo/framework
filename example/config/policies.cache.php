@@ -5,6 +5,11 @@
 return array (
   0 => 
   array (
+    'model' => 'Example\\App\\Models\\Blog',
+    'policy' => 'Example\\App\\Policies\\BlogPolicy',
+  ),
+  1 => 
+  array (
     'model' => 'Example\\App\\Models\\Event',
     'policy' => 'Example\\App\\Policies\\EventPolicy',
   ),

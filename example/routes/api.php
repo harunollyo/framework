@@ -1,5 +1,6 @@
 <?php
 
+use Example\App\Http\Controllers\BlogController;
 use Example\App\Http\Controllers\EventsController;
 use Example\App\Http\Controllers\SpeakersController;
 use Example\App\Http\Requests\ExampleRequest;
@@ -31,13 +32,15 @@ Route::get('/ping', function (Request $request) {
     ]);
 });
 
-Route::get('/events', [EventsController::class, 'index'])->middleware([AdminMiddleware::class, AuthMiddleware::class]);
+Route::get('/events/{event}', [EventsController::class, 'index'])->middleware([AdminMiddleware::class, AuthMiddleware::class]);
 Route::post('/events', [EventsController::class, 'create']);
 
 Route::get('/speakers', [SpeakersController::class, 'index']);
 Route::get('/speakers/{speaker}', [SpeakersController::class, 'show']);
 Route::post('/speakers', [SpeakersController::class, 'create']);
 Route::put('/speakers/{speaker}', [SpeakersController::class, 'update']);
+
+Route::post('/blogs/{blog}', [BlogController::class, 'update']);
 
 Route::get('/options', function (Request $request) {
     $events = Event::query()->get();

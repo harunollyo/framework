@@ -44,9 +44,39 @@ class PolicyDiscovery implements Discoverable, Cacheable
         // For the production mode we will cache the policies to improve the performance.
         // So don't need to discover the policies from the filesystem.
         if (!app()->is_dev_mode()) {
+            return $this->discover_once();
+        }
+
+        return $this->create_cache_file();
+    }
+
+    /**
+     * Discover the policies from the cache.
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     */
+    protected function discover_once()
+    {
+        $policies_cache_path = config_path('policies.cache.php');
+
+        if (!file_exists($policies_cache_path)) {
             return $this;
         }
 
+        return $this->create_cache_file();
+    }
+
+    /**
+     * Create the cache file.
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     */
+    protected function create_cache_file()
+    {
         $policies_directory = app_path('Policies');
 
         if (!file_exists($policies_directory)) {

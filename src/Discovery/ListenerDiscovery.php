@@ -46,10 +46,41 @@ class ListenerDiscovery implements Discoverable, Cacheable
     {
         // For the production mode we will cache the listeners to improve the performance.
         // So don't need to discover the listeners from the filesystem.
+        // In the production mode we have to run the discovery once.
         if (!app()->is_dev_mode()) {
+            return $this->discover_once();
+        }
+
+        return $this->create_cache_file();
+    }
+
+    /**
+     * Discover the listeners from the cache.
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     */
+    protected function discover_once()
+    {
+        $listeners_cache_path = config_path('listeners.cache.php');
+
+        if (!file_exists($listeners_cache_path)) {
             return $this;
         }
 
+        return $this->create_cache_file();
+    }
+
+    /**
+     * Create the cache file.
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     */
+    protected function create_cache_file()
+    {
         $listeners_directory = app_path('Listeners');
 
         if (!file_exists($listeners_directory)) {

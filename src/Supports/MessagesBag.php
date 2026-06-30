@@ -95,7 +95,8 @@ class MessagesBag
             'auth.admin_required' => 'You have to be logged in and have admin privileges.',
             'auth.unauthorized_request' => 'You are not authorized to make this request.',
             'auth.unauthorized_action' => 'You are not authorized to %s this resource.',
-            'auth.no_policy' => 'No policy found for this resource.',
+            // phpcs:ignore Generic.Files.LineLength.TooLong
+            'auth.no_policy' => 'No policy found for this resource. Pass the model instance or class name as the second argument.',
             'auth.ability_not_defined' => 'The ability %s is not defined in the policy for this resource.',
             'auth.upload_forbidden' => 'You are not authorized to upload files.',
             'auth.invalid_upload_path' => 'Invalid upload path.',

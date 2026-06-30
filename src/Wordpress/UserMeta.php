@@ -21,24 +21,27 @@ class UserMeta
      * @param int $user_id The user id.
      * @param string $key The key.
      * @param bool $single The single.
+     * @param bool $with_prefix The with prefix.
      *
      * @return mixed
      *
      * @since 1.0.0
      */
-    public static function get(int $user_id, string $key = '', bool $single = true)
+    public static function get(int $user_id, string $key = '', bool $single = true, bool $with_prefix = true)
     {
-        if (!empty($key)) {
-            return get_user_meta($user_id, with_prefix($key), $single);
+        if ($key === '') {
+            $key = $with_prefix ? with_prefix($key) : $key;
+
+            return get_user_meta($user_id, $key, $single);
         }
 
-        $metadata = get_user_meta($user_id, $key, $single);
+        $metadata = get_user_meta($user_id, '', $single);
 
         $updated_metadata = [];
 
-        foreach ($metadata as $key => $value) {
-            $key = without_prefix($key);
-            $updated_metadata[$key] = $single ? $value[0] : $value;
+        foreach ($metadata as $name => $value) {
+            $name = $with_prefix ? without_prefix($name) : $name;
+            $updated_metadata[$name] = $single ? $value[0] : $value;
         }
 
         return $updated_metadata;
@@ -49,14 +52,15 @@ class UserMeta
      *
      * @param int $user_id The user id.
      * @param mixed $single The single.
+     * @param bool $with_prefix The with prefix.
      *
      * @return array
      *
      * @since 1.0.0
      */
-    public static function get_all(int $user_id, $single = true)
+    public static function get_all(int $user_id, $single = true, bool $with_prefix = true)
     {
-        return self::get($user_id, '', $single);
+        return static::get($user_id, '', $single, $with_prefix);
     }
 
     /**
@@ -66,14 +70,17 @@ class UserMeta
      * @param string $key The key.
      * @param mixed $value The value.
      * @param mixed $unique The unique.
+     * @param bool $with_prefix The with prefix.
      *
      * @return bool|int
      *
      * @since 1.0.0
      */
-    public static function add(int $user_id, string $key, $value, $unique = false)
+    public static function add(int $user_id, string $key, $value, $unique = false, bool $with_prefix = true)
     {
-        return add_user_meta($user_id, with_prefix($key), $value, $unique);
+        $key = $with_prefix ? with_prefix($key) : $key;
+
+        return add_user_meta($user_id, $key, $value, $unique);
     }
 
     /**
@@ -81,15 +88,16 @@ class UserMeta
      *
      * @param int $user_id The user id.
      * @param array $meta_input The meta input.
+     * @param bool $with_prefix The with prefix.
      *
      * @return bool
      *
      * @since 1.0.0
      */
-    public static function add_many(int $user_id, array $meta_input)
+    public static function add_many(int $user_id, array $meta_input, bool $with_prefix = true)
     {
         foreach ($meta_input as $key => $value) {
-            static::add($user_id, $key, $value);
+            static::add($user_id, $key, $value, false, $with_prefix);
         }
 
         return true;
@@ -102,14 +110,17 @@ class UserMeta
      * @param string $key The key.
      * @param mixed $value The value.
      * @param mixed $prev_value The prev value.
+     * @param bool $with_prefix The with prefix.
      *
      * @return bool|int
      *
      * @since 1.0.0
      */
-    public static function update(int $user_id, string $key, $value, $prev_value = '')
+    public static function update(int $user_id, string $key, $value, $prev_value = '', bool $with_prefix = true)
     {
-        return update_user_meta($user_id, with_prefix($key), $value, $prev_value);
+        $key = $with_prefix ? with_prefix($key) : $key;
+
+        return update_user_meta($user_id, $key, $value, $prev_value);
     }
 
     /**
@@ -117,15 +128,16 @@ class UserMeta
      *
      * @param int $user_id The user id.
      * @param array $meta_input The meta input.
+     * @param bool $with_prefix The with prefix.
      *
      * @return bool
      *
      * @since 1.0.0
      */
-    public static function update_many(int $user_id, array $meta_input)
+    public static function update_many(int $user_id, array $meta_input, bool $with_prefix = true)
     {
         foreach ($meta_input as $key => $value) {
-            static::update($user_id, $key, $value);
+            static::update($user_id, $key, $value, '', $with_prefix);
         }
 
         return true;
@@ -136,14 +148,19 @@ class UserMeta
      *
      * @param int $user_id The user id.
      * @param string $key The key.
-     * @param mixed $value The value.
+     * @param mixed $value Metadata value. If provided,
+     *                     rows will only be removed that match the value.
+     *                     Must be serializable if non-scalar. Default empty.
+     * @param bool $with_prefix The with prefix.
      *
      * @return bool
      *
      * @since 1.0.0
      */
-    public static function delete(int $user_id, string $key, $value = '')
+    public static function delete(int $user_id, string $key, $value = '', bool $with_prefix = true)
     {
-        return delete_user_meta($user_id, with_prefix($key), $value);
+        $key = $with_prefix ? with_prefix($key) : $key;
+
+        return delete_user_meta($user_id, $key, $value);
     }
 }

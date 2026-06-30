@@ -12,14 +12,13 @@ namespace Framework\Managers;
 
 defined('ABSPATH') || exit;
 
-use Exception;
 use Framework\Concerns\DependencyResolvable;
+use Framework\Database\Query\Model;
 use Framework\Exceptions\AuthorizationException;
 use Framework\Supports\Arr;
 use InvalidArgumentException;
 use ReflectionMethod;
 use ReflectionNamedType;
-use ReflectionParameter;
 
 use function Framework\app;
 use function Framework\config_path;
@@ -125,13 +124,13 @@ class PolicyManager
      */
     protected function resolve_policy($model)
     {
-        $model = is_object($model) ? get_class($model) : $model;
+        $model_name = is_object($model) ? get_class($model) : $model;
 
-        if (!$this->has_policy($model)) {
+        if (!$this->has_policy($model_name)) {
             return null;
         }
 
-        return app()->make($this->policy($model));
+        return app()->make($this->policy($model_name));
     }
 
     /**
@@ -171,12 +170,12 @@ class PolicyManager
      *
      * @return bool|mixed
      *
-     * @throws \AuthorizationException
-     * @throws \InvalidArgumentException
+     * @throws AuthorizationException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
-    public function authorize(string $ability, $model = null, array $arguments = [])
+    public function authorize(string $ability, $model = null, ...$arguments)
     {
         $user = $this->get_current_user();
 
@@ -210,11 +209,11 @@ class PolicyManager
             );
         }
 
-        if (!empty($arguments) && !Arr::is_associative($arguments)) {
-            throw new InvalidArgumentException('The 3rd parameter must be an associative array.');
-        }
-
-        $dependencies = $this->resolve_method_dependencies($policy, $ability, $arguments);
+        $dependencies = $this->resolve_method_dependencies(
+            $policy,
+            $ability,
+            $this->build_arguments($arguments, $user, $model)
+        );
 
         $can_perform = $policy->$ability(...$dependencies);
 
@@ -225,6 +224,24 @@ class PolicyManager
         }
 
         return true;
+    }
+
+    /**
+     * Build the arguments for the policy method.
+     *
+     * @param array $arguments The method arguments.
+     * @param mixed $user The user instance.
+     * @param mixed $model The model instance.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    protected function build_arguments(array $arguments, $user, $model)
+    {
+        array_unshift($arguments, $user, $model);
+
+        return $arguments;
     }
 
     /**

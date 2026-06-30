@@ -11,31 +11,23 @@ use Example\App\Models\Speaker;
 use Example\App\Models\Tag;
 use Framework\Http\Request;
 use Framework\Supports\Facades\DB;
+use Framework\Supports\Facades\Guard;
 
 use function Framework\request;
 use function Framework\response;
 
 class EventsController
 {
-	public function index(ExampleRequest $request)
+	public function index(Request $request, Event $event)
 	{
+		Guard::authorize('view', $event, $request);
+
 		DB::enable_query_log();
-		$blog = new Blog();
-		$blog->body = ['name' => 'John Doe'];
-		$blog->user_id = 1;
-		$blog->title = 'John Doe';
-		$blog->slug = 'john-doe';
-		$blog->save();
-		// $blog = Blog::create([
-		// 	'body' => ['name' => 'John Doe'],
-		// 	'title' => 'John Doe',
-		// 	'slug' => 'john-doe',
-		// ]);
+		// $events = Event::all();
 		$queries = DB::get_query_log();
 
 		return response()->json([
-			'request' => $request->all(),
-			'blog' => $blog,
+			'events' => $event,
 			'queries' => $queries,
 		]);
 	}

@@ -444,7 +444,7 @@ class QueryBuilder
         [$query, $bindings] = $this->create_subquery($query);
 
         return $this->from_raw(
-            sprintf('(%s) as %s', $query, $as),
+            sprintf('(%s) as %s', $query, $this->get_compiler()->wrap($as)),
             $bindings
         );
     }
@@ -589,7 +589,7 @@ class QueryBuilder
         [$query, $bindings] = $this->create_subquery($query);
 
         return $this->select_raw(
-            sprintf('(%s) as %s', $query, $as),
+            sprintf('(%s) as %s', $query, $this->get_compiler()->wrap($as)),
             $bindings
         );
     }

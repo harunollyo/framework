@@ -934,6 +934,18 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
     }
 
     /**
+     * Convert the collection to a base collection.
+     *
+     * @return Collection The base collection
+     *
+     * @since 1.0.0
+     */
+    public function to_base()
+    {
+        return new self($this);
+    }
+
+    /**
      * Convert the collection into a JSON string.
      * This is an alias of the toJson method for following wordpress convention.
      *
