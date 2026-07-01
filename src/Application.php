@@ -111,7 +111,7 @@ class Application extends Container
     /**
      * Service providers
      *
-     * @var array<string,
+     * @var array<string, ServiceProvider>
      *
      * @since 1.0.0
      */
@@ -156,7 +156,7 @@ class Application extends Container
     /**
      * Cached namespaces resolved from composer PSR-4 paths.
      *
-     * @var array<string,
+     * @var array<string, string>
      *
      * @since 1.0.0
      */
@@ -199,8 +199,8 @@ class Application extends Container
         $this->register_base_service_providers();
         $this->register_base_aliases();
 
-        $this->register_app_defined_providers();
-        $this->register_app_defined_aliases();
+        // $this->register_app_defined_providers();
+        // $this->register_app_defined_aliases();
     }
 
     /**
@@ -437,7 +437,12 @@ class Application extends Container
      */
     public static function configure(string $base_path)
     {
-        return static::get_instance($base_path);
+        $instance = static::get_instance($base_path);
+
+        $instance->register_app_defined_providers()
+            ->register_app_defined_aliases();
+
+        return $instance;
     }
 
     /**
@@ -801,7 +806,7 @@ class Application extends Container
     /**
      * Register other on demand provided providers.
      *
-     * @return void
+     * @return $this
      *
      * @throws \InvalidArgumentException
      *
@@ -812,13 +817,13 @@ class Application extends Container
         $path = $this->bootstrap_service_provider_path();
 
         if (!file_exists($path)) {
-            return;
+            return $this;
         }
 
         $providers = require $path;
 
         if (empty($providers)) {
-            return;
+            return $this;
         }
 
         foreach ($providers as $provider) {
@@ -834,13 +839,15 @@ class Application extends Container
 
             $this->register(new $provider($this));
         }
+
+        return $this;
     }
 
     /**
      * Register tha aliases defined at the application level.
      * Generally it will come from the bootstrap/aliases.php file.
      *
-     * @return void
+     * @return $this
      *
      * @since 1.0.0
      */
@@ -849,13 +856,13 @@ class Application extends Container
         $aliases_path = $this->bootstrap_path('aliases.php');
 
         if (!file_exists($aliases_path)) {
-            return;
+            return $this;
         }
 
         $aliases = require $aliases_path;
 
         if (empty($aliases)) {
-            return;
+            return $this;
         }
 
         foreach ($aliases as $alias => $abstracts) {
@@ -863,6 +870,8 @@ class Application extends Container
                 $this->alias($alias, $abstract);
             }
         }
+
+        return $this;
     }
 
     /**

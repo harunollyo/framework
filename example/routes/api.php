@@ -4,31 +4,23 @@ use Example\App\Http\Controllers\BlogController;
 use Example\App\Http\Controllers\EventsController;
 use Example\App\Http\Controllers\SpeakersController;
 use Example\App\Http\Requests\ExampleRequest;
+use Example\App\Models\Blog;
 use Example\App\Models\Event;
 use Framework\Http\Request;
 use Framework\Middlewares\AdminMiddleware;
 use Framework\Middlewares\AuthMiddleware;
 use Framework\Route;
 use Framework\Supports\Arr;
-use Framework\Supports\Facades\DB;
-use Framework\Supports\Facades\File;
-use Framework\Supports\Facades\Option;
 
-use function Framework\app;
-use function Framework\collection;
-use function Framework\config;
-use function Framework\dd;
-use function Framework\dump;
-use function Framework\request;
 use function Framework\response;
 
 Route::set_namespace('framework/v1');
 
 Route::get('/ping', function (Request $request) {
+    $blog = Blog::with(['comments' => fn ($query) => $query->select('id', 'blog_id', 'body')])->find(1);
+
     return response()->json([
-        'status'   => 'ok',
-        'dev_mode' => app()->is_dev_mode(),
-        'prefix'   => app()->prefix(),
+        'data' => $blog,
     ]);
 });
 

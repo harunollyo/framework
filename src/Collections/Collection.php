@@ -259,14 +259,14 @@ class Collection implements ArrayAccess, Countable, Iterator, Arrayable, Jsonabl
      * access a single model or value from a previously constrained result set
      * without performing additional checks.
      *
-     * @param (callable(TValue, TKey): bool)|null $callback The callback to use to determine the first item
+     * @param (callable(TValue, TKey): bool)|null   $callback The to use to determine the first item
      * @param TFirstDefault|(\Closure(): TFirstDefault) $default The default value to return if no items exist
      *
      * @return TValue|TFirstDefault The first item or null when no items exist
      *
      * @since 1.0.0
      */
-    public function first($callback = null, $default = null)
+    public function first(?callable $callback = null, $default = null)
     {
         return Arr::first($this->items, $callback, $default);
     }

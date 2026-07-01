@@ -157,7 +157,7 @@ if (!function_exists('Framework\config')) {
         }
 
         if (is_null($cache[$filename])) {
-            return $default;
+            return value($default);
         }
 
         return deep_get($cache[$filename], $key, $default);

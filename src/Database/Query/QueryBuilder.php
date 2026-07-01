@@ -2324,7 +2324,9 @@ class QueryBuilder
      */
     public function limit($limit)
     {
-        $this->limit = $limit;
+        if ($limit >= 0) {
+            $this->limit = $limit;
+        }
 
         return $this;
     }
@@ -2788,7 +2790,7 @@ class QueryBuilder
      */
     public function first($columns = ['*'])
     {
-        return $this->take(1)->get($columns)->first();
+        return $this->limit(1)->get($columns)->first();
     }
 
     /**
@@ -3556,14 +3558,14 @@ class QueryBuilder
      *
      * @return mixed The sole record.
      *
-     * @throws \RecordNotFoundException
-     * @throws \MultipleRecordsFoundException
+     * @throws RecordNotFoundException
+     * @throws MultipleRecordsFoundException
      *
      * @since 1.0.0
      */
     public function sole($columns = ['*'])
     {
-        $result = $this->take(2)->get($columns);
+        $result = $this->limit(2)->get($columns);
 
         $count = $result->count();
 
