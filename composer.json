@@ -3,7 +3,7 @@
 	"type": "library",
 	"description": "Elegant PHP framework for WordPress plugins",
 	"license": "GPL-2.0-or-later",
-	"version": "1.0.13",
+	"version": "1.0.14",
 	"keywords": [
 		"wordpress",
 		"framework",
@@ -17,9 +17,7 @@
 	],
 	"homepage": "https://github.com/themeum/framework",
 	"require": {
-		"php": ">=7.4",
-		"nesbot/carbon": "^2.0",
-		"carbonphp/carbon-doctrine-types": "^2.0"
+		"php": ">=7.4"
 	},
 	"require-dev": {
 		"fakerphp/faker": "^1.23",
