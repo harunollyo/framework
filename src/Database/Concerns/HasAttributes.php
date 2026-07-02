@@ -20,9 +20,7 @@ use Framework\Database\Contracts\CastsAttributes;
 use Framework\Database\Query\Relations\Relation;
 use Framework\Exceptions\InvalidCastException;
 use Framework\Supports\Arr;
-use Framework\Supports\Carbon;
 use Framework\Supports\Facades\Date;
-use InvalidArgumentException;
 use ReflectionMethod;
 use LogicException;
 
@@ -957,13 +955,13 @@ trait HasAttributes
      *
      * @param mixed $value The value to convert
      *
-     * @return Carbon The date value
+     * @return \DateTime The date value
      *
      * @since 1.0.0
      */
     protected function as_date($value)
     {
-        return $this->as_date_time($value)->startOfDay();
+        return Date::start_of_day($this->as_date_time($value));
     }
 
     /**
@@ -971,17 +969,13 @@ trait HasAttributes
      *
      * @param mixed $value The value.
      *
-     * @return Carbon The date time value
+     * @return \DateTime The date time value
      *
      * @since 1.0.0
      */
     #[\ReturnTypeWillChange]
     protected function as_date_time($value)
     {
-        if ($value instanceof Carbon) {
-            return Date::instance($value);
-        }
-
         if ($value instanceof DateTimeInterface) {
             return Date::parse(
                 $value->format('Y-m-d H:i:s.u'),
@@ -990,20 +984,15 @@ trait HasAttributes
         }
 
         if (is_numeric($value)) {
-            return Date::createFromTimestamp($value, date_default_timezone_get());
+            return Date::create_from_timestamp($value);
         }
 
         if ($this->is_standard_date_format($value)) {
-            return Date::instance(Carbon::createFromFormat('Y-m-d', $value)->startOfDay());
+            return Date::start_of_day(Date::create_from_format('Y-m-d', $value));
         }
 
         $format = $this->get_date_format();
-
-        try {
-            $date = Date::createFromFormat($format, $value);
-        } catch (InvalidArgumentException $exception) {
-            $date = false;
-        }
+        $date = Date::create_from_format($format, $value);
 
         return $date ?: Date::parse($value);
     }
@@ -1394,7 +1383,7 @@ trait HasAttributes
      */
     protected function serialize_date(DateTimeInterface $date)
     {
-        return Date::instance($date)->to_sql_datetime_string();
+        return Date::to_sql_datetime_string($date);
     }
 
     /**

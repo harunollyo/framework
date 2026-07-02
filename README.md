@@ -141,7 +141,7 @@ WP-CLI generator stubs live under `src/Console/stubs/` as `*.stub` files. Includ
 
 Never register PSR-4 autoload for `vendor/themeum/framework` alongside the scoped tree.
 
-`composer install` in the plugin also installs every package `themeum/framework` requires (for example `nesbot/carbon`) into the plugin’s `vendor/`. Those stay **unprefixed** at runtime; only the scoped tree under `libraries/` uses your prefix. You do not need to list Carbon separately in the plugin’s `composer.json`.
+`composer install` in the plugin also installs every package `themeum/framework` requires into the plugin’s `vendor/`. Those stay **unprefixed** at runtime; only the scoped tree under `libraries/` uses your prefix.
 
 ### 4. Generate the scoped tree
 

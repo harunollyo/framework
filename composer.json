@@ -17,9 +17,7 @@
 	],
 	"homepage": "https://github.com/themeum/framework",
 	"require": {
-		"php": ">=7.4",
-		"nesbot/carbon": "^2.0",
-		"carbonphp/carbon-doctrine-types": "^2.0"
+		"php": ">=7.4"
 	},
 	"require-dev": {
 		"fakerphp/faker": "^1.23",

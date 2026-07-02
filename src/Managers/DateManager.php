@@ -1,7 +1,6 @@
 <?php
 /**
- * Proxy manager forwarding static Carbon date calls to the framework Carbon class.
- * Exposes the full Carbon API through __call for use by the Date facade.
+ * Date and time operations using native PHP DateTime.
  * Centralizes date/time operations with WordPress timezone awareness.
  *
  * @package    Framework
@@ -12,130 +11,236 @@ namespace Framework\Managers;
 
 defined('ABSPATH') || exit;
 
-use BadMethodCallException;
-use Framework\Supports\Carbon;
-use Framework\Supports\Str;
+use DateTime;
+use DateTimeInterface;
+use DateTimeZone;
+use Exception;
+use Framework\Constants\DateTimeFormats;
 
-// phpcs:disable Generic.Files.LineLength.TooLong
-
-/**
- * Proxy manager forwarding static Carbon date calls to the framework Carbon class.
- *
- * @method bool can_be_created_from_format(?string $date, string $format)
- * @method \Framework\Supports\Carbon|null create($year = 0, $month = 1, $day = 1, $hour = 0, $minute = 0, $second = 0, $timezone = null)
- * @method \Framework\Supports\Carbon create_from_date($year = null, $month = null, $day = null, $timezone = null)
- * @method \Framework\Supports\Carbon|null create_from_format($format, $time, $timezone = null)
- * @method \Framework\Supports\Carbon|null create_from_iso_format(string $format, string $time, $timezone = null, ?string $locale = 'en', $translator = null)
- * @method \Framework\Supports\Carbon|null create_from_locale_format(string $format, string $locale, string $time, $timezone = null)
- * @method \Framework\Supports\Carbon|null create_from_locale_iso_format(string $format, string $locale, string $time, $timezone = null)
- * @method \Framework\Supports\Carbon create_from_time($hour = 0, $minute = 0, $second = 0, $timezone = null)
- * @method \Framework\Supports\Carbon create_from_time_string(string $time, \DateTimeZone|string|int|null $timezone = null)
- * @method \Framework\Supports\Carbon create_from_timestamp(string|int|float $timestamp, \DateTimeZone|string|int|null $timezone = null)
- * @method \Framework\Supports\Carbon create_from_timestamp_ms(string|int|float $timestamp, \DateTimeZone|string|int|null $timezone = null)
- * @method \Framework\Supports\Carbon create_from_timestamp_ms_utc($timestamp)
- * @method \Framework\Supports\Carbon create_from_timestamp_utc(string|int|float $timestamp)
- * @method \Framework\Supports\Carbon create_midnight_date($year = null, $month = null, $day = null, $timezone = null)
- * @method \Framework\Supports\Carbon|null create_safe($year = null, $month = null, $day = null, $hour = null, $minute = null, $second = null, $timezone = null)
- * @method \Framework\Supports\Carbon create_strict(?int $year = 0, ?int $month = 1, ?int $day = 1, ?int $hour = 0, ?int $minute = 0, ?int $second = 0, $timezone = null)
- * @method void disable_human_diff_option($humanDiffOption)
- * @method void enable_human_diff_option($humanDiffOption)
- * @method mixed execute_with_locale(string $locale, callable $func)
- * @method \Framework\Supports\Carbon from_serialized($value)
- * @method array get_available_locales()
- * @method array get_available_locales_info()
- * @method array get_days()
- * @method ?string get_fallback_locale()
- * @method array get_formats_to_iso_replacements()
- * @method int get_human_diff_options()
- * @method array get_iso_units()
- * @method array|false get_last_errors()
- * @method string get_locale()
- * @method int get_mid_day_at()
- * @method string get_time_format_by_precision(string $unit_precision)
- * @method string|\Closure|null get_translation_message_with($translator, string $key, ?string $locale = null, ?string $default = null)
- * @method \Framework\Supports\Carbon|null get_test_now()
- * @method mixed get_translator()
- * @method int get_week_ends_at(?string $locale = null)
- * @method int get_week_starts_at(?string $locale = null)
- * @method array get_weekend_days()
- * @method bool has_format(string $date, string $format)
- * @method bool has_format_with_modifiers(string $date, string $format)
- * @method bool has_macro($name)
- * @method bool has_relative_keywords(?string $time)
- * @method bool has_test_now()
- * @method \Framework\Supports\Carbon instance(\DateTimeInterface $date)
- * @method bool is_immutable()
- * @method bool is_modifiable_unit($unit)
- * @method bool is_mutable()
- * @method bool is_strict_mode_enabled()
- * @method bool locale_has_diff_one_day_words(string $locale)
- * @method bool locale_has_diff_syntax(string $locale)
- * @method bool locale_has_diff_two_day_words(string $locale)
- * @method bool locale_has_period_syntax($locale)
- * @method bool locale_has_short_units(string $locale)
- * @method void macro(string $name, ?callable $macro)
- * @method \Framework\Supports\Carbon|null make($var, \DateTimeZone|string|null $timezone = null)
- * @method void mixin(object|string $mixin)
- * @method \Framework\Supports\Carbon now(\DateTimeZone|string|int|null $timezone = null)
- * @method \Framework\Supports\Carbon parse(\DateTimeInterface|\Carbon\WeekDay|\Carbon\Month|string|int|float|null $time, \DateTimeZone|string|int|null $timezone = null)
- * @method \Framework\Supports\Carbon parse_from_locale(string $time, ?string $locale = null, \DateTimeZone|string|int|null $timezone = null)
- * @method string plural_unit(string $unit)
- * @method \Framework\Supports\Carbon|null raw_create_from_format(string $format, string $time, $timezone = null)
- * @method \Framework\Supports\Carbon raw_parse(\DateTimeInterface|\Carbon\WeekDay|\Carbon\Month|string|int|float|null $time, \DateTimeZone|string|int|null $timezone = null)
- * @method void reset_months_overflow()
- * @method void reset_to_string_format()
- * @method void reset_years_overflow()
- * @method void serialize_using($callback)
- * @method void set_fallback_locale(string $locale)
- * @method void set_human_diff_options($human_diff_options)
- * @method void set_locale(string $locale)
- * @method void set_mid_day_at($hour)
- * @method void set_test_now(mixed $test_now = null)
- * @method void set_test_now_and_timezone(mixed $test_now = null, $timezone = null)
- * @method void set_to_string_format(string|\Closure|null $format)
- * @method void set_translator($translator)
- * @method void set_week_ends_at($day)
- * @method void set_week_starts_at($day)
- * @method void set_weekend_days($days)
- * @method bool should_overflow_months()
- * @method bool should_overflow_years()
- * @method string singular_unit(string $unit)
- * @method void sleep(int|float $seconds)
- * @method \Framework\Supports\Carbon today(\DateTimeZone|string|int|null $timezone = null)
- * @method \Framework\Supports\Carbon tomorrow(\DateTimeZone|string|int|null $timezone = null)
- * @method string translate_time_string(string $time_string, ?string $from = null, ?string $to = null, int $mode = \Carbon\CarbonInterface::TRANSLATE_ALL)
- * @method string translate_with($translator, string $key, array $parameters = [], $number = null)
- * @method void use_months_overflow($months_overflow = true)
- * @method void use_strict_mode($strict_mode_enabled = true)
- * @method void use_years_overflow($years_overflow = true)
- * @method mixed with_test_now(mixed $test_now, callable $callback)
- * @method static with_time_zone(\DateTimeZone|string|int|null $timezone)
- * @method \Framework\Supports\Carbon yesterday(\DateTimeZone|string|int|null $timezone = null)
- * @method string to_sql_datetime_string()
- * @see    https://carbon.nesbot.com/docs/
- */
 class DateManager
 {
     /**
-     * Handle the Carbon date functions. Forward the date methods from Date Facade to Carbon.
+     * Default SQL datetime format string.
      *
-     * @param mixed $method The method name.
-     * @param mixed $parameters The parameters array.
-     *
-     * @return mixed
-     *
-     * @throws \BadMethodCallException
+     * @var string
      *
      * @since 1.0.0
      */
-    public function __call($method, $parameters)
-    {
-        $method = Str::camel($method);
+    public const BASE_FORMAT = DateTimeFormats::DB_DATETIME;
 
-        if (!method_exists(Carbon::class, $method)) {
-            throw new BadMethodCallException("Call to undefined method Framework\Managers\DateManager::$method");
+    /**
+     * Get the current date and time.
+     *
+     * @param \DateTimeZone|string|int|null $timezone Optional timezone.
+     *
+     * @return \DateTime
+     *
+     * @since 1.0.0
+     */
+    public function now($timezone = null)
+    {
+        return new DateTime('now', $this->resolve_timezone($timezone));
+    }
+
+    /**
+     * Parse a value into a DateTime instance.
+     *
+     * @param \DateTimeInterface|string|int|float|null $time The value to parse.
+     * @param \DateTimeZone|string|int|null $timezone Optional timezone.
+     *
+     * @return \DateTime
+     *
+     * @since 1.0.0
+     */
+    public function parse($time, $timezone = null)
+    {
+        $resolved_timezone = $this->resolve_timezone($timezone);
+
+        if ($time instanceof DateTimeInterface) {
+            $date = $this->to_datetime($time);
+
+            return $date->setTimezone($resolved_timezone);
         }
 
-        return Carbon::$method(...$parameters);
+        if (is_int($time) || is_float($time)) {
+            return $this->create_from_timestamp($time, $resolved_timezone);
+        }
+
+        return new DateTime((string) $time, $resolved_timezone);
+    }
+
+    /**
+     * Create a DateTime instance from an existing date object.
+     *
+     * @param \DateTimeInterface $date The source date.
+     *
+     * @return \DateTime
+     *
+     * @since 1.0.0
+     */
+    public function instance(DateTimeInterface $date)
+    {
+        return $this->to_datetime($date);
+    }
+
+    /**
+     * Create a DateTime instance from a format string.
+     *
+     * @param string $format The expected format.
+     * @param string $time The date string.
+     * @param \DateTimeZone|string|int|null $timezone Optional timezone.
+     *
+     * @return \DateTime|null
+     *
+     * @since 1.0.0
+     */
+    public function create_from_format($format, $time, $timezone = null)
+    {
+        $date = DateTime::createFromFormat(
+            $format,
+            $time,
+            $this->resolve_timezone($timezone)
+        );
+
+        if ($date === false) {
+            return null;
+        }
+
+        return $date;
+    }
+
+    /**
+     * Create a DateTime instance from a Unix timestamp.
+     *
+     * @param string|int|float $timestamp The Unix timestamp.
+     * @param \DateTimeZone|string|int|null $timezone Optional timezone.
+     *
+     * @return \DateTime
+     *
+     * @since 1.0.0
+     */
+    public function create_from_timestamp($timestamp, $timezone = null)
+    {
+        $date = DateTime::createFromFormat('U', (string) $timestamp);
+
+        return $date->setTimezone($this->resolve_timezone($timezone));
+    }
+
+    /**
+     * Check if the value is a valid date.
+     *
+     * @param mixed $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    public function is_valid_date($value)
+    {
+        if ($value instanceof DateTimeInterface) {
+            return true;
+        }
+
+        if (!is_string($value) && !is_numeric($value)) {
+            return false;
+        }
+
+        try {
+            $this->parse($value);
+
+            return true;
+        } catch (Exception $exception) {
+            return false;
+        }
+    }
+
+    /**
+     * Set the time of a date to the start of the day.
+     *
+     * @param \DateTimeInterface $date The source date.
+     *
+     * @return \DateTime
+     *
+     * @since 1.0.0
+     */
+    public function start_of_day(DateTimeInterface $date)
+    {
+        $start_of_day = $this->to_datetime($date);
+        $start_of_day->setTime(0, 0, 0);
+
+        return $start_of_day;
+    }
+
+    /**
+     * Determine whether a date is after another date.
+     *
+     * @param \DateTimeInterface $date The date to compare.
+     * @param \DateTimeInterface $other The reference date.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    public function is_after(DateTimeInterface $date, DateTimeInterface $other)
+    {
+        return $date > $other;
+    }
+
+    /**
+     * Convert a date to a SQL safe datetime string.
+     *
+     * @param \DateTimeInterface $date The date to format.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function to_sql_datetime_string(DateTimeInterface $date)
+    {
+        return $date->format(static::BASE_FORMAT);
+    }
+
+    /**
+     * Resolve a timezone value to a DateTimeZone instance.
+     *
+     * @param \DateTimeZone|string|int|null $timezone Optional timezone.
+     *
+     * @return \DateTimeZone
+     *
+     * @since 1.0.0
+     */
+    protected function resolve_timezone($timezone = null)
+    {
+        if ($timezone instanceof DateTimeZone) {
+            return $timezone;
+        }
+
+        if (is_string($timezone) && $timezone !== '') {
+            return new DateTimeZone($timezone);
+        }
+
+        if (function_exists('wp_timezone')) {
+            return wp_timezone();
+        }
+
+        return new DateTimeZone(date_default_timezone_get());
+    }
+
+    /**
+     * Convert a DateTimeInterface instance to a mutable DateTime.
+     *
+     * @param \DateTimeInterface $date The source date.
+     *
+     * @return \DateTime
+     *
+     * @since 1.0.0
+     */
+    protected function to_datetime(DateTimeInterface $date)
+    {
+        if ($date instanceof DateTime) {
+            return clone $date;
+        }
+
+        return new DateTime($date->format('Y-m-d H:i:s.u'), $date->getTimezone());
     }
 }

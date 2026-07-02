@@ -51,7 +51,7 @@ trait HasTimestamps
     /**
      * Get the current timestamp for a model instance.
      *
-     * @return \Framework\Supports\Carbon The current timestamp
+     * @return \DateTime The current timestamp
      *
      * @since 1.0.0
      */

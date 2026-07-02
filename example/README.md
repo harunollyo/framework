@@ -88,7 +88,7 @@ This playground runs the library exactly as a shipped plugin would: prefixed wit
 
 - The path repository symlinks the **unscoped** library into `vendor/themeum/framework` (this is only php-scoper's *input*).
 - `make scope` rewrites every `Framework\` namespace to `Themeum\Framework\` (and `Framework\app()` to `Themeum\Framework\app()`) into `libraries/themeum/framework/`.
-- `scoper.config.php` uses a negative-lookahead in `exclude-namespaces` so only `Framework\` is prefixed; all other namespaces (e.g. `Carbon\`) stay unchanged and load from `vendor/` via Composer (Carbon is a transitive dependency of `themeum/framework`, not a separate plugin requirement).
+- `scoper.config.php` uses a negative-lookahead in `exclude-namespaces` so only `Framework\` is prefixed.
 - `example/composer.json` autoloads **only** the scoped copy:
 
 ```jsonc
@@ -129,6 +129,5 @@ The plugin code references the prefixed namespace throughout: `Themeum\Framework
 | REST route returns 404 | Permalinks not flushed. Re-run `make init`, or `make wp-cli CMD="rewrite flush"`. |
 | Library edits under `../src/` not reflected | The plugin runs the scoped copy. Re-run `make scope` after editing the library. |
 | `Cannot redeclare class Themeum\Framework\...` | Both unscoped `vendor/themeum/framework` and the scoped `libraries/` tree are autoloaded. Only the scoped tree should be in `autoload`. |
-| `Class "Carbon\Carbon" not found` | Scoped code references unprefixed `Carbon\`, but `vendor/nesbot/carbon` is missing. Run `make example-install` so Composer installs `themeum/framework` and its transitive deps (including Carbon) into `vendor/`. |
 | Xdebug not connecting | Confirm `XDEBUG_MODE=debug` in `.env` and `docker compose restart php`; IDE must listen on `9003`. Use `?XDEBUG_TRIGGER=PHPSTORM` (web) or `make xdebug-wp` (CLI). |
 | IDE stops on Symfony `--once` / `RuntimeException` | Harmless Symfony Console noise while debugging CLI; press Continue, or use **Listen for Xdebug** (has `ignoreExceptions` configured). |

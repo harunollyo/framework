@@ -27,7 +27,8 @@ class AfterRule extends BaseRule
     {
         if (array_key_exists($this->rule_value, $this->data)) {
             if (Date::is_valid_date($this->value)) {
-                return Date::parse($this->value)->isAfter(
+                return Date::is_after(
+                    Date::parse($this->value),
                     Date::parse($this->data[$this->rule_value])
                 );
             }

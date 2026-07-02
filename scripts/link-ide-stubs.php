@@ -8,7 +8,6 @@ $stubs_dir = $root . '/stubs';
 $links = [
     'wordpress-stubs.php' => $root . '/vendor/php-stubs/wordpress-stubs/wordpress-stubs.php',
     'wp-cli-stubs.php' => $root . '/vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php',
-    'carbon' => $root . '/vendor/nesbot/carbon/src/Carbon',
     'phpunit' => $root . '/vendor/phpunit/phpunit/src',
 ];
 

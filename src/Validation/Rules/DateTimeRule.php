@@ -26,9 +26,9 @@ class DateTimeRule extends BaseRule
      */
     public function validate_rule()
     {
-        $date = Date::createFromFormat(DateTimeFormats::DB_DATETIME, $this->value);
+        $date = Date::create_from_format(DateTimeFormats::DB_DATETIME, $this->value);
 
-        return $date && $date->isValid();
+        return $date && $date->format(DateTimeFormats::DB_DATETIME) === $this->value;
     }
 
     /**
