@@ -1,49 +1,231 @@
 <?php
 /**
- * Validates that the given value is a string.
+ * String rule class.
  *
  * @package    Framework
- * @subpackage Validation\Rules
+ * @subpackage Validation
  * @since      1.0.0
  */
 namespace Framework\Validation\Rules;
 
-use function Framework\message;
+use Framework\Supports\Arr;
+use Framework\Validation\Rule;
 
 defined('ABSPATH') || exit;
 
-class StringRule extends BaseRule
+/**
+ * Validates that the given value is a string.
+ *
+ * @method StringRule min(int $min)
+ * @method StringRule max(int $max)
+ * @method StringRule length(int $length)
+ * @method StringRule size(int $size)
+ * @method StringRule regex(string $regex)
+ * @method StringRule email()
+ * @method StringRule url()
+ * @method StringRule ip()
+ */
+class StringRule extends Rule
 {
     /**
-     * Check for strict data type
+     * The available methods.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
+    protected array $constraints = [
+        'min',
+        'max',
+        'length',
+        'size',
+        'regex',
+        'email',
+        'url',
+        'ip',
+    ];
+
+    /**
+     * Whether to check the strict data type.
      *
      * @var bool
      *
      * @since 1.0.0
      */
-    protected $check_strict_data_type = true;
+    protected bool $strict = true;
 
     /**
-     * Determine if the value is a string.
+     * The messages for the validation errors.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
+    protected array $default_messages = [
+        'min' => 'The field {name} must be at least {min} characters long.',
+        'max' => 'The field {name} must be at most {max} characters long.',
+        'length' => 'The field {name} must be {length} characters long.',
+        'size' => 'The field {name} must be {size} characters long.',
+        'regex' => 'The field {name} must match the regex {regex}.',
+        'email' => 'The field {name} must be a valid email address.',
+        'url' => 'The field {name} must be a valid url.',
+        'ip' => 'The field {name} must be a valid ip address.',
+        'default' => 'The field {name} must be a string.',
+    ];
+
+    /**
+     * @inheritDoc
+     */
+    public function validate(): bool
+    {
+        if (!is_string($this->value)) {
+            return $this->fails($this->default_messages['default']);
+        }
+
+        return $this->with_constraints(function ($passed, $constraint) {
+            if (!$passed) {
+                $this->fails($this->default_messages[$constraint]);
+            }
+        });
+    }
+
+    /**
+     * Add a message to the validation errors.
+     *
+     * @param string $message The message to add.
+     *
+     * @return bool
+     * 
+     * @since 1.0.0
+     */
+    protected function fails($message)
+    {
+        $this->messages = array_merge($this->messages, Arr::wrap($message));
+
+        return false;
+    }
+
+    /**
+     * Compile the min constraint.
+     *
+     * @param string $value The value to validate.
      *
      * @return bool
      *
      * @since 1.0.0
      */
-    public function validate_rule()
+    protected function compile_min($value)
     {
-        return is_string($this->value);
+        return mb_strlen($value) >= (int) $this->get('min');
     }
 
     /**
-     * Get the error message for a non-string value.
+     * Compile the max constraint.
      *
-     * @return string
+     * @param string $value The value to validate.
+     *
+     * @return bool
      *
      * @since 1.0.0
      */
-    public function get_error_message()
+    protected function compile_max($value)
     {
-        return message('validator.string', $this->last_key_segment());
+        return mb_strlen($value) <= (int) $this->get('max');
+    }
+
+    /**
+     * Compile the length constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function compile_length($value)
+    {
+        return mb_strlen($value) === (int) $this->get('length');
+    }
+
+    /**
+     * Compile the size constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function compile_size($value)
+    {
+        return mb_strlen($value) === (int) $this->get('size');
+    }
+
+    /**
+     * Compile the regex constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function compile_regex($value)
+    {
+        return preg_match($this->get('regex'), $value) !== false; // @todo: handle this in a proper way
+    }
+
+    /**
+     * Compile the email constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function compile_email($value)
+    {
+        return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
+    }
+
+    /**
+     * Compile the url constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function compile_url($value)
+    {
+        return filter_var($value, FILTER_VALIDATE_URL) !== false;
+    }
+
+    /**
+     * Compile the ip constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function compile_ip($value)
+    {
+        return filter_var($value, FILTER_VALIDATE_IP) !== false;
+    }
+
+    /**
+     * Get the error message.
+     *
+     * @return array
+     * 
+     * @since 1.0.0
+     */
+    public function message()
+    {
+        return $this->messages;
     }
 }

@@ -517,8 +517,8 @@ class Request implements RequestContract, Arrayable
         $this->sanitized = $sanitized;
         $this->merge($sanitized);
 
-        $validated = $this->run_validation($this->attributes(), $this->rules());
-        $this->validated = $validated;
+        // $validated = $this->run_validation($this->attributes(), $this->rules());
+        // $this->validated = $validated;
 
         $this->passed_validation();
     }

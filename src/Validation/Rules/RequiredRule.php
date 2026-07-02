@@ -1,56 +1,40 @@
 <?php
 /**
- * Validates that a value is present and not null.
+ * String rule class.
  *
  * @package    Framework
- * @subpackage Validation\Rules
+ * @subpackage Validation
  * @since      1.0.0
  */
 namespace Framework\Validation\Rules;
 
+use Framework\Validation\Rule;
+
 defined('ABSPATH') || exit;
 
-use function Framework\message;
-
-class RequiredRule extends BaseRule
+class RequiredRule extends Rule
 {
     /**
-     * Determine if the value is present.
+     * Validate the rule.
      *
      * @return bool
      *
      * @since 1.0.0
      */
-    public function validate_rule()
+    public function validate(): bool
     {
-        if (is_array($this->value)) {
-            return count($this->value) > 0;
-        }
-
-        return !is_null($this->value) && $this->value !== '';
+        return is_string($this->value);
     }
 
     /**
-     * Get the error message for a missing required field.
+     * Get the error message.
      *
      * @return string
      *
      * @since 1.0.0
      */
-    public function get_error_message()
+    public function message()
     {
-        return message('validator.required', $this->last_key_segment());
-    }
-
-    /**
-     * Ignore rule check.
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    protected function ignore_rule_check()
-    {
-        return false;
+        return 'The field {name} is required.';
     }
 }

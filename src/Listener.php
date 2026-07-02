@@ -11,6 +11,12 @@ namespace Framework;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Base class for event listeners defining a default priority of zero.
+ * Subclasses override priority to control dispatch order relative to other listeners.
+ *
+ * @method mixed handle($event)
+ */
 class Listener
 {
     /**

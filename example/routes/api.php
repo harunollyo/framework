@@ -1,5 +1,6 @@
 <?php
 
+use Example\App\Events\SampleEvent;
 use Example\App\Http\Controllers\BlogController;
 use Example\App\Http\Controllers\EventsController;
 use Example\App\Http\Controllers\SpeakersController;
@@ -11,6 +12,8 @@ use Framework\Middlewares\AdminMiddleware;
 use Framework\Middlewares\AuthMiddleware;
 use Framework\Route;
 use Framework\Supports\Arr;
+use Framework\Validation\Rule;
+use Framework\Validation\Validator;
 
 use function Framework\response;
 
@@ -50,11 +53,13 @@ Route::get('/check', function (ExampleRequest $request) {
 });
 
 Route::post('/check', function (Request $request) {
-    $name = $request->get('name');
-    $payload  = unserialize($name, ['allowed_classes' => true]);
+    $data = Validator::make($request->all(), [
+        'data' => ['array'],
+        'data.*.name' => ['string'],
+        'data.*.age' => ['numeric'],
+    ])->validated();
 
     return response()->json([
-        'request' => $payload,
-        'name' => $name,
+        'validator' => $data,
     ]);
 });

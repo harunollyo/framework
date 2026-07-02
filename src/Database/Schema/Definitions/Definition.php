@@ -12,7 +12,7 @@ namespace Framework\Database\Schema\Definitions;
 
 defined('ABSPATH') || exit;
 
-use Framework\Supports\Flex;
+use Framework\Supports\Fluent;
 
 /**
  * Define the definition of the database schema columns.
@@ -30,7 +30,7 @@ use Framework\Supports\Flex;
  * @method $this unique()
  * @method $this use_current()
  */
-class Definition extends Flex
+class Definition extends Fluent
 {
     // Column definition
 }

@@ -66,9 +66,9 @@ class EventManager
      *
      * @param mixed $event The event.
      *
-     * @return void
+     * @return array
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -89,9 +89,13 @@ class EventManager
 
         $event_listeners = $this->listeners[$event_class] ?? [];
 
+        $response = [];
+
         foreach ($event_listeners as $listener) {
-            $this->resolve($listener, $event);
+            $response[] = $this->resolve($listener, $event);
         }
+
+        return $response;
     }
 
     /**
@@ -134,9 +138,9 @@ class EventManager
      * @param mixed $listener The listener.
      * @param mixed $event The event.
      *
-     * @return void
+     * @return mixed
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */

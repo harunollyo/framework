@@ -1,49 +1,40 @@
 <?php
 /**
- * Validates that a value is an array.
+ * String rule class.
  *
  * @package    Framework
- * @subpackage Validation\Rules
+ * @subpackage Validation
  * @since      1.0.0
  */
 namespace Framework\Validation\Rules;
 
+use Framework\Validation\Rule;
+
 defined('ABSPATH') || exit;
 
-use function Framework\message;
-
-class ArrayRule extends BaseRule
+class ArrayRule extends Rule
 {
     /**
-     * Check for strict data type
-     *
-     * @var bool
-     *
-     * @since 1.0.0
-     */
-    protected $check_strict_data_type = true;
-
-    /**
-     * Check if the value is a valid array.
+     * Validate the rule.
      *
      * @return bool
      *
      * @since 1.0.0
      */
-    public function validate_rule()
+    public function validate(): bool
     {
-        return is_array($this->value);
+        return true;
     }
 
     /**
-     * Get the error message for an invalid array value.
+     * Get the error message.
      *
      * @return string
      *
      * @since 1.0.0
      */
-    public function get_error_message()
+    public function message()
     {
-        return message('validator.array', $this->last_key_segment());
+        return ['The field {name} is required.'];
     }
 }

@@ -11,7 +11,7 @@ class SampleListener extends Listener
 {
     public function handle(SampleEvent $event)
     {
-        file_put_contents(__DIR__ . '/test.log', 'from-sample-listener: ' . $event->blog->id . PHP_EOL, FILE_APPEND);
+        return true;
     }
 
     public function priority()
