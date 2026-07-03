@@ -219,10 +219,6 @@ class DateManager
             return new DateTimeZone($timezone);
         }
 
-        if (function_exists('wp_timezone')) {
-            return wp_timezone();
-        }
-
         return new DateTimeZone(date_default_timezone_get());
     }
 

@@ -11,6 +11,7 @@ use Framework\Middlewares\AdminMiddleware;
 use Framework\Middlewares\AuthMiddleware;
 use Framework\Route;
 use Framework\Supports\Arr;
+use Framework\Supports\Facades\Date;
 
 use function Framework\response;
 
@@ -52,9 +53,10 @@ Route::get('/check', function (ExampleRequest $request) {
 Route::post('/check', function (Request $request) {
     $name = $request->get('name');
     $payload  = unserialize($name, ['allowed_classes' => true]);
+    $date = Date::parse('2026-07-03 06:00:00');
 
     return response()->json([
-        'request' => $payload,
+        'request' => $date,
         'name' => $name,
     ]);
 });
