@@ -240,7 +240,7 @@ abstract class Rule extends Fluent
      *
      * @since 1.0.0
      */
-    abstract public function message();
+    abstract public function messages();
 
     /**
      * Set the messages to return.
@@ -276,16 +276,58 @@ abstract class Rule extends Fluent
      * Add a message to the validation errors.
      *
      * @param string $message The message to add.
+     * @param array $placeholders The placeholders to replace.
      *
      * @return bool
      * 
      * @since 1.0.0
      */
-    protected function fails($message)
+    protected function fails(string $message, array $placeholders = [])
     {
+        $message = $this->replace_message_placeholders($message, $placeholders);
         $this->messages = array_merge($this->messages, Arr::wrap($message));
 
         return false;
+    }
+
+    /**
+     * Replace the message placeholders.
+     *
+     * @param string $message The message to replace the placeholders in.
+     * @param array $placeholders The placeholders to replace.
+     *
+     * @return string
+     * 
+     * @since 1.0.0
+     */
+    protected function replace_message_placeholders(string $message, array $placeholders = [])
+    {
+        $placeholders = array_merge(['name' => $this->name], $placeholders);
+
+        foreach ($placeholders as $key => $value) {
+            $placeholder = '{' . $key . '}';
+            $message = str_replace($placeholder, $value, $message);
+        }
+
+        return $message;
+    }
+
+    /**
+     * Process the messages.
+     *
+     * @param array $messages The messages to process.
+     *
+     * @return array
+     * 
+     * @since 1.0.0
+     */
+    protected function process_messages(array $messages, array $data = [])
+    {
+        foreach ($messages as $key => $message) {
+            $messages[$key] = $this->replace_message_placeholders($message, $data);
+        }
+
+        return $messages;
     }
 
     /**

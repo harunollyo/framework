@@ -48,15 +48,23 @@ class NumericRule extends Rule
      */
     public function validate(): bool
     {
+        $passed = true;
+
         if (!is_numeric($this->value)) {
-            return $this->fails($this->default_messages['default']);
+            $this->fails($this->default_messages['default']);
+
+            if ($this->should_stop_on_first_failure) {
+                return false;
+            }
         }
 
-        return $this->with_constraints(function ($passed, $constraint) {
+        $passed = $this->with_constraints(function ($passed, $constraint) {
             if (!$passed) {
-                $this->fails($this->default_messages[$constraint]);
+                $this->fails($this->default_messages[$constraint], [$constraint => $this->get($constraint)]);
             }
         });
+
+        return $passed;
     }
 
     /**
@@ -94,8 +102,8 @@ class NumericRule extends Rule
      *
      * @since 1.0.0
      */
-    public function message()
+    public function messages()
     {
-        return $this->messages;
+        return $this->process_messages($this->messages);
     }
 }

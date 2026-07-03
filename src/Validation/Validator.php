@@ -256,7 +256,7 @@ class Validator
             ->should_stop_on_first_failure($this->stop_on_first_failure);
 
         if (!$rule->validate()) {
-            return $this->add_error($key, $rule->message());
+            return $this->add_error($key, $rule->messages());
         }
 
         return true;

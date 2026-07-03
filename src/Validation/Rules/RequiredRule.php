@@ -33,8 +33,8 @@ class RequiredRule extends Rule
      *
      * @since 1.0.0
      */
-    public function message()
+    public function messages()
     {
-        return 'The field {name} is required.';
+        return $this->process_messages($this->default_messages);
     }
 }

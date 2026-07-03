@@ -15,6 +15,17 @@ defined('ABSPATH') || exit;
 class ArrayRule extends Rule
 {
     /**
+     * The default messages.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
+    protected array $default_messages = [
+        'default' => 'The field {name} must be an array.',
+    ];
+
+    /**
      * Validate the rule.
      *
      * @return bool
@@ -23,6 +34,10 @@ class ArrayRule extends Rule
      */
     public function validate(): bool
     {
+        if (!is_array($this->value)) {
+            return $this->fails($this->default_messages['default']);
+        }
+
         return true;
     }
 
@@ -33,8 +48,8 @@ class ArrayRule extends Rule
      *
      * @since 1.0.0
      */
-    public function message()
+    public function messages()
     {
-        return ['The field {name} is required.'];
+        return $this->process_messages($this->messages);
     }
 }

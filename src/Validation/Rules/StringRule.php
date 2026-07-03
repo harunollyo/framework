@@ -62,15 +62,15 @@ class StringRule extends Rule
      * @since 1.0.0
      */
     protected array $default_messages = [
-        'min' => 'The field {name} must be at least {min} characters long.',
-        'max' => 'The field {name} must be at most {max} characters long.',
-        'length' => 'The field {name} must be {length} characters long.',
-        'size' => 'The field {name} must be {size} characters long.',
-        'regex' => 'The field {name} must match the regex {regex}.',
-        'email' => 'The field {name} must be a valid email address.',
-        'url' => 'The field {name} must be a valid url.',
-        'ip' => 'The field {name} must be a valid ip address.',
-        'default' => 'The field {name} must be a string.',
+        'min' => 'The field `{name}` must be at least {min} characters long.',
+        'max' => 'The field `{name}` must be at most {max} characters long.',
+        'length' => 'The field `{name}` must be {length} characters long.',
+        'size' => 'The field `{name}` must be {size} characters long.',
+        'regex' => 'The field `{name}` must match the regex {regex}.',
+        'email' => 'The field `{name}` must be a valid email address.',
+        'url' => 'The field `{name}` must be a valid url.',
+        'ip' => 'The field `{name}` must be a valid ip address.',
+        'default' => 'The field `{name}` must be a string.',
     ];
 
     /**
@@ -84,25 +84,9 @@ class StringRule extends Rule
 
         return $this->with_constraints(function ($passed, $constraint) {
             if (!$passed) {
-                $this->fails($this->default_messages[$constraint]);
+                $this->fails($this->default_messages[$constraint], [$constraint => $this->get($constraint)]);
             }
         });
-    }
-
-    /**
-     * Add a message to the validation errors.
-     *
-     * @param string $message The message to add.
-     *
-     * @return bool
-     * 
-     * @since 1.0.0
-     */
-    protected function fails($message)
-    {
-        $this->messages = array_merge($this->messages, Arr::wrap($message));
-
-        return false;
     }
 
     /**
@@ -218,14 +202,10 @@ class StringRule extends Rule
     }
 
     /**
-     * Get the error message.
-     *
-     * @return array
-     * 
-     * @since 1.0.0
+     * @inheritDoc
      */
-    public function message()
+    public function messages()
     {
-        return $this->messages;
+        return $this->process_messages($this->messages);
     }
 }
