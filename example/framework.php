@@ -38,6 +38,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 add_action('init', 'framework_example_boot_application', 0);
 
+date_default_timezone_set('UTC');
+
 function framework_example_boot_application()
 {
     require_once FRAMEWORK_EXAMPLE_PATH . 'bootstrap/app.php';

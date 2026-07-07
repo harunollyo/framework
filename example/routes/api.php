@@ -54,7 +54,7 @@ Route::get('/check', function (ExampleRequest $request) {
 
 Route::post('/check', function (Request $request) {
     $data = Validator::make($request->all(), [
-        'type' => ['numeric', 'min:3', 'max:5']
+        'type' => 'nullable|string|min:5|max:10',
     ])->validated();
 
     return response()->json([

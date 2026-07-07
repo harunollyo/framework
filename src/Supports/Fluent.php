@@ -165,6 +165,24 @@ class Fluent implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, Jso
     }
 
     /**
+     * Remove a given attribute.
+     *
+     * @param string $key The attribute key.
+     *
+     * @return $this
+     *
+     * @since 1.0.0
+     */
+    public function remove($key)
+    {
+        if ($this->exists($key)) {
+            unset($this->attributes[$key]);
+        }
+
+        return $this;
+    }
+
+    /**
      * Get the value of a given attribute.
      *
      * @param string $keys The attribute keys.

@@ -8,12 +8,28 @@
  */
 namespace Framework\Validation\Rules;
 
-use Framework\Validation\Rule;
+use Framework\Validation\ValidationRule;
 
 defined('ABSPATH') || exit;
 
-class NumericRule extends Rule
+/**
+ * Numeric rule class.
+ *
+ * @method $this integer()
+ * @method $this min(int $min)
+ * @method $this max(int $max)
+ */
+class NumericRule extends ValidationRule
 {
+    /**
+     * The rule name.
+     *
+     * @var string
+     *
+     * @since 1.0.0
+     */
+    protected string $rule = 'numeric';
+
     /**
      * The available methods.
      *
@@ -24,6 +40,8 @@ class NumericRule extends Rule
     protected array $constraints = [
         'min',
         'max',
+        'integer',
+        'int',
     ];
 
     /**
@@ -37,6 +55,8 @@ class NumericRule extends Rule
         'default' => 'The field {name} must be a number.',
         'min' => 'The field {name} must be greater than or equal to {min}.',
         'max' => 'The field {name} must be less than or equal to {max}.',
+        'integer' => 'The field {name} must be an integer.',
+        'int' => 'The field {name} must be an integer.',
     ];
 
     /**
@@ -78,7 +98,7 @@ class NumericRule extends Rule
      */
     protected function compile_min($value)
     {
-        return floatval($value) <= floatval($this->get('min'));
+        return floatval($value) >= floatval($this->get('min'));
     }
 
     /**
@@ -92,7 +112,36 @@ class NumericRule extends Rule
      */
     protected function compile_max($value)
     {
-        return floatval($value) >= floatval($this->get('max'));
+        $x = floatval($value) <= floatval($this->get('max'));
+        return $x;
+    }
+
+    /**
+     * Compile the integer constraint.
+     *
+     * @param string $value The value to compile.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function compile_integer($value)
+    {
+        return filter_var($value, FILTER_VALIDATE_INT) !== false;
+    }
+
+    /**
+     * Compile the int constraint.
+     *
+     * @param string $value The value to compile.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function compile_int($value)
+    {
+        return filter_var($value, FILTER_VALIDATE_INT) !== false;
     }
 
     /**

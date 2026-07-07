@@ -13,7 +13,7 @@ use Framework\Validation\ValidationRule;
 
 defined('ABSPATH') || exit;
 
-class RequiredRule extends ValidationRule
+class NullableRule extends ValidationRule
 {
     /**
      * The rule name.
@@ -22,27 +22,7 @@ class RequiredRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected string $rule = 'required';
-
-    /**
-     * Whether the rule is an implicit rule.
-     *
-     * @var bool
-     *
-     * @since 1.0.0
-     */
-    public bool $is_implicit = true;
-
-    /**
-     * The default messages.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $default_messages = [
-        'default' => 'The {name} field is required.',
-    ];
+    protected string $rule = 'nullable';
 
     /**
      * Validate the rule.
@@ -53,13 +33,8 @@ class RequiredRule extends ValidationRule
      */
     public function validate(): bool
     {
-        if ($this->is_nullish($this->value)) {
-            return $this->fails($this->default_messages['default']);
-        }
-
         return true;
     }
-
 
     /**
      * Get the error message.
@@ -70,6 +45,6 @@ class RequiredRule extends ValidationRule
      */
     public function messages()
     {
-        return $this->process_messages($this->messages);
+        return [];
     }
 }

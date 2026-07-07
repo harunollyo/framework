@@ -9,7 +9,6 @@
 
 namespace Framework\Validation;
 
-use Framework\Collections\Collection;
 use Framework\Supports\Arr;
 
 use function Framework\Polyfill\str_contains;
@@ -87,12 +86,12 @@ class ValidationRuleParser
     {
         $exploded = [];
 
-        foreach ($this->rules as $key => $rule) {
+        foreach ($this->rules as $key => $rules) {
             if (str_contains($key, '*')) {
-                $array_rules = $this->explode_array_rule($key, $rule);
+                $array_rules = $this->explode_array_rule($key, $rules);
                 $exploded = array_merge($exploded, $array_rules);
             } else {
-                $exploded[$key] = $rule;
+                $exploded[$key] = $rules;
             }
         }
 
@@ -113,7 +112,7 @@ class ValidationRuleParser
         $parsed = [];
 
         foreach ($this->rules as $key => $rules) {
-            $parsed[$key] = Factory::make($this->wrap($rules));
+            $parsed[$key] = Factory::make($this->make_array($rules));
         }
 
         $this->rules = $parsed;
@@ -122,15 +121,15 @@ class ValidationRuleParser
     }
 
     /**
-     * Prepare the rules.
+     * Prepare the rules to an array.
      *
-     * @param array $rules The rules to prepare.
+     * @param array|Rule|string $rules The rules to prepare.
      *
      * @return array
      * 
      * @since 1.0.0
      */
-    protected function wrap(array $rules)
+    protected function make_array($rules)
     {
         if (is_array($rules)) {
             return $rules;

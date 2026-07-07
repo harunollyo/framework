@@ -9,12 +9,13 @@
 namespace Framework\Validation;
 
 use Framework\Exceptions\ValidationException;
+use Framework\Filesystem\File;
 use Framework\Supports\Arr;
 use Framework\Validation\Rules\ArrayRule;
+use Framework\Validation\Rules\NullableRule;
 use stdClass;
 
 use function Framework\deep_get;
-use function Framework\Polyfill\str_contains;
 
 defined('ABSPATH') || exit;
 
@@ -82,6 +83,17 @@ class Validator
      * @since 1.0.0
      */
     protected bool $stop_on_first_failure = false;
+
+    /**
+     * The implicit rules.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
+    protected array $implicit_rules = [
+        'required',
+    ];
 
     /**
      * Create a new validator instance.
@@ -221,7 +233,7 @@ class Validator
      * Apply the rules to the key.
      *
      * @param string $key The key to apply the rules to.
-     * @param array<Rule> $rules The rules to apply.
+     * @param array<ValidationRule> $rules The rules to apply.
      *
      * @return void
      * 
@@ -232,6 +244,10 @@ class Validator
         $value = deep_get($this->data, $key);
 
         foreach ($rules as $rule) {
+            if ($rule instanceof NullableRule && ValidationRule::is_nullish($value)) {
+                break;
+            }
+
             $this->apply($rule, $value, $key);
         }
     }
@@ -239,7 +255,7 @@ class Validator
     /**
      * Apply a rule to a value.
      *
-     * @param Rule $rule The rule to apply.
+     * @param ValidationRule $rule The rule to apply.
      * @param mixed $value The value to apply the rule to.
      * @param string $key The key to apply the rule to.
      *
@@ -247,7 +263,7 @@ class Validator
      * 
      * @since 1.0.0
      */
-    protected function apply(Rule $rule, $value, string $key)
+    protected function apply(ValidationRule $rule, $value, string $key)
     {
         $rule->with_data($this->data)
             ->with_name($key)
@@ -255,7 +271,7 @@ class Validator
             ->without_messages()
             ->should_stop_on_first_failure($this->stop_on_first_failure);
 
-        if (!$rule->validate()) {
+        if (!$rule->passed()) {
             return $this->add_error($key, $rule->messages());
         }
 
