@@ -8,9 +8,11 @@
  */
 namespace Framework\Validation;
 
+use Framework\Contracts\Support\Arrayable;
 use Framework\Supports\Arr;
 use Framework\Supports\Fluent;
 use Framework\Validation\Rules\ArrayRule;
+use Framework\Validation\Rules\InRule;
 use Framework\Validation\Rules\NullableRule;
 use Framework\Validation\Rules\NumericRule;
 use Framework\Validation\Rules\RequiredRule;
@@ -91,5 +93,23 @@ class Rule
     public static function nullable()
     {
         return new NullableRule();
+    }
+
+    /**
+     * Create a new in rule.
+     *
+     * @param array|Arrayable $values The values to check.
+     *
+     * @return InRule
+     *
+     * @since 1.0.0
+     */
+    public static function in($values)
+    {
+        if ($values instanceof Arrayable) {
+            $values = $values->to_array();
+        }
+
+        return new InRule(is_array($values) ? $values : func_get_args());
     }
 }

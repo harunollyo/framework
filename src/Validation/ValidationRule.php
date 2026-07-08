@@ -54,6 +54,15 @@ abstract class ValidationRule extends Fluent
     protected string $rule = '';
 
     /**
+     * The arguments to validate.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
+    protected $args;
+
+    /**
      * Whether to check the strict data type.
      *
      * @var bool
@@ -101,19 +110,15 @@ abstract class ValidationRule extends Fluent
     /**
      * Create a new rule instance.
      *
-     * @param array $data The data to validate.
-     * @param mixed $value The value to validate.
-     * @param string $name The name of the field where the validation rule is applied.
+     * @param array $args The additional arguments to validate.
      *
      * @return void
      * 
      * @since 1.0.0
      */
-    public function __construct(array $data = [], $value = null, string $name = '')
+    public function __construct($args = null)
     {
-        $this->data = $data;
-        $this->value = $value;
-        $this->name = $name;
+        $this->args = $args;
     }
 
     /**
@@ -269,35 +274,7 @@ abstract class ValidationRule extends Fluent
      */
     public function passed()
     {
-        if ($this->get('required')) {
-            $this->discard_nullable();
-
-            if (static::is_nullish($this->value)) {
-                return $this->fails('The {name} field is required.');
-            }
-        }
-
-        // If nullable allowed and value is null,
-        // then no need to check the other validation rules.
-        if ($this->get('nullable') && static::is_nullish($this->value)) {
-            return true;
-        }
-
         return $this->validate();
-    }
-
-    /**
-     * Discard the nullable constraint.
-     *
-     * @return $this
-     * 
-     * @since 1.0.0
-     */
-    protected function discard_nullable()
-    {
-        $this->remove('nullable');
-
-        return $this;
     }
 
     /**
@@ -326,34 +303,6 @@ abstract class ValidationRule extends Fluent
     public function without_messages()
     {
         $this->messages = [];
-
-        return $this;
-    }
-
-    /**
-     * Set the nullable constraint.
-     *
-     * @return $this
-     * 
-     * @since 1.0.0
-     */
-    public function nullable()
-    {
-        $this->set('nullable', true);
-
-        return $this;
-    }
-
-    /**
-     * Set the required constraint.
-     *
-     * @return $this
-     * 
-     * @since 1.0.0
-     */
-    public function required()
-    {
-        $this->set('required', true);
 
         return $this;
     }
@@ -418,7 +367,15 @@ abstract class ValidationRule extends Fluent
      */
     protected function replace_message_placeholders(string $message, array $placeholders = [])
     {
-        $placeholders = array_merge(['name' => $this->name], $placeholders);
+        $placeholders = array_merge(
+            [
+                'name' => $this->name,
+                'args' => is_array($this->args)
+                    ? Arr::join($this->args, ', ')
+                    : (string) $this->args
+            ],
+            $placeholders
+        );
 
         foreach ($placeholders as $key => $value) {
             $placeholder = '{' . $key . '}';

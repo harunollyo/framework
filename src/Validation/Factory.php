@@ -49,6 +49,15 @@ class Factory
     protected static array $rule_class_cache = [];
 
     /**
+     * Store the arguments of the base rules.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
+    protected array $base_rule_arguments = [];
+
+    /**
      * Construct the factory.
      *
      * @param array $rules The rules to construct the factory with.
@@ -134,9 +143,9 @@ class Factory
         }
 
         $rule_name = $this->rule_name($rule);
-        $rule_arguments = $this->rule_arguments($rule);
+        $rule_arguments = $this->rule_arguments($rule) ?? $this->base_rule_arguments[$rule_name] ?? null;
 
-        $instance = $rule_arguments ? Rule::$rule_name($rule_arguments) : Rule::$rule_name();
+        $instance = Rule::$rule_name($rule_arguments);
 
         foreach ($modifiers as $modifier) {
             $name = $this->rule_name($modifier);
@@ -176,12 +185,13 @@ class Factory
             }
 
             $rule_name = $this->rule_name($rule);
+            $arguments = $this->rule_arguments($rule);
 
-            if (($rule_class = $this->get_rule_class($rule_name)) !== null) {
+            if (($rule_class = $this->get_rule_class($rule_name, $arguments)) !== null) {
                 $last_base_rule = $rule_class->get_rule_name();
             }
 
-            $this->distribute($rule, $last_base_rule);
+            $this->distribute($rule, $last_base_rule, $arguments);
         }
     }
 
@@ -190,21 +200,27 @@ class Factory
      *
      * @param string $rule The rule to distribute.
      * @param string $last_base_rule The last base rule.
+     * @param array|null $arguments The arguments of the rule.
      *
      * @return void
      *
      * @since 1.0.0
      */
-    protected function distribute($rule, $last_base_rule)
+    protected function distribute($rule, $last_base_rule, $arguments)
     {
         if ($last_base_rule === null) {
             return;
         }
 
         $rule_name = $this->rule_name($rule);
+        $arguments = $this->rule_arguments($rule);
         $this->chain[$last_base_rule] ??= [];
 
-        if ($last_base_rule !== null && Rule::$last_base_rule()->has_constraint($rule_name)) {
+        if (!isset($this->base_rule_arguments[$last_base_rule])) {
+            $this->base_rule_arguments[$last_base_rule] = $arguments;
+        }
+
+        if ($last_base_rule !== null && Rule::$last_base_rule($arguments)->has_constraint($rule_name)) {
             $this->chain[$last_base_rule][] = $rule;
         }
     }
@@ -218,7 +234,7 @@ class Factory
      *
      * @since 1.0.0
      */
-    protected function get_rule_class(string $rule)
+    protected function get_rule_class(string $rule, $arguments = null)
     {
         if (isset(static::$rule_class_cache[$rule])) {
             return static::$rule_class_cache[$rule];
@@ -230,23 +246,9 @@ class Factory
 
         $method = new ReflectionMethod(Rule::class, $rule);
 
-        return static::$rule_class_cache[$rule] = $method->invoke(null);
-    }
-
-    /**
-     * Check if the rule class exists.
-     *
-     * @param string $rule The rule to check.
-     *
-     * @return bool
-     *
-     * @since 1.0.0
-     */
-    protected function rule_class_exists(string $rule)
-    {
-        $rule_class = $this->get_rule_class($rule);
-
-        return $rule_class !== null && $rule_class->get_rule_name() === $rule;
+        return static::$rule_class_cache[$rule] = is_null($arguments)
+            ? $method->invoke(null)
+            : $method->invokeArgs(null, Arr::wrap($arguments));
     }
 
     /**
