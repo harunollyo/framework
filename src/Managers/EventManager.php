@@ -84,7 +84,7 @@ class EventManager
         $event_class = get_class($event);
 
         if (!isset($this->listeners[$event_class])) {
-            return;
+            return [];
         }
 
         $event_listeners = $this->listeners[$event_class] ?? [];
