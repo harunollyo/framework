@@ -71,20 +71,14 @@ class NumericRule extends ValidationRule
         $passed = true;
 
         if (!is_numeric($this->value)) {
-            $this->fails($this->default_messages['default']);
-
-            if ($this->should_stop_on_first_failure) {
-                return false;
-            }
+            return $this->fails($this->default_messages['default']);
         }
 
-        $passed = $this->with_constraints(function ($passed, $constraint) {
+        return $this->with_constraints(function ($passed, $constraint) {
             if (!$passed) {
                 $this->fails($this->default_messages[$constraint], [$constraint => $this->get($constraint)]);
             }
         });
-
-        return $passed;
     }
 
     /**

@@ -290,7 +290,8 @@ class Validator
      */
     protected function add_error(string $key, $messages)
     {
-        $this->errors[$key] = array_merge((array) $this->errors[$key], Arr::wrap($messages));
+        $this->errors[$key] ??= [];
+        $this->errors[$key] = array_merge($this->errors[$key], Arr::wrap($messages));
 
         return false;
     }
@@ -344,7 +345,7 @@ class Validator
      */
     public function validated()
     {
-        if ($this->messages === []) {
+        if (empty($this->errors())) {
             $this->passes();
         }
 

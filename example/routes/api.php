@@ -54,7 +54,7 @@ Route::get('/check', function (ExampleRequest $request) {
 
 Route::post('/check', function (Request $request) {
     $data = Validator::make($request->all(), [
-        'type' => ['in:foo,bar'],
+        'type' => 'integer',
     ])->validated();
 
     return response()->json([

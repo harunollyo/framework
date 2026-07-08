@@ -36,6 +36,30 @@ class Rule
     }
 
     /**
+     * Create a new email rule.
+     *
+     * @return StringRule
+     *
+     * @since 1.0.0
+     */
+    public static function email()
+    {
+        return (new StringRule())->email();
+    }
+
+    /**
+     * Create a new url rule.
+     *
+     * @return StringRule
+     *
+     * @since 1.0.0
+     */
+    public static function url()
+    {
+        return (new StringRule())->url();
+    }
+
+    /**
      * Create a new required rule.
      *
      * @return RequiredRule

@@ -23,7 +23,6 @@ defined('ABSPATH') || exit;
  * @method StringRule max(int $max)
  * @method StringRule length(int $length)
  * @method StringRule size(int $size)
- * @method StringRule regex(string $regex)
  * @method StringRule email()
  * @method StringRule url()
  * @method StringRule ip()
@@ -59,7 +58,6 @@ class StringRule extends ValidationRule
         'max',
         'length',
         'size',
-        'regex',
         'email',
         'url',
         'ip',
