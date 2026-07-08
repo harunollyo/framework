@@ -43,6 +43,12 @@ class NumericRule extends ValidationRule
         'max',
         'integer',
         'int',
+        'float',
+        'decimal',
+        'gt',
+        'gte',
+        'lt',
+        'lte',
     ];
 
     /**
@@ -58,6 +64,12 @@ class NumericRule extends ValidationRule
         'max' => 'The field {name} must be less than or equal to {max}.',
         'integer' => 'The field {name} must be an integer.',
         'int' => 'The field {name} must be an integer.',
+        'float' => 'The field {name} must be a float.',
+        'decimal' => 'The field {name} must be a decimal.',
+        'gt' => 'The field {name} must be greater than {gt}.',
+        'gte' => 'The field {name} must be greater than or equal to {gte}.',
+        'lt' => 'The field {name} must be less than {lt}.',
+        'lte' => 'The field {name} must be less than or equal to {lte}.',
     ];
 
     /**
@@ -123,6 +135,34 @@ class NumericRule extends ValidationRule
     }
 
     /**
+     * Validate the float constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function validate_float($value)
+    {
+        return filter_var($value, FILTER_VALIDATE_FLOAT) !== false;
+    }
+
+    /**
+     * Validate the decimal constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function validate_decimal($value)
+    {
+        return filter_var($value, FILTER_VALIDATE_FLOAT) !== false;
+    }
+
+    /**
      * Validate the int constraint.
      *
      * @param string $value The value to validate.
@@ -134,6 +174,62 @@ class NumericRule extends ValidationRule
     protected function validate_int($value)
     {
         return $this->validate_integer($value);
+    }
+
+    /**
+     * Validate the gt constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function validate_gt($value)
+    {
+        return floatval($value) > floatval($this->get('gt'));
+    }
+
+    /**
+     * Validate the gte constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function validate_gte($value)
+    {
+        return floatval($value) >= floatval($this->get('gte'));
+    }
+
+    /**
+     * Validate the lt constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function validate_lt($value)
+    {
+        return floatval($value) < floatval($this->get('lt'));
+    }
+
+    /**
+     * Validate the lte constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function validate_lte($value)
+    {
+        return floatval($value) <= floatval($this->get('lte'));
     }
 
     /**

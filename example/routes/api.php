@@ -53,12 +53,22 @@ Route::get('/check', function (ExampleRequest $request) {
 });
 
 Route::post('/check', function (Request $request) {
-    $data = Validator::make($request->all(), [
-        'type' => 'integer',
+    $data = [
+        'name' => 'John Doe',
+        'email' => 'john.doe@example.com',
+        'role' => 'customer',
+        'is_admin' => true,
+    ];
+
+    $validated = Validator::make($data, [
+        'name'  => 'required|string',
+        'email' => 'required|email',
+        'role'  => 'required|in:admin,buyer,seller,customer',
+        'is_admin' => 'prohibited_unless:role,admin,seller',
     ])->validated();
 
     return response()->json([
-        'validator' => $data,
-        'data' => filter_var('no', FILTER_VALIDATE_BOOLEAN),
+        'validator' => $validated,
+        'data' => explode(':', '10:5:20', 2),
     ]);
 });

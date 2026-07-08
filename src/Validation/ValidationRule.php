@@ -359,7 +359,7 @@ abstract class ValidationRule extends Fluent
             [
                 'name' => $this->name,
                 'args' => is_array($this->args)
-                    ? Arr::join($this->args, ', ')
+                    ? Arr::join(Arr::reject($this->args, fn ($arg) => !is_string($arg) || !is_numeric($arg)), ', ')
                     : (string) $this->args
             ],
             $placeholders

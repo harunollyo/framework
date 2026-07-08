@@ -9,6 +9,7 @@
 namespace Framework\Validation;
 
 use Framework\Contracts\Support\Arrayable;
+use Framework\Supports\Arr;
 use Framework\Validation\Rules\ArrayRule;
 use Framework\Validation\Rules\BooleanRule;
 use Framework\Validation\Rules\DateRule;
@@ -18,8 +19,12 @@ use Framework\Validation\Rules\NotInRule;
 use Framework\Validation\Rules\NullableRule;
 use Framework\Validation\Rules\NumericRule;
 use Framework\Validation\Rules\ObjectRule;
+use Framework\Validation\Rules\ProhibitedIfRule;
 use Framework\Validation\Rules\ProhibitedRule;
+use Framework\Validation\Rules\ProhibitedUnlessRule;
+use Framework\Validation\Rules\RequiredIfRule;
 use Framework\Validation\Rules\RequiredRule;
+use Framework\Validation\Rules\RequiredUnlessRule;
 use Framework\Validation\Rules\SameAsRule;
 use Framework\Validation\Rules\StringRule;
 use Framework\Validation\Rules\UniqueRule;
@@ -66,6 +71,20 @@ class Rule
     }
 
     /**
+     * Create a new regex rule.
+     *
+     * @param string $pattern The regex pattern.
+     *
+     * @return StringRule
+     *
+     * @since 1.0.0
+     */
+    public static function regex(string $pattern)
+    {
+        return (new StringRule())->regex($pattern);
+    }
+
+    /**
      * Create a new required rule.
      *
      * @return RequiredRule
@@ -75,6 +94,36 @@ class Rule
     public static function required()
     {
         return new RequiredRule();
+    }
+
+    /**
+     * Create a new required if rule.
+     *
+     * @param string $other The other field to check.
+     * @param mixed $value The value to check.
+     *
+     * @return RequiredIfRule
+     *
+     * @since 1.0.0
+     */
+    public static function required_if($other, $value = null)
+    {
+        return new RequiredIfRule(static::process_conditional_arguments($other, $value));
+    }
+
+    /**
+     * Create a new required unless rule.
+     *
+     * @param string $other The other field to check.
+     * @param mixed $value The value to check.
+     *
+     * @return RequiredUnlessRule
+     *
+     * @since 1.0.0
+     */
+    public static function required_unless($other, $value = null)
+    {
+        return new RequiredUnlessRule(static::process_conditional_arguments($other, $value));
     }
 
     /**
@@ -99,6 +148,30 @@ class Rule
     public static function numeric()
     {
         return new NumericRule();
+    }
+
+    /**
+     * Create a new number rule.
+     *
+     * @return NumericRule
+     *
+     * @since 1.0.0
+     */
+    public static function number()
+    {
+        return static::numeric();
+    }
+
+    /**
+     * Create a new float rule.
+     *
+     * @return NumericRule
+     *
+     * @since 1.0.0
+     */
+    public static function float()
+    {
+        return static::numeric()->float();
     }
 
     /**
@@ -188,6 +261,18 @@ class Rule
     }
 
     /**
+     * Create a new datetime rule.
+     *
+     * @return DateRule
+     *
+     * @since 1.0.0
+     */
+    public static function datetime()
+    {
+        return (new DateRule())->datetime();
+    }
+
+    /**
      * Create a new object rule.
      *
      * @return ObjectRule
@@ -209,6 +294,36 @@ class Rule
     public static function prohibited()
     {
         return new ProhibitedRule();
+    }
+
+    /**
+     * Create a new prohibited if rule.
+     *
+     * @param string $other The other field to check.
+     * @param mixed $value The value to check.
+     *
+     * @return ProhibitedIfRule
+     *
+     * @since 1.0.0
+     */
+    public static function prohibited_if($other, $value = null)
+    {
+        return new ProhibitedIfRule(static::process_conditional_arguments($other, $value));
+    }
+
+    /**
+     * Create a new prohibited unless rule.
+     *
+     * @param string $other The other field to check.
+     * @param mixed $value The value to check.
+     *
+     * @return ProhibitedUnlessRule
+     *
+     * @since 1.0.0
+     */
+    public static function prohibited_unless($other, $value = null)
+    {
+        return new ProhibitedUnlessRule(static::process_conditional_arguments($other, $value));
     }
 
     /**
@@ -291,5 +406,24 @@ class Rule
             [$table, $column, $ignore_id],
             fn ($argument) => $argument !== null
         );
+    }
+
+    /**
+     * Normalize required if rule arguments into a single array.
+     *
+     * @param string $other The other field to check.
+     * @param mixed $value The value to check.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    protected static function process_conditional_arguments($other, $value)
+    {
+        if (is_array($other)) {
+            return $other;
+        }
+
+        return array_merge(Arr::wrap($other), Arr::wrap($value));
     }
 }

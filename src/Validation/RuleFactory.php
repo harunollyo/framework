@@ -260,7 +260,7 @@ class RuleFactory
      */
     protected function rule_name(string $rule)
     {
-        return array_first(explode(':', $rule));
+        return array_first(explode(':', $rule, 2));
     }
 
     /**
@@ -278,7 +278,7 @@ class RuleFactory
             return null;
         }
 
-        $arguments = array_last(explode(':', $rule));
+        $arguments = array_last(explode(':', $rule, 2));
 
         if (empty($arguments)) {
             return null;

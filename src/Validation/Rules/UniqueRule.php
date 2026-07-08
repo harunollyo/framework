@@ -31,6 +31,15 @@ class UniqueRule extends ValidationRule
     protected string $rule = 'unique';
 
     /**
+     * The constraints.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
+    protected array $constraints = [];
+
+    /**
      * The default messages.
      *
      * @var array
@@ -68,17 +77,15 @@ class UniqueRule extends ValidationRule
     {
         [$table, $column, $ignore_id] = $this->table_column_and_ignore_id();
 
-        $query = "SELECT 1 FROM `{$table}` WHERE `{$column}` = %s";
-        $bindings = [$this->value];
+        $query = DB::table($table)->where($column, $this->value);
 
         if ($ignore_id !== null) {
-            $query .= ' AND `id` != %d';
-            $bindings[] = $ignore_id;
+            $query->where('id', '!=', $ignore_id);
         }
 
-        $results = DB::select($query . ' LIMIT 1', $bindings);
+        $query->limit(1);
 
-        return !empty($results);
+        return $query->exists();
     }
 
     /**
@@ -91,7 +98,7 @@ class UniqueRule extends ValidationRule
     protected function table_column_and_ignore_id()
     {
         $arguments = Arr::wrap($this->args);
-        $table = DB::get_table_prefix() . $arguments[0];
+        $table = $arguments[0];
         $column = !empty($arguments[1]) ? $arguments[1] : array_last(explode('.', $this->name));
         $ignore_id = $arguments[2] ?? null;
 

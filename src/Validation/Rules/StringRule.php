@@ -28,12 +28,13 @@ defined('ABSPATH') || exit;
  * @method StringRule alpha()
  * @method StringRule alpha_num()
  * @method StringRule alpha_dash()
- * @method StringRule between(int $min, int $max)
+ * @method StringRule between(array $values)
  * @method StringRule starts_with(string $value)
  * @method StringRule ends_with(string $value)
  * @method StringRule doesnt_start_with(string $value)
  * @method StringRule doesnt_end_with(string $value)
  * @method StringRule exactly(int $value)
+ * @method StringRule regex(string $pattern)
  */
 class StringRule extends ValidationRule
 {
@@ -60,6 +61,7 @@ class StringRule extends ValidationRule
         'size',
         'email',
         'url',
+        'regex',
         'ip',
         'alpha',
         'alpha_num',
@@ -86,6 +88,7 @@ class StringRule extends ValidationRule
         'size' => 'The {name} field must be {size} characters long.',
         'email' => 'The {name} field must be a valid email address.',
         'url' => 'The {name} field must be a valid url.',
+        'regex' => 'The {name} field format is invalid.',
         'ip' => 'The {name} field must be a valid ip address.',
         'alpha' => 'The {name} field must only contain alphabetic characters.',
         'alpha_num' => 'The {name} field must only contain alphabetic characters and numbers.',
@@ -290,6 +293,20 @@ class StringRule extends ValidationRule
         [$min, $max] = $this->get('between');
 
         return mb_strlen($value) >= (int) $min && mb_strlen($value) <= (int) $max;
+    }
+
+    /**
+     * Validate the regex constraint.
+     *
+     * @param string $value The value to validate.
+     *
+     * @return bool
+     * 
+     * @since 1.0.0
+     */
+    protected function validate_regex($value)
+    {
+        return preg_match($this->get('regex'), $value) === 1;
     }
 
     /**
