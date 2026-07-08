@@ -11,7 +11,6 @@ namespace Framework\Validation;
 use Framework\Filesystem\File;
 use Framework\Supports\Arr;
 use Framework\Supports\Fluent;
-use Framework\Validation\Rules\RequiredRule;
 
 defined('ABSPATH') || exit;
 
@@ -61,15 +60,6 @@ abstract class ValidationRule extends Fluent
      * @since 1.0.0
      */
     protected $args;
-
-    /**
-     * Whether to check the strict data type.
-     *
-     * @var bool
-     *
-     * @since 1.0.0
-     */
-    protected bool $strict = false;
 
     /**
      * Whether the rule is an implicit rule.
@@ -198,7 +188,7 @@ abstract class ValidationRule extends Fluent
     }
 
     /**
-     * Add constraints to the validation rule.
+     * Run the applied constraints against the value.
      *
      * @param callable $callback The callback to call when a constraint fails.
      *
@@ -206,13 +196,13 @@ abstract class ValidationRule extends Fluent
      * 
      * @since 1.0.0
      */
-    protected function with_constraints(callable $callback)
+    protected function validate_constraints(callable $callback)
     {
         $constraints = array_intersect($this->keys(), $this->constraints);
         $passed = true;
 
         foreach ($constraints as $constraint) {
-            $method = 'compile_' . strtolower($constraint);
+            $method = 'validate_' . strtolower($constraint);
 
             if (!method_exists($this, $method)) {
                 continue;
@@ -225,8 +215,6 @@ abstract class ValidationRule extends Fluent
                 if ($this->should_stop_on_first_failure) {
                     return false;
                 }
-
-                $passed = false;
             }
         }
 
@@ -308,7 +296,7 @@ abstract class ValidationRule extends Fluent
     }
 
     /**
-     * Check if the value is truthy.
+     * Check if the value is null, an empty string, or an empty countable.
      *
      * @param mixed $value The value to check.
      *

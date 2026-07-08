@@ -1,6 +1,6 @@
 <?php
 /**
- * Required rule class.
+ * User exists rule class.
  *
  * @package    Framework
  * @subpackage Validation
@@ -12,7 +12,13 @@ use Framework\Validation\ValidationRule;
 
 defined('ABSPATH') || exit;
 
-class RequiredRule extends ValidationRule
+/**
+ * Validates that a WordPress user exists for the given value.
+ *
+ * The lookup field defaults to the user id and can be set
+ * to email, login, or slug via the rule argument.
+ */
+class UserExistsRule extends ValidationRule
 {
     /**
      * The rule name.
@@ -21,16 +27,7 @@ class RequiredRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected string $rule = 'required';
-
-    /**
-     * Whether the rule is an implicit rule.
-     *
-     * @var bool
-     *
-     * @since 1.0.0
-     */
-    public bool $is_implicit = true;
+    protected string $rule = 'user_exists';
 
     /**
      * The default messages.
@@ -40,7 +37,7 @@ class RequiredRule extends ValidationRule
      * @since 1.0.0
      */
     protected array $default_messages = [
-        'default' => 'The {name} field is required.',
+        'default' => 'The selected {name} is not a valid user.',
     ];
 
     /**
@@ -52,18 +49,33 @@ class RequiredRule extends ValidationRule
      */
     public function validate(): bool
     {
-        if ($this->is_nullish($this->value)) {
+        $user = \get_user_by($this->lookup_field(), $this->value);
+
+        if ($user === false) {
             return $this->fails($this->default_messages['default']);
         }
 
         return true;
     }
 
-
     /**
-     * Get the error message.
+     * Get the user lookup field from the rule argument.
      *
      * @return string
+     *
+     * @since 1.0.0
+     */
+    protected function lookup_field()
+    {
+        $field = is_string($this->args) && $this->args !== '' ? $this->args : 'id';
+
+        return in_array($field, ['id', 'email', 'login', 'slug'], true) ? $field : 'id';
+    }
+
+    /**
+     * Get the error messages.
+     *
+     * @return array
      *
      * @since 1.0.0
      */

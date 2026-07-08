@@ -1,6 +1,6 @@
 <?php
 /**
- * String rule class.
+ * In rule class.
  *
  * @package    Framework
  * @subpackage Validation

@@ -9,7 +9,6 @@
 namespace Framework\Validation;
 
 use Framework\Exceptions\ValidationException;
-use Framework\Filesystem\File;
 use Framework\Supports\Arr;
 use Framework\Validation\Rules\ArrayRule;
 use Framework\Validation\Rules\NullableRule;
@@ -27,7 +26,7 @@ class Validator
      * @var array
      *
      * @since 1.0.0
-     */ 
+     */
     protected array $data = [];
 
     /**
@@ -49,7 +48,7 @@ class Validator
     protected array $raw_rules = [];
 
     /**
-     * The messages to validate.
+     * The custom validation messages.
      *
      * @var array
      *
@@ -67,15 +66,6 @@ class Validator
     protected array $errors = [];
 
     /**
-     * The validation failed.
-     *
-     * @var bool
-     *
-     * @since 1.0.0
-     */
-    protected bool $failed = false;
-
-    /**
      * The validation should stop on first failure.
      *
      * @var bool
@@ -83,17 +73,6 @@ class Validator
      * @since 1.0.0
      */
     protected bool $stop_on_first_failure = false;
-
-    /**
-     * The implicit rules.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $implicit_rules = [
-        'required',
-    ];
 
     /**
      * Create a new validator instance.
@@ -131,9 +110,9 @@ class Validator
     }
 
     /**
-     * Set the rules.
+     * Parse the raw rules into rule instances.
      *
-     * @param array $rules The rules to set.
+     * @param array $rules The rules to parse.
      *
      * @return array
      * 
@@ -141,7 +120,7 @@ class Validator
      */
     protected function parse_rules(array $rules)
     {
-        return (new ValidationRuleParser($this->data, $rules))->parse()->all();
+        return (new RuleParser($this->data, $rules))->parse()->all();
     }
 
     /**

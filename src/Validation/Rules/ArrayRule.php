@@ -1,6 +1,6 @@
 <?php
 /**
- * String rule class.
+ * Array rule class.
  *
  * @package    Framework
  * @subpackage Validation
@@ -12,6 +12,15 @@ use Framework\Validation\ValidationRule;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Validates that the given value is an array.
+ *
+ * @method $this min(int $min)
+ * @method $this max(int $max)
+ * @method $this size(int $size)
+ * @method $this exactly(int $exactly)
+ * @method $this contains(mixed $contains)
+ */
 class ArrayRule extends ValidationRule
 {
     /**
@@ -24,7 +33,7 @@ class ArrayRule extends ValidationRule
     protected string $rule = 'array';
 
     /**
-     * The constraints.
+     * The supported constraints.
      *
      * @var array
      *
@@ -67,7 +76,7 @@ class ArrayRule extends ValidationRule
             return $this->fails($this->default_messages['default']);
         }
 
-        return $this->with_constraints(function ($passed, $constraint) {
+        return $this->validate_constraints(function ($passed, $constraint) {
             if (!$passed) {
                 $this->fails($this->default_messages[$constraint], [$constraint => $this->get($constraint)]);
             }
@@ -81,7 +90,7 @@ class ArrayRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_min(): bool
+    protected function validate_min(): bool
     {
         return count($this->value) >= (int) $this->get('min');
     }
@@ -93,7 +102,7 @@ class ArrayRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_max(): bool
+    protected function validate_max(): bool
     {
         return count($this->value) <= (int) $this->get('max');
     }
@@ -105,9 +114,9 @@ class ArrayRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_size(): bool
+    protected function validate_size(): bool
     {
-        return count($this->value) === (int) $this->get('size');
+        return $this->has_exact_count('size');
     }
 
     /**
@@ -117,9 +126,23 @@ class ArrayRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_exactly(): bool
+    protected function validate_exactly(): bool
     {
-        return count($this->value) === (int) $this->get('exactly');
+        return $this->has_exact_count('exactly');
+    }
+
+    /**
+     * Check whether the value item count matches the given constraint value.
+     *
+     * @param string $constraint The constraint holding the expected count.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function has_exact_count(string $constraint): bool
+    {
+        return count($this->value) === (int) $this->get($constraint);
     }
 
     /**
@@ -129,7 +152,7 @@ class ArrayRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_contains(): bool
+    protected function validate_contains(): bool
     {
         return in_array($this->get('contains'), $this->value);
     }

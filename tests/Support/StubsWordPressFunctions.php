@@ -121,6 +121,21 @@ if (!function_exists('maybe_unserialize')) {
     }
 }
 
+if (!function_exists('get_user_by')) {
+    function get_user_by($field, $value)
+    {
+        $users = $GLOBALS['framework_test_users'] ?? [];
+
+        foreach ($users as $user) {
+            if (isset($user[$field]) && (string) $user[$field] === (string) $value) {
+                return (object) $user;
+            }
+        }
+
+        return false;
+    }
+}
+
 if (!class_exists('WP_REST_Request')) {
     class WP_REST_Request
     {

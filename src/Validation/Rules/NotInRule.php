@@ -1,6 +1,6 @@
 <?php
 /**
- * Required rule class.
+ * Not in rule class.
  *
  * @package    Framework
  * @subpackage Validation
@@ -12,7 +12,10 @@ use Framework\Validation\ValidationRule;
 
 defined('ABSPATH') || exit;
 
-class RequiredRule extends ValidationRule
+/**
+ * Validates that the given value is not in the list of disallowed values.
+ */
+class NotInRule extends ValidationRule
 {
     /**
      * The rule name.
@@ -21,16 +24,7 @@ class RequiredRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected string $rule = 'required';
-
-    /**
-     * Whether the rule is an implicit rule.
-     *
-     * @var bool
-     *
-     * @since 1.0.0
-     */
-    public bool $is_implicit = true;
+    protected string $rule = 'not_in';
 
     /**
      * The default messages.
@@ -40,7 +34,7 @@ class RequiredRule extends ValidationRule
      * @since 1.0.0
      */
     protected array $default_messages = [
-        'default' => 'The {name} field is required.',
+        'default' => 'The {name} field must not be in the list of "{args}".',
     ];
 
     /**
@@ -52,18 +46,17 @@ class RequiredRule extends ValidationRule
      */
     public function validate(): bool
     {
-        if ($this->is_nullish($this->value)) {
+        if (in_array($this->value, (array) $this->args)) {
             return $this->fails($this->default_messages['default']);
         }
 
         return true;
     }
 
-
     /**
-     * Get the error message.
+     * Get the error messages.
      *
-     * @return string
+     * @return array
      *
      * @since 1.0.0
      */

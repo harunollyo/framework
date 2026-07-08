@@ -16,8 +16,9 @@ use Framework\Contracts\Support\Jsonable;
 use Framework\Collections\Collection;
 use Framework\Database\Query\Paginator;
 use Framework\Supports\Arr;
+use JsonSerializable;
 
-abstract class Resource implements Arrayable, Jsonable
+abstract class Resource implements Arrayable, Jsonable, JsonSerializable
 {
     /**
      * The resource instance.
@@ -145,6 +146,18 @@ abstract class Resource implements Arrayable, Jsonable
     public function to_json($options = 0)
     {
         return Arr::json_encode($this->to_array(), $options);
+    }
+
+    /**
+     * Convert the resource to an array.
+     *
+     * @return array The array representation of the resource
+     *
+     * @since 1.0.0
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->to_array();
     }
 
     /**

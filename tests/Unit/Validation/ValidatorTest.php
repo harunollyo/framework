@@ -4,173 +4,187 @@ namespace Framework\Tests\Unit\Validation;
 
 use Framework\Exceptions\ValidationException;
 use Framework\Tests\Unit\TestCase;
+use Framework\Validation\Rule;
 use Framework\Validation\Validator;
 
 class ValidatorTest extends TestCase
 {
-    public function test_it_passes_when_all_rules_are_satisfied(): void
+    public function test_passes_when_all_rules_are_satisfied(): void
     {
         $validator = Validator::make(
             ['name' => 'Widget', 'price' => 10],
-            ['name' => 'required|string', 'price' => 'required|integer']
+            ['name' => 'required|string', 'price' => 'required|numeric']
         );
 
-        $this->assertTrue($validator->is_valid());
-        $this->assertSame(['name' => 'Widget', 'price' => 10], $validator->validated());
+        $this->assertTrue($validator->passes());
+        $this->assertSame([], $validator->errors());
     }
 
-    public function test_it_collects_errors_for_invalid_fields(): void
+    public function test_fails_and_collects_errors_keyed_by_field(): void
     {
         $validator = Validator::make(
             ['name' => ''],
             ['name' => 'required|string']
         );
 
-        $this->assertTrue($validator->is_failed());
-        $this->assertArrayHasKey('name', $validator->get_errors());
+        $this->assertTrue($validator->fails());
+        $this->assertArrayHasKey('name', $validator->errors());
+        $this->assertContains('The name field is required.', $validator->errors()['name']);
     }
 
     public function test_validate_throws_validation_exception_on_failure(): void
     {
-        $validator = Validator::make(['email' => 'not-an-email'], ['email' => 'email']);
+        $validator = Validator::make(
+            ['email' => 'not-an-email'],
+            ['email' => 'string|email']
+        );
 
         $this->expectException(ValidationException::class);
         $validator->validate();
     }
 
-    public function test_it_validates_wildcard_array_fields(): void
+    public function test_validate_returns_validated_data_on_success(): void
+    {
+        $validator = Validator::make(
+            ['name' => 'Widget', 'ignored' => 'extra'],
+            ['name' => 'required|string']
+        );
+
+        $this->assertSame(['name' => 'Widget'], $validator->validate());
+    }
+
+    public function test_validated_builds_nested_data_from_dot_notation(): void
+    {
+        $validator = Validator::make(
+            ['user' => ['profile' => ['name' => 'Jane']]],
+            ['user.profile.name' => 'required|string']
+        );
+
+        $this->assertSame(
+            ['user' => ['profile' => ['name' => 'Jane']]],
+            $validator->validated()
+        );
+    }
+
+    public function test_validated_throws_when_validation_failed(): void
+    {
+        $validator = Validator::make(
+            ['name' => 123],
+            ['name' => 'string']
+        );
+
+        $this->expectException(ValidationException::class);
+        $validator->validated();
+    }
+
+    public function test_wildcard_rules_expand_to_each_array_item(): void
     {
         $validator = Validator::make(
             [
                 'items' => [
-                    ['name' => 'A'],
+                    ['name' => 'Valid'],
                     ['name' => ''],
                 ],
             ],
             ['items.*.name' => 'required|string']
         );
 
-        $this->assertTrue($validator->is_failed());
-        $this->assertArrayHasKey('items.1.name', $validator->get_errors());
+        $this->assertTrue($validator->fails());
+        $this->assertArrayHasKey('items.1.name', $validator->errors());
+        $this->assertArrayNotHasKey('items.0.name', $validator->errors());
     }
 
-    public function test_it_builds_nested_validated_data_from_dot_notation(): void
+    public function test_validated_merges_wildcard_fields_into_nested_arrays(): void
     {
         $validator = Validator::make(
             [
-                'user' => [
-                    'profile' => [
-                        'name' => 'Jane',
-                    ],
+                'items' => [
+                    ['name' => 'First'],
+                    ['name' => 'Second'],
                 ],
             ],
-            ['user.profile.name' => 'required|string']
+            [
+                'items' => 'array',
+                'items.*.name' => 'required|string',
+            ]
         );
 
-        $this->assertTrue($validator->is_valid());
         $this->assertSame(
             [
-                'user' => [
-                    'profile' => [
-                        'name' => 'Jane',
-                    ],
+                'items' => [
+                    ['name' => 'First'],
+                    ['name' => 'Second'],
                 ],
             ],
             $validator->validated()
         );
     }
 
-    public function test_strict_type_rules_pass_when_any_strict_rule_matches(): void
+    public function test_nullable_skips_remaining_rules_for_nullish_values(): void
     {
         $validator = Validator::make(
-            ['value' => 42],
-            ['value' => 'string|integer']
+            ['nickname' => null],
+            ['nickname' => 'nullable|string']
         );
 
-        $this->assertTrue($validator->is_valid());
+        $this->assertTrue($validator->passes());
     }
 
-    public function test_strict_type_rules_fail_when_no_strict_rule_matches(): void
+    public function test_nullable_still_validates_present_values(): void
     {
         $validator = Validator::make(
-            ['value' => 42.5],
-            ['value' => 'string|integer']
+            ['nickname' => 123],
+            ['nickname' => 'nullable|string']
         );
 
-        $this->assertTrue($validator->is_failed());
-        $this->assertArrayHasKey('value', $validator->get_errors());
+        $this->assertTrue($validator->fails());
+        $this->assertArrayHasKey('nickname', $validator->errors());
     }
 
-    public function test_apply_if_adds_rules_when_callback_returns_true(): void
+    public function test_missing_required_field_fails(): void
     {
         $validator = Validator::make(
-            ['enabled' => true, 'code' => ''],
-            ['enabled' => 'boolean']
+            [],
+            ['name' => 'required|string']
         );
 
-        $validator->apply_if('code', 'required|string', function (array $data) {
-            return !empty($data['enabled']);
-        });
-
-        $this->assertTrue($validator->is_failed());
-        $this->assertArrayHasKey('code', $validator->get_errors());
+        $this->assertTrue($validator->fails());
+        $this->assertArrayHasKey('name', $validator->errors());
     }
 
-    public function test_apply_if_skips_rules_when_callback_returns_false(): void
+    public function test_accepts_fluent_rule_objects(): void
     {
         $validator = Validator::make(
-            ['enabled' => false, 'code' => ''],
-            ['enabled' => 'boolean']
+            ['name' => 'ab'],
+            ['name' => [Rule::required(), Rule::string()->min(3)]]
         );
 
-        $validator->apply_if('code', 'required|string', function (array $data) {
-            return !empty($data['enabled']);
-        });
-
-        $this->assertTrue($validator->is_valid());
+        $this->assertTrue($validator->fails());
+        $this->assertContains(
+            'The name field must be at least 3 characters long.',
+            $validator->errors()['name']
+        );
     }
 
-    public function test_it_supports_closure_validation_rules(): void
+    public function test_accepts_array_of_string_rules(): void
     {
         $validator = Validator::make(
-            ['slug' => 'Invalid Slug'],
-            [
-                'slug' => [
-                    function ($value) {
-                        return $value === 'valid-slug' ? true : 'Slug must be valid-slug.';
-                    },
-                ],
-            ]
+            ['status' => 'active'],
+            ['status' => ['required', 'in:active,inactive']]
         );
 
-        $this->assertTrue($validator->is_failed());
-        $this->assertSame(['Slug must be valid-slug.'], $validator->get_errors()['slug']);
+        $this->assertTrue($validator->passes());
     }
 
-    public function test_it_reports_error_when_wildcard_target_is_not_an_array(): void
+    public function test_error_messages_replace_name_placeholder(): void
     {
         $validator = Validator::make(
-            ['items' => 'not-an-array'],
-            ['items.*.name' => 'required|string']
+            ['title' => 42],
+            ['title' => 'string']
         );
 
-        $this->assertTrue($validator->is_failed());
-        $this->assertArrayHasKey('items', $validator->get_errors());
-    }
+        $validator->passes();
 
-    public function test_it_uses_custom_expected_array_message_from_request_messages(): void
-    {
-        $validator = Validator::make(
-            ['items' => 'not-an-array'],
-            ['items.*.name' => 'required|string'],
-            [
-                'items' => [
-                    'expected_array' => 'Items must be a list.',
-                ],
-            ]
-        );
-
-        $this->assertTrue($validator->is_failed());
-        $this->assertSame(['Items must be a list.'], $validator->get_errors()['items']);
+        $this->assertSame(['The title field must be a string.'], $validator->errors()['title']);
     }
 }

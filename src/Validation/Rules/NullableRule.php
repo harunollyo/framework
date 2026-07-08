@@ -1,6 +1,6 @@
 <?php
 /**
- * String rule class.
+ * Nullable rule class.
  *
  * @package    Framework
  * @subpackage Validation
@@ -8,7 +8,6 @@
  */
 namespace Framework\Validation\Rules;
 
-use Framework\Filesystem\File;
 use Framework\Validation\ValidationRule;
 
 defined('ABSPATH') || exit;

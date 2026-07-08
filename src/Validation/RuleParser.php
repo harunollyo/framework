@@ -1,11 +1,11 @@
 <?php
 /**
-* Validation rule parser class.
-*
-* @package    Framework
-* @subpackage Validation
-* @since      1.0.0
-*/
+ * Validation rule parser class.
+ *
+ * @package    Framework
+ * @subpackage Validation
+ * @since      1.0.0
+ */
 
 namespace Framework\Validation;
 
@@ -15,7 +15,7 @@ use function Framework\Polyfill\str_contains;
 
 defined('ABSPATH') || exit;
 
-class ValidationRuleParser
+class RuleParser
 {
     /**
      * The data to parse.
@@ -36,12 +36,13 @@ class ValidationRuleParser
     protected array $rules;
 
     /**
-     * Create a new validation rule parser instance.
+     * Create a new rule parser instance.
      *
      * @param array $data The data to parse.
+     * @param array $rules The rules to parse.
      *
      * @return void
-     * 
+     *
      * @since 1.0.0
      */
     public function __construct(array $data, array $rules)
@@ -51,23 +52,23 @@ class ValidationRuleParser
     }
 
     /**
-     * Get the rules.
+     * Parse the rules into rule instances.
      *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function parse()
     {
         return $this->explode_wildcards()
-            ->proces_rules();
+            ->process_rules();
     }
 
     /**
      * Get the parsed and exploded rules.
      *
      * @return array
-     * 
+     *
      * @since 1.0.0
      */
     public function all()
@@ -76,10 +77,10 @@ class ValidationRuleParser
     }
 
     /**
-     * Explode the rules into a new array.
+     * Expand the wildcard rule keys into concrete keys.
      *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
     public function explode_wildcards()
@@ -101,18 +102,18 @@ class ValidationRuleParser
     }
 
     /**
-     * Parse the rules.
+     * Build rule instances for every parsed rule definition.
      *
      * @return $this
-     * 
+     *
      * @since 1.0.0
      */
-    public function proces_rules()
+    public function process_rules()
     {
         $parsed = [];
 
         foreach ($this->rules as $key => $rules) {
-            $parsed[$key] = Factory::make($this->make_array($rules));
+            $parsed[$key] = RuleFactory::make($this->make_array($rules));
         }
 
         $this->rules = $parsed;
@@ -126,7 +127,7 @@ class ValidationRuleParser
      * @param array|Rule|string $rules The rules to prepare.
      *
      * @return array
-     * 
+     *
      * @since 1.0.0
      */
     protected function make_array($rules)
@@ -146,7 +147,7 @@ class ValidationRuleParser
      * Get the rules.
      *
      * @return array
-     * 
+     *
      * @since 1.0.0
      */
     public function rules()

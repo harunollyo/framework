@@ -1,6 +1,6 @@
 <?php
 /**
- * The validation factory.
+ * The validation rule factory.
  *
  * @package    Framework
  * @subpackage Validation
@@ -15,14 +15,13 @@ use ReflectionMethod;
 defined('ABSPATH') || exit;
 
 use function Framework\Polyfill\array_first;
-use function Framework\Polyfill\array_key_first;
 use function Framework\Polyfill\array_last;
 use function Framework\Polyfill\str_contains;
 
-class Factory
+class RuleFactory
 {
     /**
-     * The rules.
+     * The raw rules to build instances from.
      *
      * @var array
      *
@@ -31,7 +30,7 @@ class Factory
     protected array $rules = [];
 
     /**
-     * The chain of rules.
+     * The base rules mapped to their constraint definitions.
      *
      * @var array
      *
@@ -40,7 +39,7 @@ class Factory
     protected array $chain = [];
 
     /**
-     * The cache of rule classes.
+     * The cache of resolved rule instances keyed by rule name.
      *
      * @var array
      *
@@ -73,9 +72,9 @@ class Factory
     }
 
     /**
-     * Make the rule array.
+     * Make the rule instances from the given rule definitions.
      *
-     * @param array $rules The rules to make the rule array with.
+     * @param array $rules The rule definitions.
      *
      * @return array
      *
@@ -87,7 +86,7 @@ class Factory
     }
 
     /**
-     * Make the rule array.
+     * Build the rule instances from the chain.
      *
      * @return array
      *
@@ -98,16 +97,15 @@ class Factory
         $rules = [];
 
         foreach ($this->chain as $rule_name => $constraints) {
-            $instance = $this->build_rule($rule_name, $constraints);
-            $rules[] = $instance;
+            $rules[] = $this->build_rule($rule_name, $constraints);
         }
 
-        return $this->finalyze($rules);
+        return $this->finalize($rules);
     }
 
     /**
-     * Finalyze the rules.
-     * If the rules has implicit rules then remove the nullable rule.
+     * Finalize the rules.
+     * If the rules have an implicit rule then remove the nullable rule.
      *
      * @param array $rules The rules to filter.
      *
@@ -115,11 +113,11 @@ class Factory
      *
      * @since 1.0.0
      */
-    protected function finalyze($rules)
+    protected function finalize($rules)
     {
-        $has_impliclit = !empty(Arr::where($rules, fn ($rule) => $rule->is_implicit));
+        $has_implicit = !empty(Arr::where($rules, fn ($rule) => $rule->is_implicit));
 
-        $rules = Arr::reject($rules, fn ($rule) => $has_impliclit && $rule->get_rule_name() === 'nullable');
+        $rules = Arr::reject($rules, fn ($rule) => $has_implicit && $rule->get_rule_name() === 'nullable');
 
         usort($rules, fn ($first, $second) => $first->is_implicit || $first->get_rule_name() === 'nullable' ? -1 : 1);
 
@@ -127,19 +125,19 @@ class Factory
     }
 
     /**
-     * Build the rule.
+     * Build a rule instance and apply its constraints.
      *
      * @param string $rule The rule to build.
-     * @param array $modifiers The from chain.
+     * @param array $constraints The constraints from the chain.
      *
-     * @return Rule
+     * @return ValidationRule
      *
      * @since 1.0.0
      */
-    protected function build_rule(string $rule, array $modifiers)
+    protected function build_rule(string $rule, array $constraints)
     {
         if (is_subclass_of($rule, ValidationRule::class)) {
-            return array_first($modifiers);
+            return array_first($constraints);
         }
 
         $rule_name = $this->rule_name($rule);
@@ -147,9 +145,9 @@ class Factory
 
         $instance = Rule::$rule_name($rule_arguments);
 
-        foreach ($modifiers as $modifier) {
-            $name = $this->rule_name($modifier);
-            $arguments = $this->rule_arguments($modifier);
+        foreach ($constraints as $constraint) {
+            $name = $this->rule_name($constraint);
+            $arguments = $this->rule_arguments($constraint);
 
             if (!$instance->has_constraint($name)) {
                 continue;
@@ -166,7 +164,7 @@ class Factory
     }
 
     /**
-     * Build the chain.
+     * Build the chain of base rules and their constraints.
      *
      * @param array $rules The rules to build the chain with.
      *
@@ -174,7 +172,7 @@ class Factory
      *
      * @since 1.0.0
      */
-    public function build_rules_chain(array $rules)
+    protected function build_rules_chain(array $rules)
     {
         $last_base_rule = null;
 
@@ -191,44 +189,44 @@ class Factory
                 $last_base_rule = $rule_class->get_rule_name();
             }
 
-            $this->distribute($rule, $last_base_rule, $arguments);
+            $this->group_under_base_rule($rule, $last_base_rule, $arguments);
         }
     }
 
     /**
-     * Distribute the rule.
+     * Group a rule under its base rule when it is a supported constraint.
      *
-     * @param string $rule The rule to distribute.
-     * @param string $last_base_rule The last base rule.
-     * @param array|null $arguments The arguments of the rule.
+     * @param string $rule The rule to group.
+     * @param string|null $last_base_rule The last base rule.
+     * @param mixed $arguments The arguments of the rule.
      *
      * @return void
      *
      * @since 1.0.0
      */
-    protected function distribute($rule, $last_base_rule, $arguments)
+    protected function group_under_base_rule($rule, $last_base_rule, $arguments)
     {
         if ($last_base_rule === null) {
             return;
         }
 
         $rule_name = $this->rule_name($rule);
-        $arguments = $this->rule_arguments($rule);
         $this->chain[$last_base_rule] ??= [];
 
         if (!isset($this->base_rule_arguments[$last_base_rule])) {
             $this->base_rule_arguments[$last_base_rule] = $arguments;
         }
 
-        if ($last_base_rule !== null && Rule::$last_base_rule($arguments)->has_constraint($rule_name)) {
+        if (Rule::$last_base_rule($arguments)->has_constraint($rule_name)) {
             $this->chain[$last_base_rule][] = $rule;
         }
     }
 
     /**
-     * Check if the rule class exists.
+     * Resolve a rule instance by its name when a factory method exists.
      *
-     * @param string $rule The rule to check.
+     * @param string $rule The rule to resolve.
+     * @param mixed $arguments The arguments of the rule.
      *
      * @return ValidationRule|null
      *

@@ -1,6 +1,6 @@
 <?php
 /**
- * String rule class.
+ * Numeric rule class.
  *
  * @package    Framework
  * @subpackage Validation
@@ -13,9 +13,10 @@ use Framework\Validation\ValidationRule;
 defined('ABSPATH') || exit;
 
 /**
- * Numeric rule class.
+ * Validates that the given value is numeric.
  *
  * @method $this integer()
+ * @method $this int()
  * @method $this min(int $min)
  * @method $this max(int $max)
  */
@@ -31,7 +32,7 @@ class NumericRule extends ValidationRule
     protected string $rule = 'numeric';
 
     /**
-     * The available methods.
+     * The supported constraints.
      *
      * @var array
      *
@@ -68,13 +69,11 @@ class NumericRule extends ValidationRule
      */
     public function validate(): bool
     {
-        $passed = true;
-
         if (!is_numeric($this->value)) {
             return $this->fails($this->default_messages['default']);
         }
 
-        return $this->with_constraints(function ($passed, $constraint) {
+        return $this->validate_constraints(function ($passed, $constraint) {
             if (!$passed) {
                 $this->fails($this->default_messages[$constraint], [$constraint => $this->get($constraint)]);
             }
@@ -82,60 +81,59 @@ class NumericRule extends ValidationRule
     }
 
     /**
-     * Compile the min constraint.
+     * Validate the min constraint.
      *
-     * @param string $value The value to compile.
+     * @param string $value The value to validate.
      *
      * @return bool
      *
      * @since 1.0.0
      */
-    protected function compile_min($value)
+    protected function validate_min($value)
     {
         return floatval($value) >= floatval($this->get('min'));
     }
 
     /**
-     * Compile the max constraint.
+     * Validate the max constraint.
      *
-     * @param string $value The value to compile.
+     * @param string $value The value to validate.
      *
      * @return bool
      *
      * @since 1.0.0
      */
-    protected function compile_max($value)
+    protected function validate_max($value)
     {
-        $x = floatval($value) <= floatval($this->get('max'));
-        return $x;
+        return floatval($value) <= floatval($this->get('max'));
     }
 
     /**
-     * Compile the integer constraint.
+     * Validate the integer constraint.
      *
-     * @param string $value The value to compile.
+     * @param string $value The value to validate.
      *
      * @return bool
      *
      * @since 1.0.0
      */
-    protected function compile_integer($value)
+    protected function validate_integer($value)
     {
         return filter_var($value, FILTER_VALIDATE_INT) !== false;
     }
 
     /**
-     * Compile the int constraint.
+     * Validate the int constraint.
      *
-     * @param string $value The value to compile.
+     * @param string $value The value to validate.
      *
      * @return bool
      *
      * @since 1.0.0
      */
-    protected function compile_int($value)
+    protected function validate_int($value)
     {
-        return filter_var($value, FILTER_VALIDATE_INT) !== false;
+        return $this->validate_integer($value);
     }
 
     /**

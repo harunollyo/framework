@@ -8,7 +8,6 @@
  */
 namespace Framework\Validation\Rules;
 
-use Framework\Supports\Arr;
 use Framework\Validation\ValidationRule;
 
 use function Framework\Polyfill\str_ends_with;
@@ -27,6 +26,7 @@ defined('ABSPATH') || exit;
  * @method StringRule url()
  * @method StringRule ip()
  * @method StringRule alpha()
+ * @method StringRule alpha_num()
  * @method StringRule alpha_dash()
  * @method StringRule between(int $min, int $max)
  * @method StringRule starts_with(string $value)
@@ -47,7 +47,7 @@ class StringRule extends ValidationRule
     protected string $rule = 'string';
 
     /**
-     * The available methods.
+     * The supported constraints.
      *
      * @var array
      *
@@ -71,15 +71,6 @@ class StringRule extends ValidationRule
         'doesnt_end_with',
         'exactly',
     ];
-
-    /**
-     * Whether to check the strict data type.
-     *
-     * @var bool
-     *
-     * @since 1.0.0
-     */
-    protected bool $strict = true;
 
     /**
      * The messages for the validation errors.
@@ -117,15 +108,35 @@ class StringRule extends ValidationRule
             return $this->fails($this->default_messages['default']);
         }
 
-        return $this->with_constraints(function ($passed, $constraint) {
+        return $this->validate_constraints(function ($passed, $constraint) {
             if (!$passed) {
-                $this->fails($this->default_messages[$constraint], [$constraint => $this->get($constraint)]);
+                $this->fails($this->default_messages[$constraint], $this->constraint_placeholders($constraint));
             }
         });
     }
 
     /**
-     * Compile the min constraint.
+     * Build the message placeholders for a failed constraint.
+     *
+     * @param string $constraint The failed constraint name.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    protected function constraint_placeholders(string $constraint)
+    {
+        if ($constraint === 'between') {
+            [$min, $max] = $this->get('between');
+
+            return ['min' => (string) $min, 'max' => (string) $max];
+        }
+
+        return [$constraint => (string) $this->get($constraint)];
+    }
+
+    /**
+     * Validate the min constraint.
      *
      * @param string $value The value to validate.
      *
@@ -133,13 +144,13 @@ class StringRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_min($value)
+    protected function validate_min($value)
     {
         return mb_strlen($value) >= (int) $this->get('min');
     }
 
     /**
-     * Compile the max constraint.
+     * Validate the max constraint.
      *
      * @param string $value The value to validate.
      *
@@ -147,13 +158,13 @@ class StringRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_max($value)
+    protected function validate_max($value)
     {
         return mb_strlen($value) <= (int) $this->get('max');
     }
 
     /**
-     * Compile the length constraint.
+     * Validate the length constraint.
      *
      * @param string $value The value to validate.
      *
@@ -161,13 +172,13 @@ class StringRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_length($value)
+    protected function validate_length($value)
     {
-        return mb_strlen($value) === (int) $this->get('length');
+        return $this->has_exact_length($value, 'length');
     }
 
     /**
-     * Compile the size constraint.
+     * Validate the size constraint.
      *
      * @param string $value The value to validate.
      *
@@ -175,13 +186,13 @@ class StringRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_size($value)
+    protected function validate_size($value)
     {
-        return mb_strlen($value) === (int) $this->get('size');
+        return $this->has_exact_length($value, 'size');
     }
 
     /**
-     * Compile the exactly constraint.
+     * Validate the exactly constraint.
      *
      * @param string $value The value to validate.
      *
@@ -189,13 +200,28 @@ class StringRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_exactly($value)
+    protected function validate_exactly($value)
     {
-        return mb_strlen($value) === (int) $this->get('exactly');
+        return $this->has_exact_length($value, 'exactly');
     }
 
     /**
-     * Compile the starts_with constraint.
+     * Check whether the value length matches the given constraint value.
+     *
+     * @param string $value The value to check.
+     * @param string $constraint The constraint holding the expected length.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function has_exact_length($value, string $constraint)
+    {
+        return mb_strlen($value) === (int) $this->get($constraint);
+    }
+
+    /**
+     * Validate the starts_with constraint.
      *
      * @param string $value The value to validate.
      *
@@ -203,13 +229,13 @@ class StringRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_starts_with($value)
+    protected function validate_starts_with($value)
     {
         return str_starts_with($value, $this->get('starts_with'));
     }
 
     /**
-     * Compile the ends_with constraint.
+     * Validate the ends_with constraint.
      *
      * @param string $value The value to validate.
      *
@@ -217,13 +243,13 @@ class StringRule extends ValidationRule
      * 
      * @since 1.0.0
      */
-    protected function compile_ends_with($value)
+    protected function validate_ends_with($value)
     {
         return str_ends_with($value, $this->get('ends_with'));
     }
 
     /**
-     * Compile the doesnt_start_with constraint.
+     * Validate the doesnt_start_with constraint.
      *
      * @param string $value The value to validate.
      *
@@ -231,13 +257,13 @@ class StringRule extends ValidationRule
      * 
      * @since 1.0.0
      */
-    protected function compile_doesnt_start_with($value)
+    protected function validate_doesnt_start_with($value)
     {
         return !str_starts_with($value, $this->get('doesnt_start_with'));
     }
 
     /**
-     * Compile the doesnt_end_with constraint.
+     * Validate the doesnt_end_with constraint.
      *
      * @param string $value The value to validate.
      *
@@ -245,13 +271,13 @@ class StringRule extends ValidationRule
      * 
      * @since 1.0.0
      */
-    protected function compile_doesnt_end_with($value)
+    protected function validate_doesnt_end_with($value)
     {
         return !str_ends_with($value, $this->get('doesnt_end_with'));
     }
 
     /**
-     * Compile the between constraint.
+     * Validate the between constraint.
      *
      * @param string $value The value to validate.
      *
@@ -259,7 +285,7 @@ class StringRule extends ValidationRule
      * 
      * @since 1.0.0
      */
-    protected function compile_between($value)
+    protected function validate_between($value)
     {
         [$min, $max] = $this->get('between');
 
@@ -267,7 +293,7 @@ class StringRule extends ValidationRule
     }
 
     /**
-     * Compile the alpha constraint.
+     * Validate the alpha constraint.
      *
      * @param string $value The value to validate.
      *
@@ -275,15 +301,13 @@ class StringRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_alpha($value)
+    protected function validate_alpha($value)
     {
-        $regex = '/^[a-zA-Z]+$/';
-
-        return (bool) preg_match($regex, $value) !== false;
+        return preg_match('/^[a-zA-Z]+$/', $value) === 1;
     }
 
     /**
-     * Compile the alpha_num constraint.
+     * Validate the alpha_num constraint.
      *
      * @param string $value The value to validate.
      *
@@ -291,15 +315,13 @@ class StringRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_alpha_num($value)
+    protected function validate_alpha_num($value)
     {
-        $regex = '/^[a-zA-Z0-9]+$/';
-
-        return (bool) preg_match($regex, $value) !== false;
+        return preg_match('/^[a-zA-Z0-9]+$/', $value) === 1;
     }
 
     /**
-     * Compile the alpha_dash constraint.
+     * Validate the alpha_dash constraint.
      *
      * @param string $value The value to validate.
      *
@@ -307,15 +329,13 @@ class StringRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_alpha_dash($value)
+    protected function validate_alpha_dash($value)
     {
-        $regex = '/^[a-zA-Z0-9_-]+$/';
-
-        return (bool) preg_match($regex, $value) !== false;
+        return preg_match('/^[a-zA-Z0-9_-]+$/', $value) === 1;
     }
 
     /**
-     * Compile the email constraint.
+     * Validate the email constraint.
      *
      * @param string $value The value to validate.
      *
@@ -323,13 +343,13 @@ class StringRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_email($value)
+    protected function validate_email($value)
     {
         return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
     }
 
     /**
-     * Compile the url constraint.
+     * Validate the url constraint.
      *
      * @param string $value The value to validate.
      *
@@ -337,13 +357,13 @@ class StringRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_url($value)
+    protected function validate_url($value)
     {
         return filter_var($value, FILTER_VALIDATE_URL) !== false;
     }
 
     /**
-     * Compile the ip constraint.
+     * Validate the ip constraint.
      *
      * @param string $value The value to validate.
      *
@@ -351,7 +371,7 @@ class StringRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected function compile_ip($value)
+    protected function validate_ip($value)
     {
         return filter_var($value, FILTER_VALIDATE_IP) !== false;
     }

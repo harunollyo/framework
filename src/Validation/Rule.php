@@ -9,15 +9,21 @@
 namespace Framework\Validation;
 
 use Framework\Contracts\Support\Arrayable;
-use Framework\Supports\Arr;
-use Framework\Supports\Fluent;
 use Framework\Validation\Rules\ArrayRule;
+use Framework\Validation\Rules\BooleanRule;
+use Framework\Validation\Rules\DateRule;
+use Framework\Validation\Rules\ExistsRule;
 use Framework\Validation\Rules\InRule;
+use Framework\Validation\Rules\NotInRule;
 use Framework\Validation\Rules\NullableRule;
 use Framework\Validation\Rules\NumericRule;
+use Framework\Validation\Rules\ObjectRule;
+use Framework\Validation\Rules\ProhibitedRule;
 use Framework\Validation\Rules\RequiredRule;
+use Framework\Validation\Rules\SameAsRule;
 use Framework\Validation\Rules\StringRule;
-use Override;
+use Framework\Validation\Rules\UniqueRule;
+use Framework\Validation\Rules\UserExistsRule;
 
 defined('ABSPATH') || exit;
 
@@ -122,7 +128,7 @@ class Rule
     /**
      * Create a new in rule.
      *
-     * @param array|Arrayable $values The values to check.
+     * @param array|Arrayable $values The allowed values.
      *
      * @return InRule
      *
@@ -135,5 +141,155 @@ class Rule
         }
 
         return new InRule(is_array($values) ? $values : func_get_args());
+    }
+
+    /**
+     * Create a new not in rule.
+     *
+     * @param array|Arrayable $values The disallowed values.
+     *
+     * @return NotInRule
+     *
+     * @since 1.0.0
+     */
+    public static function not_in($values)
+    {
+        if ($values instanceof Arrayable) {
+            $values = $values->to_array();
+        }
+
+        return new NotInRule(is_array($values) ? $values : func_get_args());
+    }
+
+    /**
+     * Create a new boolean rule.
+     *
+     * @param string|null $args The rule arguments, pass 'strict' for strict boolean checks.
+     *
+     * @return BooleanRule
+     *
+     * @since 1.0.0
+     */
+    public static function boolean($args = null)
+    {
+        return new BooleanRule($args);
+    }
+
+    /**
+     * Create a new date rule.
+     *
+     * @return DateRule
+     *
+     * @since 1.0.0
+     */
+    public static function date()
+    {
+        return new DateRule();
+    }
+
+    /**
+     * Create a new object rule.
+     *
+     * @return ObjectRule
+     *
+     * @since 1.0.0
+     */
+    public static function object()
+    {
+        return new ObjectRule();
+    }
+
+    /**
+     * Create a new prohibited rule.
+     *
+     * @return ProhibitedRule
+     *
+     * @since 1.0.0
+     */
+    public static function prohibited()
+    {
+        return new ProhibitedRule();
+    }
+
+    /**
+     * Create a new same as rule.
+     *
+     * @param string $field The field to match against.
+     *
+     * @return SameAsRule
+     *
+     * @since 1.0.0
+     */
+    public static function same_as($field)
+    {
+        return new SameAsRule($field);
+    }
+
+    /**
+     * Create a new exists rule.
+     *
+     * @param string|array $table The table name, or [table, column] arguments.
+     * @param string|null $column The column name, defaults to the field name.
+     *
+     * @return ExistsRule
+     *
+     * @since 1.0.0
+     */
+    public static function exists($table, $column = null)
+    {
+        return new ExistsRule(static::table_arguments($table, $column));
+    }
+
+    /**
+     * Create a new unique rule.
+     *
+     * @param string|array $table The table name, or [table, column, ignore_id] arguments.
+     * @param string|null $column The column name, defaults to the field name.
+     * @param int|string|null $ignore_id The id of a record to ignore.
+     *
+     * @return UniqueRule
+     *
+     * @since 1.0.0
+     */
+    public static function unique($table, $column = null, $ignore_id = null)
+    {
+        return new UniqueRule(static::table_arguments($table, $column, $ignore_id));
+    }
+
+    /**
+     * Create a new user exists rule.
+     *
+     * @param string $field The user lookup field: id, email, login, or slug.
+     *
+     * @return UserExistsRule
+     *
+     * @since 1.0.0
+     */
+    public static function user_exists($field = 'id')
+    {
+        return new UserExistsRule($field);
+    }
+
+    /**
+     * Normalize table based rule arguments into a single array.
+     *
+     * @param string|array $table The table name or a full arguments array.
+     * @param string|null $column The column name.
+     * @param int|string|null $ignore_id The id of a record to ignore.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    protected static function table_arguments($table, $column = null, $ignore_id = null)
+    {
+        if (is_array($table)) {
+            return $table;
+        }
+
+        return array_filter(
+            [$table, $column, $ignore_id],
+            fn ($argument) => $argument !== null
+        );
     }
 }

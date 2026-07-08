@@ -59,5 +59,6 @@ Route::post('/check', function (Request $request) {
 
     return response()->json([
         'validator' => $data,
+        'data' => filter_var('no', FILTER_VALIDATE_BOOLEAN),
     ]);
 });

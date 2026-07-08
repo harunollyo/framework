@@ -23,6 +23,7 @@ use Framework\Supports\Str;
 
 use function Framework\message;
 use function Framework\user;
+use function Framework\value;
 
 /**
  * The Request class for handling HTTP requests.
@@ -663,11 +664,15 @@ class Request implements RequestContract, Arrayable
      */
     public function get(string $key, $default = null, $type = null)
     {
-        $value = isset($this->attributes[$key]) ? $this->attributes[$key] : $default;
+        $value = $this->attributes[$key] ?? null;
+
+        if ($value === null) {
+            return value($default);
+        }
 
         $value = Sanitizer::apply_rule($value, $type);
 
-        return $value;
+        return $value ?? value($default);
     }
 
     /**

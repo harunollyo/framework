@@ -1,6 +1,6 @@
 <?php
 /**
- * Required rule class.
+ * Same as rule class.
  *
  * @package    Framework
  * @subpackage Validation
@@ -10,9 +10,14 @@ namespace Framework\Validation\Rules;
 
 use Framework\Validation\ValidationRule;
 
+use function Framework\deep_get;
+
 defined('ABSPATH') || exit;
 
-class RequiredRule extends ValidationRule
+/**
+ * Validates that the given value strictly matches the value of another field.
+ */
+class SameAsRule extends ValidationRule
 {
     /**
      * The rule name.
@@ -21,16 +26,7 @@ class RequiredRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected string $rule = 'required';
-
-    /**
-     * Whether the rule is an implicit rule.
-     *
-     * @var bool
-     *
-     * @since 1.0.0
-     */
-    public bool $is_implicit = true;
+    protected string $rule = 'same_as';
 
     /**
      * The default messages.
@@ -40,7 +36,7 @@ class RequiredRule extends ValidationRule
      * @since 1.0.0
      */
     protected array $default_messages = [
-        'default' => 'The {name} field is required.',
+        'default' => 'The {name} field must match the {args} field.',
     ];
 
     /**
@@ -52,18 +48,19 @@ class RequiredRule extends ValidationRule
      */
     public function validate(): bool
     {
-        if ($this->is_nullish($this->value)) {
+        $other_value = deep_get($this->data, (string) $this->args);
+
+        if ($this->value !== $other_value) {
             return $this->fails($this->default_messages['default']);
         }
 
         return true;
     }
 
-
     /**
-     * Get the error message.
+     * Get the error messages.
      *
-     * @return string
+     * @return array
      *
      * @since 1.0.0
      */

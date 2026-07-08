@@ -1,6 +1,6 @@
 <?php
 /**
- * Required rule class.
+ * Prohibited rule class.
  *
  * @package    Framework
  * @subpackage Validation
@@ -12,7 +12,10 @@ use Framework\Validation\ValidationRule;
 
 defined('ABSPATH') || exit;
 
-class RequiredRule extends ValidationRule
+/**
+ * Validates that the given field is absent or empty.
+ */
+class ProhibitedRule extends ValidationRule
 {
     /**
      * The rule name.
@@ -21,7 +24,7 @@ class RequiredRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected string $rule = 'required';
+    protected string $rule = 'prohibited';
 
     /**
      * Whether the rule is an implicit rule.
@@ -40,7 +43,7 @@ class RequiredRule extends ValidationRule
      * @since 1.0.0
      */
     protected array $default_messages = [
-        'default' => 'The {name} field is required.',
+        'default' => 'The {name} field is prohibited.',
     ];
 
     /**
@@ -53,17 +56,16 @@ class RequiredRule extends ValidationRule
     public function validate(): bool
     {
         if ($this->is_nullish($this->value)) {
-            return $this->fails($this->default_messages['default']);
+            return true;
         }
 
-        return true;
+        return $this->fails($this->default_messages['default']);
     }
 
-
     /**
-     * Get the error message.
+     * Get the error messages.
      *
-     * @return string
+     * @return array
      *
      * @since 1.0.0
      */
