@@ -16,6 +16,13 @@ class TestResource extends Resource
 
     public function to_array()
     {
-        return array_merge((array) $this->resource, $this->other);
+        return [
+            'id' => $this->resource->id,
+            'title' => $this->resource->title,
+            'content' => $this->resource->content,
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
+            'other' => $this->other,
+        ];
     }
 }

@@ -61,12 +61,11 @@ Route::post('/check', function (Request $request) {
     ];
 
     $other = ['gender' => 'male', 'age' => 20];
+    $posts = Blog::query()->get();
 
-    $resource = TestResource::make($data, $other);
+    $resource = TestResource::collection($posts, $other);
 
     return response()->json([
-        // 'request' => $date,
-        // 'name' => $name,
         'blogs' => $resource,
     ]);
 });
