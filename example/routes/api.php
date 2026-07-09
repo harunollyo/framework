@@ -55,20 +55,15 @@ Route::get('/check', function (ExampleRequest $request) {
 });
 
 Route::post('/check', function (Request $request) {
-    $blog = Blog::query()->where('id', 1)->first();
     $data = [
-        'name' => 'John Doe',
-        'email' => 'john.doe@example.com',
-        'role' => 'customer',
-        'is_admin' => true,
+        'user_email' => 'admin@example.com',
     ];
+    $validator = Validator::make(
+        $data,
+        ['user_email' => 'unique:users']
+    );
 
-    $validated = Validator::make($data, [
-        'name'  => 'required|string',
-        'email' => 'required|email',
-        'role'  => 'required|in:admin,buyer,seller,customer',
-        'is_admin' => 'prohibited_unless:role,admin,seller',
-    ])->validated();
+    $validated = $validator->validated();
 
     return response()->json([
         'validator' => $validated,

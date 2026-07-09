@@ -39,7 +39,7 @@ class DatabaseRulesTest extends TestCase
 
     public function test_exists_passes_when_record_is_found(): void
     {
-        $this->bootstrap_database(['products' => [['sku' => 'PRD-100']]]);
+        $this->bootstrap_database(['wp_products' => [['sku' => 'PRD-100']]]);
 
         $validator = Validator::make(['sku' => 'PRD-100'], ['sku' => 'exists:products']);
 
@@ -48,7 +48,7 @@ class DatabaseRulesTest extends TestCase
 
     public function test_exists_fails_when_record_is_missing(): void
     {
-        $this->bootstrap_database(['products' => [['sku' => 'PRD-100']]]);
+        $this->bootstrap_database(['wp_products' => [['sku' => 'PRD-100']]]);
 
         $validator = Validator::make(['sku' => 'PRD-999'], ['sku' => 'exists:products']);
 
@@ -58,7 +58,7 @@ class DatabaseRulesTest extends TestCase
 
     public function test_exists_uses_explicit_column_argument(): void
     {
-        $this->bootstrap_database(['products' => [['code' => 'ABC']]]);
+        $this->bootstrap_database(['wp_products' => [['code' => 'ABC']]]);
 
         $validator = Validator::make(['sku' => 'ABC'], ['sku' => 'exists:products,code']);
 
@@ -67,11 +67,11 @@ class DatabaseRulesTest extends TestCase
 
     public function test_exists_queries_the_prefixed_table(): void
     {
-        $wpdb = $this->bootstrap_database(['products' => [['sku' => 'PRD-100']]]);
+        $wpdb = $this->bootstrap_database(['wp_products' => [['sku' => 'PRD-100']]]);
 
         Validator::make(['sku' => 'PRD-100'], ['sku' => 'exists:products'])->passes();
 
-        $this->assertStringContainsString('FROM `wp_products`', end($wpdb->queries));
+        $this->assertStringContainsString('from `wp_wp_products`', strtolower(end($wpdb->queries)));
     }
 
     public function test_unique_passes_when_no_record_matches(): void
@@ -102,7 +102,36 @@ class DatabaseRulesTest extends TestCase
             ['email' => 'unique:users,email,5']
         )->passes();
 
-        $this->assertMatchesRegularExpression('/AND `id` != \'?5\'?/', end($wpdb->queries));
+        $this->assertMatchesRegularExpression('/and `id` != \'?5\'?/i', end($wpdb->queries));
+    }
+
+    public function test_unique_ignore_id_allows_existing_record(): void
+    {
+        $this->bootstrap_database([
+            'users' => [
+                ['id' => 5, 'email' => 'jane@example.com'],
+            ],
+        ]);
+
+        $validator = Validator::make(
+            ['email' => 'jane@example.com'],
+            ['email' => 'unique:users,email,5']
+        );
+
+        $this->assertTrue($validator->passes());
+    }
+
+    public function test_unique_uses_explicit_column_argument(): void
+    {
+        $this->bootstrap_database(['users' => [['user_email' => 'taken@example.com']]]);
+
+        $validator = Validator::make(
+            ['email' => 'taken@example.com'],
+            ['email' => 'unique:users,user_email']
+        );
+
+        $this->assertTrue($validator->fails());
+        $this->assertSame(['The email has already been taken.'], $validator->errors()['email']);
     }
 
     public function test_user_exists_passes_for_known_user_id(): void

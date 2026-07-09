@@ -68,12 +68,7 @@ class ExistsRule extends ValidationRule
     {
         [$table, $column] = $this->table_and_column();
 
-        $results = DB::select(
-            "SELECT 1 FROM `{$table}` WHERE `{$column}` = %s LIMIT 1",
-            [$this->value]
-        );
-
-        return !empty($results);
+        return DB::table($table)->where($column, $this->value)->limit(1)->exists();
     }
 
     /**
