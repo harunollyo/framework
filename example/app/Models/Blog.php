@@ -12,7 +12,7 @@ class Blog extends Model
     protected $primary_key = 'id';
 
     protected $casts = [
-        'status' => 'bool',
+        'status' => 'string',
         'published_at' => 'datetime',
         'body' => AsSerialize::class,
     ];

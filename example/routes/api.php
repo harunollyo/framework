@@ -6,9 +6,11 @@ use Example\App\Http\Controllers\SpeakersController;
 use Example\App\Http\Requests\ExampleRequest;
 use Example\App\Models\Blog;
 use Example\App\Models\Event;
+use Example\App\Resources\TestResource;
 use Framework\Http\Request;
 use Framework\Middlewares\AdminMiddleware;
 use Framework\Middlewares\AuthMiddleware;
+use Framework\Resource;
 use Framework\Route;
 use Framework\Supports\Arr;
 use Framework\Supports\Facades\Date;
@@ -51,12 +53,20 @@ Route::get('/check', function (ExampleRequest $request) {
 });
 
 Route::post('/check', function (Request $request) {
-    $name = $request->get('name');
-    $payload  = unserialize($name, ['allowed_classes' => true]);
-    $date = Date::parse('2026-07-03 06:00:00');
+    $data = [
+        'name' => 'John Doe',
+        'email' => 'john.doe@example.com',
+        'role' => 'admin',
+        'is_admin' => true,
+    ];
+
+    $other = ['gender' => 'male', 'age' => 20];
+
+    $resource = TestResource::make($data, $other);
 
     return response()->json([
-        'request' => $date,
-        'name' => $name,
+        // 'request' => $date,
+        // 'name' => $name,
+        'blogs' => $resource,
     ]);
 });

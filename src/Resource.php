@@ -60,17 +60,13 @@ abstract class Resource implements Arrayable, Jsonable
      *
      * @param mixed $resource The resource to create a new instance of.
      *
-     * @return array|null
+     * @return array
      *
      * @since 1.0.0
      */
-    public static function make($resource)
+    public static function make(...$resource)
     {
-        if ($resource === null) {
-            return null;
-        }
-
-        return (new static($resource))->to_array();
+        return (new static(...$resource))->to_array();
     }
 
     /**
