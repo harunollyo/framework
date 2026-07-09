@@ -59,15 +59,15 @@ abstract class Resource implements Arrayable, Jsonable, JsonSerializable
     /**
      * Create a new resource instance, or return null if the resource is null.
      *
-     * @param mixed $resource The resource to create a new instance of.
+     * @param mixed $parameters The resource to create a new instance of.
      *
      * @return array
      *
      * @since 1.0.0
      */
-    public static function make(...$resource)
+    public static function make(...$parameters)
     {
-        return (new static(...$resource))->to_array();
+        return (new static(...$parameters))->to_array();
     }
 
     /**
@@ -77,29 +77,25 @@ abstract class Resource implements Arrayable, Jsonable, JsonSerializable
      * class for each item, then calls the to_array method on the resource to
      * obtain its representation as an array.
      *
-     * @param iterable $resources The iterable of resources to convert.
+     * @param mixed    $parameters The parameters to pass to the resource constructor.
      *
      * @return array The array of resource representations.
      *
      * @since 1.0.0
      */
-    public static function collection($resources)
+    public static function collection(...$parameters)
     {
-        $data = [];
-
-        if (empty($resources)) {
-            return $data;
+        if (empty($parameters)) {
+            return [];
         }
 
-        if ($resources instanceof Collection) {
-            $resources = $resources->all();
+        $resource = array_shift($parameters);
+
+        if ($resource instanceof Collection) {
+            $resource = $resource->all();
         }
 
-        foreach ($resources as $resource) {
-            $data[] = (new static($resource))->to_array();
-        }
-
-        return $data;
+        return Arr::map($resource, fn ($resource) => (new static($resource, ...$parameters))->to_array());
     }
 
     /**
@@ -111,17 +107,18 @@ abstract class Resource implements Arrayable, Jsonable, JsonSerializable
      * the resource to obtain its representation as an array.
      *
      * @param Paginator $paginator The paginator object to convert.
+     * @param mixed    $parameters The parameters to pass to the resource constructor.
      *
      * @return array The array of resource representations, including pagination metadata.
      *
      * @since 1.0.0
      */
-    public static function paginated(Paginator $paginator)
+    public static function paginated(Paginator $paginator, ...$parameters)
     {
         $paginated_data = $paginator->to_array();
 
         foreach ($paginated_data['results'] as $key => $resource) {
-            $paginated_data['results'][$key] = (new static($resource))->to_array();
+            $paginated_data['results'][$key] = (new static($resource, ...$parameters))->to_array();
         }
 
         return $paginated_data;
