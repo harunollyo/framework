@@ -28,7 +28,6 @@ use Framework\Validation\Rules\RequiredUnlessRule;
 use Framework\Validation\Rules\SameAsRule;
 use Framework\Validation\Rules\StringRule;
 use Framework\Validation\Rules\UniqueRule;
-use Framework\Validation\Rules\UserExistsRule;
 
 defined('ABSPATH') || exit;
 
@@ -369,20 +368,6 @@ class Rule
     public static function unique($table, $column = null, $ignore_id = null)
     {
         return new UniqueRule(static::table_arguments($table, $column, $ignore_id));
-    }
-
-    /**
-     * Create a new user exists rule.
-     *
-     * @param string $field The user lookup field: id, email, login, or slug.
-     *
-     * @return UserExistsRule
-     *
-     * @since 1.0.0
-     */
-    public static function user_exists($field = 'id')
-    {
-        return new UserExistsRule($field);
     }
 
     /**

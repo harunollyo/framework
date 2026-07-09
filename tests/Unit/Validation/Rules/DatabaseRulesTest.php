@@ -11,13 +11,6 @@ use Framework\Validation\Validator;
 
 class DatabaseRulesTest extends TestCase
 {
-    protected function tearDown(): void
-    {
-        unset($GLOBALS['framework_test_users']);
-
-        parent::tearDown();
-    }
-
     protected function bootstrap_database(array $seed = []): ModelTestWpdb
     {
         global $wpdb;
@@ -39,7 +32,7 @@ class DatabaseRulesTest extends TestCase
 
     public function test_exists_passes_when_record_is_found(): void
     {
-        $this->bootstrap_database(['wp_products' => [['sku' => 'PRD-100']]]);
+        $this->bootstrap_database(['products' => [['sku' => 'PRD-100']]]);
 
         $validator = Validator::make(['sku' => 'PRD-100'], ['sku' => 'exists:products']);
 
@@ -48,7 +41,7 @@ class DatabaseRulesTest extends TestCase
 
     public function test_exists_fails_when_record_is_missing(): void
     {
-        $this->bootstrap_database(['wp_products' => [['sku' => 'PRD-100']]]);
+        $this->bootstrap_database(['products' => [['sku' => 'PRD-100']]]);
 
         $validator = Validator::make(['sku' => 'PRD-999'], ['sku' => 'exists:products']);
 
@@ -58,7 +51,7 @@ class DatabaseRulesTest extends TestCase
 
     public function test_exists_uses_explicit_column_argument(): void
     {
-        $this->bootstrap_database(['wp_products' => [['code' => 'ABC']]]);
+        $this->bootstrap_database(['products' => [['code' => 'ABC']]]);
 
         $validator = Validator::make(['sku' => 'ABC'], ['sku' => 'exists:products,code']);
 
@@ -67,11 +60,65 @@ class DatabaseRulesTest extends TestCase
 
     public function test_exists_queries_the_prefixed_table(): void
     {
-        $wpdb = $this->bootstrap_database(['wp_products' => [['sku' => 'PRD-100']]]);
+        $wpdb = $this->bootstrap_database(['products' => [['sku' => 'PRD-100']]]);
 
         Validator::make(['sku' => 'PRD-100'], ['sku' => 'exists:products'])->passes();
 
-        $this->assertStringContainsString('from `wp_wp_products`', strtolower(end($wpdb->queries)));
+        $this->assertStringContainsString('from `wp_products`', strtolower(end($wpdb->queries)));
+    }
+
+    public function test_exists_passes_when_all_array_values_exist(): void
+    {
+        $this->bootstrap_database([
+            'products' => [
+                ['id' => 1],
+                ['id' => 4],
+            ],
+        ]);
+
+        $validator = Validator::make(
+            ['ids' => [1, 4]],
+            ['ids' => 'array|exists:products,id']
+        );
+
+        $this->assertTrue($validator->passes());
+    }
+
+    public function test_exists_fails_when_any_array_value_is_missing(): void
+    {
+        $this->bootstrap_database([
+            'products' => [
+                ['id' => 1],
+            ],
+        ]);
+
+        $validator = Validator::make(
+            ['ids' => [1, 4]],
+            ['ids' => 'array|exists:products,id']
+        );
+
+        $this->assertTrue($validator->fails());
+        $this->assertSame(['The selected ids does not exist.'], $validator->errors()['ids']);
+    }
+
+    public function test_exists_uses_where_in_for_array_values(): void
+    {
+        $wpdb = $this->bootstrap_database([
+            'products' => [
+                ['id' => 1],
+                ['id' => 4],
+            ],
+        ]);
+
+        Validator::make(
+            ['ids' => [1, 4]],
+            ['ids' => 'array|exists:products,id']
+        )->passes();
+
+        $this->assertMatchesRegularExpression(
+            '/where `id` in \(1,\s*4\)/i',
+            end($wpdb->queries)
+        );
     }
 
     public function test_unique_passes_when_no_record_matches(): void
@@ -132,45 +179,5 @@ class DatabaseRulesTest extends TestCase
 
         $this->assertTrue($validator->fails());
         $this->assertSame(['The email has already been taken.'], $validator->errors()['email']);
-    }
-
-    public function test_user_exists_passes_for_known_user_id(): void
-    {
-        $GLOBALS['framework_test_users'] = [['id' => 7, 'email' => 'jane@example.com']];
-
-        $validator = Validator::make(['user_id' => 7], ['user_id' => 'user_exists']);
-
-        $this->assertTrue($validator->passes());
-    }
-
-    public function test_user_exists_fails_for_unknown_user(): void
-    {
-        $GLOBALS['framework_test_users'] = [['id' => 7]];
-
-        $validator = Validator::make(['user_id' => 99], ['user_id' => 'user_exists']);
-
-        $this->assertTrue($validator->fails());
-        $this->assertSame(['The selected user_id is not a valid user.'], $validator->errors()['user_id']);
-    }
-
-    public function test_user_exists_supports_email_lookup(): void
-    {
-        $GLOBALS['framework_test_users'] = [['id' => 7, 'email' => 'jane@example.com']];
-
-        $validator = Validator::make(
-            ['email' => 'jane@example.com'],
-            ['email' => 'user_exists:email']
-        );
-
-        $this->assertTrue($validator->passes());
-    }
-
-    public function test_user_exists_falls_back_to_id_for_unsupported_field(): void
-    {
-        $GLOBALS['framework_test_users'] = [['id' => 7]];
-
-        $validator = Validator::make(['user' => 7], ['user' => 'user_exists:unsupported']);
-
-        $this->assertTrue($validator->passes());
     }
 }

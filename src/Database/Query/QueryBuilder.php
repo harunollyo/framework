@@ -2690,7 +2690,6 @@ class QueryBuilder
      */
     public function get($columns = ['*'])
     {
-        
         $columns = is_array($columns) ? $columns : func_get_args();
 
         $items = $this->once_with_columns(
@@ -3081,7 +3080,7 @@ class QueryBuilder
         });
 
         if (!$results->empty()) {
-            return array_change_key_case($results->to_array())[0]['aggregate'];
+            return array_change_key_case((array) $results->to_array())[0]['aggregate'];
         }
     }
 

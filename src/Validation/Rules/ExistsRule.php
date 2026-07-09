@@ -68,7 +68,15 @@ class ExistsRule extends ValidationRule
     {
         [$table, $column] = $this->table_and_column();
 
-        return DB::table($table)->where($column, $this->value)->limit(1)->exists();
+        $values = Arr::wrap($this->value);
+
+        if (empty($values)) {
+            return false;
+        }
+
+        $total = DB::table($table)->where_in($column, $values)->count();
+
+        return $total === count($values);
     }
 
     /**
@@ -81,7 +89,7 @@ class ExistsRule extends ValidationRule
     protected function table_and_column()
     {
         $arguments = Arr::wrap($this->args);
-        $table = DB::get_table_prefix() . $arguments[0];
+        $table = $arguments[0];
         $column = $arguments[1] ?? array_last(explode('.', $this->name));
 
         return [$table, $column];

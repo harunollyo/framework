@@ -56,11 +56,11 @@ Route::get('/check', function (ExampleRequest $request) {
 
 Route::post('/check', function (Request $request) {
     $data = [
-        'user_email' => 'admin@example.com',
+        'ids' => [1, 4],
     ];
     $validator = Validator::make(
         $data,
-        ['user_email' => 'unique:users']
+        ['ids' => 'array|exists:framework_blogs,id']
     );
 
     $validated = $validator->validated();

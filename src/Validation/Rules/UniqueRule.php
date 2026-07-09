@@ -8,6 +8,7 @@
  */
 namespace Framework\Validation\Rules;
 
+use Exception;
 use Framework\Supports\Arr;
 use Framework\Supports\Facades\DB;
 use Framework\Validation\ValidationRule;
@@ -83,9 +84,12 @@ class UniqueRule extends ValidationRule
             $query->where('id', '!=', $ignore_id);
         }
 
-        $query->limit(1);
-
-        return $query->exists();
+        try {
+            $query->sole();
+            return true;
+        } catch (Exception $error) {
+            return false;
+        }
     }
 
     /**
