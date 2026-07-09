@@ -1030,7 +1030,7 @@ class QueryCompiler
      */
     protected function where_raw(QueryBuilder $builder, $where)
     {
-        return $where['sql'] instanceof Expression ? $where['sql']->get_value($this) : $where['sql'];
+        return $where['sql'] instanceof Expression ? $where['sql']->get_value() : $where['sql'];
     }
 
     /**

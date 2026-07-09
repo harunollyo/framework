@@ -53,6 +53,7 @@ Route::get('/check', function (ExampleRequest $request) {
 });
 
 Route::post('/check', function (Request $request) {
+    $blog = Blog::query()->where('id', 1)->first();
     $data = [
         'name' => 'John Doe',
         'email' => 'john.doe@example.com',
