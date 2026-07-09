@@ -104,14 +104,14 @@ class EventManager
      * @param Closure $boolean The boolean.
      * @param mixed $event The event.
      *
-     * @return void
+     * @return mixed
      *
      * @since 1.0.0
      */
     public function dispatch_if(Closure $boolean, $event)
     {
         if ($boolean($event)) {
-            $this->dispatch($event);
+            return $this->dispatch($event);
         }
     }
 
@@ -121,21 +121,21 @@ class EventManager
      * @param Closure $boolean The boolean.
      * @param mixed $event The event.
      *
-     * @return void
+     * @return mixed
      *
      * @since 1.0.0
      */
     public function dispatch_unless(Closure $boolean, $event)
     {
         if (!$boolean($event)) {
-            $this->dispatch($event);
+            return $this->dispatch($event);
         }
     }
 
     /**
      * Resolve.
      *
-     * @param mixed $listener The listener.
+     * @param class-string<Listener> $listener The listener.
      * @param mixed $event The event.
      *
      * @return mixed
