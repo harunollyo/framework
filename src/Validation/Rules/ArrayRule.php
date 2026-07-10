@@ -72,7 +72,7 @@ class ArrayRule extends ValidationRule
      */
     public function validate(): bool
     {
-        if (!is_array($this->value)) {
+        if (!is_iterable($this->value)) {
             return $this->fails($this->default_messages['default']);
         }
 

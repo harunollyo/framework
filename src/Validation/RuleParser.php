@@ -193,7 +193,7 @@ class RuleParser
         $segment = array_shift($segments);
 
         if ($segment === '*') {
-            if (!is_array($current_data) || $current_data === []) {
+            if (!is_iterable($current_data) || $current_data === []) {
                 return [];
             }
 

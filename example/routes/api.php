@@ -56,7 +56,8 @@ Route::get('/check', function (ExampleRequest $request) {
 
 Route::post('/check', function (Request $request) {
     $validated = Validator::make($request->all(), [
-        'file' => Rule::image()->extensions(['jpg', 'jpeg', 'jpe'])
+        'file' => 'array',
+        'file.*' => Rule::image()->types(['application/pdf'])->min('1mb')
     ])->validated();
 
     return response()->json([
