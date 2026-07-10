@@ -14,6 +14,7 @@ use Framework\Validation\Rules\ArrayRule;
 use Framework\Validation\Rules\BooleanRule;
 use Framework\Validation\Rules\DateRule;
 use Framework\Validation\Rules\ExistsRule;
+use Framework\Validation\Rules\FileRule;
 use Framework\Validation\Rules\InRule;
 use Framework\Validation\Rules\NotInRule;
 use Framework\Validation\Rules\NullableRule;
@@ -368,6 +369,30 @@ class Rule
     public static function unique($table, $column = null, $ignore_id = null)
     {
         return new UniqueRule(static::table_arguments($table, $column, $ignore_id));
+    }
+
+    /**
+     * Create a new image rule.
+     *
+     * @return FileRule
+     *
+     * @since 1.0.0
+     */
+    public static function image()
+    {
+        return (new FileRule())->image();
+    }
+
+    /**
+     * Create a new file rule.
+     *
+     * @return FileRule
+     *
+     * @since 1.0.0
+     */
+    public static function file()
+    {
+        return new FileRule();
     }
 
     /**

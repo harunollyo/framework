@@ -55,18 +55,11 @@ Route::get('/check', function (ExampleRequest $request) {
 });
 
 Route::post('/check', function (Request $request) {
-    $data = [
-        'ids' => [1, 4],
-    ];
-    $validator = Validator::make(
-        $data,
-        ['ids' => 'array|exists:framework_blogs,id']
-    );
-
-    $validated = $validator->validated();
+    $validated = Validator::make($request->all(), [
+        'file' => Rule::image()->extensions(['jpg', 'jpeg', 'jpe'])
+    ])->validated();
 
     return response()->json([
         'validator' => $validated,
-        'data' => explode(':', '10:5:20', 2),
     ]);
 });

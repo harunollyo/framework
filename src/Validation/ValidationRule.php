@@ -365,6 +365,11 @@ abstract class ValidationRule extends Fluent
             $placeholders
         );
 
+        $placeholders = Arr::map(
+            $placeholders,
+            fn ($placeholder) => is_array($placeholder) ? implode(', ', $placeholder) : $placeholder
+        );
+
         foreach ($placeholders as $key => $value) {
             $placeholder = '{' . $key . '}';
             $message = str_replace($placeholder, $value, $message);

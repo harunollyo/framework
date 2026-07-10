@@ -415,13 +415,27 @@ class Request implements RequestContract, Arrayable
     /**
      * Get all input attributes.
      *
+     * @param array|null $keys The keys to get.
+     *
      * @return array
      *
      * @since 1.0.0
      */
-    public function all()
+    public function all($keys = null)
     {
-        return $this->attributes;
+        $input = array_merge($this->attributes, $this->all_files());
+
+        if (!$keys) {
+            return $input;
+        }
+
+        $results = [];
+
+        foreach (is_array($keys) ? $keys : func_get_args() as $key) {
+            Arr::set($results, $key, Arr::get($input, $key));
+        }
+
+        return $results;
     }
 
     /**
