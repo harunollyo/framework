@@ -50,17 +50,6 @@ class BooleanRule extends ValidationRule
     protected array $accepted_values = [true, false, 0, 1, '0', '1', 'true', 'false'];
 
     /**
-     * The default messages.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $default_messages = [
-        'default' => 'The {name} field must be a boolean.',
-    ];
-
-    /**
      * Create a new boolean rule instance.
      *
      * @param mixed $args The rule arguments.

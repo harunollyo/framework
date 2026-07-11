@@ -27,17 +27,6 @@ class NotInRule extends ValidationRule
     protected string $rule = 'not_in';
 
     /**
-     * The default messages.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $default_messages = [
-        'default' => 'The {name} field must not be in the list of "{args}".',
-    ];
-
-    /**
      * Validate the rule.
      *
      * @return bool

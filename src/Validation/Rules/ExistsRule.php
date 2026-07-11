@@ -31,17 +31,6 @@ class ExistsRule extends ValidationRule
     protected string $rule = 'exists';
 
     /**
-     * The default messages.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $default_messages = [
-        'default' => 'The selected {name} does not exist.',
-    ];
-
-    /**
      * Validate the rule.
      *
      * @return bool

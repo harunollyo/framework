@@ -29,17 +29,6 @@ class SameAsRule extends ValidationRule
     protected string $rule = 'same_as';
 
     /**
-     * The default messages.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $default_messages = [
-        'default' => 'The {name} field must match the {args} field.',
-    ];
-
-    /**
      * Validate the rule.
      *
      * @return bool

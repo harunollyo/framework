@@ -46,20 +46,6 @@ class DateRule extends ValidationRule
     ];
 
     /**
-     * The default messages.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $default_messages = [
-        'default' => 'The {name} field must be a valid date.',
-        'after' => 'The {name} field must be a date after {after}.',
-        'format' => 'The {name} field must match the format {format}.',
-        'datetime' => 'The {name} field must be a valid datetime.',
-    ];
-
-    /**
      * The date format.
      *
      * @var string

@@ -130,6 +130,7 @@ abstract class ValidationRule extends Fluent
     public function __construct($args = null)
     {
         $this->args = $args;
+        $this->process_default_messages($this->constraints);
     }
 
     /**
@@ -464,7 +465,9 @@ abstract class ValidationRule extends Fluent
      */
     protected function get_default_message(string $key)
     {
-        return message($this->build_message_key($key)) ?? '';
+        $message = message($this->build_message_key($key)) ?? '';
+
+        return html_entity_decode($message, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
 
     /**

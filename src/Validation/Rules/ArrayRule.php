@@ -48,22 +48,6 @@ class ArrayRule extends ValidationRule
     ];
 
     /**
-     * The default messages.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $default_messages = [
-        'default' => 'The field {name} must be an array.',
-        'min' => 'The field {name} must have at least {min} items.',
-        'max' => 'The field {name} must have at most {max} items.',
-        'size' => 'The field {name} must have exactly {size} items.',
-        'exactly' => 'The field {name} must have exactly {exactly} items.',
-        'contains' => 'The field {name} must contain {contains}.',
-    ];
-
-    /**
      * Validate the rule.
      *
      * @return bool

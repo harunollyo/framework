@@ -24,17 +24,6 @@ class InRule extends ValidationRule
     protected string $rule = 'in';
 
     /**
-     * The default messages.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $default_messages = [
-        'default' => 'The {name} field must be in the list of "{args}".',
-    ];
-
-    /**
      * Validate the rule.
      *
      * @return bool

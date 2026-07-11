@@ -75,22 +75,6 @@ class StringRule extends ValidationRule
     ];
 
     /**
-     * Construct the rule.
-     *
-     * @param array $args The arguments to pass to the rule.
-     *
-     * @return void
-     * 
-     * @since 1.0.0
-     */
-    public function __construct($args = null)
-    {
-        $this->process_default_messages($this->constraints);
-
-        parent::__construct($args);
-    }
-
-    /**
      * @inheritDoc
      */
     public function validate(): bool

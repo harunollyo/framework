@@ -52,27 +52,6 @@ class NumericRule extends ValidationRule
     ];
 
     /**
-     * The default messages.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $default_messages = [
-        'default' => 'The field {name} must be a number.',
-        'min' => 'The field {name} must be greater than or equal to {min}.',
-        'max' => 'The field {name} must be less than or equal to {max}.',
-        'integer' => 'The field {name} must be an integer.',
-        'int' => 'The field {name} must be an integer.',
-        'float' => 'The field {name} must be a float.',
-        'decimal' => 'The field {name} must be a decimal.',
-        'gt' => 'The field {name} must be greater than {gt}.',
-        'gte' => 'The field {name} must be greater than or equal to {gte}.',
-        'lt' => 'The field {name} must be less than {lt}.',
-        'lte' => 'The field {name} must be less than or equal to {lte}.',
-    ];
-
-    /**
      * Validate the rule.
      *
      * @return bool

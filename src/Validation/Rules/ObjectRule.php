@@ -27,17 +27,6 @@ class ObjectRule extends ValidationRule
     protected string $rule = 'object';
 
     /**
-     * The default messages.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $default_messages = [
-        'default' => 'The {name} field must be an object.',
-    ];
-
-    /**
      * Validate the rule.
      *
      * @return bool

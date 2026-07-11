@@ -54,8 +54,46 @@ class MessagesBag
     {
         return [
             'validator' => [
-                'invalid' => 'The value provided for %s is invalid.',
-                'required' => 'The %s field is required.',
+                'failed' => 'Validation failed!',
+                'required' => [
+                    'default' => 'The {name} field is required.',
+                ],
+                'required_if' => [
+                    'default' => 'The {name} field is required.',
+                ],
+                'required_unless' => [
+                    'default' => 'The {name} field is required.',
+                ],
+                'prohibited' => [
+                    'default' => 'The {name} field is prohibited.',
+                ],
+                'prohibited_if' => [
+                    'default' => 'The {name} field is prohibited.',
+                ],
+                'prohibited_unless' => [
+                    'default' => 'The {name} field is prohibited.',
+                ],
+                'boolean' => [
+                    'default' => 'The {name} field must be a boolean.',
+                ],
+                'object' => [
+                    'default' => 'The {name} field must be an object.',
+                ],
+                'exists' => [
+                    'default' => 'The selected {name} does not exist.',
+                ],
+                'unique' => [
+                    'default' => 'The {name} has already been taken.',
+                ],
+                'in' => [
+                    'default' => 'The {name} field must be in the list of "{args}".',
+                ],
+                'not_in' => [
+                    'default' => 'The {name} field must not be in the list of "{args}".',
+                ],
+                'same_as' => [
+                    'default' => 'The {name} field must match the {args} field.',
+                ],
                 'string' => [
                     'min' => 'The {name} field must be at least {min} characters long.',
                     'max' => 'The {name} field must be at most {max} characters long.',
@@ -75,7 +113,44 @@ class MessagesBag
                     'doesnt_end_with' => 'The {name} field must not end with {doesnt_end_with}.',
                     'exactly' => 'The {name} field must be exactly {exactly} characters long.',
                     'default' => 'The {name} field must be a string.',
-                ]
+                ],
+                'array' => [
+                    'default' => 'The field {name} must be an array.',
+                    'min' => 'The field {name} must have at least {min} items.',
+                    'max' => 'The field {name} must have at most {max} items.',
+                    'size' => 'The field {name} must have exactly {size} items.',
+                    'exactly' => 'The field {name} must have exactly {exactly} items.',
+                    'contains' => 'The field {name} must contain {contains}.',
+                ],
+                'numeric' => [
+                    'default' => 'The field {name} must be a number.',
+                    'min' => 'The field {name} must be greater than or equal to {min}.',
+                    'max' => 'The field {name} must be less than or equal to {max}.',
+                    'integer' => 'The field {name} must be an integer.',
+                    'int' => 'The field {name} must be an integer.',
+                    'float' => 'The field {name} must be a float.',
+                    'decimal' => 'The field {name} must be a decimal.',
+                    'gt' => 'The field {name} must be greater than {gt}.',
+                    'gte' => 'The field {name} must be greater than or equal to {gte}.',
+                    'lt' => 'The field {name} must be less than {lt}.',
+                    'lte' => 'The field {name} must be less than or equal to {lte}.',
+                ],
+                'date' => [
+                    'default' => 'The {name} field must be a valid date.',
+                    'after' => 'The {name} field must be a date after {after}.',
+                    'format' => 'The {name} field must match the format {format}.',
+                    'datetime' => 'The {name} field must be a valid datetime.',
+                ],
+                'file' => [
+                    'default' => 'The {name} field must be a file.',
+                    'size' => 'The {name} field must be less than {size} kilobytes.',
+                    'min' => 'The {name} field must be at least {min} kilobytes.',
+                    'max' => 'The {name} field must be less than {max} kilobytes.',
+                    'between' => 'The {name} field must be between {min} and {max} kilobytes.',
+                    'image' => 'The {name} field must be an image.',
+                    'types' => 'The {name} field must be a file of type: {types}.',
+                    'extensions' => 'The {name} field must have one of the following extensions: {extensions}.',
+                ],
             ],
             'auth' => [
                 'logged_in_required' => 'You have to be logged in.',

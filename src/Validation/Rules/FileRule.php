@@ -42,24 +42,6 @@ class FileRule extends ValidationRule
     protected string $rule = 'file';
 
     /**
-     * The default messages.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $default_messages = [
-        'default' => 'The {name} field must be a file.',
-        'size' => 'The {name} field must be less than {size} kilobytes.',
-        'min' => 'The {name} field must be at least {min} kilobytes.',
-        'max' => 'The {name} field must be less than {max} kilobytes.',
-        'between' => 'The {name} field must be between {min} and {max} kilobytes.',
-        'image' => 'The {name} field must be an image.',
-        'types' => 'The {name} field must be a file of type: {types}.',
-        'extensions' => 'The {name} field must have one of the following extensions: {extensions}.',
-    ];
-
-    /**
      * The constraints.
      *
      * @var array

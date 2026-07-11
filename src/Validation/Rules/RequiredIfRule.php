@@ -39,17 +39,6 @@ class RequiredIfRule extends ValidationRule
     public bool $is_implicit = true;
 
     /**
-     * The default messages.
-     *
-     * @var array
-     *
-     * @since 1.0.0
-     */
-    protected array $default_messages = [
-        'default' => 'The {name} field is required.',
-    ];
-
-    /**
      * Validate the rule.
      *
      * @return bool
