@@ -8,9 +8,12 @@
  */
 namespace Framework\Validation;
 
+use Closure;
 use Framework\Filesystem\File;
 use Framework\Supports\Arr;
 use Framework\Supports\Fluent;
+
+use function Framework\message;
 
 defined('ABSPATH') || exit;
 
@@ -78,6 +81,24 @@ abstract class ValidationRule extends Fluent
      * @since 1.0.0
      */
     protected array $messages = [];
+
+    /**
+     * The default messages to return.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
+    protected array $default_messages = [];
+
+    /**
+     * The custom user defined messages to return.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
+    protected array $custom_messages = [];
 
     /**
      * Whether to stop on first failure.
@@ -266,33 +287,47 @@ abstract class ValidationRule extends Fluent
     }
 
     /**
-     * Set the messages to return.
-     *
-     * @param array $messages The messages to return.
-     *
-     * @return $this
-     * 
-     * @since 1.0.0
-     */
-    public function with_messages(array $messages)
-    {
-        $this->messages = $messages;
-
-        return $this;
-    }
-
-    /**
      * Reset the messages to an empty array.
      *
      * @return $this
      * 
      * @since 1.0.0
      */
-    public function without_messages()
+    public function clear_error_messages()
     {
         $this->messages = [];
 
         return $this;
+    }
+
+    /** 
+     * Set the custom messages to return.
+     *
+     * @param array $messages The custom messages to return.
+     *
+     * @return $this
+     * 
+     * @since 1.0.0
+     */
+    public function sync_custom_messages(array $messages)
+    {
+        $this->custom_messages = $messages;
+
+        $this->sync_default_messages_with_custom_messages();
+
+        return $this;
+    }
+
+    /**
+     * Sync the default messages with the custom messages.
+     *
+     * @return void
+     * 
+     * @since 1.0.0
+     */
+    protected function sync_default_messages_with_custom_messages()
+    {
+        $this->process_default_messages($this->constraints);
     }
 
     /**
@@ -387,12 +422,88 @@ abstract class ValidationRule extends Fluent
      * 
      * @since 1.0.0
      */
-    protected function process_messages(array $messages, array $data = [])
+    protected function process_messages(array $messages)
     {
         foreach ($messages as $key => $message) {
-            $messages[$key] = $this->replace_message_placeholders($message, $data);
+            $messages[$key] = $this->replace_message_placeholders($message);
         }
 
         return $messages;
+    }
+
+    /**
+     * Get the default messages.
+     *
+     * @param array $keys The keys to get the default messages for.
+     *
+     * @return array
+     * 
+     * @since 1.0.0
+     */
+    protected function process_default_messages(array $keys)
+    {
+        $keys = array_merge(['default'], $keys);
+
+        $messages = [];
+
+        foreach ($keys as $key) {
+            $messages[$key] = $this->get_custom_message($key) ?? $this->get_default_message($key);
+        }
+
+        return $this->default_messages = $messages;
+    }
+
+    /**
+     * Get the default message.
+     *
+     * @param string $key The key to get the default message for.
+     *
+     * @return string
+     * 
+     * @since 1.0.0
+     */
+    protected function get_default_message(string $key)
+    {
+        return message($this->build_message_key($key)) ?? '';
+    }
+
+    /**
+     * Get the custom message.
+     *
+     * @param string $key The key to get the custom message for.
+     *
+     * @return string|null
+     * 
+     * @since 1.0.0
+     */
+    protected function get_custom_message(string $key)
+    {
+        if ($key === 'default') {
+            $key = $this->rule;
+        }
+
+        $custom_message_key = $this->name . '.' . $key;
+
+        $message = Arr::get($this->custom_messages, $custom_message_key);
+
+        if ($message instanceof Closure) {
+            return $message($this->name, $this->value, $this->data);
+        }
+
+        return $message;
+    }
+
+    /**
+     * Build the message key.
+     *
+     * @param string $key The key to build the message key for.
+     *
+     * @return string
+     * 
+     * @since 1.0.0
+     */
+    protected function build_message_key(string $key)
+    {
+        return 'validator.' . $this->rule . '.' . $key;
     }
 }

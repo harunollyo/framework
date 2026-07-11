@@ -15,6 +15,7 @@ use Framework\Contracts\Request as RequestContract;
 use Framework\Contracts\Support\Arrayable;
 use Framework\Sanitizer;
 use Framework\Exceptions\AuthorizationException;
+use Framework\Exceptions\ValidationException;
 use Framework\Http\Concerns\InteractsWithFiles;
 use Framework\Supports\Arr;
 use Framework\Validation\Validator;
@@ -263,6 +264,8 @@ class Request implements RequestContract, Arrayable
      * @param array $rules The rules.
      *
      * @return array
+     * 
+     * @throws ValidationException if fails to validate.
      *
      * @since 1.0.0
      */
@@ -270,9 +273,7 @@ class Request implements RequestContract, Arrayable
     {
         $validator = Validator::make($data, $rules, $this->messages());
 
-        if ($validator->validate()) {
-            return $validator->validated();
-        }
+        return $validator->validated();
     }
 
     /**
@@ -528,12 +529,12 @@ class Request implements RequestContract, Arrayable
     {
         $this->prepare_for_validation();
 
+        $validated = $this->run_validation($this->attributes(), $this->rules());
+        $this->validated = $validated;
+
         $sanitized = $this->run_sanitization($this->attributes(), $this->filters());
         $this->sanitized = $sanitized;
         $this->merge($sanitized);
-
-        // $validated = $this->run_validation($this->attributes(), $this->rules());
-        // $this->validated = $validated;
 
         $this->passed_validation();
     }

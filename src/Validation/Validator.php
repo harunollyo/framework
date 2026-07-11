@@ -54,7 +54,7 @@ class Validator
      *
      * @since 1.0.0
      */
-    protected array $messages = [];
+    protected array $custom_messages = [];
 
     /**
      * The errors encountered during validation.
@@ -90,7 +90,7 @@ class Validator
         $this->data = $data;
         $this->raw_rules = $rules;
         $this->rules = $this->parse_rules($rules);
-        $this->messages = $messages;
+        $this->custom_messages = $messages;
     }
 
     /**
@@ -121,6 +121,18 @@ class Validator
     protected function parse_rules(array $rules)
     {
         return (new RuleParser($this->data, $rules))->parse()->all();
+    }
+
+    /**
+     * Get the custom messages.
+     *
+     * @return array
+     * 
+     * @since 1.0.0
+     */
+    public function get_custom_messages()
+    {
+        return $this->custom_messages;
     }
 
     /**
@@ -177,18 +189,6 @@ class Validator
     }
 
     /**
-     * Get the messages.
-     *
-     * @return array
-     * 
-     * @since 1.0.0
-     */
-    public function get_messages()
-    {
-        return $this->messages;
-    }
-
-    /**
      * Validate the data.
      *
      * @return bool
@@ -223,6 +223,8 @@ class Validator
         $value = deep_get($this->data, $key);
 
         foreach ($rules as $rule) {
+            // For the nullable rule, the the value is nullable
+            // then we don't need to validate other rules.
             if ($rule instanceof NullableRule && ValidationRule::is_nullish($value)) {
                 break;
             }
@@ -247,7 +249,8 @@ class Validator
         $rule->with_data($this->data)
             ->with_name($key)
             ->with_value($value)
-            ->without_messages()
+            ->clear_error_messages()
+            ->sync_custom_messages($this->custom_messages)
             ->should_stop_on_first_failure($this->stop_on_first_failure);
 
         if (!$rule->passed()) {

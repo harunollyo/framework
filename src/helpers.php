@@ -703,7 +703,9 @@ if (!function_exists('Framework\message')) {
      * @param string $key the key of the message
      * @param mixed $args the arguments to pass to the message
      *
-     * @return string
+     * @return string|null
+     * 
+     * @since 1.0.0
      */
     function message($key, ...$args)
     {

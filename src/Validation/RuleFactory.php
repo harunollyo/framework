@@ -75,14 +75,15 @@ class RuleFactory
      * Make the rule instances from the given rule definitions.
      *
      * @param array $rules The rule definitions.
+     * @param array $messages The custom messages to make the rule instances with.
      *
      * @return array
      *
      * @since 1.0.0
      */
-    public static function make(array $rules)
+    public static function make(array $rules, array $messages = [])
     {
-        return (new static($rules))->make_rule_array();
+        return (new static($rules, $messages))->make_rule_array();
     }
 
     /**

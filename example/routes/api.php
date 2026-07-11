@@ -54,13 +54,17 @@ Route::get('/check', function (ExampleRequest $request) {
     ]);
 });
 
-Route::post('/check', function (Request $request) {
-    $validated = Validator::make($request->all(), [
-        'file' => 'array',
-        'file.*' => Rule::image()->types(['application/pdf'])->min('1mb')
+Route::post('/check', function (ExampleRequest $request) {
+    $data = [
+        'name' => 13445,
+        'email' => 'john.doe@example.cc',
+    ];
+    $validated = Validator::make($data, [
+        'name' => 'string|max:3',
+        'email' => 'string|email',
     ])->validated();
 
     return response()->json([
-        'validator' => $validated,
+        'validator' => $request->all(),
     ]);
 });

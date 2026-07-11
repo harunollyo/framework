@@ -75,32 +75,20 @@ class StringRule extends ValidationRule
     ];
 
     /**
-     * The messages for the validation errors.
+     * Construct the rule.
      *
-     * @var array
+     * @param array $args The arguments to pass to the rule.
      *
+     * @return void
+     * 
      * @since 1.0.0
      */
-    protected array $default_messages = [
-        'min' => 'The {name} field must be at least {min} characters long.',
-        'max' => 'The {name} field must be at most {max} characters long.',
-        'length' => 'The {name} field must be {length} characters long.',
-        'size' => 'The {name} field must be {size} characters long.',
-        'email' => 'The {name} field must be a valid email address.',
-        'url' => 'The {name} field must be a valid url.',
-        'regex' => 'The {name} field format is invalid.',
-        'ip' => 'The {name} field must be a valid ip address.',
-        'alpha' => 'The {name} field must only contain alphabetic characters.',
-        'alpha_num' => 'The {name} field must only contain alphabetic characters and numbers.',
-        'alpha_dash' => 'The {name} field must only contain alphabetic characters, dashes and underscores.',
-        'between' => 'The {name} field must be between {min} and {max} characters long.',
-        'starts_with' => 'The {name} field must start with {starts_with}.',
-        'ends_with' => 'The {name} field must end with {ends_with}.',
-        'doesnt_start_with' => 'The {name} field must not start with {doesnt_start_with}.',
-        'doesnt_end_with' => 'The {name} field must not end with {doesnt_end_with}.',
-        'exactly' => 'The {name} field must be exactly {exactly} characters long.',
-        'default' => 'The {name} field must be a string.',
-    ];
+    public function __construct($args = null)
+    {
+        $this->process_default_messages($this->constraints);
+
+        parent::__construct($args);
+    }
 
     /**
      * @inheritDoc
