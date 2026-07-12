@@ -122,7 +122,72 @@ if (!function_exists('Framework\deep_get')) {
             } elseif (is_object($target) && isset($target->{$segment})) {
                 $target = $target->{$segment};
             } else {
-                return $default;
+                return value($default);
+            }
+        }
+
+        return $target;
+    }
+}
+
+if (!function_exists('Framework\deep_set')) {
+    /**
+     * Set a value in an array using a dot notation key.
+     *
+     * @param array $target The target array to set the value in.
+     * @param string|array $key The key to set the value in.
+     * @param mixed $value The value to set.
+     * @return void
+     */
+    function deep_set(&$target, $key, $value, $overwrite = true)
+    {
+        $segments = is_array($key) ? $key : explode('.', $key);
+
+        $segment = array_shift($segments);
+
+        if ($segment === '*') {
+            if (!Arr::accessible($target)) {
+                $target = [];
+            }
+
+            if ($segments) {
+                foreach ($target as &$inner) {
+                    deep_set($inner, $segments, $value, $overwrite);
+                }
+
+                unset($inner);
+            } elseif ($overwrite) {
+                foreach ($target as &$inner) {
+                    $inner = $value;
+                }
+            }
+        } elseif (Arr::accessible($target)) {
+            if ($segments) {
+                if (!Arr::exists($target, $segment)) {
+                    $target[$segment] = [];
+                }
+
+                deep_set($target[$segment], $segments, $value, $overwrite);
+            } elseif ($overwrite || !Arr::exists($target, $segment)) {
+                $target[$segment] = $value;
+            }
+        } elseif (is_object($target)) {
+            if ($segments) {
+                if (!isset($target->{$segment})) {
+                    $target->{$segment} = [];
+                }
+
+                deep_set($target->{$segment}, $segments, $value, $overwrite);
+            } elseif ($overwrite || !isset($target->{$segment})) {
+                $target->{$segment} = $value;
+            }
+        } else {
+            $target = [];
+
+            if ($segments) {
+                deep_set($target[$segment], $segments, $value, $overwrite);
+            } elseif ($overwrite) {
+                $target[$segment] = $value;
             }
         }
 
@@ -638,7 +703,9 @@ if (!function_exists('Framework\message')) {
      * @param string $key the key of the message
      * @param mixed $args the arguments to pass to the message
      *
-     * @return string
+     * @return string|null
+     * 
+     * @since 1.0.0
      */
     function message($key, ...$args)
     {

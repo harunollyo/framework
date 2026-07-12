@@ -20,7 +20,7 @@ defined('ABSPATH') || exit;
 /**
  * Validates that the given field is absent or empty.
  */
-class ProhibitedIfRule extends ValidationRule
+class ProhibitedUnlessRule extends ValidationRule
 {
     /**
      * The rule name.
@@ -29,7 +29,7 @@ class ProhibitedIfRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected string $rule = 'prohibited_if';
+    protected string $rule = 'prohibited_unless';
 
     /**
      * Whether the rule is an implicit rule.
@@ -51,7 +51,7 @@ class ProhibitedIfRule extends ValidationRule
     {
         $callback = $this->get_callback();
 
-        if (!$callback()) {
+        if ($callback()) {
             return true;
         }
 

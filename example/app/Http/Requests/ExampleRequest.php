@@ -10,10 +10,8 @@ class ExampleRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'data' => 'required|array',
-            'data.name' => 'required|string|min:3',
-            'data.age' => 'required|integer',
+            'name' => 'string|max:3',
+            'email' => 'string|email',
         ];
     }
 
@@ -21,18 +19,20 @@ class ExampleRequest extends Request
     {
         return [
             'name' => Sanitizer::TEXT,
-            'age' => Sanitizer::INT,
-            'options' => Sanitizer::ARRAY,
+            'email' => Sanitizer::EMAIL,
         ];
     }
 
     public function messages()
     {
         return [
-            'data.name' => [
-                'required' => 'You have to provide a value for the name field.',
-                // 'string' => fn ($key) => sprintf('The "%s" field must be a string.', $key),
-                'min' => fn ($key, $value) => sprintf('The "%s" field must be greater than or equal to %s characters.', $key, $value),
+            'name' => [
+                'string' => 'The `name` must be a string.',
+                'max' => 'The `name` field must be at most 3 characters long.',
+            ],
+            'email' => [
+                'string' => 'The `email` must be a string.',
+                'email' => fn ($key, $value) => sprintf('The `%s` field must be a valid email address. Found: %s', $key, $value),
             ],
         ];
     }

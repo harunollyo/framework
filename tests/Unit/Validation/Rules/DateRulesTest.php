@@ -7,73 +7,85 @@ use Framework\Validation\Validator;
 
 class DateRulesTest extends TestCase
 {
-    public function test_date_rule_accepts_db_date_format(): void
+    protected function setUp(): void
     {
-        $validator = Validator::make(
-            ['starts_on' => '2024-05-01'],
-            ['starts_on' => 'date']
-        );
+        parent::setUp();
 
-        $this->assertTrue($validator->is_valid());
-    }
-
-    public function test_date_rule_rejects_invalid_dates(): void
-    {
-        $validator = Validator::make(
-            ['starts_on' => '2024-13-40'],
-            ['starts_on' => 'date']
-        );
-
-        $this->assertTrue($validator->is_failed());
-    }
-
-    public function test_datetime_rule_accepts_db_datetime_format(): void
-    {
-        $validator = Validator::make(
-            ['published_at' => '2024-05-01 14:30:00'],
-            ['published_at' => 'datetime']
-        );
-
-        $this->assertTrue($validator->is_valid());
-    }
-
-    public function test_date_format_rule_accepts_custom_format(): void
-    {
-        $validator = Validator::make(
-            ['starts_on' => '01-05-2024'],
-            ['starts_on' => 'date_format:d-m-Y']
-        );
-
-        $this->assertTrue($validator->is_valid());
-    }
-
-    public function test_after_rule_passes_when_date_is_after_reference_field(): void
-    {
         $this->bind_date_manager();
-
-        $validator = Validator::make(
-            [
-                'starts_on' => '2024-01-01',
-                'ends_on' => '2024-06-01',
-            ],
-            ['ends_on' => 'after:starts_on']
-        );
-
-        $this->assertTrue($validator->is_valid());
     }
 
-    public function test_after_rule_fails_when_date_is_before_reference_field(): void
+    public function test_date_accepts_parseable_dates(): void
     {
-        $this->bind_date_manager();
+        $this->assertTrue(Validator::make(['published_at' => '2024-01-15'], ['published_at' => 'date'])->passes());
+        $this->assertTrue(Validator::make(['published_at' => '2024-01-15 10:30:00'], ['published_at' => 'date'])->passes());
+    }
 
+    public function test_date_rejects_invalid_values(): void
+    {
+        $this->assertTrue(Validator::make(['published_at' => 'not-a-date'], ['published_at' => 'date'])->fails());
+        $this->assertTrue(Validator::make(['published_at' => ['array']], ['published_at' => 'date'])->fails());
+    }
+
+    public function test_after_constraint_with_literal_date(): void
+    {
+        $this->assertTrue(
+            Validator::make(['end_date' => '2024-02-01'], ['end_date' => 'date|after:2024-01-01'])->passes()
+        );
+        $this->assertTrue(
+            Validator::make(['end_date' => '2023-12-01'], ['end_date' => 'date|after:2024-01-01'])->fails()
+        );
+    }
+
+    public function test_after_constraint_resolves_another_field_first(): void
+    {
         $validator = Validator::make(
-            [
-                'starts_on' => '2024-06-01',
-                'ends_on' => '2024-01-01',
-            ],
-            ['ends_on' => 'after:starts_on']
+            ['start_date' => '2024-03-01', 'end_date' => '2024-02-01'],
+            ['end_date' => 'date|after:start_date']
         );
 
-        $this->assertTrue($validator->is_failed());
+        $this->assertTrue($validator->fails());
+        $this->assertArrayHasKey('end_date', $validator->errors());
+
+        $validator = Validator::make(
+            ['start_date' => '2024-01-01', 'end_date' => '2024-02-01'],
+            ['end_date' => 'date|after:start_date']
+        );
+
+        $this->assertTrue($validator->passes());
+    }
+
+    public function test_after_constraint_fails_for_invalid_reference(): void
+    {
+        $validator = Validator::make(
+            ['end_date' => '2024-02-01'],
+            ['end_date' => 'date|after:not-a-date']
+        );
+
+        $this->assertTrue($validator->fails());
+    }
+
+    public function test_format_constraint_requires_exact_format(): void
+    {
+        $this->assertTrue(
+            Validator::make(['birthday' => '15-01-2024'], ['birthday' => 'date|format:d-m-Y'])->passes()
+        );
+        $this->assertTrue(
+            Validator::make(['birthday' => '2024-01-15'], ['birthday' => 'date|format:d-m-Y'])->fails()
+        );
+    }
+
+    public function test_constraint_failures_produce_descriptive_messages(): void
+    {
+        $validator = Validator::make(
+            ['end_date' => '2023-12-01'],
+            ['end_date' => 'date|after:2024-01-01']
+        );
+
+        $validator->passes();
+
+        $this->assertSame(
+            ['The end_date field must be a date after 2024-01-01.'],
+            $validator->errors()['end_date']
+        );
     }
 }

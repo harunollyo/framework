@@ -3,111 +3,90 @@
 namespace Framework\Tests\Unit\Validation\Rules;
 
 use Framework\Tests\Unit\TestCase;
+use Framework\Validation\Rule;
 use Framework\Validation\Validator;
 
 class ComparisonRulesTest extends TestCase
 {
-    public function test_min_rule_validates_string_length(): void
+    public function test_in_accepts_listed_values(): void
     {
-        $validator = Validator::make(
-            ['code' => 'ab'],
-            ['code' => 'string|min:3']
-        );
-
-        $this->assertTrue($validator->is_failed());
+        $this->assertTrue(Validator::make(['status' => 'active'], ['status' => 'in:active,inactive'])->passes());
+        $this->assertTrue(Validator::make(['status' => 'deleted'], ['status' => 'in:active,inactive'])->fails());
     }
 
-    public function test_max_rule_validates_string_length(): void
+    public function test_in_accepts_fluent_rule_with_array(): void
     {
         $validator = Validator::make(
-            ['code' => 'abcdef'],
-            ['code' => 'string|max:3']
+            ['status' => 'archived'],
+            ['status' => [Rule::in(['active', 'inactive'])]]
         );
 
-        $this->assertTrue($validator->is_failed());
+        $this->assertTrue($validator->fails());
+        $this->assertSame(
+            ['The status field must be in the list of "active, inactive".'],
+            $validator->errors()['status']
+        );
     }
 
-    public function test_min_rule_validates_numeric_values(): void
+    public function test_not_in_rejects_listed_values(): void
     {
-        $validator = Validator::make(
-            ['quantity' => 2],
-            ['quantity' => 'integer|min:5']
-        );
-
-        $this->assertTrue($validator->is_failed());
+        $this->assertTrue(Validator::make(['username' => 'admin'], ['username' => 'not_in:admin,root'])->fails());
+        $this->assertTrue(Validator::make(['username' => 'jane'], ['username' => 'not_in:admin,root'])->passes());
     }
 
-    public function test_gt_rule_validates_numeric_comparison(): void
+    public function test_not_in_failure_message_lists_disallowed_values(): void
     {
-        $validator = Validator::make(
-            ['price' => 5],
-            ['price' => 'integer|gt:10']
-        );
+        $validator = Validator::make(['username' => 'root'], ['username' => 'not_in:admin,root']);
 
-        $this->assertTrue($validator->is_failed());
+        $validator->passes();
+
+        $this->assertSame(
+            ['The username field must not be in the list of "admin, root".'],
+            $validator->errors()['username']
+        );
     }
 
-    public function test_gte_rule_passes_on_equal_values(): void
+    public function test_same_as_passes_for_identical_values(): void
     {
         $validator = Validator::make(
-            ['price' => 10],
-            ['price' => 'integer|gte:10']
+            ['password' => 'secret', 'password_confirmation' => 'secret'],
+            ['password_confirmation' => 'same_as:password']
         );
 
-        $this->assertTrue($validator->is_valid());
+        $this->assertTrue($validator->passes());
     }
 
-    public function test_lt_rule_validates_numeric_comparison(): void
+    public function test_same_as_fails_for_different_values(): void
     {
         $validator = Validator::make(
-            ['discount' => 15],
-            ['discount' => 'integer|lt:10']
+            ['password' => 'secret', 'password_confirmation' => 'other'],
+            ['password_confirmation' => 'same_as:password']
         );
 
-        $this->assertTrue($validator->is_failed());
+        $this->assertTrue($validator->fails());
+        $this->assertSame(
+            ['The password_confirmation field must match the password field.'],
+            $validator->errors()['password_confirmation']
+        );
     }
 
-    public function test_lte_rule_passes_on_equal_values(): void
+    public function test_same_as_uses_strict_comparison(): void
     {
         $validator = Validator::make(
-            ['discount' => 10],
-            ['discount' => 'integer|lte:10']
+            ['count' => 1, 'count_confirmation' => '1'],
+            ['count_confirmation' => 'same_as:count']
         );
 
-        $this->assertTrue($validator->is_valid());
+        $this->assertTrue($validator->fails());
     }
 
-    public function test_in_rule_accepts_allowed_values(): void
+    public function test_same_as_resolves_dot_notation_fields(): void
     {
         $validator = Validator::make(
-            ['status' => 'active'],
-            ['status' => 'in:active,inactive,pending']
+            ['user' => ['email' => 'jane@example.com'], 'email_confirmation' => 'jane@example.com'],
+            ['email_confirmation' => 'same_as:user.email']
         );
 
-        $this->assertTrue($validator->is_valid());
-    }
-
-    public function test_not_in_rule_rejects_disallowed_values(): void
-    {
-        $validator = Validator::make(
-            ['status' => 'deleted'],
-            ['status' => 'not_in:deleted,archived']
-        );
-
-        $this->assertTrue($validator->is_failed());
-    }
-
-    public function test_same_as_rule_requires_matching_field_value(): void
-    {
-        $validator = Validator::make(
-            ['password' => 'secret', 'password_confirmation' => 'different'],
-            [
-                'password' => 'required|string',
-                'password_confirmation' => 'same_as:password',
-            ]
-        );
-
-        $this->assertTrue($validator->is_failed());
-        $this->assertArrayHasKey('password_confirmation', $validator->get_errors());
+        $this->assertTrue($validator->passes());
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Prohibited rule class.
+ * Required rule class.
  *
  * @package    Framework
  * @subpackage Validation
@@ -14,13 +14,11 @@ use Framework\Validation\ValidationRule;
 use InvalidArgumentException;
 
 use function Framework\deep_get;
+use function Framework\Polyfill\array_first;
 
 defined('ABSPATH') || exit;
 
-/**
- * Validates that the given field is absent or empty.
- */
-class ProhibitedIfRule extends ValidationRule
+class RequiredUnlessRule extends ValidationRule
 {
     /**
      * The rule name.
@@ -29,7 +27,7 @@ class ProhibitedIfRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    protected string $rule = 'prohibited_if';
+    protected string $rule = 'required_unless';
 
     /**
      * Whether the rule is an implicit rule.
@@ -51,15 +49,15 @@ class ProhibitedIfRule extends ValidationRule
     {
         $callback = $this->get_callback();
 
-        if (!$callback()) {
+        if ($callback()) {
             return true;
         }
 
         if (static::is_nullish($this->value)) {
-            return true;
+            return $this->fails($this->default_messages['default']);
         }
 
-        return $this->fails($this->default_messages['default']);
+        return true;
     }
 
     /**
@@ -94,10 +92,11 @@ class ProhibitedIfRule extends ValidationRule
         return $other;
     }
 
+
     /**
-     * Get the error messages.
+     * Get the error message.
      *
-     * @return array
+     * @return string
      *
      * @since 1.0.0
      */

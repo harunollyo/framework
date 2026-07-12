@@ -68,7 +68,7 @@ class EventManager
      *
      * @return array
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -140,7 +140,7 @@ class EventManager
      *
      * @return mixed
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */

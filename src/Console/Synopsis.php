@@ -12,7 +12,7 @@ namespace Framework\Console;
 
 defined('ABSPATH') || exit;
 
-use Framework\Supports\Flex;
+use Framework\Supports\Fluent;
 
 /**
  * Synopsis class to describe WP-CLI command arguments, options, and positional parameters.
@@ -26,7 +26,7 @@ use Framework\Supports\Flex;
  * @method $this default($value)
  */
 
-class Synopsis extends Flex
+class Synopsis extends Fluent
 {
     /**
      * Handle dynamic method calls

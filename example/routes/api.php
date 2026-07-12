@@ -1,5 +1,6 @@
 <?php
 
+use Example\App\Events\SampleEvent;
 use Example\App\Http\Controllers\BlogController;
 use Example\App\Http\Controllers\EventsController;
 use Example\App\Http\Controllers\SpeakersController;
@@ -13,7 +14,8 @@ use Framework\Middlewares\AuthMiddleware;
 use Framework\Resource;
 use Framework\Route;
 use Framework\Supports\Arr;
-use Framework\Supports\Facades\Date;
+use Framework\Validation\Rule;
+use Framework\Validation\Validator;
 
 use function Framework\response;
 
@@ -54,18 +56,24 @@ Route::get('/check', function (ExampleRequest $request) {
 
 Route::post('/check', function (Request $request) {
     $data = [
-        'name' => 'John Doe',
-        'email' => 'john.doe@example.com',
-        'role' => 'admin',
-        'is_admin' => true,
+        'name' => 13445,
+        'email' => 'john.doe@example',
     ];
-
-    $other = ['gender' => 'male', 'age' => 20];
-    $posts = Blog::query()->get();
-
-    $resource = TestResource::collection($posts, $other);
+    $validated = Validator::make($data, [
+        'name' => 'string|max:3',
+        'email' => 'string|email',
+    ], [
+        'name' => [
+            'string' => 'The `name` must be a string.',
+            'max' => 'The `name` field must be at most 3 characters long.',
+        ],
+        'email' => [
+            'string' => 'The `email` must be a string.',
+            'email' => fn ($key, $value) => sprintf('The "%s" field must be a valid email address. Found: %s', $key, $value),
+        ],
+    ])->validated();
 
     return response()->json([
-        'blogs' => $resource,
+        'validator' => $validated,
     ]);
 });

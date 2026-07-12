@@ -107,6 +107,17 @@ class ModelTestWpdb extends TestWpdb
    */
     protected function resolve_select(string $sql): array
     {
+        if (preg_match('/^select exists\((.*)\) as [`\']?exists[`\']?\s*$/is', trim($sql), $exists_match)) {
+            $inner_rows = $this->resolve_select($exists_match[1]);
+
+            return [['exists' => empty($inner_rows) ? 0 : 1]];
+        }
+
+        $is_aggregate = (bool) preg_match(
+            '/^select\s+(?:count|sum|avg|min|max)\s*\([^)]*\)\s+as\s+[`\']?aggregate[`\']?/i',
+            trim($sql)
+        );
+
         $sql = preg_replace('/\s+limit\s+\d+/i', '', $sql);
 
         if (!preg_match('/FROM `([^`]+)`/i', $sql, $table_match)) {
@@ -122,18 +133,31 @@ class ModelTestWpdb extends TestWpdb
                 return $this->normalize_sql_value($value);
             }, explode(',', $matches[2]));
 
-            return array_values(array_filter($data, function (array $row) use ($column, $values) {
+            $data = array_values(array_filter($data, function (array $row) use ($column, $values) {
                 return $this->value_in_list($row[$column] ?? null, $values);
             }));
-        }
-
-        if (preg_match('/WHERE `(\w+)` = ([^\s]+)/i', $sql, $matches)) {
+        } elseif (preg_match('/WHERE `(\w+)` = ([^\s]+)/i', $sql, $matches)) {
             $column = $matches[1];
             $value = $this->normalize_sql_value($matches[2]);
 
-            return array_values(array_filter($data, function (array $row) use ($column, $value) {
+            $data = array_values(array_filter($data, function (array $row) use ($column, $value) {
                 return isset($row[$column]) && (string) $row[$column] === (string) $value;
             }));
+        }
+
+        if (preg_match_all('/AND `(\w+)` != ([^\s]+)/i', $sql, $not_matches, PREG_SET_ORDER)) {
+            foreach ($not_matches as $not_match) {
+                $column = $not_match[1];
+                $value = $this->normalize_sql_value($not_match[2]);
+
+                $data = array_values(array_filter($data, function (array $row) use ($column, $value) {
+                    return !isset($row[$column]) || (string) $row[$column] !== (string) $value;
+                }));
+            }
+        }
+
+        if ($is_aggregate) {
+            return [['aggregate' => count($data)]];
         }
 
         return $data;

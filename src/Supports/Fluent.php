@@ -16,14 +16,22 @@ use ArrayAccess;
 use ArrayIterator;
 use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;
+use Framework\Supports\Traits\Macroable;
 use IteratorAggregate;
 use JsonSerializable;
 use Traversable;
 
+use function Framework\deep_get;
+use function Framework\deep_set;
 use function Framework\Polyfill\array_first;
+use function Framework\value;
 
-class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonSerializable
+class Fluent implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonSerializable
 {
+    use Macroable {
+        __call as macro_call;
+    }
+
     /**
      * The attributes.
      *
@@ -48,6 +56,20 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
     }
 
     /**
+     * Create a new instance.
+     *
+     * @param array $attributes The attributes array.
+     *
+     * @return static
+     *
+     * @since 1.0.0
+     */
+    public static function make(array $attributes = [])
+    {
+        return new static($attributes);
+    }
+
+    /**
      * Fill the attributes with the given array.
      *
      * @param array $attributes The attributes array.
@@ -61,6 +83,39 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
         foreach ($attributes as $key => $value) {
             $this->attributes[$key] = $value;
         }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of a given attribute.
+     *
+     * @param string $key The attribute key.
+     * @param mixed $default The default value if the attribute does not exist.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function value($key, $default = null)
+    {
+        if ($this->exists($key)) {
+            return $this->get($key);
+        }
+
+        return value($default);
+    }
+
+    /**
+     * Get the keys of the attributes.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    public function keys()
+    {
+        return array_keys($this->attributes);
     }
 
     /**
@@ -75,11 +130,7 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
      */
     public function get($key, $default = null)
     {
-        if (!array_key_exists($key, $this->attributes)) {
-            return $default;
-        }
-
-        return $this->attributes[$key];
+        return deep_get($this->attributes, $key, $default);
     }
 
     /**
@@ -108,9 +159,106 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
      */
     public function set($key, $value)
     {
-        $this->attributes[$key] = $value;
+        deep_set($this->attributes, $key, $value);
 
         return $this;
+    }
+
+    /**
+     * Remove a given attribute.
+     *
+     * @param string $key The attribute key.
+     *
+     * @return $this
+     *
+     * @since 1.0.0
+     */
+    public function remove($key)
+    {
+        if ($this->exists($key)) {
+            unset($this->attributes[$key]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of a given attribute.
+     *
+     * @param string $keys The attribute keys.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function all($keys = null)
+    {
+        $data = $this->data();
+
+        if (!$keys) {
+            return $data;
+        }
+
+        $results = [];
+
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        foreach ($keys as $key) {
+            Arr::set($results, $key, Arr::get($data, $key));
+        }
+
+        return $results;
+    }
+
+    /**
+     * Get the value of a given attribute.
+     *
+     * @param string $key The attribute key.
+     * @param mixed $default The default value if the attribute does not exist.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function data($key = null, $default = null)
+    {
+        return $this->get($key, $default);
+    }
+
+    /**
+     * Get the attributes.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    public function get_attributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * Check if the attributes are empty.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    public function empty(): bool
+    {
+        return empty($this->attributes);
+    }
+
+    /**
+     * Check if the attributes are not empty.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    public function not_empty(): bool
+    {
+        return !$this->empty();
     }
 
     /**
@@ -197,13 +345,6 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
     }
 
     /**
-     * Get the value for a given offset.
-     *
-     * @param  TKey  $offset
-     * @return TValue|null
-     */
-    #[\ReturnTypeWillChange]
-    /**
      * OffsetGet.
      *
      * @param mixed $offset The offset.
@@ -212,6 +353,7 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
      *
      * @since 1.0.0
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->value($offset);
@@ -248,6 +390,9 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
 
     /**
      * Get an iterator for the attributes.
+     * 
+     * @template TKey
+     * @template TValue
      *
      * @return ArrayIterator<TKey, TValue>
      *
@@ -296,6 +441,10 @@ class Flex implements ArrayAccess, IteratorAggregate, Arrayable, Jsonable, JsonS
      */
     public function __call($method, $arguments)
     {
+        if (static::has_macro($method)) {
+            return $this->macro_call($method, $arguments);
+        }
+
         $this->attributes[$method] = count($arguments) > 0 ? array_first($arguments) : true;
 
         return $this;
