@@ -8,6 +8,7 @@
  */
 namespace Framework\Validation;
 
+use Closure;
 use Framework\Exceptions\ValidationException;
 use Framework\Supports\Arr;
 use Framework\Validation\Rules\ArrayRule;
@@ -229,8 +230,35 @@ class Validator
                 break;
             }
 
+            if ($rule instanceof Closure) {
+                $this->apply_closure_rule($rule, $value, $key);
+                continue;
+            }
+
             $this->apply($rule, $value, $key);
         }
+    }
+
+    /**
+     * Apply a closure to a value.
+     *
+     * @param Closure $closure The closure to apply.
+     * @param mixed $value The value to apply the closure to.
+     * @param string $key The key to apply the closure to.
+     *
+     * @return string|bool
+     * 
+     * @since 1.0.0
+     */
+    protected function apply_closure_rule(Closure $closure, $value, string $key)
+    {
+        $result = $closure($key, $value, $this->data);
+
+        if (is_string($result)) {
+            return $this->add_error($key, $result);
+        }
+
+        return true;
     }
 
     /**

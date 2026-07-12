@@ -61,16 +61,13 @@ Route::post('/check', function (Request $request) {
     ];
     $validated = Validator::make($data, [
         'name' => 'string|max:3',
-        'email' => 'string|email',
-    ], [
-        'name' => [
-            'string' => 'The `name` must be a string.',
-            'max' => 'The `name` field must be at most 3 characters long.',
-        ],
-        'email' => [
-            'string' => 'The `email` must be a string.',
-            'email' => fn ($key, $value) => sprintf('The "%s" field must be a valid email address. Found: %s', $key, $value),
-        ],
+        'email' => function ($key, $value, $data) {
+            if ($value === 'john.doe@example') {
+                return 'The email must be a valid email address. You have entered: ' . $value;
+            }
+
+            return true;
+        },
     ])->validated();
 
     return response()->json([

@@ -9,6 +9,7 @@
 
 namespace Framework\Validation;
 
+use Closure;
 use Framework\Supports\Arr;
 use ReflectionMethod;
 
@@ -17,6 +18,7 @@ defined('ABSPATH') || exit;
 use function Framework\Polyfill\array_first;
 use function Framework\Polyfill\array_last;
 use function Framework\Polyfill\str_contains;
+use function Framework\Polyfill\str_starts_with;
 
 class RuleFactory
 {
@@ -75,15 +77,14 @@ class RuleFactory
      * Make the rule instances from the given rule definitions.
      *
      * @param array $rules The rule definitions.
-     * @param array $messages The custom messages to make the rule instances with.
      *
      * @return array
      *
      * @since 1.0.0
      */
-    public static function make(array $rules, array $messages = [])
+    public static function make(array $rules)
     {
-        return (new static($rules, $messages))->make_rule_array();
+        return (new static($rules))->make_rule_array();
     }
 
     /**
@@ -116,11 +117,17 @@ class RuleFactory
      */
     protected function finalize($rules)
     {
-        $has_implicit = !empty(Arr::where($rules, fn ($rule) => $rule->is_implicit));
+        $has_implicit = !empty(Arr::where($rules, fn ($rule) => $rule instanceof ValidationRule && $rule->is_implicit));
 
-        $rules = Arr::reject($rules, fn ($rule) => $has_implicit && $rule->get_rule_name() === 'nullable');
+        $rules = Arr::reject($rules, fn ($rule) => $rule instanceof ValidationRule && $has_implicit && $rule->get_rule_name() === 'nullable');
 
-        usort($rules, fn ($first, $second) => $first->is_implicit || $first->get_rule_name() === 'nullable' ? -1 : 1);
+        usort(
+            $rules,
+            fn ($first, $second) => $first instanceof ValidationRule && 
+                ($first->is_implicit || $first->get_rule_name() === 'nullable')
+                    ? -1
+                    : 1
+        );
 
         return $rules;
     }
@@ -138,6 +145,10 @@ class RuleFactory
     protected function build_rule(string $rule, array $constraints)
     {
         if (is_subclass_of($rule, ValidationRule::class)) {
+            return array_first($constraints);
+        }
+
+        if (str_starts_with($rule, 'closure-')) {
             return array_first($constraints);
         }
 
@@ -180,6 +191,11 @@ class RuleFactory
         foreach ($rules as $rule) {
             if ($rule instanceof ValidationRule) {
                 $this->chain[get_class($rule)] = [$rule];
+                continue;
+            }
+
+            if ($rule instanceof Closure) {
+                $this->chain['closure-' . uniqid()] = [$rule];
                 continue;
             }
 
