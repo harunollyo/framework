@@ -21,6 +21,7 @@ use Framework\Supports\Arr;
 use Framework\Validation\Validator;
 use WP_REST_Request;
 use Framework\Supports\Str;
+use InvalidArgumentException;
 
 use function Framework\message;
 use function Framework\user;
@@ -112,6 +113,15 @@ class Request implements RequestContract, Arrayable
      * @since 1.0.0
      */
     protected bool $validation_resolved = false;
+
+    /**
+     * The route parameters.
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
+    protected array $route_params = [];
 
     /**
      * Registered sanitizer method suffixes for typed request accessors.
@@ -241,6 +251,7 @@ class Request implements RequestContract, Arrayable
         $this->method = $request->get_method();
         $this->route = $request->get_route();
         $this->headers = $request->get_headers();
+        $this->route_params = $request->get_url_params();
 
         return $this;
     }
@@ -437,6 +448,25 @@ class Request implements RequestContract, Arrayable
         }
 
         return $results;
+    }
+
+    /**
+     * Get the route parameters.
+     *
+     * @param string $key The key of the route parameter.
+     * @param mixed $default The default value.
+     *
+     * @return array|mixed
+     *
+     * @since 1.0.0
+     */
+    public function route($key, $default = null)
+    {
+        if (empty($key)) {
+            throw new InvalidArgumentException('The route key is required.');
+        }
+
+        return Arr::get($this->route_params, $key, $default);
     }
 
     /**

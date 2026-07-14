@@ -13,7 +13,6 @@ namespace Framework\Http\Client;
 defined('ABSPATH') || exit;
 
 use BadMethodCallException;
-use Framework\Collections\Collection;
 use Framework\Supports\Arr;
 use Framework\Supports\Str;
 use Framework\Supports\Traits\Macroable;

@@ -50,9 +50,9 @@ Route::get('/options', function (Request $request) {
     ]);
 });
 
-Route::get('/check', function (ExampleRequest $request) {
+Route::get('/check/{id}/another/{value}', function (Request $request) {
     return response()->json([
-        'request' => $request->string('name'),
+        'request' => $request->route('id'),
     ]);
 });
 
