@@ -10,11 +10,13 @@
 namespace Framework\Validation;
 
 use Closure;
+use Framework\Exceptions\InvalidValidationRuleException;
 use Framework\Supports\Arr;
 use ReflectionMethod;
 
 defined('ABSPATH') || exit;
 
+use function Framework\message;
 use function Framework\Polyfill\array_first;
 use function Framework\Polyfill\array_last;
 use function Framework\Polyfill\str_contains;
@@ -124,7 +126,7 @@ class RuleFactory
         usort(
             $rules,
             fn ($first, $second) => $first instanceof ValidationRule && 
-                ($first->is_implicit || $first->get_rule_name() === 'nullable')
+                ($first->is_implicit || in_array($first->get_rule_name(), ['nullable', 'sometimes'], true))
                     ? -1
                     : 1
         );
@@ -202,7 +204,13 @@ class RuleFactory
             $rule_name = $this->rule_name($rule);
             $arguments = $this->rule_arguments($rule);
 
-            if (($rule_class = $this->get_rule_class($rule_name, $arguments)) !== null) {
+            $rule_class = $this->get_rule_class($rule_name, $arguments);
+
+            if ($rule_class === null && $last_base_rule === null) {
+                throw new InvalidValidationRuleException(message('validator.invalid_rule', [$rule]));
+            }
+
+            if ($rule_class !== null) {
                 $last_base_rule = $rule_class->get_rule_name();
             }
 

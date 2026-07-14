@@ -13,9 +13,11 @@ use Framework\Exceptions\ValidationException;
 use Framework\Supports\Arr;
 use Framework\Validation\Rules\ArrayRule;
 use Framework\Validation\Rules\NullableRule;
+use Framework\Validation\Rules\SometimesRule;
 use stdClass;
 
 use function Framework\deep_get;
+use function Framework\message;
 
 defined('ABSPATH') || exit;
 
@@ -230,6 +232,12 @@ class Validator
                 break;
             }
 
+            // For the sometimes rule,
+            // if the key does not exist in the validating data then skip validation.
+            if ($rule instanceof SometimesRule && !array_key_exists($key, $this->data)) {
+                break;
+            }
+
             if ($rule instanceof Closure) {
                 $this->apply_closure_rule($rule, $value, $key);
                 continue;
@@ -252,10 +260,14 @@ class Validator
      */
     protected function apply_closure_rule(Closure $closure, $value, string $key)
     {
-        $result = $closure($key, $value, $this->data);
+        $result = $closure($value, $key, $this->data);
 
         if (is_string($result)) {
             return $this->add_error($key, $result);
+        }
+
+        if ($result === false) {
+            return $this->add_error($key, message('validator.invalid', [$key]));
         }
 
         return true;
@@ -401,5 +413,25 @@ class Validator
                 return $rule instanceof ArrayRule;
             })
         );
+    }
+
+    /**
+     * Sometimes the rules should be applied.
+     *
+     * @param string $key The key to apply the rules to.
+     * @param array|string $rules The rules to apply.
+     * @param callable $callback The callback to check if the rules should be applied.
+     *
+     * @return void
+     * 
+     * @since 1.0.0
+     */
+    public function sometimes(string $key, $rules, $callback)
+    {
+        if ($callback($this->data)) {
+            $rules = [$key => $rules];
+            $rules = $this->parse_rules($rules);
+            $this->rules = array_merge($this->rules, $rules);
+        }
     }
 }

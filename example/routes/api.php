@@ -14,9 +14,11 @@ use Framework\Middlewares\AuthMiddleware;
 use Framework\Resource;
 use Framework\Route;
 use Framework\Supports\Arr;
+use Framework\Supports\Facades\Http;
 use Framework\Validation\Rule;
 use Framework\Validation\Validator;
 
+use function Framework\dd;
 use function Framework\response;
 
 Route::set_namespace('framework/v1');
@@ -56,21 +58,24 @@ Route::get('/check', function (ExampleRequest $request) {
 
 Route::post('/check', function (Request $request) {
     $data = [
-        'name' => 13445,
-        'email' => 'john.doe@example',
+        'name' => 'John Doe',
+        // 'email' => 'john.doe@example',
     ];
-    $validated = Validator::make($data, [
-        'name' => 'string|max:3',
-        'email' => function ($key, $value, $data) {
-            if ($value === 'john.doe@example') {
-                return 'The email must be a valid email address. You have entered: ' . $value;
-            }
+    $validator = Validator::make($data, [
+        'name' => [
+            'required',
+            'string',
+        ],
+        'email' => [
+            'email',
+        ],
+    ]);
 
-            return true;
-        },
-    ])->validated();
+    $validator->sometimes('email', 'required|email', function ($data) {
+        return $data['name'] === 'John Doe';
+    });
 
     return response()->json([
-        'validator' => $validated,
+        'validator' => $validator->validated(),
     ]);
 });

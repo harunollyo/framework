@@ -55,6 +55,8 @@ class MessagesBag
         return [
             'validator' => [
                 'failed' => 'Validation failed!',
+                'invalid' => 'The %s field is invalid.',
+                'invalid_rule' => 'There is no validation rule defined as %s.',
                 'required' => [
                     'default' => 'The {name} field is required.',
                 ],
