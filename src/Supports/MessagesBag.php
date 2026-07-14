@@ -55,6 +55,8 @@ class MessagesBag
         return [
             'validator' => [
                 'failed' => 'Validation failed!',
+                'invalid' => 'The %s field is invalid.',
+                'invalid_rule' => 'There is no validation rule defined as %s.',
                 'required' => [
                     'default' => 'The {name} field is required.',
                 ],
@@ -235,6 +237,6 @@ class MessagesBag
             throw new InvalidArgumentException('You may forget to define the full path of the message key.');
         }
 
-        return vsprintf(esc_html($message), $args);
+        return vsprintf($message, $args);
     }
 }

@@ -27,6 +27,7 @@ use Framework\Validation\Rules\RequiredIfRule;
 use Framework\Validation\Rules\RequiredRule;
 use Framework\Validation\Rules\RequiredUnlessRule;
 use Framework\Validation\Rules\SameAsRule;
+use Framework\Validation\Rules\SometimesRule;
 use Framework\Validation\Rules\StringRule;
 use Framework\Validation\Rules\UniqueRule;
 
@@ -196,6 +197,18 @@ class Rule
     public static function nullable()
     {
         return new NullableRule();
+    }
+
+    /**
+     * Create a new sometimes rule.
+     *
+     * @return SometimesRule
+     *
+     * @since 1.0.0
+     */
+    public static function sometimes()
+    {
+        return new SometimesRule();
     }
 
     /**
