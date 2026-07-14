@@ -237,6 +237,6 @@ class MessagesBag
             throw new InvalidArgumentException('You may forget to define the full path of the message key.');
         }
 
-        return vsprintf(esc_html($message), $args);
+        return vsprintf($message, $args);
     }
 }
