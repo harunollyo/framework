@@ -121,7 +121,10 @@ class RuleFactory
     {
         $has_implicit = !empty(Arr::where($rules, fn ($rule) => $rule instanceof ValidationRule && $rule->is_implicit));
 
-        $rules = Arr::reject($rules, fn ($rule) => $rule instanceof ValidationRule && $has_implicit && $rule->get_rule_name() === 'nullable');
+        $rules = Arr::reject(
+            $rules,
+            fn ($rule) => $rule instanceof ValidationRule && $has_implicit && $rule->get_rule_name() === 'nullable'
+        );
 
         usort(
             $rules,
