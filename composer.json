@@ -3,7 +3,7 @@
 	"type": "library",
 	"description": "Elegant PHP framework for WordPress plugins",
 	"license": "GPL-2.0-or-later",
-	"version": "1.0.17",
+	"version": "1.0.18",
 	"keywords": [
 		"wordpress",
 		"framework",
