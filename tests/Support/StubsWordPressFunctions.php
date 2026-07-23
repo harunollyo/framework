@@ -179,6 +179,11 @@ if (!class_exists('WP_REST_Request')) {
         {
             return $this->headers;
         }
+
+        public function get_url_params()
+        {
+            return $this->params['URL'] ?? [];
+        }
     }
 }
 
