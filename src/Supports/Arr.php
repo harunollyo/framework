@@ -384,7 +384,7 @@ class Arr
      */
     public static function accessible($value)
     {
-        return is_array($value) || $value instanceof Arrayable;
+        return is_array($value) || $value instanceof ArrayAccess;
     }
 
     /**

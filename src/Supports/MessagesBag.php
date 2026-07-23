@@ -231,7 +231,7 @@ class MessagesBag
     public function get(string $key, ...$args)
     {
         $args = !empty($args) ? Arr::flatten($args) : [];
-        $message = Arr::get($this->messages(), $key);
+        $message = Arr::get($this->messages(), $key, '');
 
         if (is_array($message)) {
             throw new InvalidArgumentException('You may forget to define the full path of the message key.');

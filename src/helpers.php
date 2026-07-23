@@ -16,6 +16,7 @@ use Faker\Factory;
 use Faker\Generator;
 use Framework\Application;
 use Framework\Collections\Collection;
+use Framework\Contracts\Support\Arrayable;
 use Framework\Database\Migrations\Migrator;
 use Framework\Http\Request;
 use Framework\Wordpress\User;

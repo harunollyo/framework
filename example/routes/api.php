@@ -1,5 +1,6 @@
 <?php
 
+use Example\App\DTO\SampleDTO;
 use Example\App\Events\SampleEvent;
 use Example\App\Http\Controllers\BlogController;
 use Example\App\Http\Controllers\EventsController;
@@ -18,16 +19,36 @@ use Framework\Supports\Facades\Http;
 use Framework\Validation\Rule;
 use Framework\Validation\Validator;
 
+use function Framework\collection;
 use function Framework\dd;
 use function Framework\response;
 
 Route::set_namespace('framework/v1');
 
 Route::get('/ping', function (Request $request) {
-    $blog = Blog::with(['comments' => fn ($query) => $query->select('id', 'blog_id', 'body')])->find(1);
+    $data = [
+        'name' => 'John Doe',
+        'age' => 20,
+        'gender' => 'abc',
+    ];
+
+    $validator = Validator::make($data, [
+        'name' => [
+            'required',
+            'string',
+        ],
+        'age' => [
+            'required',
+        ],
+        'gender' => ['sometimes', 'required', 'in:male,female']
+    ]);
+
+    // $validator->sometimes('gender', 'required|in:male,female', function ($data) {
+    //     return $data['age'] > 18;
+    // });
 
     return response()->json([
-        'data' => $blog,
+        'data' => $validator->validated(),
     ]);
 });
 
