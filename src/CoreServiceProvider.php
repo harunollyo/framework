@@ -18,13 +18,14 @@ use Framework\Database\Migrations\Migrator;
 use Framework\Database\Schema\SchemaManager;
 use Framework\Discovery\ListenerDiscovery;
 use Framework\Discovery\PolicyDiscovery;
+use Framework\Contracts\SomoyInterface;
 use Framework\Managers\EventManager;
 use Framework\Managers\LogManager;
 use Framework\Managers\PolicyManager;
 use Framework\ServiceProvider;
-use Framework\Managers\DateManager;
 use Framework\Http\Response;
 use Framework\Supports\MessagesBag;
+use Framework\Supports\Somoy;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -98,7 +99,9 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(LogManager::class);
         $this->app->singleton(EventManager::class);
         $this->app->singleton(PolicyManager::class);
-        $this->app->singleton(DateManager::class);
+        $this->app->bind(SomoyInterface::class, function () {
+            return new Somoy();
+        });
         $this->app->singleton(CommandManager::class);
     }
 

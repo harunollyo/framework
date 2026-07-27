@@ -51,7 +51,7 @@ trait HasTimestamps
     /**
      * Get the current timestamp for a model instance.
      *
-     * @return \DateTime The current timestamp
+     * @return \Framework\Contracts\SomoyInterface The current timestamp
      *
      * @since 1.0.0
      */

@@ -8,6 +8,8 @@
  */
 namespace Framework\Validation\Rules;
 
+use Framework\Constants\DateTimeFormats;
+use Framework\Exceptions\InvalidDateFormatException;
 use Framework\Supports\Facades\Date;
 use Framework\Validation\ValidationRule;
 
@@ -51,8 +53,8 @@ class DateRule extends ValidationRule
      * @var string
      *
      * @since 1.0.0
-     */ 
-    public const DATE_FORMAT = 'Y-m-d';
+     */
+    public const DATE_FORMAT = DateTimeFormats::DB_DATE;
 
     /**
      * The datetime format.
@@ -61,7 +63,7 @@ class DateRule extends ValidationRule
      *
      * @since 1.0.0
      */
-    public const DATETIME_FORMAT = 'Y-m-d H:i:s';
+    public const DATETIME_FORMAT = DateTimeFormats::DB_DATETIME;
 
     /**
      * Validate the rule.
@@ -100,7 +102,7 @@ class DateRule extends ValidationRule
             return false;
         }
 
-        return Date::is_after(Date::parse($value), Date::parse($reference));
+        return Date::parse($value)->is_after(Date::parse($reference));
     }
 
     /**
@@ -120,9 +122,13 @@ class DateRule extends ValidationRule
             return false;
         }
 
-        $date = Date::create_from_format($format, $value);
+        try {
+            $date = Date::create_from_format($format, $value);
+        } catch (InvalidDateFormatException $exception) {
+            return false;
+        }
 
-        return $date !== null && $date->format($format) === $value;
+        return $date->format($format) === $value;
     }
 
     /**
@@ -142,9 +148,13 @@ class DateRule extends ValidationRule
             $format = static::DATETIME_FORMAT;
         }
 
-        $date = Date::create_from_format($format, $value);
+        try {
+            $date = Date::create_from_format($format, $value);
+        } catch (InvalidDateFormatException $exception) {
+            return false;
+        }
 
-        return $date !== null && $date->format($format) === $value;
+        return $date->format($format) === $value;
     }
 
     /**

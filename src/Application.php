@@ -36,7 +36,6 @@ use Framework\Managers\PolicyManager;
 use Framework\ServiceProvider;
 use Framework\Filesystem\FileSystemServiceProvider;
 use Framework\Http\Request;
-use Framework\Managers\DateManager;
 use Framework\Filesystem\Path;
 use Framework\Http\Client\Request as ClientRequest;
 use Framework\CoreServiceProvider;
@@ -309,7 +308,6 @@ class Application extends Container
                 'policy' => PolicyManager::class,
                 'event' => EventManager::class,
                 'log' => LogManager::class,
-                'date' => DateManager::class,
                 'client-request' => ClientRequest::class,
                 'command' => CommandManager::class,
                 RequestContract::class => Request::class,

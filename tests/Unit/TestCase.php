@@ -12,8 +12,9 @@ use Framework\Database\Query\Relations\Relation;
 use Framework\Database\Schema\Structure;
 use Framework\Tests\Support\Database\ModelTestWpdb;
 use Framework\Facade;
-use Framework\Managers\DateManager;
+use Framework\Contracts\SomoyInterface;
 use Framework\Route;
+use Framework\Supports\Somoy;
 use Framework\Supports\Str;
 use Framework\Tests\Support\Database\TestWpdb;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -36,14 +37,13 @@ abstract class TestCase extends BaseTestCase
         return dirname(__DIR__, 2);
     }
 
-    protected function bind_date_manager(): void
+    protected function bind_somoy(): void
     {
         $container = new Container();
         $container->instance('app', $container);
-        $container->singleton(DateManager::class, function () {
-            return new DateManager();
+        $container->bind(SomoyInterface::class, function () {
+            return new Somoy();
         });
-        $container->alias('date', DateManager::class);
 
         $this->set_container_instance($container);
     }
@@ -93,10 +93,9 @@ abstract class TestCase extends BaseTestCase
 
         $container = new Container();
         $container->instance('app', $container);
-        $container->singleton(DateManager::class, function () {
-            return new DateManager();
+        $container->bind(SomoyInterface::class, function () {
+            return new Somoy();
         });
-        $container->alias('date', DateManager::class);
         $container->instance(Connection::class, new Connection());
 
         $this->set_container_instance($container);

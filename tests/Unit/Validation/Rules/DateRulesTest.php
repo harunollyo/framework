@@ -7,13 +7,6 @@ use Framework\Validation\Validator;
 
 class DateRulesTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->bind_date_manager();
-    }
-
     public function test_date_accepts_parseable_dates(): void
     {
         $this->assertTrue(Validator::make(['published_at' => '2024-01-15'], ['published_at' => 'date'])->passes());

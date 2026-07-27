@@ -329,6 +329,11 @@ if (!function_exists('Framework\without_prefix')) {
 if (!function_exists('Framework\redirect')) {
     /**
      * Redirect to the given location.
+     * 
+     * @param string $location
+     * @return void
+     * 
+     * @since 1.0.0
      */
     function redirect($location)
     {
