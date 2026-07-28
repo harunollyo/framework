@@ -482,6 +482,22 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
+     * Validate the request data.
+     *
+     * @param array $rules The rules to validate.
+     *
+     * @return array
+     *
+     * @throws ValidationException if fails to validate.
+     *
+     * @since 1.0.0
+     */
+    public function validate(array $rules)
+    {
+        return $this->run_validation($this->attributes(), $rules);
+    }
+
+    /**
      * Get the validated data.
      *
      * @return array

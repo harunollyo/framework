@@ -721,7 +721,7 @@ class Application extends Container
      */
     public function is_cli_available()
     {
-        return defined('WP_CLI') && WP_CLI;
+        return defined('WP_CLI') && \WP_CLI;
     }
 
     /**

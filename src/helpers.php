@@ -473,7 +473,7 @@ if (!function_exists('Framework\configure_dumper')) {
         }
 
         $configured = true;
-        $is_cli = defined('WP_CLI') && WP_CLI;
+        $is_cli = defined('WP_CLI') && \WP_CLI;
 
         if ($is_cli) {
             VarDumper::setHandler(function ($var) {
