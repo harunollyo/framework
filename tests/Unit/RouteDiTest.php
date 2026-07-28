@@ -5,7 +5,9 @@ namespace Framework\Tests\Unit;
 use Exception;
 use InvalidArgumentException;
 use Framework\Contracts\Request as RequestContract;
+use Framework\Http\Request;
 use Framework\Route;
+use WP_REST_Request;
 
 class RouteDiTest extends TestCase
 {
@@ -87,6 +89,27 @@ class RouteDiTest extends TestCase
         $this->assertSame(RouteDiDependentService::class, $dependencies['abstracts'][0]['type']);
     }
 
+    public function test_resolve_closure_dependencies_categorizes_parameters(): void
+    {
+        $route = Route::get('hello/{name}', function (RequestContract $request, string $name, RouteDiDependentService $service) {
+            return compact('request', 'name', 'service');
+        });
+
+        $dependencies = $this->invoke_route_method(
+            $route,
+            'resolve_closure_dependencies',
+            $this->read_route_property($route, 'action')
+        );
+
+        $this->assertCount(1, $dependencies['requests']);
+        $this->assertSame(RequestContract::class, $dependencies['requests'][0]['type']);
+        $this->assertCount(1, $dependencies['builtins']);
+        $this->assertSame('string', $dependencies['builtins'][0]['type']);
+        $this->assertSame('name', $dependencies['builtins'][0]['variable']);
+        $this->assertCount(1, $dependencies['abstracts']);
+        $this->assertSame(RouteDiDependentService::class, $dependencies['abstracts'][0]['type']);
+    }
+
     public function test_resolve_method_dependencies_requires_single_request_parameter(): void
     {
         $route = Route::get('ping', [RouteDiControllerWithMultipleRequests::class, 'handle']);
@@ -100,6 +123,23 @@ class RouteDiTest extends TestCase
             RouteDiControllerWithMultipleRequests::class,
             'handle'
         );
+    }
+
+    public function test_rest_closure_dispatch_injects_route_params(): void
+    {
+        $this->bootstrap_application();
+
+        $route = Route::get('hello/{name}', function (Request $request, string $name) {
+            return 'hi-' . $name;
+        });
+
+        $rest_request = new WP_REST_Request('GET', '/framework/v1/hello/sajeeb', ['name' => 'sajeeb']);
+        $this->invoke_route_method($route, 'resolve_permission_callback', $rest_request);
+
+        $callback = $this->invoke_route_method($route, 'resolve_route');
+        $result = $callback($rest_request);
+
+        $this->assertSame('hi-sajeeb', $result);
     }
 
     public function test_sort_dependencies_orders_by_parameter_position(): void

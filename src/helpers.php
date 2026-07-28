@@ -19,6 +19,7 @@ use Framework\Collections\Collection;
 use Framework\Contracts\Support\Arrayable;
 use Framework\Database\Migrations\Migrator;
 use Framework\Http\Request;
+use Framework\Http\RedirectResponse;
 use Framework\Wordpress\User;
 use Framework\Http\Response;
 use Framework\Supports\Arr;
@@ -27,6 +28,7 @@ use Framework\Supports\MessagesBag;
 use Framework\Supports\Str;
 use Framework\Supports\Url;
 use Framework\Supports\Utils;
+use Framework\View\View;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
@@ -257,6 +259,40 @@ if (!function_exists('Framework\response')) {
             'Referrer-Policy' => 'no-referrer-when-downgrade',
             'Cache-Control' => 'public, max-age=60, stale-while-revalidate=30',
         ]);
+    }
+}
+
+if (!function_exists('Framework\view')) {
+    /**
+     * Create a view instance for the given template.
+     *
+     * @param string $template The template name in dot notation.
+     * @param array $data The data to pass to the template.
+     *
+     * @return View
+     *
+     * @since 1.0.0
+     */
+    function view(string $template, array $data = [])
+    {
+        return new View($template, $data);
+    }
+}
+
+if (!function_exists('Framework\redirect')) {
+    /**
+     * Create a redirect response.
+     *
+     * @param string $url The redirect target URL.
+     * @param int $status The HTTP status code.
+     *
+     * @return RedirectResponse
+     *
+     * @since 1.0.0
+     */
+    function redirect(string $url, int $status = 302)
+    {
+        return new RedirectResponse($url, $status);
     }
 }
 
@@ -593,6 +629,22 @@ if (!function_exists('Framework\resource_path')) {
     function resource_path($path = '')
     {
         return app()->resource_path($path);
+    }
+}
+
+if (!function_exists('Framework\view_path')) {
+    /**
+     * Get the path to the views directory.
+     *
+     * @param string $path
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    function view_path($path = '')
+    {
+        return app()->view_path($path);
     }
 }
 

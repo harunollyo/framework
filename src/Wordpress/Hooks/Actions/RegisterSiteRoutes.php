@@ -1,8 +1,7 @@
 <?php
 /**
- * WordPress rest_api_init action that registers all Route instances with the REST API.
- * Iterates the static route registry and calls register on each.
- * Bridges the Route fluent API to WordPress REST endpoints.
+ * WordPress init action that boots the SiteRouter for all site routes.
+ * Registers rewrite rules, query vars, and dispatch hooks for front-end routes.
  *
  * @package    Framework
  * @subpackage Wordpress\Hooks\Actions
@@ -12,12 +11,13 @@ namespace Framework\Wordpress\Hooks\Actions;
 
 defined('ABSPATH') || exit;
 
+use Framework\Route;
+use Framework\Routing\SiteRouter;
+use Framework\Wordpress\BaseHook;
 use Framework\Wordpress\Constants\HookNames;
 use Framework\Wordpress\Constants\HookTypes;
-use Framework\Wordpress\BaseHook;
-use Framework\Route;
 
-class RegisterRestApi extends BaseHook
+class RegisterSiteRoutes extends BaseHook
 {
     /**
      * Get the name.
@@ -28,7 +28,7 @@ class RegisterRestApi extends BaseHook
      */
     public function get_name()
     {
-        return HookNames::REST_API_INIT;
+        return HookNames::INIT;
     }
 
     /**
@@ -54,14 +54,18 @@ class RegisterRestApi extends BaseHook
      */
     public function handle(...$args)
     {
-        $routes = Route::get_routes();
+        $site_routes = Route::get_site_routes();
 
-        foreach ($routes as $route) {
-            if ($route->is_site_route()) {
-                continue;
-            }
-
-            $route->register();
+        if (empty($site_routes)) {
+            return;
         }
+
+        $router = new SiteRouter(
+            Route::get_site_namespace(),
+            Route::get_routing_method()
+        );
+
+        $router->boot($site_routes);
+        Route::set_site_router($router);
     }
 }

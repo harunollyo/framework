@@ -14,6 +14,7 @@ use Framework\Tests\Support\Database\ModelTestWpdb;
 use Framework\Facade;
 use Framework\Contracts\SomoyInterface;
 use Framework\Route;
+use Framework\Routing\CurrentRoute;
 use Framework\Supports\Somoy;
 use Framework\Supports\Str;
 use Framework\Tests\Support\Database\TestWpdb;
@@ -180,18 +181,31 @@ abstract class TestCase extends BaseTestCase
 
     protected function reset_route_state(): void
     {
+        CurrentRoute::reset();
+
         $reflection = new \ReflectionClass(Route::class);
 
-        foreach (['namespace', 'routes', 'group_stack', 'instances'] as $property_name) {
-            $property = $reflection->getProperty($property_name);
-            $property->setAccessible(true);
+        $defaults = [
+            'namespace' => '',
+            'site_namespace' => '',
+            'routing_method' => Route::ROUTING_REWRITE_RULES,
+            'default_hook_name' => \Framework\Wordpress\Constants\HookNames::TEMPLATE_REDIRECT,
+            'routes' => [],
+            'named_routes' => [],
+            'group_stack' => [],
+            'instances' => [],
+            'site_router' => null,
+            'with_site_route' => false,
+        ];
 
-            if ($property_name === 'namespace') {
-                $property->setValue(null, '');
+        foreach ($defaults as $property_name => $value) {
+            if (!$reflection->hasProperty($property_name)) {
                 continue;
             }
 
-            $property->setValue(null, []);
+            $property = $reflection->getProperty($property_name);
+            $property->setAccessible(true);
+            $property->setValue(null, $value);
         }
     }
 }

@@ -108,6 +108,15 @@ class Application extends Container
     protected $resource_path;
 
     /**
+     * View path
+     *
+     * @var string|null
+     *
+     * @since 1.0.0
+     */
+    protected $view_path;
+
+    /**
      * Service providers
      *
      * @var array<string, ServiceProvider>
@@ -235,6 +244,7 @@ class Application extends Container
         $this->instance('path.config', $this->config_path());
         $this->instance('path.database', $this->database_path());
         $this->instance('path.resource', $this->resource_path());
+        $this->instance('path.view', $this->view_path());
     }
 
     /**
@@ -584,6 +594,24 @@ class Application extends Container
     }
 
     /**
+     * Register a view path.
+     *
+     * @param string $path The view path.
+     *
+     * @return static
+     *
+     * @since 1.0.0
+     */
+    public function use_view_path($path)
+    {
+        $this->view_path = $path;
+
+        $this->instance('path.view', $path);
+
+        return $this;
+    }
+
+    /**
      * Join paths.
      *
      * @param string $base_path The base path to join.
@@ -680,6 +708,20 @@ class Application extends Container
     public function resource_path($path = '')
     {
         return $this->join_paths($this->resource_path ?: $this->base_path('resources'), $path);
+    }
+
+    /**
+     * Get or set the path to the views directory.
+     *
+     * @param string $path Optional path to join or absolute path when setting via use_view_path.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function view_path($path = '')
+    {
+        return $this->join_paths($this->view_path ?: $this->resource_path('views'), $path);
     }
 
     /**

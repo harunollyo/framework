@@ -21,34 +21,16 @@ use Framework\Validation\Validator;
 
 use function Framework\collection;
 use function Framework\dd;
+use function Framework\deep_set;
 use function Framework\response;
 
 Route::set_namespace('framework/v1');
 
-Route::get('/ping', function (Request $request) {
-    $data = [
-        'name' => 'John Doe',
-        'age' => 20,
-        'gender' => 'abc',
-    ];
-
-    $validator = Validator::make($data, [
-        'name' => [
-            'required',
-            'string',
-        ],
-        'age' => [
-            'required',
-        ],
-        'gender' => ['sometimes', 'required', 'in:male,female']
-    ]);
-
-    // $validator->sometimes('gender', 'required|in:male,female', function ($data) {
-    //     return $data['age'] > 18;
-    // });
+Route::get('/ping/{name}', function (Request $request, string $name) {
 
     return response()->json([
-        'data' => $validator->validated(),
+        'data' => true,
+        'name' => $name,
     ]);
 });
 
@@ -71,7 +53,7 @@ Route::get('/options', function (Request $request) {
     ]);
 });
 
-Route::get('/check/{id}/another/{value}', function (Request $request) {
+Route::get('/check', function (Request $request) {
     return response()->json([
         'request' => $request->route('id'),
     ]);
