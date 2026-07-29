@@ -384,8 +384,7 @@ trait HasAttributes
         }
 
         if (!is_null($value) && $this->is_date_attribute($key)) {
-            $this->attributes[$key] = $this->as_date_time($value);
-            return $this;
+            $value = $this->as_date_time($value);
         }
 
         if ($this->is_class_castable($key)) {
@@ -395,9 +394,10 @@ trait HasAttributes
         }
 
         if (!is_null($value) && $this->is_json_castable($key)) {
-            $this->attributes[$key] = $this->cast_attribute_as_json($key, $value);
-            return $this;
+            $value = $this->cast_attribute_as_json($key, $value);
         }
+
+        $this->attributes[$key] = $value;
 
         return $this;
     }
