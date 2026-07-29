@@ -90,15 +90,26 @@ class TemplateEngine
             throw new RuntimeException(sprintf('View [%s] not found.', $view));
         }
 
-        $data = array_merge($this->shared, $data);
+        $merged = array_merge($this->shared, $data);
+        $context = app(ViewContext::class);
+        $context->push([
+            'template' => $view,
+            'route_name' => '',
+            'resolved_path' => $path,
+            'data' => $merged,
+        ]);
 
-        $content = $this->render_file($path, $data);
+        try {
+            $content = $this->render_file($path);
 
-        if (!$layout) {
-            return $content;
+            if (!$layout) {
+                return $content;
+            }
+
+            return $this->wrap_layout($content);
+        } finally {
+            $context->pop();
         }
-
-        return $this->wrap_layout($content);
     }
 
     /**
@@ -167,26 +178,25 @@ class TemplateEngine
     }
 
     /**
-     * Render a PHP template file with extracted data.
+     * Render a PHP template file without extracting data into local variables.
+     *
+     * Templates must read data via view_data().
      *
      * @param string $path Absolute template path.
-     * @param array $data Template data.
      *
      * @return string
      *
      * @since 1.0.0
      */
-    protected function render_file(string $path, array $data)
+    protected function render_file(string $path)
     {
         ob_start();
 
         // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
-        (static function ($__path, $__data) {
-            // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
-            extract($__data, EXTR_SKIP);
+        (static function ($__path) {
             // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
             require $__path;
-        })($path, $data);
+        })($path);
 
         return (string) ob_get_clean();
     }
@@ -200,7 +210,7 @@ class TemplateEngine
      *
      * @since 1.0.0
      */
-    protected function wrap_layout(string $content)
+    public function wrap_layout(string $content)
     {
         ob_start();
 
@@ -282,6 +292,8 @@ class TemplateEngine
      *
      * @return void
      *
+     * @throws RuntimeException When the view cannot be resolved.
+     *
      * @since 1.0.0
      */
     public function include(string $view, array $data = [], bool $once = true)
@@ -289,19 +301,40 @@ class TemplateEngine
         $path = $this->resolve_path($view);
 
         if ($path === '') {
-            return;
+            throw new RuntimeException(sprintf('View [%s] not found.', $view));
         }
 
-        $data = array_merge($this->shared, $data);
+        $merged = array_merge($this->shared, $data);
+        $context = app(ViewContext::class);
+        $context->push([
+            'template' => $view,
+            'route_name' => '',
+            'resolved_path' => $path,
+            'data' => $merged,
+        ]);
 
-        extract($data, EXTR_SKIP);
+        try {
+            if ($once) {
+                require_once $path;
 
-        if ($once) {
-            require_once $path;
+                return;
+            }
 
-            return;
+            require $path;
+        } finally {
+            $context->pop();
         }
+    }
 
-        require $path;
+    /**
+     * Absolute path to the framework layout wrapper stub.
+     *
+     * @return string
+     *
+     * @since 2.1.2
+     */
+    public function layout_wrapper_path()
+    {
+        return dirname(__FILE__) . '/layout-wrapper.php';
     }
 }

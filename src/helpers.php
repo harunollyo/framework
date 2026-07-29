@@ -282,7 +282,7 @@ if (!function_exists('Framework\view')) {
 
 if (!function_exists('Framework\view_data')) {
     /**
-     * Read data shared with the active template_include view context.
+     * Read data from the innermost authorized view context.
      *
      * Supports dot notation for nested keys (e.g. `product.name`).
      *
@@ -296,6 +296,27 @@ if (!function_exists('Framework\view_data')) {
     function view_data($key = null, $default = null)
     {
         return app(ViewContext::class)->get($key, $default);
+    }
+}
+
+if (!function_exists('Framework\include_view')) {
+    /**
+     * Include a nested pure-PHP view partial (Laravel @include equivalent).
+     *
+     * Explicit $data (plus TemplateEngine shared data) is pushed as a child
+     * ViewContext frame. The partial must read values via view_data().
+     *
+     * @param string $view The view name in dot notation.
+     * @param array $data Data for the partial.
+     *
+     * @return void
+     *
+     * @since 2.1.2
+     * @throws \RuntimeException When the view cannot be resolved.
+     */
+    function include_view(string $view, array $data = [])
+    {
+        app(\Framework\View\TemplateEngine::class)->include($view, $data, false);
     }
 }
 

@@ -28,7 +28,7 @@ class TemplateEngineTest extends TestCase
     {
         $views = sys_get_temp_dir() . '/framework-views-' . uniqid();
         mkdir($views . '/shop', 0777, true);
-        file_put_contents($views . '/shop/product.php', '<?php echo esc_html($name);');
+        file_put_contents($views . '/shop/product.php', '<?php echo esc_html(\Framework\view_data("name"));');
 
         $app = $this->bootstrap_application();
         $app->use_view_path($views);
@@ -46,11 +46,12 @@ class TemplateEngineTest extends TestCase
     {
         $views = sys_get_temp_dir() . '/framework-views-' . uniqid();
         mkdir($views, 0777, true);
-        file_put_contents($views . '/hello.php', 'Hello <?php echo $name; ?>');
+        file_put_contents($views . '/hello.php', 'Hello <?php echo \Framework\view_data("name"); ?>');
 
         $app = $this->bootstrap_application();
         $app->use_view_path($views);
         $app->instance(TemplateEngine::class, new TemplateEngine());
+        $app->instance(\Framework\View\ViewContext::class, new \Framework\View\ViewContext());
 
         $output = $app->make(TemplateEngine::class)->render('hello', ['name' => 'World'], false);
 

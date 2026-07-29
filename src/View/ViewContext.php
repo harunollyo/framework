@@ -1,8 +1,8 @@
 <?php
 /**
- * Active view data context for template_include site routes.
+ * Active view data context stack for site route templates.
  *
- * Registers controller view data and exposes it to the matched template via
+ * Registers controller and nested partial view data and exposes it via
  * view_data(), with caller verification to prevent hijacking.
  *
  * @package    Framework
@@ -20,13 +20,13 @@ use function Framework\app;
 class ViewContext
 {
     /**
-     * Active context for the current request.
+     * Stack of view contexts for the current request (root + nested partials).
      *
-     * @var array|null
+     * @var array
      *
      * @since 2.1.2
      */
-    protected $active = null;
+    protected $stack = [];
 
     /**
      * Whether the shutdown clear hook was registered.
@@ -38,13 +38,13 @@ class ViewContext
     protected $shutdown_registered = false;
 
     /**
-     * Prepare and register view data for a template_include dispatch.
+     * Prepare and push view data for a site route view.
      *
      * @param View $view Controller view return value.
      * @param string $route_name Named route or empty string.
      * @param string $resolved_path Absolute template filesystem path.
      *
-     * @return array Final data stored in the active context.
+     * @return array Final data stored in the pushed context.
      *
      * @since 2.1.2
      */
@@ -57,7 +57,7 @@ class ViewContext
         $template = $view->get_template();
         $data = array_merge($engine->get_shared(), $view->get_data());
 
-        $this->activate([
+        $this->push([
             'template' => $template,
             'route_name' => $route_name,
             'resolved_path' => $this->normalize_path($resolved_path),
@@ -68,7 +68,42 @@ class ViewContext
     }
 
     /**
-     * Read a value from the active context when the caller is authorized.
+     * Push a context frame onto the stack.
+     *
+     * @param array $context Context payload with template, route_name, resolved_path, data.
+     *
+     * @return void
+     *
+     * @since 2.1.2
+     */
+    public function push(array $context)
+    {
+        if (isset($context['resolved_path'])) {
+            $context['resolved_path'] = $this->normalize_path((string) $context['resolved_path']);
+        }
+
+        $this->stack[] = $context;
+        $this->ensure_shutdown_registered();
+    }
+
+    /**
+     * Pop the top context frame from the stack.
+     *
+     * @return array|null The removed frame, or null when the stack is empty.
+     *
+     * @since 2.1.2
+     */
+    public function pop()
+    {
+        if ($this->stack === []) {
+            return null;
+        }
+
+        return array_pop($this->stack);
+    }
+
+    /**
+     * Read a value from the innermost authorized context.
      *
      * Supports dot notation for nested keys (e.g. `product.name`).
      *
@@ -81,19 +116,21 @@ class ViewContext
      */
     public function get($key = null, $default = null)
     {
-        if ($this->active === null || !$this->caller_is_authorized()) {
+        $frame = $this->authorized_frame();
+
+        if ($frame === null) {
             return $key === null ? [] : $default;
         }
 
         if ($key === null) {
-            return $this->active['data'];
+            return $frame['data'];
         }
 
-        return Arr::get($this->active['data'], $key, $default);
+        return Arr::get($frame['data'], $key, $default);
     }
 
     /**
-     * Clear the active context.
+     * Clear the entire context stack.
      *
      * @return void
      *
@@ -101,11 +138,11 @@ class ViewContext
      */
     public function clear()
     {
-        $this->active = null;
+        $this->stack = [];
     }
 
     /**
-     * Get the active context metadata, or null when none.
+     * Get the top context frame, or null when the stack is empty.
      *
      * @return array|null
      *
@@ -113,26 +150,68 @@ class ViewContext
      */
     public function get_active()
     {
-        return $this->active;
+        if ($this->stack === []) {
+            return null;
+        }
+
+        return $this->stack[count($this->stack) - 1];
     }
 
     /**
-     * Set the active context and ensure it clears on shutdown.
+     * Find the innermost stack frame that authorizes the current caller.
      *
-     * @param array $context Context payload.
-     *
-     * @return void
+     * @return array|null
      *
      * @since 2.1.2
      */
-    protected function activate(array $context)
+    protected function authorized_frame()
     {
-        $this->active = $context;
-        $this->ensure_shutdown_registered();
+        if ($this->stack === []) {
+            return null;
+        }
+
+        $trace_files = $this->trace_files();
+
+        for ($index = count($this->stack) - 1; $index >= 0; $index--) {
+            $frame = $this->stack[$index];
+
+            if (empty($frame['resolved_path'])) {
+                continue;
+            }
+
+            if (isset($trace_files[$frame['resolved_path']])) {
+                return $frame;
+            }
+        }
+
+        return null;
     }
 
     /**
-     * Register a shutdown callback to clear the active context once.
+     * Collect normalized file paths from the current backtrace.
+     *
+     * @return array<string, bool> Map of normalized path => true.
+     *
+     * @since 2.1.2
+     */
+    protected function trace_files()
+    {
+        $files = [];
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+
+        foreach ($trace as $frame) {
+            if (empty($frame['file'])) {
+                continue;
+            }
+
+            $files[$this->normalize_path($frame['file'])] = true;
+        }
+
+        return $files;
+    }
+
+    /**
+     * Register a shutdown callback to clear the stack once.
      *
      * @return void
      *
@@ -149,37 +228,6 @@ class ViewContext
         add_action('shutdown', function () {
             $this->clear();
         }, 999);
-    }
-
-    /**
-     * Whether the current call stack originates from the active template.
-     *
-     * @return bool
-     *
-     * @since 2.1.2
-     */
-    protected function caller_is_authorized()
-    {
-        if ($this->active === null || empty($this->active['resolved_path'])) {
-            return false;
-        }
-
-        $resolved = $this->active['resolved_path'];
-        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
-        foreach ($trace as $frame) {
-            if (empty($frame['file'])) {
-                continue;
-            }
-
-            $file = $this->normalize_path($frame['file']);
-
-            if ($file === $resolved) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

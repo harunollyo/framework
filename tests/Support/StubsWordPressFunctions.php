@@ -202,6 +202,20 @@ if (!function_exists('wp_is_block_theme')) {
     }
 }
 
+if (!function_exists('get_header')) {
+    function get_header($name = null, $args = [])
+    {
+        echo '<!--header-->';
+    }
+}
+
+if (!function_exists('get_footer')) {
+    function get_footer($name = null, $args = [])
+    {
+        echo '<!--footer-->';
+    }
+}
+
 if (!defined('MINUTE_IN_SECONDS')) {
     define('MINUTE_IN_SECONDS', 60);
 }

@@ -801,6 +801,9 @@ class Route
     /**
      * Disable layout wrapping for views returned by this route.
      *
+     * Applies on template_redirect dispatch only. On template_include,
+     * use View::partial() on the returned view instead.
+     *
      * @return $this
      *
      * @since 1.0.0

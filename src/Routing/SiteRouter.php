@@ -358,7 +358,8 @@ class SiteRouter
 
             if ($result instanceof View) {
                 $path = $result->get_template();
-                $resolved = app(TemplateEngine::class)->resolve_path($path);
+                $engine = app(TemplateEngine::class);
+                $resolved = $engine->resolve_path($path);
 
                 if ($resolved !== '') {
                     app(ViewContext::class)->prepare(
@@ -366,6 +367,10 @@ class SiteRouter
                         (string) $route->get_name(),
                         $resolved
                     );
+
+                    if ($result->uses_layout()) {
+                        return $engine->layout_wrapper_path();
+                    }
 
                     return $resolved;
                 }

@@ -163,7 +163,7 @@ class SiteRouterTest extends TestCase
 
         Route::site(function () {
             Route::get('shop/product', function (Request $request) {
-                return \Framework\view('product', ['title' => 'Widget']);
+                return \Framework\view('product', ['title' => 'Widget'])->partial();
             })->name('shop.product');
         });
 
@@ -189,6 +189,65 @@ class SiteRouterTest extends TestCase
         $output = (string) ob_get_clean();
 
         $this->assertSame('Widget', $output);
+
+        unset($GLOBALS['framework_test_query_vars'], $_SERVER['REQUEST_METHOD']);
+        app(\Framework\View\ViewContext::class)->clear();
+
+        $files = scandir($views);
+        foreach ($files as $file) {
+            if ($file === '.' || $file === '..') {
+                continue;
+            }
+            unlink($views . '/' . $file);
+        }
+        rmdir($views);
+    }
+
+    public function test_handle_template_include_returns_layout_wrapper_when_layout_enabled(): void
+    {
+        $views = sys_get_temp_dir() . '/framework-site-views-' . uniqid();
+        mkdir($views, 0777, true);
+        file_put_contents(
+            $views . '/product.php',
+            '<?php echo \Framework\view_data("title", "");'
+        );
+
+        $app = $this->bootstrap_application();
+        $app->use_view_path($views);
+        $app->instance(\Framework\View\TemplateEngine::class, new \Framework\View\TemplateEngine());
+        $app->instance(\Framework\View\ViewContext::class, new \Framework\View\ViewContext());
+
+        Route::site(function () {
+            Route::get('shop/product', function (Request $request) {
+                return \Framework\view('product', ['title' => 'Widget']);
+            })->name('shop.product');
+        });
+
+        $router = new SiteRouter('framework');
+        $router->boot(Route::get_site_routes());
+
+        $reflection = new \ReflectionClass($router);
+        $route_id_method = $reflection->getMethod('route_id');
+        $route_id_method->setAccessible(true);
+        $route_id = $route_id_method->invoke($router, Route::get_site_routes()[0]);
+
+        $GLOBALS['framework_test_query_vars'] = [
+            'framework_route' => $route_id,
+        ];
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $resolved = $router->handle_template_include('/theme/index.php', 10);
+        $wrapper = app(\Framework\View\TemplateEngine::class)->layout_wrapper_path();
+
+        $this->assertSame(realpath($wrapper) ?: $wrapper, realpath($resolved) ?: $resolved);
+
+        ob_start();
+        require $resolved;
+        $output = (string) ob_get_clean();
+
+        $this->assertStringContainsString('<!--header-->', $output);
+        $this->assertStringContainsString('Widget', $output);
+        $this->assertStringContainsString('<!--footer-->', $output);
 
         unset($GLOBALS['framework_test_query_vars'], $_SERVER['REQUEST_METHOD']);
         app(\Framework\View\ViewContext::class)->clear();

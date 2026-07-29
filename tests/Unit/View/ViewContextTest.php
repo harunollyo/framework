@@ -146,6 +146,72 @@ class ViewContextTest extends TestCase
         $this->assertSame('blocked', $output);
     }
 
+    public function test_push_pop_isolates_nested_partial_data(): void
+    {
+        $parent = $this->views . '/parent.php';
+        $child = $this->views . '/child.php';
+        file_put_contents(
+            $parent,
+            '<?php echo \Framework\view_data("label");'
+        );
+        file_put_contents(
+            $child,
+            '<?php echo \Framework\view_data("label", "missing"); echo "-"; echo \Framework\view_data("products", "none");'
+        );
+
+        $context = app(ViewContext::class);
+        $context->prepare(
+            new View('parent', ['label' => 'parent', 'products' => [1]]),
+            'parent',
+            $parent
+        );
+
+        $context->push([
+            'template' => 'child',
+            'route_name' => '',
+            'resolved_path' => $child,
+            'data' => array_merge(app(TemplateEngine::class)->get_shared(), ['label' => 'child']),
+        ]);
+
+        ob_start();
+        require $child;
+        $child_output = (string) ob_get_clean();
+
+        $this->assertSame('child-none', $child_output);
+
+        $context->pop();
+
+        ob_start();
+        require $parent;
+        $parent_output = (string) ob_get_clean();
+
+        $this->assertSame('parent', $parent_output);
+    }
+
+    public function test_clear_empties_entire_stack(): void
+    {
+        $path = $this->views . '/one.php';
+        file_put_contents($path, '<?php');
+
+        $context = app(ViewContext::class);
+        $context->push([
+            'template' => 'one',
+            'route_name' => '',
+            'resolved_path' => $path,
+            'data' => ['a' => 1],
+        ]);
+        $context->push([
+            'template' => 'two',
+            'route_name' => '',
+            'resolved_path' => $path,
+            'data' => ['b' => 2],
+        ]);
+
+        $context->clear();
+
+        $this->assertNull($context->get_active());
+    }
+
     protected function remove_directory(string $directory): void
     {
         if (!is_dir($directory)) {
