@@ -380,8 +380,7 @@ trait HasAttributes
     public function set_attribute($key, $value)
     {
         if ($this->has_set_mutator($key)) {
-            $this->attributes[$key] = $this->set_mutated_attribute_value($key, $value);
-            return $this;
+            return $this->set_mutated_attribute_value($key, $value);
         }
 
         if (!is_null($value) && $this->is_date_attribute($key)) {
