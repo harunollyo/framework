@@ -204,6 +204,9 @@ class TemplateEngine
     /**
      * Wrap rendered content with theme header and footer.
      *
+     * Assembles HTML as a string. Dynamic view data must be escaped in templates
+     * before it becomes part of $content.
+     *
      * @param string $content The view content.
      *
      * @return string
@@ -212,19 +215,13 @@ class TemplateEngine
      */
     public function wrap_layout(string $content)
     {
-        ob_start();
-
-        $this->render_header();
-        echo $content;
-        $this->render_footer();
-
-        return (string) ob_get_clean();
+        return $this->render_header() . $content . $this->render_footer();
     }
 
     /**
      * Render the theme header for classic or block themes.
      *
-     * @return void
+     * @return string
      *
      * @since 1.0.0
      */
@@ -243,6 +240,8 @@ class TemplateEngine
                     esc_attr(get_stylesheet())
                 )
             );
+
+            ob_start();
             ?>
             <!doctype html>
             <html <?php language_attributes(); ?>>
@@ -253,34 +252,38 @@ class TemplateEngine
             <body <?php body_class(); ?>>
                 <?php wp_body_open(); ?>
                 <div class="wp-site-blocks">
-                <?php
-                echo $this->block_header;
-                return;
+            <?php
+
+            return (string) ob_get_clean() . $this->block_header;
         }
 
+        ob_start();
         get_header();
+
+        return (string) ob_get_clean();
     }
 
     /**
      * Render the theme footer for classic or block themes.
      *
-     * @return void
+     * @return string
      *
      * @since 1.0.0
      */
     public function render_footer()
     {
         if ($this->is_block_theme()) {
-            echo $this->block_footer;
-            echo '</div>';
+            ob_start();
             wp_footer();
-            echo '</body>';
-            echo '</html>';
+            $footer_scripts = (string) ob_get_clean();
 
-            return;
+            return $this->block_footer . '</div>' . $footer_scripts . '</body></html>';
         }
 
+        ob_start();
         get_footer();
+
+        return (string) ob_get_clean();
     }
 
     /**

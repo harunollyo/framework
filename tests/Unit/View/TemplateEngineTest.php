@@ -46,7 +46,7 @@ class TemplateEngineTest extends TestCase
     {
         $views = sys_get_temp_dir() . '/framework-views-' . uniqid();
         mkdir($views, 0777, true);
-        file_put_contents($views . '/hello.php', 'Hello <?php echo \Framework\view_data("name"); ?>');
+        file_put_contents($views . '/hello.php', 'Hello <?php echo esc_html((string) \Framework\view_data("name")); ?>');
 
         $app = $this->bootstrap_application();
         $app->use_view_path($views);

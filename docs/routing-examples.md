@@ -327,6 +327,37 @@ $name = view_data('product.name');
 
 **BREAKING:** The framework no longer `extract()`s view data into local variables. Always use `view_data()`.
 
+### Escaping view output (WordPress.org)
+
+`view_data()` returns **raw** values. Escape at the point of echo with the function that matches the HTML context:
+
+```php
+<?php
+$name = view_data('product.name');
+$url = view_data('product.url');
+$description = view_data('product.description');
+?>
+<h1><?php echo esc_html((string) $name); ?></h1>
+<a href="<?php echo esc_url((string) $url); ?>">
+    <img src="<?php echo esc_url((string) view_data('product.image')); ?>"
+         alt="<?php echo esc_attr((string) $name); ?>">
+</a>
+<div class="description">
+    <?php echo wp_kses_post((string) $description); ?>
+</div>
+```
+
+| Context | Function |
+|---|---|
+| HTML body text | `esc_html()` |
+| HTML attribute | `esc_attr()` |
+| URL (`href`, `src`) | `esc_url()` |
+| Trusted rich HTML (WYSIWYG) | `wp_kses_post()` |
+
+Do **not** use `esc_html()` on fields that must retain markup — use `wp_kses_post()` (or a narrower allowlist) instead.
+
+**Controller string returns:** If a `template_redirect` controller returns a plain string (not a `view()`), that string must already be safe HTML. The framework does not auto-escape it. Prefer returning `view(...)` when possible.
+
 ---
 
 ## 10. Route-level handlers

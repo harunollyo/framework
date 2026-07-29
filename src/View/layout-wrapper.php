@@ -30,4 +30,5 @@ ob_start();
 require $path;
 $content = (string) ob_get_clean();
 
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Assembled layout HTML; dynamic data is escaped in view templates via esc_*.
 echo app(TemplateEngine::class)->wrap_layout($content);

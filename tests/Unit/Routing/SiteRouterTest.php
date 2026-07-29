@@ -153,7 +153,7 @@ class SiteRouterTest extends TestCase
         mkdir($views, 0777, true);
         file_put_contents(
             $views . '/product.php',
-            '<?php echo \Framework\view_data("title", "");'
+            '<?php echo esc_html((string) \Framework\view_data("title", ""));'
         );
 
         $app = $this->bootstrap_application();
@@ -209,7 +209,7 @@ class SiteRouterTest extends TestCase
         mkdir($views, 0777, true);
         file_put_contents(
             $views . '/product.php',
-            '<?php echo \Framework\view_data("title", "");'
+            '<?php echo esc_html((string) \Framework\view_data("title", ""));'
         );
 
         $app = $this->bootstrap_application();

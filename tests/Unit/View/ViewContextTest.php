@@ -62,7 +62,7 @@ class ViewContextTest extends TestCase
         $path = $this->views . '/hello.php';
         file_put_contents(
             $path,
-            '<?php echo \Framework\view_data("name"); echo "-"; echo \Framework\view_data("missing", "fallback"); echo "-"; echo implode(",", array_keys(\Framework\view_data()));'
+            '<?php echo esc_html((string) \Framework\view_data("name")); echo "-"; echo esc_html((string) \Framework\view_data("missing", "fallback")); echo "-"; echo esc_html(implode(",", array_keys(\Framework\view_data())));'
         );
 
         $context = app(ViewContext::class);
@@ -84,7 +84,7 @@ class ViewContextTest extends TestCase
         $path = $this->views . '/nested.php';
         file_put_contents(
             $path,
-            '<?php echo \Framework\view_data("product.name"); echo "-"; echo \Framework\view_data("product.meta.sku", "none");'
+            '<?php echo esc_html((string) \Framework\view_data("product.name")); echo "-"; echo esc_html((string) \Framework\view_data("product.meta.sku", "none"));'
         );
 
         $context = app(ViewContext::class);
@@ -129,7 +129,7 @@ class ViewContextTest extends TestCase
         file_put_contents($matched, '<?php');
         file_put_contents(
             $foreign,
-            '<?php echo \Framework\view_data("token", "blocked");'
+            '<?php echo esc_html((string) \Framework\view_data("token", "blocked"));'
         );
 
         $context = app(ViewContext::class);
@@ -152,11 +152,11 @@ class ViewContextTest extends TestCase
         $child = $this->views . '/child.php';
         file_put_contents(
             $parent,
-            '<?php echo \Framework\view_data("label");'
+            '<?php echo esc_html((string) \Framework\view_data("label"));'
         );
         file_put_contents(
             $child,
-            '<?php echo \Framework\view_data("label", "missing"); echo "-"; echo \Framework\view_data("products", "none");'
+            '<?php echo esc_html((string) \Framework\view_data("label", "missing")); echo "-"; echo esc_html((string) \Framework\view_data("products", "none"));'
         );
 
         $context = app(ViewContext::class);

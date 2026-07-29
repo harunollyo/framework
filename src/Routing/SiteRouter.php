@@ -569,11 +569,13 @@ class SiteRouter
         }
 
         if ($result instanceof View) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Assembled view HTML; dynamic data is escaped in templates via esc_*.
             echo $result->render();
             return;
         }
 
         if (is_string($result)) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Controller string returns must be pre-escaped safe HTML.
             echo $result;
         }
     }

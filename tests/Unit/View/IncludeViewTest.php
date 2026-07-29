@@ -44,7 +44,7 @@ class IncludeViewTest extends TestCase
     {
         file_put_contents(
             $this->views . '/shop/filter.php',
-            '<?php echo implode(",", \Framework\view_data("categories"));'
+            '<?php echo esc_html(implode(",", \Framework\view_data("categories")));'
         );
 
         ob_start();
@@ -59,11 +59,11 @@ class IncludeViewTest extends TestCase
     {
         file_put_contents(
             $this->views . '/shop/products.php',
-            '<?php \Framework\include_view("shop.filter", ["categories" => ["x"]]); echo "-"; echo \Framework\view_data("products");'
+            '<?php \Framework\include_view("shop.filter", ["categories" => ["x"]]); echo "-"; echo esc_html((string) \Framework\view_data("products"));'
         );
         file_put_contents(
             $this->views . '/shop/filter.php',
-            '<?php echo \Framework\view_data("categories")[0]; echo \Framework\view_data("products", "none");'
+            '<?php echo esc_html((string) \Framework\view_data("categories")[0]); echo esc_html((string) \Framework\view_data("products", "none"));'
         );
 
         $context = app(ViewContext::class);
@@ -86,7 +86,7 @@ class IncludeViewTest extends TestCase
 
         file_put_contents(
             $this->views . '/shop/filter.php',
-            '<?php echo \Framework\view_data("site"); echo "-"; echo \Framework\view_data("n");'
+            '<?php echo esc_html((string) \Framework\view_data("site")); echo "-"; echo esc_html((string) \Framework\view_data("n"));'
         );
 
         ob_start();

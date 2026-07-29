@@ -380,11 +380,13 @@ trait HasAttributes
     public function set_attribute($key, $value)
     {
         if ($this->has_set_mutator($key)) {
-            return $this->set_mutated_attribute_value($key, $value);
+            $this->attributes[$key] = $this->set_mutated_attribute_value($key, $value);
+            return $this;
         }
 
         if (!is_null($value) && $this->is_date_attribute($key)) {
-            $value = $this->as_date_time($value);
+            $this->attributes[$key] = $this->as_date_time($value);
+            return $this;
         }
 
         if ($this->is_class_castable($key)) {
@@ -394,10 +396,9 @@ trait HasAttributes
         }
 
         if (!is_null($value) && $this->is_json_castable($key)) {
-            $value = $this->cast_attribute_as_json($key, $value);
+            $this->attributes[$key] = $this->cast_attribute_as_json($key, $value);
+            return $this;
         }
-
-        $this->attributes[$key] = $value;
 
         return $this;
     }
