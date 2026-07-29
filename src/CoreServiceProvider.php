@@ -26,6 +26,7 @@ use Framework\ServiceProvider;
 use Framework\Http\Response;
 use Framework\Supports\MessagesBag;
 use Framework\Supports\Somoy;
+use Framework\View\TemplateEngine;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -45,6 +46,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->register_messages();
 
         $this->app->singleton(Response::class);
+        $this->app->singleton(TemplateEngine::class);
 
         if (class_exists(\Faker\Factory::class)) {
             $this->app->singleton(\Faker\Factory::class, function () {

@@ -14,6 +14,7 @@ defined('ABSPATH') || exit;
 
 use Framework\ServiceProvider;
 use Framework\Wordpress\Hooks\Actions\RegisterRestApi;
+use Framework\Wordpress\Hooks\Actions\RegisterSiteRoutes;
 
 class HookServiceProvider extends ServiceProvider
 {
@@ -25,7 +26,7 @@ class HookServiceProvider extends ServiceProvider
      * @since 1.0.0
      */
     protected static $defaults = [
-        'actions' => [RegisterRestApi::class],
+        'actions' => [RegisterRestApi::class, RegisterSiteRoutes::class],
         'filters' => [],
     ];
 
@@ -67,6 +68,10 @@ class HookServiceProvider extends ServiceProvider
 
         if (!in_array(RegisterRestApi::class, $hooks['actions'], true)) {
             array_unshift($hooks['actions'], RegisterRestApi::class);
+        }
+
+        if (!in_array(RegisterSiteRoutes::class, $hooks['actions'], true)) {
+            $hooks['actions'][] = RegisterSiteRoutes::class;
         }
 
         return [

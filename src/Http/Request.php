@@ -257,6 +257,186 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
+     * Capture the current HTTP request from PHP superglobals.
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     */
+    public static function capture()
+    {
+        // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
+        return (new static())->make_from_http($_GET, $_POST, $_FILES, $_SERVER);
+    }
+
+    /**
+     * Make a request instance from raw HTTP input arrays.
+     *
+     * @param array $query Query string parameters.
+     * @param array $body Request body parameters.
+     * @param array $files Uploaded files.
+     * @param array $server Server parameters.
+     * @param array $route_params Matched route parameters.
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     */
+    public function make_from_http(
+        array $query = [],
+        array $body = [],
+        array $files = [],
+        array $server = [],
+        array $route_params = []
+    ) {
+        $query = $this->unslash_array($query);
+        $body = $this->unslash_array($body);
+
+        $this->attributes = array_merge($query, $body, $route_params);
+        $this->method = strtoupper($server['REQUEST_METHOD'] ?? 'GET');
+        $this->route = $this->resolve_request_path($server);
+        $this->headers = $this->extract_headers($server);
+        $this->route_params = $route_params;
+        $this->files = [];
+
+        if (!empty($files)) {
+            $this->load_files_from_array($files);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the matched route parameters and merge them into attributes.
+     *
+     * @param array $params The route parameters.
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     */
+    public function set_route_params(array $params)
+    {
+        $this->route_params = $params;
+        $this->attributes = array_merge($this->attributes, $params);
+
+        return $this;
+    }
+
+    /**
+     * Get all route parameters.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    public function route_params()
+    {
+        return $this->route_params;
+    }
+
+    /**
+     * Unslash an array of input values.
+     *
+     * @param array $values The values to unslash.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    protected function unslash_array(array $values)
+    {
+        if (!function_exists('wp_unslash')) {
+            return $values;
+        }
+
+        return array_map(function ($value) {
+            if (is_array($value)) {
+                return $this->unslash_array($value);
+            }
+
+            return is_string($value) ? wp_unslash($value) : $value;
+        }, $values);
+    }
+
+    /**
+     * Resolve the request path from server parameters.
+     *
+     * @param array $server Server parameters.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    protected function resolve_request_path(array $server)
+    {
+        $request_uri = isset($server['REQUEST_URI']) ? (string) $server['REQUEST_URI'] : '';
+        $path = (string) parse_url($request_uri, PHP_URL_PATH);
+
+        if (function_exists('home_url')) {
+            $home_path = (string) parse_url(home_url(), PHP_URL_PATH);
+
+            if ($home_path !== '' && $home_path !== '/' && strpos($path, $home_path) === 0) {
+                $path = substr($path, strlen($home_path));
+            }
+        }
+
+        return trim($path, '/');
+    }
+
+    /**
+     * Extract HTTP headers from server parameters.
+     *
+     * @param array $server Server parameters.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    protected function extract_headers(array $server)
+    {
+        $headers = [];
+
+        foreach ($server as $key => $value) {
+            if (strpos($key, 'HTTP_') === 0) {
+                $name = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5)))));
+                $headers[$name] = [$value];
+                continue;
+            }
+
+            if (in_array($key, ['CONTENT_TYPE', 'CONTENT_LENGTH'], true)) {
+                $name = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
+                $headers[$name] = [$value];
+            }
+        }
+
+        return $headers;
+    }
+
+    /**
+     * Load uploaded files from a provided files array.
+     *
+     * @param array $files The files array.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    protected function load_files_from_array(array $files)
+    {
+        $converted = array_map(function ($file) {
+            if (isset($file['name']) && is_array($file['name'])) {
+                return $this->convert_uploaded_files($file);
+            }
+
+            return \Framework\Filesystem\UploadedFile::create_from_base($file);
+        }, $files);
+
+        $keys = array_keys($files);
+        $this->files = array_combine($keys, array_values($converted)) ?: [];
+    }
+
+    /**
      * Get the validation rules for the request.
      *
      * @return array
