@@ -60,6 +60,18 @@ class TemplateEngine
     }
 
     /**
+     * Get data shared with all views.
+     *
+     * @return array
+     *
+     * @since 2.1.2
+     */
+    public function get_shared()
+    {
+        return $this->shared;
+    }
+
+    /**
      * Render a view template to a string.
      *
      * @param string $view The view name in dot notation.
@@ -79,7 +91,6 @@ class TemplateEngine
         }
 
         $data = array_merge($this->shared, $data);
-        $data = apply_filters('framework/view/data', $data, $view, $path);
 
         $content = $this->render_file($path, $data);
 
@@ -169,8 +180,11 @@ class TemplateEngine
     {
         ob_start();
 
+        // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
         (static function ($__path, $__data) {
+            // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
             extract($__data, EXTR_SKIP);
+            // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
             require $__path;
         })($path, $data);
 
@@ -231,8 +245,7 @@ class TemplateEngine
                 <div class="wp-site-blocks">
                 <?php
                 echo $this->block_header;
-
-            return;
+                return;
         }
 
         get_header();
@@ -279,12 +292,7 @@ class TemplateEngine
             return;
         }
 
-        $data = apply_filters(
-            'framework/view/data',
-            array_merge($this->shared, $data),
-            $view,
-            $path
-        );
+        $data = array_merge($this->shared, $data);
 
         extract($data, EXTR_SKIP);
 

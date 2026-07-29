@@ -19,6 +19,7 @@ use Framework\Sanitizer;
 use Framework\SiteExceptionHandler;
 use Framework\View\TemplateEngine;
 use Framework\View\View;
+use Framework\View\ViewContext;
 use Framework\Wordpress\Constants\HookNames;
 use Exception;
 
@@ -360,6 +361,12 @@ class SiteRouter
                 $resolved = app(TemplateEngine::class)->resolve_path($path);
 
                 if ($resolved !== '') {
+                    app(ViewContext::class)->prepare(
+                        $result,
+                        (string) $route->get_name(),
+                        $resolved
+                    );
+
                     return $resolved;
                 }
             }

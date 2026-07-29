@@ -1,7 +1,5 @@
 <?php
 
-/**
- * @var string $name
- */
+$name = \Framework\view_data('name');
 ?>
-<div>Hello from template: <?php echo $name; ?></div>
+<div>Hello from template: <?php echo esc_html((string) $name); ?></div>

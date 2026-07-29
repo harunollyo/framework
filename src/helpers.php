@@ -29,6 +29,7 @@ use Framework\Supports\Str;
 use Framework\Supports\Url;
 use Framework\Supports\Utils;
 use Framework\View\View;
+use Framework\View\ViewContext;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
@@ -276,6 +277,25 @@ if (!function_exists('Framework\view')) {
     function view(string $template, array $data = [])
     {
         return new View($template, $data);
+    }
+}
+
+if (!function_exists('Framework\view_data')) {
+    /**
+     * Read data shared with the active template_include view context.
+     *
+     * Supports dot notation for nested keys (e.g. `product.name`).
+     *
+     * @param string|null $key Data key (dot notation allowed), or null for the full array.
+     * @param mixed $default Default when missing or unauthorized.
+     *
+     * @return mixed
+     *
+     * @since 2.1.2
+     */
+    function view_data($key = null, $default = null)
+    {
+        return app(ViewContext::class)->get($key, $default);
     }
 }
 

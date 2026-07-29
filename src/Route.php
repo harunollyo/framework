@@ -102,7 +102,7 @@ class Route
      *
      * @since 1.0.0
      */
-    protected static $default_hook_name = HookNames::TEMPLATE_REDIRECT;
+    protected static $default_hook_name = HookNames::TEMPLATE_INCLUDE;
 
     /**
      * Array of registered routes.
