@@ -44,8 +44,10 @@ Route::set_routing_method(Route::ROUTING_REWRITE_RULES);
 // Or match the request path on parse_request:
 // Route::set_routing_method(Route::ROUTING_PARSE_REQUEST);
 
-// Default dispatch hook for site routes (default: template_redirect)
-Route::set_default_hook(HookNames::TEMPLATE_REDIRECT);
+// Default dispatch hook for site routes (default: template_include)
+Route::set_default_hook(HookNames::TEMPLATE_INCLUDE);
+// Opt back into early-exit full response control globally:
+// Route::set_default_hook(HookNames::TEMPLATE_REDIRECT);
 
 // Application view directory (default: {base_path}/resources/views)
 app()->use_view_path(plugin_dir_path(__FILE__) . 'resources/views');
@@ -267,16 +269,22 @@ Route::site(function () {
 
 ## 9. Dispatch hooks
 
-Control which WordPress hook dispatches the route with fluent aliases (preferred) or the generic `hook()` method:
+Control which WordPress hook dispatches the route with fluent aliases (preferred) or the generic `hook()` method.
+
+**Default:** `template_include` — WordPress loads the returned template path through the normal theme template flow (better core/plugin compatibility).
 
 ```php
 Route::site(function () {
-    // Default: template_redirect (full control of response output)
+    // Default: template_include — return view('…', $data); use view_data() in the template
+    Route::get('shop/products/{id:int}', [ProductController::class, 'show'])
+        ->name('products.show');
+
+    // Opt into template_redirect for full response control (JSON, redirects, early exit)
     Route::get('dashboard', [DashboardController::class, 'index'])
         ->template_redirect()
         ->name('dashboard');
 
-    // template_include: return a PHP template path for WordPress to load
+    // Explicit template_include with custom priority
     Route::get('legacy-report', [ReportController::class, 'show'])
         ->template_include(20)
         ->name('reports.legacy');
@@ -296,9 +304,59 @@ Route::get('legacy-report', [ReportController::class, 'show'])
 ```
 
 **Expected:**
-- `template_redirect()` / `hook(TEMPLATE_REDIRECT)` — SiteRouter sends the response (view/redirect/JSON/string) and exits.
-- `template_include()` / `hook(TEMPLATE_INCLUDE)` — controller should return a filesystem template path (or a `View` that resolves to one).
+- Default / `template_include()` / `hook(TEMPLATE_INCLUDE)` — controller returns `view('name', $data)` (or a filesystem path). Layout-enabled views load a framework wrapper that renders theme header/footer around the view. Partial views return the raw path. Read data in all templates with `view_data('key')`.
+- `template_redirect()` / `hook(TEMPLATE_REDIRECT)` — SiteRouter sends the response (view HTML via `TemplateEngine::render()`, redirect, JSON, or string) and exits. Templates also use `view_data()`.
 - Both aliases accept an optional WordPress hook `$priority` (default `10`).
+
+**Migration:** If you previously relied on the implicit `template_redirect` default, add `->template_redirect()` on those routes or call `Route::set_default_hook(HookNames::TEMPLATE_REDIRECT)`.
+
+### View data (both hooks)
+
+```php
+// Controller
+return view('shop.product', ['product' => $product]);
+
+// resources/views/shop/product.php
+$product = view_data('product');
+$name = view_data('product.name');
+?>
+<h1><?php echo esc_html($name); ?></h1>
+```
+
+`view_data()` supports dot notation for nested keys. It only returns values when called from the matched template, a nested `include_view()` partial, or a file in that include chain. Unrelated templates cannot read another route's data.
+
+**BREAKING:** The framework no longer `extract()`s view data into local variables. Always use `view_data()`.
+
+### Escaping view output (WordPress.org)
+
+`view_data()` returns **raw** values. Escape at the point of echo with the function that matches the HTML context:
+
+```php
+<?php
+$name = view_data('product.name');
+$url = view_data('product.url');
+$description = view_data('product.description');
+?>
+<h1><?php echo esc_html((string) $name); ?></h1>
+<a href="<?php echo esc_url((string) $url); ?>">
+    <img src="<?php echo esc_url((string) view_data('product.image')); ?>"
+         alt="<?php echo esc_attr((string) $name); ?>">
+</a>
+<div class="description">
+    <?php echo wp_kses_post((string) $description); ?>
+</div>
+```
+
+| Context | Function |
+|---|---|
+| HTML body text | `esc_html()` |
+| HTML attribute | `esc_attr()` |
+| URL (`href`, `src`) | `esc_url()` |
+| Trusted rich HTML (WYSIWYG) | `wp_kses_post()` |
+
+Do **not** use `esc_html()` on fields that must retain markup — use `wp_kses_post()` (or a narrower allowlist) instead.
+
+**Controller string returns:** If a `template_redirect` controller returns a plain string (not a `view()`), that string must already be safe HTML. The framework does not auto-escape it. Prefer returning `view(...)` when possible.
 
 ---
 
@@ -343,18 +401,21 @@ public function show(Request $request)
 
 Site route controllers (and closures) may return:
 
-| Return type | Behavior |
-|-------------|----------|
-| `View` | Render via `TemplateEngine` (layout ON by default) |
-| `RedirectResponse` | `wp_safe_redirect()` + exit |
-| `JsonResponse` | Echo JSON (no theme layout) |
-| `string` | Echo raw HTML/text |
-| `null` | No output (useful with route-level handlers) |
+| Return type | `template_include` (default) | `template_redirect` |
+|-------------|------------------------------|---------------------|
+| `View` (layout ON) | Layout wrapper path; header + content + footer; data via `view_data()` | Render via `TemplateEngine` with layout; data via `view_data()` |
+| `View` (`->partial()`) | Raw resolved path; no framework header/footer | Render without layout |
+| `RedirectResponse` | Sent immediately when returned | `wp_safe_redirect()` + exit |
+| `JsonResponse` | Prefer `->template_redirect()` | Echo JSON (no theme layout) |
+| `string` (file path) | Returned as the template path when the file exists | Echo raw HTML/text |
+| `string` (HTML) | Prefer `->template_redirect()` | Echo raw HTML/text |
+| `null` | No output (useful with route-level handlers) | No output |
 
 ```php
 use function Framework\view;
 use function Framework\redirect;
 use function Framework\response;
+use function Framework\view_data;
 
 class ProductController
 {
@@ -380,32 +441,38 @@ class ProductController
 }
 ```
 
-**Expected:** JSON responses skip theme header/footer. Views use layout unless marked partial.
+**Expected:** On `template_include`, templates read controller data with `view_data()`. JSON/raw string responses that need to bypass the theme should use `->template_redirect()`.
 
 ---
 
 ## 12. View layout
 
-Layout (theme header/footer) is **ON by default** for both classic and block themes.
+Layout (theme header/footer) is **ON by default** on both hooks. Use `View::partial()` to skip it.
+
+On **`template_include`**, a layout-enabled `View` returns a framework layout wrapper that WordPress includes; the wrapper renders the view and calls theme header/footer. `View::partial()` returns the raw view path instead.
+
+`Route::partial()` / `Route::layout()` apply only on **`template_redirect`**. On `template_include`, only the returned view's layout flag controls wrapping.
 
 ```php
-// Full page with theme header/footer
+// Full page with theme header/footer (both hooks)
 return view('shop.product', ['product' => $product]);
 
-// Fragment / AJAX partial — no layout
+// Fragment / AJAX partial — no layout (both hooks via View::partial)
 return view('shop.product-card', ['product' => $product])->partial();
 
-// Route-level: disable layout for all views from this route
+// Route-level: disable layout for views from this route (template_redirect only)
 Route::get('widget', [WidgetController::class, 'render'])
     ->as_site()
+    ->template_redirect()
     ->partial()
     ->name('widget');
 ```
 
 ```php
-// Re-enable layout if a route was marked partial
+// Re-enable layout if a route was marked partial (template_redirect)
 Route::get('page', [PageController::class, 'show'])
     ->as_site()
+    ->template_redirect()
     ->layout(true);
 ```
 
@@ -534,6 +601,9 @@ View resolution order:
 ```php
 // Dot notation → resources/views/shop/product.php
 return view('shop.product', ['product' => $product]);
+
+// On template_include (default), read data in the template:
+$product = view_data('product');
 ```
 
 Theme override example:
@@ -542,23 +612,44 @@ Theme override example:
 wp-content/themes/your-theme/views/shop/product.php
 ```
 
-Shared data and includes:
+Shared data and nested partials:
 
 ```php
 use Framework\View\TemplateEngine;
 
 use function Framework\app;
+use function Framework\include_view;
+use function Framework\view_data;
 
 $engine = app(TemplateEngine::class);
 $engine->share('site_name', get_bloginfo('name'));
 
-// Include a partial without capturing output (like the old TemplateHelper::load_template)
-$engine->include('partials.notice', ['message' => 'Saved'], true);
+// Nested partial (Laravel @include equivalent) — pure PHP, no Blade
+include_view('shop.filter', ['categories' => view_data('categories')]);
 ```
+
+```php
+// resources/views/shop/products.php
+$products = view_data('products');
+include_view('shop.filter', ['categories' => view_data('categories')]);
+foreach ($products as $product) :
+    include_view('shop.product-card', ['product' => $product]);
+endforeach;
+```
+
+```php
+// resources/views/shop/filter.php
+<?php foreach (view_data('categories') as $category) : ?>
+    <li><?php echo esc_html($category); ?></li>
+<?php endforeach; ?>
+```
+
+Partials receive only the explicit `$data` argument plus TemplateEngine shared data. Parent keys are not inherited unless passed. Missing views throw `RuntimeException`.
 
 Escape in templates with native WordPress helpers:
 
 ```php
+<?php $product = view_data('product'); ?>
 <h1><?php echo esc_html($product->name); ?></h1>
 <a href="<?php echo esc_url($product->url); ?>">
 <img src="<?php echo esc_url($product->image); ?>" alt="<?php echo esc_attr($product->name); ?>">

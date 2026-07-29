@@ -60,6 +60,18 @@ class TemplateEngine
     }
 
     /**
+     * Get data shared with all views.
+     *
+     * @return array
+     *
+     * @since 2.1.2
+     */
+    public function get_shared()
+    {
+        return $this->shared;
+    }
+
+    /**
      * Render a view template to a string.
      *
      * @param string $view The view name in dot notation.
@@ -78,16 +90,26 @@ class TemplateEngine
             throw new RuntimeException(sprintf('View [%s] not found.', $view));
         }
 
-        $data = array_merge($this->shared, $data);
-        $data = apply_filters('framework/view/data', $data, $view, $path);
+        $merged = array_merge($this->shared, $data);
+        $context = app(ViewContext::class);
+        $context->push([
+            'template' => $view,
+            'route_name' => '',
+            'resolved_path' => $path,
+            'data' => $merged,
+        ]);
 
-        $content = $this->render_file($path, $data);
+        try {
+            $content = $this->render_file($path);
 
-        if (!$layout) {
-            return $content;
+            if (!$layout) {
+                return $content;
+            }
+
+            return $this->wrap_layout($content);
+        } finally {
+            $context->pop();
         }
-
-        return $this->wrap_layout($content);
     }
 
     /**
@@ -156,23 +178,25 @@ class TemplateEngine
     }
 
     /**
-     * Render a PHP template file with extracted data.
+     * Render a PHP template file without extracting data into local variables.
+     *
+     * Templates must read data via view_data().
      *
      * @param string $path Absolute template path.
-     * @param array $data Template data.
      *
      * @return string
      *
      * @since 1.0.0
      */
-    protected function render_file(string $path, array $data)
+    protected function render_file(string $path)
     {
         ob_start();
 
-        (static function ($__path, $__data) {
-            extract($__data, EXTR_SKIP);
+        // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
+        (static function ($__path) {
+            // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
             require $__path;
-        })($path, $data);
+        })($path);
 
         return (string) ob_get_clean();
     }
@@ -180,27 +204,24 @@ class TemplateEngine
     /**
      * Wrap rendered content with theme header and footer.
      *
+     * Assembles HTML as a string. Dynamic view data must be escaped in templates
+     * before it becomes part of $content.
+     *
      * @param string $content The view content.
      *
      * @return string
      *
      * @since 1.0.0
      */
-    protected function wrap_layout(string $content)
+    public function wrap_layout(string $content)
     {
-        ob_start();
-
-        $this->render_header();
-        echo $content;
-        $this->render_footer();
-
-        return (string) ob_get_clean();
+        return $this->render_header() . $content . $this->render_footer();
     }
 
     /**
      * Render the theme header for classic or block themes.
      *
-     * @return void
+     * @return string
      *
      * @since 1.0.0
      */
@@ -219,6 +240,8 @@ class TemplateEngine
                     esc_attr(get_stylesheet())
                 )
             );
+
+            ob_start();
             ?>
             <!doctype html>
             <html <?php language_attributes(); ?>>
@@ -229,35 +252,38 @@ class TemplateEngine
             <body <?php body_class(); ?>>
                 <?php wp_body_open(); ?>
                 <div class="wp-site-blocks">
-                <?php
-                echo $this->block_header;
+            <?php
 
-            return;
+            return (string) ob_get_clean() . $this->block_header;
         }
 
+        ob_start();
         get_header();
+
+        return (string) ob_get_clean();
     }
 
     /**
      * Render the theme footer for classic or block themes.
      *
-     * @return void
+     * @return string
      *
      * @since 1.0.0
      */
     public function render_footer()
     {
         if ($this->is_block_theme()) {
-            echo $this->block_footer;
-            echo '</div>';
+            ob_start();
             wp_footer();
-            echo '</body>';
-            echo '</html>';
+            $footer_scripts = (string) ob_get_clean();
 
-            return;
+            return $this->block_footer . '</div>' . $footer_scripts . '</body></html>';
         }
 
+        ob_start();
         get_footer();
+
+        return (string) ob_get_clean();
     }
 
     /**
@@ -269,6 +295,8 @@ class TemplateEngine
      *
      * @return void
      *
+     * @throws RuntimeException When the view cannot be resolved.
+     *
      * @since 1.0.0
      */
     public function include(string $view, array $data = [], bool $once = true)
@@ -276,24 +304,40 @@ class TemplateEngine
         $path = $this->resolve_path($view);
 
         if ($path === '') {
-            return;
+            throw new RuntimeException(sprintf('View [%s] not found.', $view));
         }
 
-        $data = apply_filters(
-            'framework/view/data',
-            array_merge($this->shared, $data),
-            $view,
-            $path
-        );
+        $merged = array_merge($this->shared, $data);
+        $context = app(ViewContext::class);
+        $context->push([
+            'template' => $view,
+            'route_name' => '',
+            'resolved_path' => $path,
+            'data' => $merged,
+        ]);
 
-        extract($data, EXTR_SKIP);
+        try {
+            if ($once) {
+                require_once $path;
 
-        if ($once) {
-            require_once $path;
+                return;
+            }
 
-            return;
+            require $path;
+        } finally {
+            $context->pop();
         }
+    }
 
-        require $path;
+    /**
+     * Absolute path to the framework layout wrapper stub.
+     *
+     * @return string
+     *
+     * @since 2.1.2
+     */
+    public function layout_wrapper_path()
+    {
+        return dirname(__FILE__) . '/layout-wrapper.php';
     }
 }

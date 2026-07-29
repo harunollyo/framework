@@ -19,6 +19,7 @@ use Framework\Sanitizer;
 use Framework\SiteExceptionHandler;
 use Framework\View\TemplateEngine;
 use Framework\View\View;
+use Framework\View\ViewContext;
 use Framework\Wordpress\Constants\HookNames;
 use Exception;
 
@@ -357,9 +358,20 @@ class SiteRouter
 
             if ($result instanceof View) {
                 $path = $result->get_template();
-                $resolved = app(TemplateEngine::class)->resolve_path($path);
+                $engine = app(TemplateEngine::class);
+                $resolved = $engine->resolve_path($path);
 
                 if ($resolved !== '') {
+                    app(ViewContext::class)->prepare(
+                        $result,
+                        (string) $route->get_name(),
+                        $resolved
+                    );
+
+                    if ($result->uses_layout()) {
+                        return $engine->layout_wrapper_path();
+                    }
+
                     return $resolved;
                 }
             }
@@ -557,11 +569,13 @@ class SiteRouter
         }
 
         if ($result instanceof View) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Assembled view HTML; dynamic data is escaped in templates via esc_*.
             echo $result->render();
             return;
         }
 
         if (is_string($result)) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Controller string returns must be pre-escaped safe HTML.
             echo $result;
         }
     }

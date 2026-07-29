@@ -29,6 +29,7 @@ use Framework\Supports\Str;
 use Framework\Supports\Url;
 use Framework\Supports\Utils;
 use Framework\View\View;
+use Framework\View\ViewContext;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
@@ -276,6 +277,46 @@ if (!function_exists('Framework\view')) {
     function view(string $template, array $data = [])
     {
         return new View($template, $data);
+    }
+}
+
+if (!function_exists('Framework\view_data')) {
+    /**
+     * Read data from the innermost authorized view context.
+     *
+     * Supports dot notation for nested keys (e.g. `product.name`).
+     *
+     * @param string|null $key Data key (dot notation allowed), or null for the full array.
+     * @param mixed $default Default when missing or unauthorized.
+     *
+     * @return mixed
+     *
+     * @since 2.1.2
+     */
+    function view_data($key = null, $default = null)
+    {
+        return app(ViewContext::class)->get($key, $default);
+    }
+}
+
+if (!function_exists('Framework\include_view')) {
+    /**
+     * Include a nested pure-PHP view partial (Laravel @include equivalent).
+     *
+     * Explicit $data (plus TemplateEngine shared data) is pushed as a child
+     * ViewContext frame. The partial must read values via view_data().
+     *
+     * @param string $view The view name in dot notation.
+     * @param array $data Data for the partial.
+     *
+     * @return void
+     *
+     * @since 2.1.2
+     * @throws \RuntimeException When the view cannot be resolved.
+     */
+    function include_view(string $view, array $data = [])
+    {
+        app(\Framework\View\TemplateEngine::class)->include($view, $data, false);
     }
 }
 

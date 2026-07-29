@@ -189,7 +189,7 @@ abstract class TestCase extends BaseTestCase
             'namespace' => '',
             'site_namespace' => '',
             'routing_method' => Route::ROUTING_REWRITE_RULES,
-            'default_hook_name' => \Framework\Wordpress\Constants\HookNames::TEMPLATE_REDIRECT,
+            'default_hook_name' => \Framework\Wordpress\Constants\HookNames::TEMPLATE_INCLUDE,
             'routes' => [],
             'named_routes' => [],
             'group_stack' => [],

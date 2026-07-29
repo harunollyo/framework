@@ -17,7 +17,17 @@ Route::site(function () {
     })->where('name', 'slug')->name('hello');
 
     Route::get('ping', function (Request $request) {
-        return view('sample', ['name' => 'ping']);
+        return view('sample', ['name' => 'ping', 'data' => [
+            'name' => 'ping',
+            'age' => 20,
+            'email' => 'ping@example.com',
+            'phone' => '1234567890',
+            'address' => '123 Main St, Anytown, USA',
+            'city' => 'Anytown',
+            'state' => 'CA',
+            'zip' => '12345',
+            'country' => 'USA',
+        ]]);
     })->name('ping');
 
     Route::get('products', function (Request $request) {
