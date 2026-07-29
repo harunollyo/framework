@@ -17,7 +17,10 @@ Route::site(function () {
     })->where('name', 'slug')->name('hello');
 
     Route::get('ping', function (Request $request) {
-        return response()->json(['ok' => true, 'url' => Route::site_url('hello')]);
-    });
-});
+        return view('sample', ['name' => 'ping']);
+    })->name('ping');
 
+    Route::get('products', function (Request $request) {
+        return view('sample', ['name' => 'products']);
+    })->match_page()->name('products');
+});
