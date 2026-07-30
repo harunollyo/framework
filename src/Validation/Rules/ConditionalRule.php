@@ -99,6 +99,24 @@ class ConditionalRule extends ValidationRule
     }
 
     /**
+     * Make the rules into an array.
+     *
+     * @param string|array $rules The rules to make into an array.
+     *
+     * @return array
+     * 
+     * @since 1.0.0
+     */
+    protected function make_array($rules)
+    {
+        if (is_string($rules)) {
+            return explode('|', $rules);
+        }
+
+        return $rules;
+    }
+
+    /**
      * Get the rules.
      *
      * @return array
@@ -107,7 +125,8 @@ class ConditionalRule extends ValidationRule
      */
     public function rules()
     {
-        return Arr::wrap($this->rules);
+
+        return $this->make_array($this->rules);
     }
 
     /**
@@ -119,7 +138,7 @@ class ConditionalRule extends ValidationRule
      */
     public function default_rules()
     {
-        return Arr::wrap($this->default_rules);
+        return $this->make_array($this->default_rules);
     }
 
     /**

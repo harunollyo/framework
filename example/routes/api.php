@@ -55,14 +55,14 @@ Route::get('/options', function (Request $request) {
 
 Route::get('/check', function (Request $request) {
     $data = [
-        'parent' => true,
+        'parent' => false,
         'child' => 'test'
     ];
 
     $validator = Validator::make($data, [
         'parent' => 'boolean',
         'child' => [
-            Rule::when(fn ($data) => $data['parent'] === true, ['nullable', 'integer'], ['string'])
+            Rule::when(fn ($data) => $data['parent'] === true, 'nullable|integer', 'string')
         ]
     ]);
 
