@@ -10,6 +10,7 @@
 namespace Framework\Validation;
 
 use Framework\Supports\Arr;
+use Framework\Validation\Rules\ConditionalRule;
 
 use function Framework\Polyfill\str_contains;
 
@@ -113,7 +114,11 @@ class RuleParser
         $parsed = [];
 
         foreach ($this->rules as $key => $rules) {
-            $parsed[$key] = RuleFactory::make($this->make_array($rules));
+            $parsed[$key] = RuleFactory::make(
+                $this->spread(
+                    $this->make_array($rules)
+                )
+            );
         }
 
         $this->rules = $parsed;
@@ -141,6 +146,34 @@ class RuleParser
         }
 
         return Arr::wrap($rules);
+    }
+
+    /**
+     * Spread the rules.
+     *
+     * @param array $rules The rules to spread.
+     *
+     * @return array
+     * 
+     * @since 1.0.0
+     */
+    protected function spread(array $rules)
+    {
+        $spread = [];
+
+        foreach ($rules as $rule) {
+            if ($rule instanceof ConditionalRule) {
+                if ($rule->passes($this->data)) {
+                    $spread = array_merge($spread, $rule->rules());
+                } else {
+                    $spread = array_merge($spread, $rule->default_rules());
+                }
+            } else {
+                $spread[] = $rule;
+            }
+        }
+
+        return $spread;
     }
 
     /**

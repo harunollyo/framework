@@ -31,6 +31,6 @@ Route::site(function () {
     })->name('ping');
 
     Route::get('products', function (Request $request) {
-        return view('sample', ['name' => 'products']);
+        return view('sample', ['name' => 'products'])->partial();
     })->match_page()->name('products');
 });

@@ -28,6 +28,7 @@ use Framework\Supports\MessagesBag;
 use Framework\Supports\Str;
 use Framework\Supports\Url;
 use Framework\Supports\Utils;
+use Framework\View\TemplateEngine;
 use Framework\View\View;
 use Framework\View\ViewContext;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
@@ -296,6 +297,18 @@ if (!function_exists('Framework\view_data')) {
     function view_data($key = null, $default = null)
     {
         return app(ViewContext::class)->get($key, $default);
+    }
+}
+
+if (!function_exists('Framework\template_engine')) {
+    /**
+     * Get the template engine instance.
+     *
+     * @return TemplateEngine
+     */
+    function template_engine()
+    {
+        return app(TemplateEngine::class);
     }
 }
 

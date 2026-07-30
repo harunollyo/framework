@@ -92,6 +92,9 @@ class RequiredIfRule extends ValidationRule
         return $other;
     }
 
+    // other => true
+    // other,1
+
 
     /**
      * Get the error message.

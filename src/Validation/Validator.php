@@ -12,6 +12,7 @@ use Closure;
 use Framework\Exceptions\ValidationException;
 use Framework\Supports\Arr;
 use Framework\Validation\Rules\ArrayRule;
+use Framework\Validation\Rules\ConditionalRule;
 use Framework\Validation\Rules\NullableRule;
 use Framework\Validation\Rules\SometimesRule;
 use stdClass;

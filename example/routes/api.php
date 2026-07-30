@@ -54,8 +54,20 @@ Route::get('/options', function (Request $request) {
 });
 
 Route::get('/check', function (Request $request) {
+    $data = [
+        'parent' => true,
+        'child' => 'test'
+    ];
+
+    $validator = Validator::make($data, [
+        'parent' => 'boolean',
+        'child' => [
+            Rule::when(fn ($data) => $data['parent'] === true, ['nullable', 'integer'], ['string'])
+        ]
+    ]);
+
     return response()->json([
-        'request' => $request->route('id'),
+        'data' => $validator->validated(),
     ]);
 });
 

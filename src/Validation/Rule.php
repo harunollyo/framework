@@ -30,6 +30,7 @@ use Framework\Validation\Rules\SameAsRule;
 use Framework\Validation\Rules\SometimesRule;
 use Framework\Validation\Rules\StringRule;
 use Framework\Validation\Rules\UniqueRule;
+use Framework\Validation\Rules\ConditionalRule;
 
 defined('ABSPATH') || exit;
 
@@ -406,6 +407,38 @@ class Rule
     public static function file()
     {
         return new FileRule();
+    }
+
+    /**
+     * Create a new when rule.
+     *
+     * @param bool|callable $condition The boolean condition for which the rules should be applied.
+     * @param array $rules The rules to apply when the condition is true.
+     * @param array $default_rules The rules to apply when the condition is false.
+     *
+     * @return ConditionalRule
+     *
+     * @since 1.0.0
+     */
+    public static function when($condition, $rules, $default_rules = [])
+    {
+        return new ConditionalRule($condition, $rules, $default_rules);
+    }
+
+    /**
+     * Create a new unless rule.
+     *
+     * @param bool|callable $condition The boolean condition for which the rules should be applied.
+     * @param array $rules The rules to apply when the condition is false.
+     * @param array $default_rules The rules to apply when the condition is true.
+     *
+     * @return ConditionalRule
+     * 
+     * @since 1.0.0
+     */
+    public static function unless($condition, $rules, $default_rules = [])
+    {
+        return new ConditionalRule($condition, $default_rules, $rules);
     }
 
     /**

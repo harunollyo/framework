@@ -121,7 +121,7 @@ abstract class ValidationRule extends Fluent
     /**
      * Create a new rule instance.
      *
-     * @param array $args The additional arguments to validate.
+     * @param array|null $args The additional arguments to validate.
      *
      * @return void
      * 
