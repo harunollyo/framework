@@ -163,7 +163,7 @@ class RuleFactory
                 continue;
             }
 
-            if (!empty($arguments)) {
+            if ($arguments !== null) {
                 $instance->$name($arguments);
             } else {
                 $instance->$name();
@@ -301,7 +301,7 @@ class RuleFactory
 
         $arguments = array_last(explode(':', $rule, 2));
 
-        if (empty($arguments)) {
+        if ($arguments === null || $arguments === '') {
             return null;
         }
 
