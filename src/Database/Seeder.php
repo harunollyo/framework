@@ -13,8 +13,6 @@ namespace Framework\Database;
 defined('ABSPATH') || exit;
 
 use Framework\Supports\Arr;
-use Framework\Supports\Facades\DB;
-use Framework\Supports\Facades\Log;
 use Throwable;
 
 use function Framework\app;

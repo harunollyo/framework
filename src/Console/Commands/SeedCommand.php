@@ -15,12 +15,12 @@ defined('ABSPATH') || exit;
 use Framework\Console\CommandBase;
 use Framework\Console\Synopsis;
 use Framework\Database\Seeder;
-use Framework\Database\Seeders\DatabaseSeeder;
 use Framework\Supports\Facades\DB;
 use Framework\Supports\Facades\Log;
 use Framework\Supports\Facades\Schema;
 use Framework\Supports\Str;
 use Exception;
+use Framework\Database\Contracts\DatabaseSeederContract;
 use Throwable;
 
 use function Framework\app;
@@ -120,9 +120,10 @@ class SeedCommand extends CommandBase
     protected function seeder_classes($class)
     {
         $classes = Str::split(',', $class);
+        $seeders = [];
 
-        foreach ($classes as $class) {
-            $classname = $this->classname($class);
+        foreach ($classes as $cls) {
+            $classname = $this->classname($cls);
 
             if ($this->exists($classname)) {
                 $seeders[] = $classname;
@@ -192,13 +193,13 @@ class SeedCommand extends CommandBase
         try {
             Schema::disabled_checking_foreign_key_constraints();
 
-            if (!class_exists(DatabaseSeeder::class)) {
+            try {
+                $database_seeder = app()->make(DatabaseSeederContract::class);
+                $database_seeder->run();
+                $database_seeder();
+            } catch (Exception $exception) {
                 $instance = app()->make(Seeder::class);
                 $instance->call($seeders);
-                $instance();
-            } else {
-                $instance = app()->make(DatabaseSeeder::class);
-                $instance->run();
                 $instance();
             }
         } catch (Exception $exception) {
