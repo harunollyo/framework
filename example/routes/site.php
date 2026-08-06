@@ -17,6 +17,7 @@ Route::site(function () {
     })->where('name', 'slug')->name('hello');
 
     Route::get('ping', function (Request $request) {
+        
         return view('sample', ['name' => 'ping', 'data' => [
             'name' => 'ping',
             'age' => 20,

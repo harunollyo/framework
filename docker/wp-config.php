@@ -18,6 +18,9 @@ define( 'NONCE_SALT',       'dev-docker-nonce-salt-change-me' );
 
 define( 'WP_ENVIRONMENT_TYPE', 'development' );
 
+define('ALLOW_UNFILTERED_UPLOADS', true);
+
+
 $table_prefix = 'wp_';
 
 define( 'WP_DEBUG', true );

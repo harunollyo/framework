@@ -399,18 +399,32 @@ class Request implements RequestContract, Arrayable
 
         foreach ($server as $key => $value) {
             if (strpos($key, 'HTTP_') === 0) {
-                $name = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5)))));
+                $name = $this->prepare_header_name(substr($key, 5));
                 $headers[$name] = [$value];
                 continue;
             }
 
             if (in_array($key, ['CONTENT_TYPE', 'CONTENT_LENGTH'], true)) {
-                $name = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
+                $name = $this->prepare_header_name($key);
                 $headers[$name] = [$value];
             }
         }
 
         return $headers;
+    }
+
+    /**
+     * Convert a header name to a WordPress compatible name.
+     *
+     * @param string $name The name to convert.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    protected function prepare_header_name(string $name)
+    {
+        return str_replace(' ', '_', str_replace('-', ' ', strtolower($name)));
     }
 
     /**
@@ -580,6 +594,7 @@ class Request implements RequestContract, Arrayable
      */
     public function get_header(string $name, $default = null)
     {
+        $name = $this->prepare_header_name($name);
         $value = $this->headers[$name] ?? $default;
 
         if (is_array($value)) {

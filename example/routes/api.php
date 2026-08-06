@@ -54,43 +54,31 @@ Route::get('/options', function (Request $request) {
 });
 
 Route::get('/check', function (Request $request) {
-    $data = [
-        'parent' => false,
-        'child' => 'test'
-    ];
-
-    $validator = Validator::make($data, [
-        'parent' => 'boolean',
-        'child' => [
-            Rule::when(fn ($data) => $data['parent'] === true, 'nullable|integer', 'string')
-        ]
-    ]);
-
     return response()->json([
-        'data' => $validator->validated(),
+        'data' => $request->get_header('content-type'),
     ]);
 });
 
-Route::post('/check', function (Request $request) {
-    $data = [
-        'name' => 'John Doe',
-        // 'email' => 'john.doe@example',
-    ];
-    $validator = Validator::make($data, [
-        'name' => [
-            'required',
-            'string',
-        ],
-        'email' => [
-            'email',
-        ],
-    ]);
+// Route::post('/check', function (Request $request) {
+//     $data = [
+//         'name' => 'John Doe',
+//         // 'email' => 'john.doe@example',
+//     ];
+//     $validator = Validator::make($data, [
+//         'name' => [
+//             'required',
+//             'string',
+//         ],
+//         'email' => [
+//             'email',
+//         ],
+//     ]);
 
-    $validator->sometimes('email', 'required|email', function ($data) {
-        return $data['name'] === 'John Doe';
-    });
+//     $validator->sometimes('email', 'required|email', function ($data) {
+//         return $data['name'] === 'John Doe';
+//     });
 
-    return response()->json([
-        'validator' => $validator->validated(),
-    ]);
-});
+//     return response()->json([
+//         'validator' => $validator->validated(),
+//     ]);
+// });
