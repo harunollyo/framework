@@ -61,7 +61,7 @@ class VersionUpdateManager implements Executor
     /**
      * Get the instance of the VersionManager.
      *
-     * @return VersionManager
+     * @return VersionUpdateManager
      *
      * @since 1.0.0
      */

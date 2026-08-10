@@ -22,7 +22,7 @@ class HookServiceProvider extends ServiceProvider
     /**
      * The defaults.
      *
-     * @var string
+     * @var array<string, array<string>>
      *
      * @since 1.0.0
      */
@@ -67,12 +67,16 @@ class HookServiceProvider extends ServiceProvider
             return static::$defaults;
         }
 
-        if (!in_array(RegisterRestApi::class, $hooks['actions'], true)) {
-            array_unshift($hooks['actions'], RegisterRestApi::class);
+        $default_action_hooks = [];
+
+        foreach (static::$defaults['actions'] as $action) {
+            if (!in_array($action, $hooks['actions'], true)) {
+                $default_action_hooks[] = $action;
+            }
         }
 
-        if (!in_array(RegisterSiteRoutes::class, $hooks['actions'], true)) {
-            $hooks['actions'][] = RegisterSiteRoutes::class;
+        if (!empty($default_action_hooks)) {
+            $hooks['actions'] = array_merge($default_action_hooks, $hooks['actions']);
         }
 
         return [
