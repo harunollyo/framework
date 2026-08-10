@@ -13,6 +13,7 @@ namespace Framework\Wordpress;
 defined('ABSPATH') || exit;
 
 use Framework\ServiceProvider;
+use Framework\Wordpress\Hooks\Actions\VersionUpdate;
 use Framework\Wordpress\Hooks\Actions\RegisterRestApi;
 use Framework\Wordpress\Hooks\Actions\RegisterSiteRoutes;
 
@@ -26,7 +27,7 @@ class HookServiceProvider extends ServiceProvider
      * @since 1.0.0
      */
     protected static $defaults = [
-        'actions' => [RegisterRestApi::class, RegisterSiteRoutes::class],
+        'actions' => [RegisterRestApi::class, RegisterSiteRoutes::class, VersionUpdate::class],
         'filters' => [],
     ];
 
