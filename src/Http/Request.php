@@ -29,23 +29,6 @@ use function Framework\value;
 
 /**
  * The Request class for handling HTTP requests.
- *
- * @method mixed|null string(string $key, $default = null)
- * @method mixed|null date(string $key, $default = null)
- * @method mixed|null datetime(string $key, $default = null)
- * @method mixed|null text(string $key, $default = null)
- * @method mixed|null html(string $key, $default = null)
- * @method mixed|null email(string $key, $default = null)
- * @method mixed|null url(string $key, $default = null)
- * @method mixed|null key(string $key, $default = null)
- * @method mixed|null title(string $key, $default = null)
- * @method mixed|null file_name(string $key, $default = null)
- * @method mixed|null mime_type(string $key, $default = null)
- * @method mixed|null int(string $key, $default = null)
- * @method mixed|null bool(string $key, $default = null)
- * @method mixed|null float(string $key, $default = null)
- * @method mixed|null array(string $key, $default = null)
- * @method mixed|null whitelisted(string $key, $default = null, array $whitelist = [])
  */
 class Request implements RequestContract, Arrayable
 {
@@ -954,6 +937,22 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
+     * Alias of `get_whitelisted()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param mixed $default Default value if the key doesn't exist.
+     * @param array $whitelist Array of allowed values.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function whitelisted(string $key, $default = null, array $whitelist = [])
+    {
+        return $this->get_whitelisted($key, $default, $whitelist);
+    }
+
+    /**
      * Get a string value with sanitization applied.
      *
      * @param string $key The key to retrieve.
@@ -966,6 +965,21 @@ class Request implements RequestContract, Arrayable
     public function get_string(string $key, $default = null)
     {
         return $this->get($key, $default, Sanitizer::TEXT);
+    }
+
+    /**
+     * Alias of `get_string()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param string|null $default Default value if the key doesn't exist.
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     */
+    public function string(string $key, $default = null)
+    {
+        return $this->get_string($key, $default);
     }
 
     /**
@@ -984,6 +998,21 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
+     * Alias of `get_date()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param string|null $default Default value if the key doesn't exist.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function date(string $key, $default = null)
+    {
+        return $this->get_date($key, $default);
+    }
+
+    /**
      * Get a datetime value.
      *
      * @param string $key The key to retrieve.
@@ -996,6 +1025,21 @@ class Request implements RequestContract, Arrayable
     public function get_datetime(string $key, $default = null)
     {
         return $this->get($key, $default, Sanitizer::DATETIME);
+    }
+
+    /**
+     * Alias of `get_datetime()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param string|null $default Default value if the key doesn't exist.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function datetime(string $key, $default = null)
+    {
+        return $this->get_datetime($key, $default);
     }
 
     /**
@@ -1014,6 +1058,21 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
+     * Alias of `get_text()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param string|null $default Default value if the key doesn't exist.
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     */
+    public function text(string $key, $default = null)
+    {
+        return $this->get_text($key, $default);
+    }
+
+    /**
      * Get a html supported content with sanitization applied.
      *
      * @param string $key The key to retrieve.
@@ -1026,6 +1085,21 @@ class Request implements RequestContract, Arrayable
     public function get_html(string $key, $default = null)
     {
         return $this->get($key, $default, Sanitizer::RICH_TEXT);
+    }
+
+    /**
+     * Alias of `get_html()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param string|null $default Default value if the key doesn't exist.
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     */
+    public function html(string $key, $default = null)
+    {
+        return $this->get_html($key, $default);
     }
 
     /**
@@ -1044,6 +1118,21 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
+     * Alias of `get_email()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param string|null $default Default value if the key doesn't exist.
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     */
+    public function email(string $key, $default = null)
+    {
+        return $this->get_email($key, $default);
+    }
+
+    /**
      * Get a url with sanitization applied.
      *
      * @param string $key The key to retrieve.
@@ -1056,6 +1145,21 @@ class Request implements RequestContract, Arrayable
     public function get_url(string $key, $default = null)
     {
         return $this->get($key, $default, Sanitizer::URL);
+    }
+
+    /**
+     * Alias of `get_url()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param string|null $default Default value if the key doesn't exist.
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     */
+    public function url(string $key, $default = null)
+    {
+        return $this->get_url($key, $default);
     }
 
     /**
@@ -1074,6 +1178,21 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
+     * Alias of `get_key()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param string|null $default Default value if the key doesn't exist.
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     */
+    public function key(string $key, $default = null)
+    {
+        return $this->get_key($key, $default);
+    }
+
+    /**
      * Get a title value with sanitization applied.
      *
      * @param string $key The key to retrieve.
@@ -1086,6 +1205,21 @@ class Request implements RequestContract, Arrayable
     public function get_title(string $key, $default = null)
     {
         return $this->get($key, $default, Sanitizer::TITLE);
+    }
+
+    /**
+     * Alias of `get_title()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param string|null $default Default value if the key doesn't exist.
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     */
+    public function title(string $key, $default = null)
+    {
+        return $this->get_title($key, $default);
     }
 
     /**
@@ -1104,6 +1238,21 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
+     * Alias of `get_file_name()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param string|null $default Default value if the key doesn't exist.
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     */
+    public function file_name(string $key, $default = null)
+    {
+        return $this->get_file_name($key, $default);
+    }
+
+    /**
      * Get mime type with sanitization applied.
      *
      * @param string $key The key to retrieve.
@@ -1116,6 +1265,21 @@ class Request implements RequestContract, Arrayable
     public function get_mime_type(string $key, $default = null)
     {
         return $this->get($key, $default, Sanitizer::MIME_TYPE);
+    }
+
+    /**
+     * Alias of `get_mime_type()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param string|null $default Default value if the key doesn't exist.
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     */
+    public function mime_type(string $key, $default = null)
+    {
+        return $this->get_mime_type($key, $default);
     }
 
     /**
@@ -1134,6 +1298,21 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
+     * Alias of `get_int()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param int|null $default Default value if the key doesn't exist.
+     *
+     * @return int|null
+     *
+     * @since 1.0.0
+     */
+    public function int(string $key, $default = null)
+    {
+        return $this->get_int($key, $default);
+    }
+
+    /**
      * Get a boolean value.
      *
      * @param string $key The key to retrieve.
@@ -1146,6 +1325,21 @@ class Request implements RequestContract, Arrayable
     public function get_bool(string $key, bool $default = false)
     {
         return $this->get($key, $default, Sanitizer::BOOL);
+    }
+
+    /**
+     * Alias of `get_bool()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param bool $default Default value if the key doesn't exist.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    public function bool(string $key, bool $default = false)
+    {
+        return $this->get_bool($key, $default);
     }
 
     /**
@@ -1164,6 +1358,21 @@ class Request implements RequestContract, Arrayable
     }
 
     /**
+     * Alias of `get_float()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param float|null $default Default value if the key doesn't exist.
+     *
+     * @return float|null
+     *
+     * @since 1.0.0
+     */
+    public function float(string $key, $default = null)
+    {
+        return $this->get_float($key, $default);
+    }
+
+    /**
      * Get an array value.
      *
      * @param string $key The key to retrieve.
@@ -1176,6 +1385,21 @@ class Request implements RequestContract, Arrayable
     public function get_array(string $key, $default = null)
     {
         return $this->get($key, $default, Sanitizer::ARRAY);
+    }
+
+    /**
+     * Alias of `get_array()`.
+     *
+     * @param string $key The key to retrieve.
+     * @param array|null $default Default value if the key doesn't exist.
+     *
+     * @return array|null
+     *
+     * @since 1.0.0
+     */
+    public function array(string $key, $default = null)
+    {
+        return $this->get_array($key, $default);
     }
 
     /**
