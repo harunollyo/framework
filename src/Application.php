@@ -29,6 +29,7 @@ use Framework\Console\Commands\MigrateCommand;
 use Framework\Console\Commands\SeedCommand;
 use Framework\Database\Connection\DatabaseManager;
 use Framework\Database\Schema\SchemaManager;
+use Framework\Managers\CookieManager;
 use Framework\Managers\EventManager;
 use Framework\Managers\LogManager;
 use Framework\Managers\OptionManager;
@@ -327,6 +328,7 @@ class Application extends Container
                 'policy' => PolicyManager::class,
                 'event' => EventManager::class,
                 'log' => LogManager::class,
+                'cookie' => CookieManager::class,
                 'client-request' => ClientRequest::class,
                 'command' => CommandManager::class,
                 RequestContract::class => Request::class,

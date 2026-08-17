@@ -10,8 +10,12 @@ namespace Framework\Http;
 
 defined('ABSPATH') || exit;
 
+use Framework\Http\Concerns\InteractsWithCookies;
+
 class Response
 {
+    use InteractsWithCookies;
+
     /**
      * HTTP status code for a successful request.
      *

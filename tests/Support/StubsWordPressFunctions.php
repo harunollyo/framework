@@ -386,3 +386,93 @@ if (!class_exists('WP_Error')) {
         }
     }
 }
+
+if (!function_exists('is_ssl')) {
+    function is_ssl()
+    {
+        return (bool) ($GLOBALS['framework_test_is_ssl'] ?? false);
+    }
+}
+
+if (!class_exists('WP_Http_Cookie')) {
+    class WP_Http_Cookie
+    {
+        public $name;
+
+        public $value;
+
+        public $expires;
+
+        public $path;
+
+        public $domain;
+
+        public function __construct($data, $requested_url = '')
+        {
+            if (is_string($data)) {
+                $data = ['name' => $data, 'value' => ''];
+            }
+
+            $this->name = $data['name'] ?? '';
+            $this->value = $data['value'] ?? '';
+            $this->expires = $data['expires'] ?? null;
+            $this->path = $data['path'] ?? null;
+            $this->domain = $data['domain'] ?? null;
+        }
+    }
+}
+
+if (!class_exists('WP_REST_Response')) {
+    class WP_REST_Response
+    {
+        public $data;
+
+        public $headers = [];
+
+        public $status = 200;
+
+        public function __construct($data = null, $status = 200, $headers = [])
+        {
+            $this->data = $data;
+            $this->status = $status;
+            $this->headers = $headers;
+        }
+
+        public function set_data($data)
+        {
+            $this->data = $data;
+        }
+
+        public function get_data()
+        {
+            return $this->data;
+        }
+
+        public function set_status($status)
+        {
+            $this->status = (int) $status;
+        }
+
+        public function get_status()
+        {
+            return $this->status;
+        }
+
+        public function set_headers($headers)
+        {
+            $this->headers = $headers;
+        }
+
+        public function get_headers()
+        {
+            return $this->headers;
+        }
+
+        public function header($key, $value, $replace = true)
+        {
+            if ($replace || !isset($this->headers[$key])) {
+                $this->headers[$key] = $value;
+            }
+        }
+    }
+}

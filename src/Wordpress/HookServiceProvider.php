@@ -13,9 +13,11 @@ namespace Framework\Wordpress;
 defined('ABSPATH') || exit;
 
 use Framework\ServiceProvider;
+use Framework\Wordpress\Hooks\Actions\FlushQueuedCookies;
 use Framework\Wordpress\Hooks\Actions\VersionUpdate;
 use Framework\Wordpress\Hooks\Actions\RegisterRestApi;
 use Framework\Wordpress\Hooks\Actions\RegisterSiteRoutes;
+use Framework\Wordpress\Hooks\Filters\FlushRestCookies;
 
 class HookServiceProvider extends ServiceProvider
 {
@@ -27,8 +29,13 @@ class HookServiceProvider extends ServiceProvider
      * @since 1.0.0
      */
     protected static $defaults = [
-        'actions' => [RegisterRestApi::class, RegisterSiteRoutes::class, VersionUpdate::class],
-        'filters' => [],
+        'actions' => [
+            RegisterRestApi::class,
+            RegisterSiteRoutes::class,
+            VersionUpdate::class,
+            FlushQueuedCookies::class,
+        ],
+        'filters' => [FlushRestCookies::class],
     ];
 
     /**
@@ -67,22 +74,40 @@ class HookServiceProvider extends ServiceProvider
             return static::$defaults;
         }
 
-        $default_action_hooks = [];
+        return [
+            'actions' => $this->merge_defaults($hooks['actions'] ?? [], 'actions'),
+            'filters' => $this->merge_defaults($hooks['filters'] ?? [], 'filters'),
+        ];
+    }
 
-        foreach (static::$defaults['actions'] as $action) {
-            if (!in_array($action, $hooks['actions'], true)) {
-                $default_action_hooks[] = $action;
+    /**
+     * Merge the framework default hooks into the configured ones.
+     *
+     * Defaults are prepended so the framework hooks register before application hooks,
+     * and are skipped when the application already lists them.
+     *
+     * @param array $configured The hooks defined by the application.
+     * @param string $type The hook group, either actions or filters.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    protected function merge_defaults(array $configured, string $type)
+    {
+        $missing = [];
+
+        foreach (static::$defaults[$type] as $hook) {
+            if (!in_array($hook, $configured, true)) {
+                $missing[] = $hook;
             }
         }
 
-        if (!empty($default_action_hooks)) {
-            $hooks['actions'] = array_merge($default_action_hooks, $hooks['actions']);
+        if (empty($missing)) {
+            return $configured;
         }
 
-        return [
-            'actions' => $hooks['actions'] ?? [],
-            'filters' => $hooks['filters'] ?? [],
-        ];
+        return array_merge($missing, $configured);
     }
 
     /**

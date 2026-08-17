@@ -14,6 +14,7 @@ defined('ABSPATH') || exit;
 
 use Framework\Contracts\Support\Arrayable;
 use Framework\Contracts\Support\Jsonable;
+use Framework\Http\Concerns\InteractsWithCookies;
 use Framework\Supports\Arr;
 use InvalidArgumentException;
 use JsonSerializable;
@@ -21,6 +22,8 @@ use WP_REST_Response;
 
 class JsonResponse extends WP_REST_Response
 {
+    use InteractsWithCookies;
+
     /**
      * The original data that was passed to the response.
      *

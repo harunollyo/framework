@@ -6,6 +6,14 @@ if (!defined('ABSPATH')) {
     define('ABSPATH', $framework_dir . '/');
 }
 
+if (!defined('COOKIEPATH')) {
+    define('COOKIEPATH', '/wp-subdir/');
+}
+
+if (!defined('COOKIE_DOMAIN')) {
+    define('COOKIE_DOMAIN', 'example.test');
+}
+
 $autoload = $framework_dir . '/vendor/autoload.php';
 
 if (!file_exists($autoload)) {

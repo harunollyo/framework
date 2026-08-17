@@ -15,6 +15,7 @@ use Framework\Middlewares\AuthMiddleware;
 use Framework\Resource;
 use Framework\Route;
 use Framework\Supports\Arr;
+use Framework\Supports\Facades\Cookie;
 use Framework\Supports\Facades\Http;
 use Framework\Validation\Rule;
 use Framework\Validation\Validator;
@@ -54,9 +55,13 @@ Route::get('/options', function (Request $request) {
 });
 
 Route::get('/check', function (Request $request) {
+    $cookie = Cookie::forever('test', uniqid());
+    $cookie2 = Cookie::forever('test2', 'test2');
+    Cookie::queue($cookie);
+    Cookie::queue($cookie2);
     return response()->json([
-        'data' => $request->get_header('content-type'),
-    ]);
+        'data' => $request->cookie('test'),
+    ])->with_cookie($cookie2);
 });
 
 // Route::post('/check', function (Request $request) {

@@ -19,6 +19,7 @@ use Framework\Database\Schema\SchemaManager;
 use Framework\Discovery\ListenerDiscovery;
 use Framework\Discovery\PolicyDiscovery;
 use Framework\Contracts\SomoyInterface;
+use Framework\Managers\CookieManager;
 use Framework\Managers\EventManager;
 use Framework\Managers\LogManager;
 use Framework\Managers\PolicyManager;
@@ -103,6 +104,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(LogManager::class);
         $this->app->singleton(EventManager::class);
         $this->app->singleton(PolicyManager::class);
+        $this->app->singleton(CookieManager::class);
         $this->app->bind(SomoyInterface::class, function () {
             return new Somoy();
         });
