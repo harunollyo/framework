@@ -362,11 +362,18 @@ class SiteRouter
                 $resolved = $engine->resolve_path($path);
 
                 if ($resolved !== '') {
-                    app(ViewContext::class)->prepare(
+                    $view_context = app(ViewContext::class);
+                    $view_context->prepare(
                         $result,
                         (string) $route->get_name(),
                         $resolved
                     );
+
+                    $master_layout = $result->get_master_layout();
+
+                    if ($master_layout !== null) {
+                        $view_context->set_active_attribute('master_layout', $master_layout);
+                    }
 
                     if ($result->uses_layout()) {
                         return $engine->layout_wrapper_path();
