@@ -642,6 +642,7 @@ class SiteRouter
      */
     protected function get_matched_route(Route $route)
     {
+        // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
         $request_method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
 
         foreach ($this->routes as $route_entry) {
