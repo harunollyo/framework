@@ -627,6 +627,31 @@ class SiteRouter
     }
 
     /**
+     * Get the matched route by checking current endpoint and request method.
+     *
+     * @param Route $route The route to get the matched route for.
+     *
+     * @return Route
+     *
+     * @since 1.0.0
+     */
+    protected function get_matched_route(Route $route)
+    {
+        $request_method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
+
+        foreach ($this->routes as $route_entry) {
+            if (
+                $route_entry->get_endpoint() === $route->get_endpoint() &&
+                strtoupper($route_entry->get_method()) === $request_method
+            ) {
+                return $route_entry;
+            }
+        }
+
+        return $route;
+    }
+
+    /**
      * Find a path-matched route for the current request and hook context.
      *
      * @param string $expected_hook_name Expected dispatch hook name.
@@ -645,6 +670,7 @@ class SiteRouter
         }
 
         $route = $this->routes[$id];
+        $route = $this->get_matched_route($route);
 
         if ($route->get_match_using() !== Route::MATCH_PATH) {
             return null;
@@ -685,6 +711,7 @@ class SiteRouter
             }
 
             if ($this->resolve_page_id($route->get_endpoint()) === $current_page_id) {
+                $route = $this->get_matched_route($route);
                 return $route;
             }
         }
