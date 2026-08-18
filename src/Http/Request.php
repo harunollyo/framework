@@ -16,6 +16,7 @@ use Framework\Contracts\Support\Arrayable;
 use Framework\Sanitizer;
 use Framework\Exceptions\AuthorizationException;
 use Framework\Exceptions\ValidationException;
+use Framework\Managers\SessionManager;
 use Framework\Http\Concerns\InteractsWithFiles;
 use Framework\Supports\Arr;
 use Framework\Validation\Validator;
@@ -23,6 +24,7 @@ use WP_REST_Request;
 use Framework\Supports\Str;
 use InvalidArgumentException;
 
+use function Framework\app;
 use function Framework\message;
 use function Framework\user;
 use function Framework\value;
@@ -666,6 +668,104 @@ class Request implements RequestContract, Arrayable
     public function has_cookie(string $key)
     {
         return array_key_exists($key, $this->cookies);
+    }
+
+    /**
+     * Get the session store.
+     *
+     * Session values are held by the store, never on the request attributes, so
+     * a stored value can never satisfy or override a validated input.
+     *
+     * @return SessionManager
+     *
+     * @since 1.0.0
+     */
+    public function session()
+    {
+        return app(SessionManager::class);
+    }
+
+    /**
+     * Get a value from the input flashed by the previous request.
+     *
+     * @param string|null $key The key, or null for every value.
+     * @param mixed $default The default when the key is absent.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function old(?string $key = null, $default = null)
+    {
+        return $this->session()->get_old_input($key, $default);
+    }
+
+    /**
+     * Flash this request's input so the next request can read it back.
+     *
+     * Sensitive fields and uploaded files are never flashed.
+     *
+     * @return $this
+     *
+     * @since 1.0.0
+     */
+    public function flash()
+    {
+        $this->session()->flash_input($this->flashable_input());
+
+        return $this;
+    }
+
+    /**
+     * Flash only the given input keys.
+     *
+     * @param array $keys The keys to flash.
+     *
+     * @return $this
+     *
+     * @since 1.0.0
+     */
+    public function flash_only(array $keys)
+    {
+        $input = $this->flashable_input();
+
+        $this->session()->flash_input(array_intersect_key($input, array_flip($keys)));
+
+        return $this;
+    }
+
+    /**
+     * Flash every input key except the given ones.
+     *
+     * @param array $keys The keys to exclude.
+     *
+     * @return $this
+     *
+     * @since 1.0.0
+     */
+    public function flash_except(array $keys)
+    {
+        $input = $this->flashable_input();
+
+        $this->session()->flash_input(array_diff_key($input, array_flip($keys)));
+
+        return $this;
+    }
+
+    /**
+     * Get the input that may safely be written to the session as old input.
+     *
+     * Reads the attributes only, so uploaded files are excluded by construction,
+     * then removes the fields the session is configured never to flash. Without
+     * this a failed submit would store a plaintext password in the session.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    public function flashable_input()
+    {
+        return $this->except($this->session()->get_never_flash());
     }
 
     /**

@@ -20,10 +20,12 @@ use Framework\Database\Migrations\Migrator;
 use Framework\Http\Cookie;
 use Framework\Http\Request;
 use Framework\Managers\CookieManager;
+use Framework\Managers\SessionManager;
 use Framework\Http\RedirectResponse;
 use Framework\Wordpress\User;
 use Framework\Http\Response;
 use Framework\Supports\Arr;
+use Framework\Supports\ErrorBag;
 use Framework\Supports\HigherOrderTapProxy;
 use Framework\Supports\MessagesBag;
 use Framework\Supports\Str;
@@ -304,6 +306,107 @@ if (!function_exists('Framework\cookie')) {
         }
 
         return $manager->make($name, $value, $minutes, $path, $domain, $secure, $http_only, $raw, $same_site);
+    }
+}
+
+if (!function_exists('Framework\session')) {
+    /**
+     * Access the session store.
+     *
+     * With no arguments the manager is returned. A string key reads a value,
+     * and an array writes each key and value pair.
+     *
+     * @param string|array|null $key
+     * @param mixed $default
+     *
+     * @return ($key is null ? SessionManager : ($key is array ? null : mixed))
+     *
+     * @since 1.0.0
+     */
+    function session($key = null, $default = null)
+    {
+        $manager = app('session');
+
+        if (is_null($key)) {
+            return $manager;
+        }
+
+        if (is_array($key)) {
+            $manager->put($key);
+
+            return null;
+        }
+
+        return $manager->get($key, $default);
+    }
+}
+
+if (!function_exists('Framework\old')) {
+    /**
+     * Get a value from the input flashed by the previous request.
+     *
+     * @param string|null $key
+     * @param mixed $default
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    function old($key = null, $default = null)
+    {
+        return app('session')->get_old_input($key, $default);
+    }
+}
+
+if (!function_exists('Framework\errors')) {
+    /**
+     * Get the validation errors flashed by the previous request.
+     *
+     * @return ErrorBag
+     *
+     * @since 1.0.0
+     */
+    function errors()
+    {
+        $errors = app('session')->get('errors', []);
+
+        return new ErrorBag(is_array($errors) ? $errors : []);
+    }
+}
+
+if (!function_exists('Framework\back')) {
+    /**
+     * Redirect back to the page the visitor came from.
+     *
+     * Resolves the WordPress referer first, then a previously recorded session
+     * URL when a session is already started, then the given fallback, and
+     * finally the site home URL. Resolving never starts a session.
+     *
+     * @param string|null $fallback
+     * @param int $status
+     *
+     * @return RedirectResponse
+     *
+     * @since 1.0.0
+     */
+    function back($fallback = null, $status = 302)
+    {
+        $url = function_exists('wp_get_referer') ? wp_get_referer() : false;
+
+        if (!is_string($url) || $url === '') {
+            $session = app('session');
+            $url = $session->is_started() ? $session->previous_url() : null;
+        }
+
+        if (!is_string($url) || $url === '') {
+            $url = $fallback;
+        }
+
+        if (!is_string($url) || $url === '') {
+            $url = function_exists('home_url') ? home_url('/') : '/';
+        }
+
+        return new RedirectResponse($url, $status);
     }
 }
 

@@ -14,6 +14,7 @@ defined('ABSPATH') || exit;
 use Framework\Http\JsonResponse;
 use Framework\Http\RedirectResponse;
 use Framework\Managers\CookieManager;
+use Framework\Managers\SessionManager;
 use Framework\Route;
 use Framework\Sanitizer;
 use Framework\SiteExceptionHandler;
@@ -552,6 +553,10 @@ class SiteRouter
      */
     protected function flush_queued_cookies()
     {
+        // Saving first is required, not cosmetic: starting or changing the
+        // session queues the identifier cookie that this flush emits.
+        app(SessionManager::class)->save();
+
         app(CookieManager::class)->flush_queued_cookies();
     }
 

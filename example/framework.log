@@ -1,0 +1,1 @@
+[2026-08-18 13:01:00] [WARNING] Session "c6c00dbd280d1d58eb96b10ed50cc7d96232afb5" was not stored because the response headers were already sent, so its identifier cookie could never reach the client.

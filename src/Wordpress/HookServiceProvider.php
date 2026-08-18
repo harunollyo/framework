@@ -14,6 +14,9 @@ defined('ABSPATH') || exit;
 
 use Framework\ServiceProvider;
 use Framework\Wordpress\Hooks\Actions\FlushQueuedCookies;
+use Framework\Wordpress\Hooks\Actions\InvalidateSessionOnLogout;
+use Framework\Wordpress\Hooks\Actions\MigrateSessionOnLogin;
+use Framework\Wordpress\Hooks\Actions\SaveSession;
 use Framework\Wordpress\Hooks\Actions\VersionUpdate;
 use Framework\Wordpress\Hooks\Actions\RegisterRestApi;
 use Framework\Wordpress\Hooks\Actions\RegisterSiteRoutes;
@@ -34,6 +37,9 @@ class HookServiceProvider extends ServiceProvider
             RegisterSiteRoutes::class,
             VersionUpdate::class,
             FlushQueuedCookies::class,
+            SaveSession::class,
+            MigrateSessionOnLogin::class,
+            InvalidateSessionOnLogout::class,
         ],
         'filters' => [FlushRestCookies::class],
     ];

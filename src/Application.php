@@ -30,6 +30,7 @@ use Framework\Console\Commands\SeedCommand;
 use Framework\Database\Connection\DatabaseManager;
 use Framework\Database\Schema\SchemaManager;
 use Framework\Managers\CookieManager;
+use Framework\Managers\SessionManager;
 use Framework\Managers\EventManager;
 use Framework\Managers\LogManager;
 use Framework\Managers\OptionManager;
@@ -329,6 +330,7 @@ class Application extends Container
                 'event' => EventManager::class,
                 'log' => LogManager::class,
                 'cookie' => CookieManager::class,
+                'session' => SessionManager::class,
                 'client-request' => ClientRequest::class,
                 'command' => CommandManager::class,
                 RequestContract::class => Request::class,

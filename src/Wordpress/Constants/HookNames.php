@@ -40,4 +40,6 @@ class HookNames
     public const WP_LOGIN = 'wp_login';
     public const SEND_HEADERS = 'send_headers';
     public const REST_POST_DISPATCH = 'rest_post_dispatch';
+    public const WP_LOGOUT = 'wp_logout';
+    public const SHUTDOWN = 'shutdown';
 }

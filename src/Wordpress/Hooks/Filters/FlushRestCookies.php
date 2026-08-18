@@ -1,6 +1,6 @@
 <?php
 /**
- * WordPress rest_post_dispatch filter that emits queued cookies for REST responses.
+ * WordPress rest_post_dispatch filter that saves the session and emits queued cookies for REST responses.
  * Runs before the REST server sends headers or serializes the body, so cookies still reach the client.
  * Returns the dispatched result untouched so every REST route passes through unchanged.
  *
@@ -13,6 +13,7 @@ namespace Framework\Wordpress\Hooks\Filters;
 defined('ABSPATH') || exit;
 
 use Framework\Managers\CookieManager;
+use Framework\Managers\SessionManager;
 use Framework\Wordpress\BaseHook;
 use Framework\Wordpress\Constants\HookNames;
 use Framework\Wordpress\Constants\HookTypes;
@@ -58,6 +59,9 @@ class FlushRestCookies extends BaseHook
      */
     public function handle(...$args)
     {
+        // Saved before the flush so a queued identifier cookie is emitted with it.
+        app(SessionManager::class)->save();
+
         app(CookieManager::class)->flush_queued_cookies();
 
         return $args[0] ?? null;

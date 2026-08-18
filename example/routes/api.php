@@ -20,10 +20,12 @@ use Framework\Supports\Facades\Http;
 use Framework\Validation\Rule;
 use Framework\Validation\Validator;
 
+use function Framework\back;
 use function Framework\collection;
 use function Framework\dd;
 use function Framework\deep_set;
 use function Framework\response;
+use function Framework\session;
 
 Route::set_namespace('framework/v1');
 
@@ -55,35 +57,7 @@ Route::get('/options', function (Request $request) {
 });
 
 Route::get('/check', function (Request $request) {
-    $cookie = Cookie::forever('test', uniqid());
-    $cookie2 = Cookie::forever('test2', 'test2');
-    Cookie::queue($cookie);
-    Cookie::queue($cookie2);
     return response()->json([
         'data' => $request->cookie('test'),
-    ])->with_cookie($cookie2);
+    ]);
 });
-
-// Route::post('/check', function (Request $request) {
-//     $data = [
-//         'name' => 'John Doe',
-//         // 'email' => 'john.doe@example',
-//     ];
-//     $validator = Validator::make($data, [
-//         'name' => [
-//             'required',
-//             'string',
-//         ],
-//         'email' => [
-//             'email',
-//         ],
-//     ]);
-
-//     $validator->sometimes('email', 'required|email', function ($data) {
-//         return $data['name'] === 'John Doe';
-//     });
-
-//     return response()->json([
-//         'validator' => $validator->validated(),
-//     ]);
-// });

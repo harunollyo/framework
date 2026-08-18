@@ -476,3 +476,82 @@ if (!class_exists('WP_REST_Response')) {
         }
     }
 }
+
+if (!function_exists('get_transient')) {
+    function get_transient($key)
+    {
+        $store = $GLOBALS['framework_test_transients'] ?? [];
+
+        if (!array_key_exists($key, $store)) {
+            return false;
+        }
+
+        $entry = $store[$key];
+
+        if (isset($entry['expires_at']) && $entry['expires_at'] !== 0 && $entry['expires_at'] <= time()) {
+            unset($GLOBALS['framework_test_transients'][$key]);
+
+            return false;
+        }
+
+        return $entry['value'];
+    }
+}
+
+if (!function_exists('set_transient')) {
+    function set_transient($key, $value, $expiration = 0)
+    {
+        if (!isset($GLOBALS['framework_test_transients'])) {
+            $GLOBALS['framework_test_transients'] = [];
+        }
+
+        $GLOBALS['framework_test_transients'][$key] = [
+            'value' => $value,
+            'lifetime' => (int) $expiration,
+            'expires_at' => $expiration ? time() + (int) $expiration : 0,
+        ];
+
+        return true;
+    }
+}
+
+if (!function_exists('delete_transient')) {
+    function delete_transient($key)
+    {
+        if (!isset($GLOBALS['framework_test_transients'][$key])) {
+            return false;
+        }
+
+        unset($GLOBALS['framework_test_transients'][$key]);
+
+        return true;
+    }
+}
+
+if (!function_exists('wp_using_ext_object_cache')) {
+    function wp_using_ext_object_cache()
+    {
+        return (bool) ($GLOBALS['framework_test_ext_object_cache'] ?? false);
+    }
+}
+
+if (!function_exists('wp_get_referer')) {
+    function wp_get_referer()
+    {
+        return $GLOBALS['framework_test_referer'] ?? false;
+    }
+}
+
+if (!function_exists('wp_generate_password')) {
+    function wp_generate_password($length = 12, $special_chars = true, $extra_special_chars = false)
+    {
+        $characters = 'abcdef0123456789';
+        $password = '';
+
+        for ($index = 0; $index < $length; $index++) {
+            $password .= $characters[random_int(0, strlen($characters) - 1)];
+        }
+
+        return $password;
+    }
+}

@@ -281,7 +281,7 @@ class UploadedFile extends File implements JsonSerializable
                 );
             }
 
-            @chmod($target, 0o666 & ~umask());
+            @chmod($target, 0666 & ~umask());
 
             return $target;
         }
