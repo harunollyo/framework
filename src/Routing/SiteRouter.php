@@ -320,6 +320,10 @@ class SiteRouter
     /**
      * Dispatch matched routes registered on the template_include filter.
      *
+     * The session is saved and queued cookies are emitted before the template
+     * path is handed back, because WordPress includes that file straight away
+     * and output leaves no further opportunity to send headers.
+     *
      * @param string $template Default template path from WordPress.
      * @param int $priority Hook priority being handled.
      *
@@ -339,6 +343,7 @@ class SiteRouter
         $params = $match['params'];
 
         if ($route->get_redirect() !== null) {
+            $this->flush_queued_cookies();
             $this->send_route_redirect($route, $params);
         }
 
@@ -350,6 +355,8 @@ class SiteRouter
                     new Exception('Template not found: ' . $route->get_template(), 500)
                 );
             }
+
+            $this->flush_queued_cookies();
 
             return $file;
         }
@@ -369,6 +376,11 @@ class SiteRouter
                         $resolved
                     );
 
+                    // WordPress includes the returned path immediately after this
+                    // filter, which starts output. This is the last point at which
+                    // the identifier cookie can still be sent.
+                    $this->flush_queued_cookies();
+
                     if ($result->uses_layout()) {
                         return $engine->layout_wrapper_path();
                     }
@@ -378,6 +390,8 @@ class SiteRouter
             }
 
             if (is_string($result) && $result !== '' && file_exists($result)) {
+                $this->flush_queued_cookies();
+
                 return $result;
             }
 

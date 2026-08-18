@@ -5,8 +5,13 @@ namespace Framework\Tests\Unit\Routing;
 use Framework\Contracts\Middleware;
 use Framework\Contracts\Request as RequestContract;
 use Framework\Http\Request;
+use Framework\Managers\CookieManager;
+use Framework\Managers\SessionManager;
 use Framework\Route;
 use Framework\Routing\SiteRouter;
+use Framework\Tests\Support\Http\RecordingCookieManager;
+use Framework\Tests\Support\Session\RecordingSessionHandler;
+use Framework\Tests\Support\Session\TestSessionManager;
 use Framework\Tests\Unit\TestCase;
 use Framework\Wordpress\Constants\HookNames;
 
@@ -276,6 +281,78 @@ class SiteRouterTest extends TestCase
         $url = Route::site_url('products.show', ['id' => 42]);
 
         $this->assertStringContainsString('shop/products/42', $url);
+    }
+
+    public function test_a_template_include_route_saves_the_session_before_the_template_renders(): void
+    {
+        $views = sys_get_temp_dir() . '/framework-site-views-' . uniqid();
+        mkdir($views, 0777, true);
+        file_put_contents(
+            $views . '/shop.php',
+            '<?php echo esc_html((string) \Framework\view_data("title", ""));'
+        );
+
+        $app = $this->bootstrap_application();
+        $app->use_view_path($views);
+        $app->instance(\Framework\View\TemplateEngine::class, new \Framework\View\TemplateEngine());
+        $app->instance(\Framework\View\ViewContext::class, new \Framework\View\ViewContext());
+
+        $handler = new RecordingSessionHandler();
+        $cookies = new RecordingCookieManager();
+        $cookies->set_default_path_and_domain('/', null, false, 'Lax');
+        $session = new TestSessionManager($handler);
+
+        $app->instance(CookieManager::class, $cookies);
+        $app->instance(SessionManager::class, $session);
+        $app->instance('session', $session);
+
+        Route::site(function () {
+            Route::get('shop', function (Request $request) {
+                \Framework\session()->put('data', ['name' => 'John Doe']);
+
+                return \Framework\view('shop', ['title' => 'Shop'])->layout(false);
+            })->name('shop')->match_page();
+        });
+
+        $router = new SiteRouter('framework');
+        $router->boot(Route::get_site_routes());
+
+        $reflection = new \ReflectionClass($router);
+        $route_id_method = $reflection->getMethod('route_id');
+        $route_id_method->setAccessible(true);
+        $route_id = $route_id_method->invoke($router, Route::get_site_routes()[0]);
+
+        // The route matches an existing WordPress page, exactly as ->match_page() means.
+        $GLOBALS['framework_test_query_vars'] = ['framework_route' => $route_id];
+        $GLOBALS['framework_test_is_page'] = true;
+        $GLOBALS['framework_test_pages'] = ['shop' => 12];
+        $GLOBALS['framework_test_queried_object_id'] = 12;
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $router->handle_template_include('/theme/index.php', 10);
+
+        // WordPress includes the returned template next, which begins output. By
+        // then the payload must already be stored and the id cookie emitted.
+        $this->assertCount(1, $handler->writes, 'The session was never written on the template_include path.');
+        $this->assertSame(
+            ['name' => 'John Doe'],
+            $handler->last_written_payload()['data']
+        );
+        $this->assertContains($session->get_name(), $cookies->sent_names());
+        $this->assertSame([], $cookies->get_queued_cookies());
+        $this->assertSame([], $session->warnings);
+
+        unset(
+            $GLOBALS['framework_test_query_vars'],
+            $GLOBALS['framework_test_is_page'],
+            $GLOBALS['framework_test_pages'],
+            $GLOBALS['framework_test_queried_object_id'],
+            $_SERVER['REQUEST_METHOD']
+        );
+        app(\Framework\View\ViewContext::class)->clear();
+
+        unlink($views . '/shop.php');
+        rmdir($views);
     }
 }
 

@@ -402,6 +402,28 @@ class SessionManagerTest extends TestCase
         $this->assertStringContainsString('headers were already sent', $manager->warnings[0]);
     }
 
+    public function test_a_late_write_persists_once_the_identifier_cookie_has_been_sent(): void
+    {
+        $manager = $this->manager();
+
+        // The router saves and flushes before handing the template to WordPress.
+        $manager->put('cart', ['sku']);
+        $manager->save();
+
+        $this->assertCount(1, $this->handler->writes);
+
+        // The template renders after that, so output has begun by the time
+        // anything it does reaches the shutdown save. The identifier cookie
+        // already went out, so the payload is still reachable and must persist.
+        $manager->headers_sent = true;
+        $manager->put('cart', ['sku', 'sku-2']);
+        $manager->save();
+
+        $this->assertCount(2, $this->handler->writes);
+        $this->assertSame(['sku', 'sku-2'], $this->handler->last_written_payload()['cart']);
+        $this->assertSame([], $manager->warnings);
+    }
+
     // -------------------------------------------------------------- save policy
 
     public function test_save_writes_nothing_when_the_session_never_started(): void

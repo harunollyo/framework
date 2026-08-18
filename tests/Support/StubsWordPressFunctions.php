@@ -170,14 +170,14 @@ if (!function_exists('is_admin')) {
 if (!function_exists('is_page')) {
     function is_page($page = '')
     {
-        return false;
+        return (bool) ($GLOBALS['framework_test_is_page'] ?? false);
     }
 }
 
 if (!function_exists('get_queried_object_id')) {
     function get_queried_object_id()
     {
-        return 0;
+        return (int) ($GLOBALS['framework_test_queried_object_id'] ?? 0);
     }
 }
 
@@ -191,7 +191,13 @@ if (!function_exists('get_permalink')) {
 if (!function_exists('get_page_by_path')) {
     function get_page_by_path($page_path, $output = OBJECT, $post_type = 'page')
     {
-        return null;
+        $pages = $GLOBALS['framework_test_pages'] ?? [];
+
+        if (!isset($pages[$page_path])) {
+            return null;
+        }
+
+        return (object) ['ID' => (int) $pages[$page_path]];
     }
 }
 

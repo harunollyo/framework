@@ -149,6 +149,19 @@ class SessionManager
     protected bool $flash_aged = false;
 
     /**
+     * Whether the identifier cookie for this session has been queued for emission.
+     *
+     * A generated identifier only reaches the client if its cookie can still be
+     * sent. Once it has been, a later write in the same request is reachable
+     * again and is no longer subject to the late-write rule.
+     *
+     * @var bool
+     *
+     * @since 1.0.0
+     */
+    protected bool $cookie_emitted = false;
+
+    /**
      * The resolved default session attributes.
      *
      * @var array|null
@@ -948,6 +961,7 @@ class SessionManager
 
         $this->id = $this->generate_id();
         $this->id_from_request = false;
+        $this->cookie_emitted = false;
 
         Arr::set($this->attributes, static::TOKEN_KEY, $this->generate_id());
 
@@ -1085,7 +1099,7 @@ class SessionManager
             return false;
         }
 
-        if (!$this->id_from_request && $this->headers_already_sent()) {
+        if (!$this->id_from_request && !$this->cookie_emitted && $this->headers_already_sent()) {
             $this->log_warning(sprintf(
                 'Session "%s" was not stored because the response headers were already sent, '
                 . 'so its identifier cookie could never reach the client.',
@@ -1098,6 +1112,8 @@ class SessionManager
         }
 
         $this->queue_cookie();
+
+        $this->cookie_emitted = true;
 
         $written = $this->handler->write($this->id, $payload, $this->get_lifetime_seconds());
 
@@ -1148,6 +1164,7 @@ class SessionManager
 
         $this->modified = false;
         $this->flash_aged = true;
+        $this->cookie_emitted = false;
     }
 
     /**
