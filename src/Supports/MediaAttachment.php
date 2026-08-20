@@ -85,7 +85,7 @@ class MediaAttachment
             'id'            => (string) $id,
             'filename'      => $filename,
             'url'           => wp_get_attachment_url($id),
-            'sizes'         => $sizes,
+            'sizes'         => $sizes === [] ? null : $sizes,
             'height'        => isset($metadata['height']) ? (int) $metadata['height'] : 0,
             'width'         => isset($metadata['width']) ? (int) $metadata['width'] : 0,
             'filesize'      => isset($metadata['filesize']) ? (int) $metadata['filesize'] : 0,
