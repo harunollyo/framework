@@ -7,6 +7,7 @@ use Framework\Wordpress\Constants\HookNames;
 
 use function Framework\back;
 use function Framework\dd;
+use function Framework\redirect;
 use function Framework\response;
 use function Framework\session;
 use function Framework\view;
@@ -48,6 +49,6 @@ Route::site(function () {
             'quantity' => $current + $quantity,
         ]);
 
-        return back()->with('notice', 'Added to your cart.');
+        return redirect(Route::site_url('products'))->with('notice', 'Added to your cart.');
     })->template_redirect()->name('cart.add');
 });

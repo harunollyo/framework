@@ -42,4 +42,9 @@ class Comment extends Model
     {
         return $this->has_many(Reply::class, 'comment_id');
     }
+
+    public function meta()
+    {
+        return $this->has_many(CommentMeta::class, 'comment_id', 'id');
+    }
 }

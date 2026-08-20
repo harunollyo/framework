@@ -86,6 +86,15 @@ trait HasAttributes
     protected $date_format;
 
     /**
+     * The appends attributes to model attributes array
+     * 
+     * @var array
+     * 
+     * @since 1.0.0
+     */
+    protected $appends = [];
+
+    /**
      * The primitive cast types.
      *
      * @var array
@@ -263,6 +272,100 @@ trait HasAttributes
     }
 
     /**
+     * Append attributes from model to its array
+     * 
+     * @param array $attributes The attributes to append to the array
+     *
+     * @return $this
+     * 
+     * @since 1.0.0
+     */
+    public function append($attributes)
+    {
+        $this->appends = array_values(
+            array_unique(
+                array_merge($this->appends, is_string($attributes) ? func_get_args() : $attributes)
+            )
+        );
+
+        return $this;
+    }
+
+    /**
+     * Get the appended attributes to the array
+     * 
+     * @return array
+     * 
+     * @since 1.0.0
+     */
+    public function get_appends()
+    {
+        return $this->appends;
+    }
+
+    /**
+     * Set the appends accessors to the append on the model array
+     * 
+     * @param array $appends The accessors to appends
+     * 
+     * @return $this
+     * 
+     * @since 1.0.0
+     */
+    public function set_appends(array $appends)
+    {
+        $this->appends = $appends;
+
+        return $this;
+    }
+
+    /**
+     * Merge new appends with the existing ones
+     * 
+     * @param array $appends The appends to merge
+     * 
+     * @return $this
+     * 
+     * @since 1.0.0
+     */
+    public function merge_appends(array $appends)
+    {
+        if ($appends === []) {
+            return $this;
+        }
+
+        $this->appends = array_values(array_unique(array_merge($this->appends, $appends)));
+
+        return $this;
+    }
+
+    /**
+     * Check if an attribute exists to the appends
+     * 
+     * @param string $attribute The attribute to check
+     * 
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    public function has_append($attribute)
+    {
+        return in_array($attribute, $this->get_appends());
+    }
+
+    /**
+     * Remove all the appends
+     * 
+     * @return $this
+     * 
+     * @since 1.0.0
+     */
+    public function without_appends()
+    {
+        return $this->set_appends([]);
+    }
+
+    /**
      * Get the attribute value.
      *
      * @param string $key The attribute key
@@ -350,6 +453,18 @@ trait HasAttributes
         $this->merge_attributes_from_cached_class_casts();
 
         return $this->attributes;
+    }
+
+    /**
+     * Get the arrayable attributes
+     * 
+     * @return array<string, mixed>
+     *
+     * @since 1.0.0
+     */
+    protected function get_arrayable_attributes()
+    {
+        return $this->get_attributes();
     }
 
     /**
@@ -1277,7 +1392,7 @@ trait HasAttributes
     {
         $attributes = $this->get_attributes();
         $attributes = $this->resolve_date_attributes(
-            $attributes = $this->get_attributes()
+            $attributes = $this->get_arrayable_attributes()
         );
 
         $attributes = $this->resolve_mutated_attributes(
@@ -1288,7 +1403,33 @@ trait HasAttributes
             $attributes
         );
 
+        foreach ($this->get_appends() as $key) {
+            $attributes[$key] = $this->mutate_attribute_for_array($key);
+        }
+
         return $attributes;
+    }
+
+    /**
+     * Mutate the attribute for the model attribute array
+     * 
+     * @param string $key The key to add
+     * 
+     * @return mixed
+     * 
+     * @since 1.0.0
+     */
+    protected function mutate_attribute_for_array($key)
+    {
+        $value = null;
+
+        if ($this->is_class_castable($key)) {
+            $value = $this->get_class_castable_attribute_value($key, $value);
+        } elseif ($this->has_get_mutator($key)) {
+            $value = $this->mutate_attribute($key, $value);
+        }
+
+        return $value;
     }
 
     /**

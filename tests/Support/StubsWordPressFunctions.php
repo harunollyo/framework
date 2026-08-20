@@ -63,6 +63,17 @@ if (!function_exists('esc_attr')) {
     }
 }
 
+if (!function_exists('esc_sql')) {
+    function esc_sql($data)
+    {
+        if (is_array($data)) {
+            return array_map('esc_sql', $data);
+        }
+
+        return addslashes((string) $data);
+    }
+}
+
 if (!function_exists('home_url')) {
     function home_url($path = '')
     {

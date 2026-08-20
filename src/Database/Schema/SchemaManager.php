@@ -67,6 +67,118 @@ class SchemaManager
     }
 
     /**
+     * Alter an existing table in the database.
+     *
+     * @param string $table The name of the table to alter.
+     * @param Closure $callback The callback to define the table changes.
+     *
+     * @return void
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    public function table($table, Closure $callback)
+    {
+        $structure = new Structure($table, $this->connection, Structure::MODE_ALTER);
+        $callback($structure);
+
+        $alter_sql = $structure->get_table_structure();
+        $this->connection->get_db()->query($alter_sql);
+
+        if (!empty($this->connection->get_db()->last_error)) {
+            throw new Exception($this->connection->get_db()->last_error);
+        }
+    }
+
+    /**
+     * Rename an existing table.
+     *
+     * @param string $from The current table name.
+     * @param string $to The new table name.
+     *
+     * @return void
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    public function rename(string $from, string $to)
+    {
+        $compiler = $this->connection->get_query_compiler();
+
+        $this->connection->get_db()->query(
+            sprintf(
+                'RENAME TABLE %s TO %s',
+                $compiler->wrap_table($from),
+                $compiler->wrap_table($to)
+            )
+        );
+
+        if (!empty($this->connection->get_db()->last_error)) {
+            throw new Exception($this->connection->get_db()->last_error);
+        }
+    }
+
+    /**
+     * Determine whether a table exists in the database.
+     *
+     * @param string $table The name of the table.
+     *
+     * @return bool
+     *
+     * @throws Exception
+     *
+     * @since 1.0.0
+     */
+    public function has_table($table)
+    {
+        return !empty($this->get_columns($table));
+    }
+
+    /**
+     * Determine whether a column exists on a table.
+     *
+     * @param string $table The name of the table.
+     * @param string $column The name of the column.
+     *
+     * @return bool
+     *
+     * @throws Exception
+     *
+     * @since 1.0.0
+     */
+    public function has_column($table, $column)
+    {
+        return $this->has_columns($table, [$column]);
+    }
+
+    /**
+     * Determine whether every given column exists on a table.
+     *
+     * @param string $table The name of the table.
+     * @param array $columns The column names.
+     *
+     * @return bool
+     *
+     * @throws Exception
+     *
+     * @since 1.0.0
+     */
+    public function has_columns($table, array $columns)
+    {
+        $existing = array_map('strtolower', $this->get_column_listing($table));
+
+        foreach ($columns as $column) {
+            if (!in_array(strtolower($column), $existing, true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Disable foreign key constraint checking.
      *
      * @return void

@@ -1,7 +1,7 @@
 <?php
 /**
- * Persists applied migration class names in WordPress options and reads registered migrations from container tags.
- * Tracks which migrations have run and supports rollback state queries.
+ * Persists applied migration history in WordPress options and reads registered migrations from container tags.
+ * Records the batch and timestamp of every applied migration so repeated runs execute only pending work.
  * Bridges the migrator with WordPress option storage.
  *
  * @package    Framework
@@ -20,15 +20,51 @@ use function Framework\app;
 class MigrationRepository
 {
     /**
-     * Get the previous migrations.
+     * Get the previously applied migrations keyed by class name.
      *
-     * @return array
+     * @return array<string, array{batch: int, ran_at: string|null}>
      *
      * @since 1.0.0
      */
     public function get_previous_migrations()
     {
-        return Option::get(OptionKeys::MIGRATIONS, []);
+        $migrations = Option::get(OptionKeys::MIGRATIONS, []);
+
+        if (!is_array($migrations)) {
+            return [];
+        }
+
+        $normalized = [];
+
+        foreach ($migrations as $class_name => $entry) {
+            $normalized[$class_name] = $this->normalize_entry($entry);
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * Normalize a stored history entry into the batch and timestamp shape.
+     *
+     * @param mixed $entry The stored entry.
+     *
+     * @return array{batch: int, ran_at: string|null}
+     *
+     * @since 1.0.0
+     */
+    protected function normalize_entry($entry)
+    {
+        if (!is_array($entry)) {
+            return [
+                'batch'  => 1,
+                'ran_at' => null,
+            ];
+        }
+
+        return [
+            'batch'  => isset($entry['batch']) ? (int) $entry['batch'] : 1,
+            'ran_at' => isset($entry['ran_at']) ? $entry['ran_at'] : null,
+        ];
     }
 
     /**
@@ -55,6 +91,121 @@ class MigrationRepository
     public function remove_migrations()
     {
         Option::delete(OptionKeys::MIGRATIONS);
+    }
+
+    /**
+     * Record a single migration as applied within the given batch.
+     *
+     * @param string $class_name The migration class name.
+     * @param int $batch The batch number the migration belongs to.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function record_migration(string $class_name, int $batch)
+    {
+        $migrations = $this->get_previous_migrations();
+
+        $migrations[$class_name] = [
+            'batch'  => $batch,
+            'ran_at' => gmdate('Y-m-d H:i:s'),
+        ];
+
+        $this->update_migrations($migrations);
+    }
+
+    /**
+     * Remove a single migration from the applied history.
+     *
+     * @param string $class_name The migration class name.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function forget_migration(string $class_name)
+    {
+        $migrations = $this->get_previous_migrations();
+
+        unset($migrations[$class_name]);
+
+        if (empty($migrations)) {
+            $this->remove_migrations();
+            return;
+        }
+
+        $this->update_migrations($migrations);
+    }
+
+    /**
+     * Get every recorded batch number in descending order.
+     *
+     * @return array<int, int>
+     *
+     * @since 1.0.0
+     */
+    public function get_batch_numbers()
+    {
+        $batches = [];
+
+        foreach ($this->get_previous_migrations() as $entry) {
+            $batches[] = (int) $entry['batch'];
+        }
+
+        $batches = array_values(array_unique($batches));
+
+        rsort($batches);
+
+        return $batches;
+    }
+
+    /**
+     * Get the highest recorded batch number.
+     *
+     * @return int
+     *
+     * @since 1.0.0
+     */
+    public function get_last_batch_number()
+    {
+        $batches = $this->get_batch_numbers();
+
+        return empty($batches) ? 0 : $batches[0];
+    }
+
+    /**
+     * Get the batch number the next migration run should use.
+     *
+     * @return int
+     *
+     * @since 1.0.0
+     */
+    public function get_next_batch_number()
+    {
+        return $this->get_last_batch_number() + 1;
+    }
+
+    /**
+     * Get the migration class names recorded within the given batch.
+     *
+     * @param int $batch The batch number.
+     *
+     * @return array<int, string>
+     *
+     * @since 1.0.0
+     */
+    public function get_migrations_in_batch(int $batch)
+    {
+        $matched = [];
+
+        foreach ($this->get_previous_migrations() as $class_name => $entry) {
+            if ((int) $entry['batch'] === $batch) {
+                $matched[] = $class_name;
+            }
+        }
+
+        return $matched;
     }
 
     /**

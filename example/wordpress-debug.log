@@ -1,0 +1,131 @@
+[19-Aug-2026 12:14:03 UTC] PHP Warning:  Undefined variable $start in /var/www/html/framework-library/src/Managers/VersionUpdateManager.php on line 115
+[19-Aug-2026 12:14:03 UTC] PHP Warning:  Undefined array key "after_each" in /var/www/html/framework-library/src/Managers/VersionUpdateManager.php on line 119
+[19-Aug-2026 12:14:03 UTC] PHP Warning:  Undefined array key "before_each" in /var/www/html/framework-library/src/Managers/VersionUpdateManager.php on line 119
+[19-Aug-2026 12:14:03 UTC] PHP Warning:  Undefined variable $end in /var/www/html/framework-library/src/Managers/VersionUpdateManager.php on line 125
+[19-Aug-2026 12:18:01 UTC] PHP Warning:  Undefined variable $start in /var/www/html/framework-library/src/Managers/VersionUpdateManager.php on line 117
+[19-Aug-2026 12:18:01 UTC] PHP Warning:  Undefined array key "after_each" in /var/www/html/framework-library/src/Managers/VersionUpdateManager.php on line 121
+[19-Aug-2026 12:18:01 UTC] PHP Warning:  Undefined array key "before_each" in /var/www/html/framework-library/src/Managers/VersionUpdateManager.php on line 121
+[19-Aug-2026 12:18:01 UTC] PHP Warning:  Undefined variable $end in /var/www/html/framework-library/src/Managers/VersionUpdateManager.php on line 127
+[19-Aug-2026 12:18:01 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/framework-library/src/Managers/VersionUpdateManager.php:117) in /var/www/html/wp-includes/functions.php on line 7220
+[19-Aug-2026 12:18:01 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/framework-library/src/Managers/VersionUpdateManager.php:117) in /var/www/html/wp-admin/admin-header.php on line 14
+[19-Aug-2026 12:18:43 UTC] PHP Warning:  Undefined array key "after_each" in /var/www/html/framework-library/src/Managers/VersionUpdateManager.php on line 119
+[19-Aug-2026 12:18:43 UTC] PHP Warning:  Undefined array key "before_each" in /var/www/html/framework-library/src/Managers/VersionUpdateManager.php on line 119
+[19-Aug-2026 12:18:43 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/framework-library/src/Managers/VersionUpdateManager.php:119) in /var/www/html/wp-includes/functions.php on line 7220
+[19-Aug-2026 12:18:43 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/framework-library/src/Managers/VersionUpdateManager.php:119) in /var/www/html/wp-admin/admin-header.php on line 14
+[19-Aug-2026 12:29:00 UTC] PHP Fatal error:  Uncaught Exception: Column [excerpt] does not exist on table [framework_blogs]. in /var/www/html/framework-library/src/Database/Schema/Compiler.php:524
+Stack trace:
+#0 /var/www/html/framework-library/src/Database/Schema/Compiler.php(409): Framework\Database\Schema\Compiler->get_existing_column_definition(Object(Framework\Database\Schema\Structure), 'excerpt')
+#1 /var/www/html/framework-library/src/Database/Schema/Compiler.php(338): Framework\Database\Schema\Compiler->compile_alter_renames(Object(Framework\Database\Schema\Structure))
+#2 /var/www/html/framework-library/src/Database/Schema/Structure.php(1084): Framework\Database\Schema\Compiler->compile_alter(Object(Framework\Database\Schema\Structure))
+#3 /var/www/html/framework-library/src/Database/Schema/SchemaManager.php(86): Framework\Database\Schema\Structure->get_table_structure()
+#4 /var/www/html/framework-library/src/Facade.php(104): Framework\Database\Schema\SchemaManager->table('framework_blogs', Object(Closure))
+#5 /var/www/html/wp-content/plugins/framework/database/migrations/AlterBlogsTableAddSubtitle.php(13): Framework\Facade::__callStatic('table', Array)
+#6 /var/www/html/framework-library/src/Database/Migrations/Migrator.php(73): Example\Database\Migrations\AlterBlogsTableAddSubtitle->up()
+#7 /var/www/html/wp-content/plugins/framework/config/version-updates.php(10): Framework\Database\Migrations\Migrator->run()
+#8 /var/www/html/framework-library/src/Managers/VersionUpdateManager.php(157): Framework\Managers\VersionUpdateManager->{closure}()
+#9 /var/www/html/framework-library/src/Managers/VersionUpdateManager.php(140): Framework\Managers\VersionUpdateManager->run_callback(Object(Closure))
+#10 /var/www/html/framework-library/src/Managers/VersionUpdateManager.php(119): Framework\Managers\VersionUpdateManager->run_version(Object(Closure), Object(Closure), Object(Closure))
+#11 /var/www/html/framework-library/src/Wordpress/Hooks/Actions/VersionUpdate.php(68): Framework\Managers\VersionUpdateManager->run()
+#12 /var/www/html/wp-includes/class-wp-hook.php(341): Framework\Wordpress\Hooks\Actions\VersionUpdate->handle('')
+#13 /var/www/html/wp-includes/class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#14 /var/www/html/wp-includes/plugin.php(522): WP_Hook->do_action(Array)
+#15 /var/www/html/wp-admin/admin-ajax.php(45): do_action('admin_init')
+#16 {main}
+  thrown in /var/www/html/framework-library/src/Database/Schema/Compiler.php on line 524
+[19-Aug-2026 12:29:16 UTC] PHP Fatal error:  Uncaught Exception: Column [excerpt] does not exist on table [framework_blogs]. in /var/www/html/framework-library/src/Database/Schema/Compiler.php:524
+Stack trace:
+#0 /var/www/html/framework-library/src/Database/Schema/Compiler.php(409): Framework\Database\Schema\Compiler->get_existing_column_definition(Object(Framework\Database\Schema\Structure), 'excerpt')
+#1 /var/www/html/framework-library/src/Database/Schema/Compiler.php(338): Framework\Database\Schema\Compiler->compile_alter_renames(Object(Framework\Database\Schema\Structure))
+#2 /var/www/html/framework-library/src/Database/Schema/Structure.php(1084): Framework\Database\Schema\Compiler->compile_alter(Object(Framework\Database\Schema\Structure))
+#3 /var/www/html/framework-library/src/Database/Schema/SchemaManager.php(86): Framework\Database\Schema\Structure->get_table_structure()
+#4 /var/www/html/framework-library/src/Facade.php(104): Framework\Database\Schema\SchemaManager->table('framework_blogs', Object(Closure))
+#5 /var/www/html/wp-content/plugins/framework/database/migrations/AlterBlogsTableAddSubtitle.php(13): Framework\Facade::__callStatic('table', Array)
+#6 /var/www/html/framework-library/src/Database/Migrations/Migrator.php(73): Example\Database\Migrations\AlterBlogsTableAddSubtitle->up()
+#7 /var/www/html/wp-content/plugins/framework/config/version-updates.php(10): Framework\Database\Migrations\Migrator->run()
+#8 /var/www/html/framework-library/src/Managers/VersionUpdateManager.php(157): Framework\Managers\VersionUpdateManager->{closure}()
+#9 /var/www/html/framework-library/src/Managers/VersionUpdateManager.php(140): Framework\Managers\VersionUpdateManager->run_callback(Object(Closure))
+#10 /var/www/html/framework-library/src/Managers/VersionUpdateManager.php(119): Framework\Managers\VersionUpdateManager->run_version(Object(Closure), Object(Closure), Object(Closure))
+#11 /var/www/html/framework-library/src/Wordpress/Hooks/Actions/VersionUpdate.php(68): Framework\Managers\VersionUpdateManager->run()
+#12 /var/www/html/wp-includes/class-wp-hook.php(341): Framework\Wordpress\Hooks\Actions\VersionUpdate->handle('')
+#13 /var/www/html/wp-includes/class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#14 /var/www/html/wp-includes/plugin.php(522): WP_Hook->do_action(Array)
+#15 /var/www/html/wp-admin/admin.php(180): do_action('admin_init')
+#16 /var/www/html/wp-admin/index.php(10): require_once('/var/www/html/w...')
+#17 {main}
+  thrown in /var/www/html/framework-library/src/Database/Schema/Compiler.php on line 524
+[19-Aug-2026 12:29:24 UTC] PHP Fatal error:  Uncaught Exception: Column [excerpt] does not exist on table [framework_blogs]. in /var/www/html/framework-library/src/Database/Schema/Compiler.php:524
+Stack trace:
+#0 /var/www/html/framework-library/src/Database/Schema/Compiler.php(409): Framework\Database\Schema\Compiler->get_existing_column_definition(Object(Framework\Database\Schema\Structure), 'excerpt')
+#1 /var/www/html/framework-library/src/Database/Schema/Compiler.php(338): Framework\Database\Schema\Compiler->compile_alter_renames(Object(Framework\Database\Schema\Structure))
+#2 /var/www/html/framework-library/src/Database/Schema/Structure.php(1084): Framework\Database\Schema\Compiler->compile_alter(Object(Framework\Database\Schema\Structure))
+#3 /var/www/html/framework-library/src/Database/Schema/SchemaManager.php(86): Framework\Database\Schema\Structure->get_table_structure()
+#4 /var/www/html/framework-library/src/Facade.php(104): Framework\Database\Schema\SchemaManager->table('framework_blogs', Object(Closure))
+#5 /var/www/html/wp-content/plugins/framework/database/migrations/AlterBlogsTableAddSubtitle.php(13): Framework\Facade::__callStatic('table', Array)
+#6 /var/www/html/framework-library/src/Database/Migrations/Migrator.php(73): Example\Database\Migrations\AlterBlogsTableAddSubtitle->up()
+#7 /var/www/html/wp-content/plugins/framework/config/version-updates.php(10): Framework\Database\Migrations\Migrator->run()
+#8 /var/www/html/framework-library/src/Managers/VersionUpdateManager.php(157): Framework\Managers\VersionUpdateManager->{closure}()
+#9 /var/www/html/framework-library/src/Managers/VersionUpdateManager.php(140): Framework\Managers\VersionUpdateManager->run_callback(Object(Closure))
+#10 /var/www/html/framework-library/src/Managers/VersionUpdateManager.php(119): Framework\Managers\VersionUpdateManager->run_version(Object(Closure), Object(Closure), Object(Closure))
+#11 /var/www/html/framework-library/src/Wordpress/Hooks/Actions/VersionUpdate.php(68): Framework\Managers\VersionUpdateManager->run()
+#12 /var/www/html/wp-includes/class-wp-hook.php(341): Framework\Wordpress\Hooks\Actions\VersionUpdate->handle('')
+#13 /var/www/html/wp-includes/class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#14 /var/www/html/wp-includes/plugin.php(522): WP_Hook->do_action(Array)
+#15 /var/www/html/wp-admin/admin.php(180): do_action('admin_init')
+#16 /var/www/html/wp-admin/index.php(10): require_once('/var/www/html/w...')
+#17 {main}
+  thrown in /var/www/html/framework-library/src/Database/Schema/Compiler.php on line 524
+[19-Aug-2026 12:34:49 UTC] PHP Fatal error:  Uncaught Exception: Column [excerpt] does not exist on table [framework_blogs]. in /var/www/html/framework-library/src/Database/Schema/Compiler.php:524
+Stack trace:
+#0 /var/www/html/framework-library/src/Database/Schema/Compiler.php(409): Framework\Database\Schema\Compiler->get_existing_column_definition(Object(Framework\Database\Schema\Structure), 'excerpt')
+#1 /var/www/html/framework-library/src/Database/Schema/Compiler.php(338): Framework\Database\Schema\Compiler->compile_alter_renames(Object(Framework\Database\Schema\Structure))
+#2 /var/www/html/framework-library/src/Database/Schema/Structure.php(1084): Framework\Database\Schema\Compiler->compile_alter(Object(Framework\Database\Schema\Structure))
+#3 /var/www/html/framework-library/src/Database/Schema/SchemaManager.php(86): Framework\Database\Schema\Structure->get_table_structure()
+#4 /var/www/html/framework-library/src/Facade.php(104): Framework\Database\Schema\SchemaManager->table('framework_blogs', Object(Closure))
+#5 /var/www/html/wp-content/plugins/framework/database/migrations/AlterBlogsTableAddSubtitle.php(13): Framework\Facade::__callStatic('table', Array)
+#6 /var/www/html/framework-library/src/Database/Migrations/Migrator.php(73): Example\Database\Migrations\AlterBlogsTableAddSubtitle->up()
+#7 /var/www/html/wp-content/plugins/framework/config/version-updates.php(10): Framework\Database\Migrations\Migrator->run()
+#8 /var/www/html/framework-library/src/Managers/VersionUpdateManager.php(157): Framework\Managers\VersionUpdateManager->{closure}()
+#9 /var/www/html/framework-library/src/Managers/VersionUpdateManager.php(140): Framework\Managers\VersionUpdateManager->run_callback(Object(Closure))
+#10 /var/www/html/framework-library/src/Managers/VersionUpdateManager.php(119): Framework\Managers\VersionUpdateManager->run_version(Object(Closure), Object(Closure), NULL)
+#11 /var/www/html/framework-library/src/Wordpress/Hooks/Actions/VersionUpdate.php(68): Framework\Managers\VersionUpdateManager->run()
+#12 /var/www/html/wp-includes/class-wp-hook.php(341): Framework\Wordpress\Hooks\Actions\VersionUpdate->handle('')
+#13 /var/www/html/wp-includes/class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#14 /var/www/html/wp-includes/plugin.php(522): WP_Hook->do_action(Array)
+#15 /var/www/html/wp-admin/admin-ajax.php(45): do_action('admin_init')
+#16 {main}
+  thrown in /var/www/html/framework-library/src/Database/Schema/Compiler.php on line 524
+[19-Aug-2026 14:31:40 UTC] PHP Warning:  Undefined property: Example\App\Models\Blog::$title in /var/www/html/wp-content/plugins/framework/app/Models/Blog.php on line 26
+[19-Aug-2026 14:31:40 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:40 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:40 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:40 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:40 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:40 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:41 UTC] PHP Warning:  Undefined property: Example\App\Models\Blog::$title in /var/www/html/wp-content/plugins/framework/app/Models/Blog.php on line 26
+[19-Aug-2026 14:31:41 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:41 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:41 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:41 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:41 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:41 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:42 UTC] PHP Warning:  Undefined property: Example\App\Models\Blog::$title in /var/www/html/wp-content/plugins/framework/app/Models/Blog.php on line 26
+[19-Aug-2026 14:31:42 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:42 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:42 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:42 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:42 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:42 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:43 UTC] PHP Warning:  Undefined property: Example\App\Models\Blog::$title in /var/www/html/wp-content/plugins/framework/app/Models/Blog.php on line 26
+[19-Aug-2026 14:31:43 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:43 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:43 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:43 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:43 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:31:43 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:32:18 UTC] PHP Warning:  Undefined property: Example\App\Models\Blog::$title in /var/www/html/wp-content/plugins/framework/app/Models/Blog.php on line 26
+[19-Aug-2026 14:32:18 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:32:18 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:32:18 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:32:18 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:32:18 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897
+[19-Aug-2026 14:32:18 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-content/plugins/framework/app/Models/Blog.php:26) in /var/www/html/wp-includes/rest-api/class-wp-rest-server.php on line 1897

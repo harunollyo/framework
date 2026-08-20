@@ -11,13 +11,22 @@ class Blog extends Model
 
     protected $primary_key = 'id';
 
+    protected $appends = ['text'];
+
     protected $casts = [
         'status' => 'string',
         'published_at' => 'datetime',
         'body' => AsSerialize::class,
     ];
 
+    protected $fillable = ['title'];
+
     protected $guarded = ['id'];
+
+    public function get_text_attribute()
+    {
+        return $this->title . ' & ' . $this->subtitle;
+    }
 
     public function category()
     {

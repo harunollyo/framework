@@ -59,101 +59,107 @@ class Migrator
             return;
         }
 
+        $batch = $this->repository->get_next_batch_number();
+
         foreach ($migrations as $migration) {
             $class_name = get_class($migration);
 
-            if (!class_exists($class_name)) {
-                throw new Exception(
-                    sprintf(
-                        'Class [%s] does not exist',
-                        $class_name
-                    )
-                );
-            }
-
-            if (!$migration instanceof Migration) {
-                throw new Exception(
-                    sprintf(
-                        'Class [%s] must implements [%s]',
-                        $class_name,
-                        Migration::class
-                    )
-                );
-            }
+            $this->validate_migration($migration, $class_name);
 
             if (!empty($previous_migrations[$class_name])) {
                 continue;
             }
 
             $migration->up();
-            $previous_migrations[$class_name] = true;
-        }
 
-        // $this->repository->update_migrations($previous_migrations);
+            $this->repository->record_migration($class_name, $batch);
+        }
     }
 
     /**
-     * Rollback the migrations.
+     * Rollback the migrations of the most recent batches.
      *
-     * @return void
+     * @param int $steps The number of batches to roll back.
+     *
+     * @return array<int, string>
      *
      * @throws \Exception
      *
      * @since 1.0.0
      */
-    public function rollback()
+    public function rollback($steps = 1)
     {
         if (!$this->repository->is_rollback_enabled()) {
-            return;
+            return [];
         }
 
         $migrations = $this->repository->get_registered_migrations();
-        $previous_migrations = $this->repository->get_previous_migrations();
 
         if (empty($migrations)) {
-            return;
+            return [];
         }
 
-        foreach ($migrations as $migration) {
-            $class_name = get_class($migration);
+        $targets = $this->get_rollback_targets((int) $steps);
 
-            if (empty($previous_migrations[$class_name])) {
-                continue;
-            }
-
-            if (!class_exists($class_name)) {
-                throw new Exception(
-                    sprintf(
-                        'Class [%s] does not exist',
-                        $class_name
-                    )
-                );
-            }
-
-            if (!$migration instanceof Migration) {
-                throw new Exception(
-                    sprintf(
-                        'Class [%s] must implements [%s]',
-                        $class_name,
-                        Migration::class
-                    )
-                );
-            }
-
-            $migration->down();
-            unset($previous_migrations[$class_name]);
+        if (empty($targets)) {
+            return [];
         }
 
-        if (empty($previous_migrations)) {
-            $this->repository->remove_migrations();
-            return;
+        $rolled_back = [];
+
+        try {
+            Schema::disabled_checking_foreign_key_constraints();
+
+            foreach (array_reverse($migrations) as $migration) {
+                $class_name = get_class($migration);
+
+                if (!in_array($class_name, $targets, true)) {
+                    continue;
+                }
+
+                $this->validate_migration($migration, $class_name);
+
+                $migration->down();
+
+                $this->repository->forget_migration($class_name);
+
+                $rolled_back[] = $class_name;
+            }
+        } finally {
+            Schema::enabled_checking_foreign_key_constraints();
         }
 
-        $this->repository->update_migrations($previous_migrations);
+        return $rolled_back;
     }
 
     /**
-     * Refresh the database schema.
+     * Get the migration class names belonging to the most recent batches.
+     *
+     * @param int $steps The number of batches to include.
+     *
+     * @return array<int, string>
+     *
+     * @since 1.0.0
+     */
+    protected function get_rollback_targets(int $steps)
+    {
+        $batches = $this->repository->get_batch_numbers();
+
+        if (empty($batches)) {
+            return [];
+        }
+
+        $targets = [];
+
+        foreach (array_slice($batches, 0, max($steps, 1)) as $batch) {
+            $targets = array_merge($targets, $this->repository->get_migrations_in_batch($batch));
+        }
+
+        return $targets;
+    }
+
+    /**
+     * Refresh the database schema by undoing every applied migration.
      *
      * @return void
      *
@@ -161,16 +167,100 @@ class Migrator
      */
     public function fresh()
     {
+        $previous_migrations = $this->repository->get_previous_migrations();
+
         try {
             $migrations = $this->repository->get_registered_migrations();
 
             Schema::disabled_checking_foreign_key_constraints();
 
-            foreach ($migrations as $migration) {
+            foreach (array_reverse($migrations) as $migration) {
+                if (empty($previous_migrations[get_class($migration)])) {
+                    continue;
+                }
+
                 $migration->down();
             }
         } finally {
             Schema::enabled_checking_foreign_key_constraints();
+            $this->repository->remove_migrations();
+        }
+    }
+
+    /**
+     * Get the applied or pending state of every registered migration.
+     *
+     * @return array<int, array{migration: string, ran: bool, batch: int|null}>
+     *
+     * @since 1.0.0
+     */
+    public function status()
+    {
+        $previous_migrations = $this->repository->get_previous_migrations();
+
+        $rows = [];
+
+        foreach ($this->repository->get_registered_migrations() as $migration) {
+            $class_name = get_class($migration);
+            $applied = isset($previous_migrations[$class_name]);
+
+            $rows[] = [
+                'migration' => $this->get_short_name($class_name),
+                'ran'       => $applied,
+                'batch'     => $applied ? (int) $previous_migrations[$class_name]['batch'] : null,
+            ];
+        }
+
+        return $rows;
+    }
+
+    /**
+     * Get the class name without its namespace.
+     *
+     * @param string $class_name The fully qualified class name.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    protected function get_short_name(string $class_name)
+    {
+        $position = strrpos($class_name, '\\');
+
+        return $position === false ? $class_name : substr($class_name, $position + 1);
+    }
+
+    /**
+     * Validate that a registered migration is usable.
+     *
+     * @param mixed $migration The migration instance.
+     * @param string $class_name The migration class name.
+     *
+     * @return void
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    protected function validate_migration($migration, string $class_name)
+    {
+        if (!class_exists($class_name)) {
+            throw new Exception(
+                sprintf(
+                    'Class [%s] does not exist',
+                    $class_name
+                )
+            );
+        }
+
+        if (!$migration instanceof Migration) {
+            throw new Exception(
+                sprintf(
+                    'Class [%s] must implements [%s]',
+                    $class_name,
+                    Migration::class
+                )
+            );
         }
     }
 }

@@ -26,7 +26,9 @@ use Framework\Console\Commands\MakeProviderCommand;
 use Framework\Console\Commands\MakeRequestCommand;
 use Framework\Console\Commands\MakeSeederCommand;
 use Framework\Console\Commands\MigrateCommand;
+use Framework\Console\Commands\RollbackCommand;
 use Framework\Console\Commands\SeedCommand;
+use Framework\Console\Commands\StatusCommand;
 use Framework\Database\Connection\DatabaseManager;
 use Framework\Database\Schema\SchemaManager;
 use Framework\Managers\CookieManager;
@@ -303,6 +305,8 @@ class Application extends Container
             'make:seeder' => MakeSeederCommand::class,
             'db:seed' => SeedCommand::class,
             'migrate:fresh' => FreshCommand::class,
+            'migrate:rollback' => RollbackCommand::class,
+            'migrate:status' => StatusCommand::class,
             'make:provider' => MakeProviderCommand::class,
             'make:class' => MakeClassCommand::class,
         ];
