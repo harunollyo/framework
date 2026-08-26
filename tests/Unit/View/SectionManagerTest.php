@@ -26,6 +26,15 @@ class SectionManagerTest extends TestCase
         $this->manager = new SectionManager();
     }
 
+    protected function tearDown(): void
+    {
+        while ($this->manager !== null && $this->manager->get_active() !== null) {
+            $this->manager->end();
+        }
+
+        parent::tearDown();
+    }
+
     public function test_start_and_end_captures_section_content(): void
     {
         $this->manager->start('title');
@@ -72,7 +81,12 @@ class SectionManagerTest extends TestCase
         $this->expectExceptionMessage('Cannot start section [content] while section [title] is already being captured.');
 
         $this->manager->start('title');
-        $this->manager->start('content');
+
+        try {
+            $this->manager->start('content');
+        } finally {
+            $this->manager->end();
+        }
     }
 
     public function test_end_throws_when_no_section_active(): void
