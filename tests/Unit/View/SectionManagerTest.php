@@ -6,6 +6,12 @@ use Framework\Tests\Unit\TestCase;
 use Framework\View\SectionManager;
 use RuntimeException;
 
+/**
+ * Class SectionManagerTest.
+ *
+ * Run the testcase by running this command:
+ * vendor/bin/phpunit --prepend tests/prepend.php --filter=SectionManagerTest --testdox
+ */
 class SectionManagerTest extends TestCase
 {
     /**

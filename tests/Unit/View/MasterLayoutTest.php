@@ -12,6 +12,12 @@ use RuntimeException;
 use function Framework\app;
 use function Framework\view;
 
+/**
+ * Class MasterLayoutTest.
+ *
+ * Run the testcase by running this command:
+ * vendor/bin/phpunit --prepend tests/prepend.php --filter=MasterLayoutTest --testdox
+ */
 class MasterLayoutTest extends TestCase
 {
     /**
