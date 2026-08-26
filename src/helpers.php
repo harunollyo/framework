@@ -529,7 +529,7 @@ if (!function_exists('Framework\render_section')) {
     {
         $content = app(\Framework\View\SectionManager::class)->get($name, $default);
 
-        if ('' === $content) {
+        if ($content === '') {
             return;
         }
 
