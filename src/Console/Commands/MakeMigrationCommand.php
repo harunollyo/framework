@@ -84,6 +84,18 @@ class MakeMigrationCommand extends CommandBase
                     ->name('prefix')
                     ->description('Table prefix (if any)')
                     ->optional()
+            )
+            ->synopsis(
+                Synopsis::type('assoc')
+                    ->name('table')
+                    ->description('The existing table to alter. Generates an alter migration')
+                    ->optional()
+            )
+            ->synopsis(
+                Synopsis::type('assoc')
+                    ->name('create')
+                    ->description('The table to create. Generates a create migration')
+                    ->optional()
             );
     }
 
@@ -150,13 +162,26 @@ class MakeMigrationCommand extends CommandBase
      */
     protected function get_stub()
     {
-        $stub_path = $this->stub_path() . '/migration.stub';
+        $stub_name = $this->is_alter_migration() ? 'migration-table.stub' : 'migration.stub';
+        $stub_path = $this->stub_path() . '/' . $stub_name;
 
         if (File::missing($stub_path)) {
             \WP_CLI::error('Migration stub not found: ' . $stub_path);
         }
 
         return File::get($stub_path);
+    }
+
+    /**
+     * Determine whether the migration should alter an existing table
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    protected function is_alter_migration()
+    {
+        return !empty($this->assoc['table']);
     }
 
     /**
@@ -181,7 +206,65 @@ class MakeMigrationCommand extends CommandBase
 
         File::put($output_file, $content);
 
+        $this->register_migration($migration_class);
+
         \WP_CLI::success(sprintf('Migration  [%s] created.', $migration_class));
+    }
+
+    /**
+     * Append the generated migration to the migrations config file
+     *
+     * @param string $migration_class The generated migration class name.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    protected function register_migration(string $migration_class)
+    {
+        $config_path = app()->config_path('migrations.php');
+
+        if (File::missing($config_path)) {
+            $this->cli_warning(
+                sprintf(
+                    'Migrations config [%s] not found. Register [%s] manually.',
+                    $config_path,
+                    $migration_class
+                )
+            );
+            return;
+        }
+
+        $contents = File::get($config_path);
+        $position = strrpos($contents, '];');
+
+        if ($position === false) {
+            $this->cli_warning(
+                sprintf(
+                    'Could not parse migrations config [%s]. Register [%s] manually.',
+                    $config_path,
+                    $migration_class
+                )
+            );
+            return;
+        }
+
+        $qualified_name = sprintf('%s\\%s', app()->get_migrations_namespace(), $migration_class);
+
+        if (strpos($contents, sprintf('\\%s::class', $qualified_name)) !== false) {
+            return;
+        }
+
+        File::put(
+            $config_path,
+            sprintf(
+                '%s    \\%s::class,%s%s',
+                substr($contents, 0, $position),
+                $qualified_name,
+                PHP_EOL,
+                substr($contents, $position)
+            )
+        );
     }
 
     /**
@@ -195,11 +278,7 @@ class MakeMigrationCommand extends CommandBase
      */
     protected function table($filename)
     {
-        $table = Str::replace(
-            ['create_', '_table'],
-            '',
-            $filename
-        );
+        $table = $this->base_table_name($filename);
 
         $prefix = $this->assoc['prefix'] ?? app()->prefix();
 
@@ -208,6 +287,32 @@ class MakeMigrationCommand extends CommandBase
         }
 
         return $table;
+    }
+
+    /**
+     * Get the unprefixed table name the migration targets
+     *
+     * @param mixed $filename The filename.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    protected function base_table_name($filename)
+    {
+        if (!empty($this->assoc['table'])) {
+            return $this->assoc['table'];
+        }
+
+        if (!empty($this->assoc['create'])) {
+            return $this->assoc['create'];
+        }
+
+        return Str::replace(
+            ['create_', '_table'],
+            '',
+            $filename
+        );
     }
 
     /**

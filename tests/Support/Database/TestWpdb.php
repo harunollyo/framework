@@ -10,11 +10,33 @@ class TestWpdb
 
     public $collate;
 
+    public $last_error = '';
+
+    public $queries = [];
+
+    public $results = [];
+
     public function __construct(array $config = [])
     {
         $this->prefix = $config['prefix'] ?? 'wp_';
         $this->charset = $config['charset'] ?? 'utf8mb4';
         $this->collate = $config['collate'] ?? 'utf8mb4_unicode_ci';
+        $this->results = $config['results'] ?? [];
+        $this->last_error = $config['last_error'] ?? '';
+    }
+
+    public function query($query)
+    {
+        $this->queries[] = $query;
+
+        return true;
+    }
+
+    public function get_results($query, $output = null)
+    {
+        $this->queries[] = $query;
+
+        return $this->results;
     }
 
     public function prepare($query, ...$args)

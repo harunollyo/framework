@@ -76,7 +76,7 @@ class File extends SplFileInfo
             );
         }
 
-        @chmod($target, 0o666 & ~umask());
+        @chmod($target, 0666 & ~umask());
 
         return $target;
     }
@@ -115,7 +115,7 @@ class File extends SplFileInfo
      */
     protected function get_target_file(string $directory, ?string $name = null)
     {
-        if (!is_dir($directory) && !@mkdir($directory, 0o777, true) && !is_dir($directory)) {
+        if (!is_dir($directory) && !@mkdir($directory, 0777, true) && !is_dir($directory)) {
             if (is_file($directory)) {
                 throw new Exception(
                     sprintf('Unable to create the "%s" directory. A similar named file exists.', $directory)

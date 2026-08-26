@@ -63,6 +63,17 @@ if (!function_exists('esc_attr')) {
     }
 }
 
+if (!function_exists('esc_sql')) {
+    function esc_sql($data)
+    {
+        if (is_array($data)) {
+            return array_map('esc_sql', $data);
+        }
+
+        return addslashes((string) $data);
+    }
+}
+
 if (!function_exists('home_url')) {
     function home_url($path = '')
     {
@@ -170,14 +181,14 @@ if (!function_exists('is_admin')) {
 if (!function_exists('is_page')) {
     function is_page($page = '')
     {
-        return false;
+        return (bool) ($GLOBALS['framework_test_is_page'] ?? false);
     }
 }
 
 if (!function_exists('get_queried_object_id')) {
     function get_queried_object_id()
     {
-        return 0;
+        return (int) ($GLOBALS['framework_test_queried_object_id'] ?? 0);
     }
 }
 
@@ -191,7 +202,13 @@ if (!function_exists('get_permalink')) {
 if (!function_exists('get_page_by_path')) {
     function get_page_by_path($page_path, $output = OBJECT, $post_type = 'page')
     {
-        return null;
+        $pages = $GLOBALS['framework_test_pages'] ?? [];
+
+        if (!isset($pages[$page_path])) {
+            return null;
+        }
+
+        return (object) ['ID' => (int) $pages[$page_path]];
     }
 }
 
@@ -384,5 +401,174 @@ if (!class_exists('WP_Error')) {
         {
             return $this->data;
         }
+    }
+}
+
+if (!function_exists('is_ssl')) {
+    function is_ssl()
+    {
+        return (bool) ($GLOBALS['framework_test_is_ssl'] ?? false);
+    }
+}
+
+if (!class_exists('WP_Http_Cookie')) {
+    class WP_Http_Cookie
+    {
+        public $name;
+
+        public $value;
+
+        public $expires;
+
+        public $path;
+
+        public $domain;
+
+        public function __construct($data, $requested_url = '')
+        {
+            if (is_string($data)) {
+                $data = ['name' => $data, 'value' => ''];
+            }
+
+            $this->name = $data['name'] ?? '';
+            $this->value = $data['value'] ?? '';
+            $this->expires = $data['expires'] ?? null;
+            $this->path = $data['path'] ?? null;
+            $this->domain = $data['domain'] ?? null;
+        }
+    }
+}
+
+if (!class_exists('WP_REST_Response')) {
+    class WP_REST_Response
+    {
+        public $data;
+
+        public $headers = [];
+
+        public $status = 200;
+
+        public function __construct($data = null, $status = 200, $headers = [])
+        {
+            $this->data = $data;
+            $this->status = $status;
+            $this->headers = $headers;
+        }
+
+        public function set_data($data)
+        {
+            $this->data = $data;
+        }
+
+        public function get_data()
+        {
+            return $this->data;
+        }
+
+        public function set_status($status)
+        {
+            $this->status = (int) $status;
+        }
+
+        public function get_status()
+        {
+            return $this->status;
+        }
+
+        public function set_headers($headers)
+        {
+            $this->headers = $headers;
+        }
+
+        public function get_headers()
+        {
+            return $this->headers;
+        }
+
+        public function header($key, $value, $replace = true)
+        {
+            if ($replace || !isset($this->headers[$key])) {
+                $this->headers[$key] = $value;
+            }
+        }
+    }
+}
+
+if (!function_exists('get_transient')) {
+    function get_transient($key)
+    {
+        $store = $GLOBALS['framework_test_transients'] ?? [];
+
+        if (!array_key_exists($key, $store)) {
+            return false;
+        }
+
+        $entry = $store[$key];
+
+        if (isset($entry['expires_at']) && $entry['expires_at'] !== 0 && $entry['expires_at'] <= time()) {
+            unset($GLOBALS['framework_test_transients'][$key]);
+
+            return false;
+        }
+
+        return $entry['value'];
+    }
+}
+
+if (!function_exists('set_transient')) {
+    function set_transient($key, $value, $expiration = 0)
+    {
+        if (!isset($GLOBALS['framework_test_transients'])) {
+            $GLOBALS['framework_test_transients'] = [];
+        }
+
+        $GLOBALS['framework_test_transients'][$key] = [
+            'value' => $value,
+            'lifetime' => (int) $expiration,
+            'expires_at' => $expiration ? time() + (int) $expiration : 0,
+        ];
+
+        return true;
+    }
+}
+
+if (!function_exists('delete_transient')) {
+    function delete_transient($key)
+    {
+        if (!isset($GLOBALS['framework_test_transients'][$key])) {
+            return false;
+        }
+
+        unset($GLOBALS['framework_test_transients'][$key]);
+
+        return true;
+    }
+}
+
+if (!function_exists('wp_using_ext_object_cache')) {
+    function wp_using_ext_object_cache()
+    {
+        return (bool) ($GLOBALS['framework_test_ext_object_cache'] ?? false);
+    }
+}
+
+if (!function_exists('wp_get_referer')) {
+    function wp_get_referer()
+    {
+        return $GLOBALS['framework_test_referer'] ?? false;
+    }
+}
+
+if (!function_exists('wp_generate_password')) {
+    function wp_generate_password($length = 12, $special_chars = true, $extra_special_chars = false)
+    {
+        $characters = 'abcdef0123456789';
+        $password = '';
+
+        for ($index = 0; $index < $length; $index++) {
+            $password .= $characters[random_int(0, strlen($characters) - 1)];
+        }
+
+        return $password;
     }
 }

@@ -156,6 +156,20 @@ abstract class CommandBase
     }
 
     /**
+     * Cli warning.
+     *
+     * @param string $message The message.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    protected function cli_warning(string $message): void
+    {
+        call_user_func(['\\WP_CLI', 'warning'], $message);
+    }
+
+    /**
      * Cli line.
      *
      * @param string $message The message.

@@ -97,6 +97,14 @@ class VersionUpdateManager implements Executor
 
         $plugin_updates = include $updates_path;
 
+        $before_each = $plugin_updates['before_each'] ?? null;
+        $after_each = $plugin_updates['after_each'] ?? null;
+        
+        unset(
+            $plugin_updates['before_each'],
+            $plugin_updates['after_each'],
+        );
+
         $plugin_update_keys = array_keys($plugin_updates);
 
         usort($plugin_update_keys, function ($first, $second) {
@@ -108,12 +116,46 @@ class VersionUpdateManager implements Executor
         foreach ($plugin_update_keys as $version) {
             if (version_compare($version, app()->version(), '<=') && !$this->is_already_installed($version)) {
                 $callback = $plugin_updates[$version];
-                $callback();
+                $this->run_version($before_each, $callback, $after_each);
                 $installed_versions[] = $version;
             }
         }
 
         $this->update_installed_version($installed_versions);
+    }
+
+    /**
+     * Run a specific version update callback.
+     *
+     * @param callable $before The before callback.
+     * @param callable $callback The callback.
+     * @param callable $after The after callback.
+     *
+     * @return void
+     * 
+     * @since 1.0.0
+     */
+    protected function run_version($before, $callback, $after)
+    {
+        $this->run_callback($before);
+        $this->run_callback($callback);
+        $this->run_callback($after);
+    }
+
+    /**
+     * Run a callback.
+     *
+     * @param callable $callback The callback.
+     *
+     * @return void
+     * 
+     * @since 1.0.0
+     */
+    protected function run_callback($callback)
+    {
+        if (!empty($callback) && is_callable($callback)) {
+            $callback();
+        }
     }
 
     /**

@@ -1664,7 +1664,9 @@ class Route
             $_FILES,
             // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
             $_SERVER,
-            $route_params
+            $route_params,
+            // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
+            $_COOKIE
         );
 
         $request->authorize_request();

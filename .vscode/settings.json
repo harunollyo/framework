@@ -109,6 +109,7 @@
         "Zend OPcache",
         "zip",
         "zlib",
-        "phpunit"
+        "phpunit",
+        "random",
     ]
 }

@@ -21,6 +21,33 @@ use Exception;
 class Structure
 {
     /**
+     * Mode used when the structure describes a new table.
+     *
+     * @var string
+     *
+     * @since 1.0.0
+     */
+    public const MODE_CREATE = 'create';
+
+    /**
+     * Mode used when the structure describes changes to an existing table.
+     *
+     * @var string
+     *
+     * @since 1.0.0
+     */
+    public const MODE_ALTER = 'alter';
+
+    /**
+     * The maximum length a key or constraint name may have.
+     *
+     * @var int
+     *
+     * @since 1.0.0
+     */
+    public const MAX_KEY_NAME_LENGTH = 64;
+
+    /**
      * The name of the table (without prefix).
      *
      * @var string|null
@@ -28,6 +55,15 @@ class Structure
      * @since 1.0.0
      */
     protected $table = null;
+
+    /**
+     * The operation the structure describes.
+     *
+     * @var string
+     *
+     * @since 1.0.0
+     */
+    protected $mode = self::MODE_CREATE;
 
     /**
      * The database connection instance.
@@ -50,7 +86,7 @@ class Structure
     /**
      * The columns defined for the table.
      *
-     * @var array<string,
+     * @var array<string, Definition>
      *
      * @since 1.0.0
      */
@@ -97,21 +133,35 @@ class Structure
      *
      * @param string $table The table name (without prefix)
      * @param Connection $connection The database connection instance
+     * @param string $mode The operation the structure describes
      *
      * @return void
      *
      * @since 1.0.0
      */
-    public function __construct(string $table, Connection $connection)
+    public function __construct(string $table, Connection $connection, string $mode = self::MODE_CREATE)
     {
         $this->table = $table;
         $this->connection = $connection;
+        $this->mode = $mode;
         $db = $this->connection->get_db();
 
         $this->prefix = $db->prefix;
         $this->engine = 'InnoDB';
         $this->charset = $db->charset;
         $this->collate = $db->collate;
+    }
+
+    /**
+     * Determine whether the structure describes changes to an existing table.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    public function is_altering()
+    {
+        return $this->mode === static::MODE_ALTER;
     }
 
     /**
@@ -715,6 +765,10 @@ class Structure
             $keys = [$keys];
         }
 
+        if (!empty($key_name)) {
+            $key_name = $this->format_key_name($key_name);
+        }
+
         $this->commands['primary'] = [
             'name' => $key_name,
             'keys' => $keys,
@@ -742,6 +796,8 @@ class Structure
         if (empty($key_name)) {
             $key_name = sprintf('%s_%s_unique', $this->get_table(), implode('_', $keys));
         }
+
+        $key_name = $this->format_key_name($key_name);
 
         $this->commands['unique'][] = [
             'name' => $key_name,
@@ -771,6 +827,8 @@ class Structure
             $key_name = sprintf('%s_%s_index', $this->get_table(), implode('_', $keys));
         }
 
+        $key_name = $this->format_key_name($key_name);
+
         $this->commands['index'][] = [
             'name' => $key_name,
             'keys' => $keys,
@@ -799,6 +857,207 @@ class Structure
     }
 
     /**
+     * Guard an operation that is only valid while altering an existing table.
+     *
+     * @param string $operation The operation name.
+     *
+     * @return void
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    protected function guard_altering(string $operation)
+    {
+        if (!$this->is_altering()) {
+            throw new Exception(
+                sprintf(
+                    'The [%s] operation is only available when altering an existing table.',
+                    $operation
+                )
+            );
+        }
+    }
+
+    /**
+     * Drop one or more columns from the table.
+     *
+     * @param string|array $columns The column name(s) to drop
+     *
+     * @return $this
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    public function drop_column($columns)
+    {
+        $this->guard_altering('drop_column');
+
+        if (!is_array($columns)) {
+            $columns = [$columns];
+        }
+
+        foreach ($columns as $column) {
+            $this->commands['drop_column'][] = $column;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Rename a column on the table.
+     *
+     * @param string $from The current column name
+     * @param string $to The new column name
+     *
+     * @return $this
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    public function rename_column(string $from, string $to)
+    {
+        $this->guard_altering('rename_column');
+
+        $this->commands['rename_column'][] = [
+            'from' => $from,
+            'to'   => $to,
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Drop an index from the table.
+     *
+     * @param string|array $keys The index name, or the column(s) it covers
+     *
+     * @return $this
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    public function drop_index($keys)
+    {
+        $this->guard_altering('drop_index');
+
+        $this->commands['drop_index'][] = $this->resolve_key_name($keys, 'index');
+
+        return $this;
+    }
+
+    /**
+     * Drop a unique key from the table.
+     *
+     * @param string|array $keys The unique key name, or the column(s) it covers
+     *
+     * @return $this
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    public function drop_unique($keys)
+    {
+        $this->guard_altering('drop_unique');
+
+        $this->commands['drop_index'][] = $this->resolve_key_name($keys, 'unique');
+
+        return $this;
+    }
+
+    /**
+     * Drop the primary key from the table.
+     *
+     * @return $this
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    public function drop_primary()
+    {
+        $this->guard_altering('drop_primary');
+
+        $this->commands['drop_primary'] = true;
+
+        return $this;
+    }
+
+    /**
+     * Drop a foreign key constraint from the table.
+     *
+     * @param string|array $columns The constraint name, or the column(s) it covers
+     *
+     * @return $this
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    public function drop_foreign($columns)
+    {
+        $this->guard_altering('drop_foreign');
+
+        $this->commands['drop_foreign'][] = $this->resolve_key_name($columns, 'foreign');
+
+        return $this;
+    }
+
+    /**
+     * Resolve a key name from either an explicit name or the columns it covers.
+     *
+     * @param string|array $keys The key name, or the column(s) it covers
+     * @param string $suffix The conventional key name suffix
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    protected function resolve_key_name($keys, string $suffix)
+    {
+        if (!is_array($keys)) {
+            return $this->format_key_name($keys);
+        }
+
+        return $this->format_key_name(
+            sprintf('%s_%s_%s', $this->get_table(), implode('_', $keys), $suffix)
+        );
+    }
+
+    /**
+     * Shorten a key or constraint name that exceeds the database identifier limit.
+     *
+     * MySQL and MariaDB reject identifiers longer than 64 characters. A name over
+     * the limit is truncated and suffixed with a hash of the full name, so the
+     * result stays collision free and is reproduced identically by the migration
+     * that later drops the key.
+     *
+     * @param string $name The generated or explicit key name.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function format_key_name(string $name)
+    {
+        if (strlen($name) <= static::MAX_KEY_NAME_LENGTH) {
+            return $name;
+        }
+
+        $hash = substr(md5($name), 0, 8);
+
+        return sprintf(
+            '%s_%s',
+            substr($name, 0, static::MAX_KEY_NAME_LENGTH - (strlen($hash) + 1)),
+            $hash
+        );
+    }
+
+    /**
      * Get the compiler instance for compiling table structure.
      *
      * @return Compiler
@@ -811,14 +1070,20 @@ class Structure
     }
 
     /**
-     * Get the complete SQL statement for creating the table.
+     * Get the complete SQL statement for creating or altering the table.
      *
      * @return string
+     *
+     * @throws \Exception
      *
      * @since 1.0.0
      */
     public function get_table_structure()
     {
+        if ($this->is_altering()) {
+            return $this->compiler()->compile_alter($this);
+        }
+
         return $this->compiler()->compile_create($this);
     }
 }

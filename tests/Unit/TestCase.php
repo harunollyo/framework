@@ -164,6 +164,15 @@ abstract class TestCase extends BaseTestCase
         return new Structure($table, $this->make_test_connection($config));
     }
 
+    protected function make_alter_structure(string $table, array $config = []): Structure
+    {
+        return new Structure(
+            $table,
+            $this->make_test_connection($config),
+            Structure::MODE_ALTER
+        );
+    }
+
     protected function reset_test_wpdb(): void
     {
         global $wpdb;

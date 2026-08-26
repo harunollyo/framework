@@ -16,13 +16,16 @@ use Faker\Factory;
 use Faker\Generator;
 use Framework\Application;
 use Framework\Collections\Collection;
-use Framework\Contracts\Support\Arrayable;
 use Framework\Database\Migrations\Migrator;
+use Framework\Http\Cookie;
 use Framework\Http\Request;
+use Framework\Managers\CookieManager;
+use Framework\Managers\SessionManager;
 use Framework\Http\RedirectResponse;
 use Framework\Wordpress\User;
 use Framework\Http\Response;
 use Framework\Supports\Arr;
+use Framework\Supports\ErrorBag;
 use Framework\Supports\HigherOrderTapProxy;
 use Framework\Supports\MessagesBag;
 use Framework\Supports\Str;
@@ -261,6 +264,149 @@ if (!function_exists('Framework\response')) {
             'Referrer-Policy' => 'no-referrer-when-downgrade',
             'Cache-Control' => 'public, max-age=60, stale-while-revalidate=30',
         ]);
+    }
+}
+
+if (!function_exists('Framework\cookie')) {
+    /**
+     * Create a cookie instance, or get the cookie manager when called without arguments.
+     *
+     * The returned cookie is not sent. Queue it with the Cookie facade or attach it
+     * to a response to have it emitted.
+     *
+     * @param string|null $name The name of the cookie.
+     * @param string $value The value of the cookie.
+     * @param int $minutes The number of minutes the cookie lives, zero for a session cookie.
+     * @param string|null $path The path the cookie is scoped to.
+     * @param string|null $domain The domain the cookie is scoped to.
+     * @param bool|null $secure Whether the cookie is restricted to secure connections.
+     * @param bool $http_only Whether the cookie is hidden from client side scripts.
+     * @param bool $raw Whether the value is sent without URL encoding.
+     * @param string|null $same_site The same site policy of the cookie.
+     *
+     * @return ($name is null ? CookieManager : Cookie)
+     *
+     * @since 1.0.0
+     */
+    function cookie(
+        $name = null,
+        $value = '',
+        $minutes = 0,
+        $path = null,
+        $domain = null,
+        $secure = null,
+        $http_only = true,
+        $raw = false,
+        $same_site = null
+    ) {
+        $manager = app('cookie');
+
+        if (is_null($name)) {
+            return $manager;
+        }
+
+        return $manager->make($name, $value, $minutes, $path, $domain, $secure, $http_only, $raw, $same_site);
+    }
+}
+
+if (!function_exists('Framework\session')) {
+    /**
+     * Access the session store.
+     *
+     * With no arguments the manager is returned. A string key reads a value,
+     * and an array writes each key and value pair.
+     *
+     * @param string|array|null $key
+     * @param mixed $default
+     *
+     * @return ($key is null ? SessionManager : ($key is array ? null : mixed))
+     *
+     * @since 1.0.0
+     */
+    function session($key = null, $default = null)
+    {
+        $manager = app('session');
+
+        if (is_null($key)) {
+            return $manager;
+        }
+
+        if (is_array($key)) {
+            $manager->put($key);
+
+            return null;
+        }
+
+        return $manager->get($key, $default);
+    }
+}
+
+if (!function_exists('Framework\old')) {
+    /**
+     * Get a value from the input flashed by the previous request.
+     *
+     * @param string|null $key
+     * @param mixed $default
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    function old($key = null, $default = null)
+    {
+        return app('session')->get_old_input($key, $default);
+    }
+}
+
+if (!function_exists('Framework\errors')) {
+    /**
+     * Get the validation errors flashed by the previous request.
+     *
+     * @return ErrorBag
+     *
+     * @since 1.0.0
+     */
+    function errors()
+    {
+        $errors = app('session')->get('errors', []);
+
+        return new ErrorBag(is_array($errors) ? $errors : []);
+    }
+}
+
+if (!function_exists('Framework\back')) {
+    /**
+     * Redirect back to the page the visitor came from.
+     *
+     * Resolves the WordPress referer first, then a previously recorded session
+     * URL when a session is already started, then the given fallback, and
+     * finally the site home URL. Resolving never starts a session.
+     *
+     * @param string|null $fallback
+     * @param int $status
+     *
+     * @return RedirectResponse
+     *
+     * @since 1.0.0
+     */
+    function back($fallback = null, $status = 302)
+    {
+        $url = function_exists('wp_get_referer') ? wp_get_referer() : false;
+
+        if (!is_string($url) || $url === '') {
+            $session = app('session');
+            $url = $session->is_started() ? $session->previous_url() : null;
+        }
+
+        if (!is_string($url) || $url === '') {
+            $url = $fallback;
+        }
+
+        if (!is_string($url) || $url === '') {
+            $url = function_exists('home_url') ? home_url('/') : '/';
+        }
+
+        return new RedirectResponse($url, $status);
     }
 }
 

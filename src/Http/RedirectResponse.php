@@ -10,8 +10,17 @@ namespace Framework\Http;
 
 defined('ABSPATH') || exit;
 
+use Framework\Http\Concerns\InteractsWithCookies;
+use Framework\Http\Concerns\InteractsWithFlashData;
+use Framework\Managers\SessionManager;
+
+use function Framework\app;
+
 class RedirectResponse
 {
+    use InteractsWithCookies;
+    use InteractsWithFlashData;
+
     /**
      * The redirect target URL.
      *
@@ -79,7 +88,30 @@ class RedirectResponse
      */
     public function send()
     {
+        $this->prepare_send();
+
         wp_safe_redirect($this->url, $this->status);
         exit;
+    }
+
+    /**
+     * Persist the session and emit queued cookies before the redirect is issued.
+     *
+     * Ordering is load-bearing: starting or changing the session queues the
+     * identifier cookie, and the flush is what actually emits it. Flushing first
+     * would send the redirect without the cookie, orphaning the stored session.
+     *
+     * Kept separate from send() so the ordering stays testable, since send()
+     * itself terminates the request.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    protected function prepare_send()
+    {
+        app(SessionManager::class)->save();
+
+        $this->cookie_manager()->flush_queued_cookies();
     }
 }

@@ -10,6 +10,8 @@ use Example\Database\Migrations\CreateEventsTable;
 use Example\Database\Migrations\CreateSpeakersTable;
 use Example\Database\Migrations\CreateTagsTable;
 use Example\Database\Migrations\CreateReplyTable;
+use Example\Database\Migrations\AlterBlogsTableAddSubtitle;
+use Example\Database\Migrations\AlterBlogsTableAndOthers;
 
 return [
     CreateCategoriesTable::class,
@@ -22,4 +24,6 @@ return [
     CreateSpeakersTable::class,
     CreateEventSpeakerTable::class,
     CreateReplyTable::class,
+    AlterBlogsTableAddSubtitle::class,
+    AlterBlogsTableAndOthers::class,
 ];

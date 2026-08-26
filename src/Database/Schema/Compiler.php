@@ -27,7 +27,7 @@ class Compiler
      *
      * @since 1.0.0
      */
-    protected $modifiers = ['unsigned', 'nullable', 'default', 'auto_increment', 'comment'];
+    protected $modifiers = ['unsigned', 'nullable', 'default', 'auto_increment', 'comment', 'position'];
 
     /**
      * List of table commands to generate.
@@ -279,7 +279,8 @@ class Compiler
         }
 
         $sql = sprintf(
-            'FOREIGN KEY (`%s`) REFERENCES %s (`%s`)',
+            'CONSTRAINT `%s` FOREIGN KEY (`%s`) REFERENCES %s (`%s`)',
+            $this->get_foreign_key_name($command, $structure),
             $command->column,
             $structure->connection()->get_query_compiler()->wrap_table($command->on),
             $command->references
@@ -294,6 +295,308 @@ class Compiler
         }
 
         return $sql;
+    }
+
+    /**
+     * Get the constraint name to use for a foreign key.
+     *
+     * @param ForeignKeyDefinition $command The command.
+     * @param Structure $structure The structure.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    protected function get_foreign_key_name(ForeignKeyDefinition $command, Structure $structure)
+    {
+        if (!empty($command->name)) {
+            return $structure->format_key_name($command->name);
+        }
+
+        return $structure->format_key_name(
+            sprintf('%s_%s_foreign', $structure->get_table(), $command->column)
+        );
+    }
+
+    /**
+     * Compile the SQL statement for altering an existing table.
+     *
+     * @param Structure $structure The structure.
+     *
+     * @return string
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    public function compile_alter(Structure $structure)
+    {
+        $this->extract_commands_from_columns($structure);
+
+        $clauses = array_merge(
+            $this->compile_alter_columns($structure),
+            $this->compile_alter_renames($structure),
+            $this->compile_alter_additions($structure),
+            $this->compile_alter_drops($structure)
+        );
+
+        if (empty($clauses)) {
+            throw new Exception(
+                sprintf(
+                    'No changes were defined for table [%s].',
+                    $structure->get_table()
+                )
+            );
+        }
+
+        return sprintf(
+            'ALTER TABLE %s %s',
+            $structure->wrap_table($structure->get_table()),
+            implode(', ', $clauses)
+        );
+    }
+
+    /**
+     * Compile the added and modified column clauses.
+     *
+     * @param Structure $structure The structure.
+     *
+     * @return array<int, string>
+     *
+     * @since 1.0.0
+     */
+    protected function compile_alter_columns(Structure $structure)
+    {
+        $clauses = [];
+
+        foreach ($structure->get_columns() as $column) {
+            $clauses[] = sprintf(
+                '%s %s',
+                $column->change ? 'MODIFY COLUMN' : 'ADD COLUMN',
+                $this->compile_column($column, $structure)
+            );
+        }
+
+        return $clauses;
+    }
+
+    /**
+     * Compile the column rename clauses.
+     *
+     * @param Structure $structure The structure.
+     *
+     * @return array<int, string>
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    protected function compile_alter_renames(Structure $structure)
+    {
+        $commands = $structure->get_commands();
+
+        if (empty($commands['rename_column'])) {
+            return [];
+        }
+
+        $clauses = [];
+
+        foreach ($commands['rename_column'] as $rename) {
+            $clauses[] = sprintf(
+                'CHANGE COLUMN `%s` `%s` %s',
+                $rename['from'],
+                $rename['to'],
+                $this->get_existing_column_definition($structure, $rename['from'])
+            );
+        }
+
+        return $clauses;
+    }
+
+    /**
+     * Compile the key and constraint clauses added to an existing table.
+     *
+     * @param Structure $structure The structure.
+     *
+     * @return array<int, string>
+     *
+     * @since 1.0.0
+     */
+    protected function compile_alter_additions(Structure $structure)
+    {
+        $commands = $structure->get_commands();
+        $clauses = [];
+
+        if (!empty($commands['primary'])) {
+            $clauses[] = sprintf(
+                'ADD PRIMARY KEY (`%s`)',
+                implode('`, `', $commands['primary']['keys'])
+            );
+        }
+
+        foreach ($commands['unique'] ?? [] as $command) {
+            $clauses[] = sprintf(
+                'ADD UNIQUE KEY `%s` (`%s`)',
+                $command['name'],
+                implode('`, `', $command['keys'])
+            );
+        }
+
+        foreach ($commands['index'] ?? [] as $command) {
+            $clauses[] = sprintf(
+                'ADD INDEX `%s` (`%s`)',
+                $command['name'],
+                implode('`, `', $command['keys'])
+            );
+        }
+
+        foreach ($commands['foreign'] ?? [] as $command) {
+            $foreign = $this->compile_foreign($command, $structure);
+
+            if ($foreign) {
+                $clauses[] = sprintf('ADD %s', $foreign);
+            }
+        }
+
+        return $clauses;
+    }
+
+    /**
+     * Compile the drop clauses for an existing table.
+     *
+     * @param Structure $structure The structure.
+     *
+     * @return array<int, string>
+     *
+     * @since 1.0.0
+     */
+    protected function compile_alter_drops(Structure $structure)
+    {
+        $commands = $structure->get_commands();
+        $clauses = [];
+
+        foreach ($commands['drop_foreign'] ?? [] as $name) {
+            $clauses[] = sprintf('DROP FOREIGN KEY `%s`', $name);
+        }
+
+        foreach ($commands['drop_index'] ?? [] as $name) {
+            $clauses[] = sprintf('DROP INDEX `%s`', $name);
+        }
+
+        if (!empty($commands['drop_primary'])) {
+            $clauses[] = 'DROP PRIMARY KEY';
+        }
+
+        foreach ($commands['drop_column'] ?? [] as $column) {
+            $clauses[] = sprintf('DROP COLUMN `%s`', $column);
+        }
+
+        return $clauses;
+    }
+
+    /**
+     * Read the live definition of an existing column from the database.
+     *
+     * @param Structure $structure The structure.
+     * @param string $column The column name.
+     *
+     * @return string
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    protected function get_existing_column_definition(Structure $structure, string $column)
+    {
+        $table = $this->connection->get_table_prefix() . $structure->get_table();
+
+        $existing_columns = $this->connection->get_db()->get_results(
+            $this->compile_database_columns($table),
+            ARRAY_A
+        );
+
+        foreach ((array) $existing_columns as $existing) {
+            if (strcasecmp($existing['name'], $column) === 0) {
+                return $this->build_existing_column_definition($existing);
+            }
+        }
+
+        throw new Exception(
+            sprintf(
+                'Column [%s] does not exist on table [%s].',
+                $column,
+                $structure->get_table()
+            )
+        );
+    }
+
+    /**
+     * Rebuild a column definition from its information schema row.
+     *
+     * @param array $existing The information schema row.
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    protected function build_existing_column_definition(array $existing)
+    {
+        $sql = $existing['type'];
+
+        $sql .= strcasecmp((string) $existing['nullable'], 'YES') === 0 ? ' null' : ' not null';
+
+        $default = is_null($existing['default'])
+            ? null
+            : $this->get_existing_default_value($existing['default']);
+
+        if (!is_null($default)) {
+            $sql .= sprintf(' default %s', $default);
+        }
+
+        if (!empty($existing['extra']) && stripos($existing['extra'], 'auto_increment') !== false) {
+            $sql .= ' auto_increment';
+        }
+
+        if (!empty($existing['comment'])) {
+            $sql .= sprintf(" comment '%s'", addslashes($existing['comment']));
+        }
+
+        return $sql;
+    }
+
+    /**
+     * Format a default value read back from the information schema.
+     *
+     * MariaDB reports defaults already in SQL literal form and uses the bare
+     * string NULL to mean no default, while MySQL reports the raw value.
+     *
+     * @param string $value The stored default value.
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     */
+    protected function get_existing_default_value($value)
+    {
+        $value = (string) $value;
+
+        if (strcasecmp($value, 'NULL') === 0) {
+            return null;
+        }
+
+        if (stripos($value, 'current_timestamp') !== false) {
+            return $value;
+        }
+
+        if (is_numeric($value)) {
+            return $value;
+        }
+
+        if (strlen($value) > 1 && strpos($value, "'") === 0 && substr($value, -1) === "'") {
+            return $value;
+        }
+
+        return sprintf("'%s'", $value);
     }
 
     /**
@@ -537,6 +840,31 @@ class Compiler
     {
         if ($column->auto_increment) {
             return ' auto_increment';
+        }
+    }
+
+    /**
+     * Add the column position modifier when altering an existing table.
+     *
+     * @param Definition $column The column.
+     * @param Structure $structure The structure.
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     */
+    protected function apply_position(Definition $column, Structure $structure)
+    {
+        if (!$structure->is_altering()) {
+            return;
+        }
+
+        if ($column->first) {
+            return ' FIRST';
+        }
+
+        if ($column->after) {
+            return sprintf(' AFTER `%s`', $column->after);
         }
     }
 

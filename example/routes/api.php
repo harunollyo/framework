@@ -15,14 +15,18 @@ use Framework\Middlewares\AuthMiddleware;
 use Framework\Resource;
 use Framework\Route;
 use Framework\Supports\Arr;
+use Framework\Supports\Facades\Cookie;
+use Framework\Supports\Facades\DB;
 use Framework\Supports\Facades\Http;
 use Framework\Validation\Rule;
 use Framework\Validation\Validator;
 
+use function Framework\back;
 use function Framework\collection;
 use function Framework\dd;
 use function Framework\deep_set;
 use function Framework\response;
+use function Framework\session;
 
 Route::set_namespace('framework/v1');
 
@@ -54,31 +58,11 @@ Route::get('/options', function (Request $request) {
 });
 
 Route::get('/check', function (Request $request) {
+    DB::enable_query_log();
+    $blog = Blog::query()->find(1);
+    $query = DB::get_query_log();
     return response()->json([
-        'data' => $request->get_header('content-type'),
+        'data' => $blog,
+        'query' => $query,
     ]);
 });
-
-// Route::post('/check', function (Request $request) {
-//     $data = [
-//         'name' => 'John Doe',
-//         // 'email' => 'john.doe@example',
-//     ];
-//     $validator = Validator::make($data, [
-//         'name' => [
-//             'required',
-//             'string',
-//         ],
-//         'email' => [
-//             'email',
-//         ],
-//     ]);
-
-//     $validator->sometimes('email', 'required|email', function ($data) {
-//         return $data['name'] === 'John Doe';
-//     });
-
-//     return response()->json([
-//         'validator' => $validator->validated(),
-//     ]);
-// });

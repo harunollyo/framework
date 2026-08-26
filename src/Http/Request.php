@@ -16,6 +16,7 @@ use Framework\Contracts\Support\Arrayable;
 use Framework\Sanitizer;
 use Framework\Exceptions\AuthorizationException;
 use Framework\Exceptions\ValidationException;
+use Framework\Managers\SessionManager;
 use Framework\Http\Concerns\InteractsWithFiles;
 use Framework\Supports\Arr;
 use Framework\Validation\Validator;
@@ -23,6 +24,7 @@ use WP_REST_Request;
 use Framework\Supports\Str;
 use InvalidArgumentException;
 
+use function Framework\app;
 use function Framework\message;
 use function Framework\user;
 use function Framework\value;
@@ -69,6 +71,18 @@ class Request implements RequestContract, Arrayable
      * @since 1.0.0
      */
     protected $headers;
+
+    /**
+     * The cookies sent by the client.
+     *
+     * This bag is deliberately kept out of the request attributes so that a
+     * client supplied cookie can never satisfy or override a validated input.
+     *
+     * @var array<string,mixed>
+     *
+     * @since 1.0.0
+     */
+    protected array $cookies = [];
 
     /**
      * The sanitized data.
@@ -236,6 +250,10 @@ class Request implements RequestContract, Arrayable
         $this->headers = $request->get_headers();
         $this->route_params = $request->get_url_params();
 
+        // WP_REST_Request carries no cookie params, so read them from the superglobal.
+        // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
+        $this->cookies = $this->unslash_array($_COOKIE ?? []);
+
         return $this;
     }
 
@@ -249,7 +267,7 @@ class Request implements RequestContract, Arrayable
     public static function capture()
     {
         // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
-        return (new static())->make_from_http($_GET, $_POST, $_FILES, $_SERVER);
+        return (new static())->make_from_http($_GET, $_POST, $_FILES, $_SERVER, [], $_COOKIE);
     }
 
     /**
@@ -260,6 +278,7 @@ class Request implements RequestContract, Arrayable
      * @param array $files Uploaded files.
      * @param array $server Server parameters.
      * @param array $route_params Matched route parameters.
+     * @param array $cookies Cookies sent by the client.
      *
      * @return self
      *
@@ -270,7 +289,8 @@ class Request implements RequestContract, Arrayable
         array $body = [],
         array $files = [],
         array $server = [],
-        array $route_params = []
+        array $route_params = [],
+        array $cookies = []
     ) {
         $query = $this->unslash_array($query);
         $body = $this->unslash_array($body);
@@ -280,6 +300,7 @@ class Request implements RequestContract, Arrayable
         $this->route = $this->resolve_request_path($server);
         $this->headers = $this->extract_headers($server);
         $this->route_params = $route_params;
+        $this->cookies = $this->unslash_array($cookies);
         $this->files = [];
 
         if (!empty($files)) {
@@ -600,6 +621,151 @@ class Request implements RequestContract, Arrayable
     public function header(string $name, $default = null)
     {
         return $this->get_header($name, $default);
+    }
+
+    /**
+     * Get all cookies sent by the client.
+     *
+     * @return array<string,mixed>
+     *
+     * @since 1.0.0
+     */
+    public function cookies()
+    {
+        return $this->cookies;
+    }
+
+    /**
+     * Get a cookie sent by the client.
+     *
+     * Cookie values are client supplied and must be treated as untrusted input.
+     *
+     * @param string|null $key The name of the cookie, or null for every cookie.
+     * @param mixed $default The default value when the cookie is not present.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function cookie(?string $key = null, $default = null)
+    {
+        if (is_null($key)) {
+            return $this->cookies;
+        }
+
+        return $this->cookies[$key] ?? value($default);
+    }
+
+    /**
+     * Check whether a cookie was sent by the client.
+     *
+     * @param string $key The name of the cookie.
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    public function has_cookie(string $key)
+    {
+        return array_key_exists($key, $this->cookies);
+    }
+
+    /**
+     * Get the session store.
+     *
+     * Session values are held by the store, never on the request attributes, so
+     * a stored value can never satisfy or override a validated input.
+     *
+     * @return SessionManager
+     *
+     * @since 1.0.0
+     */
+    public function session()
+    {
+        return app(SessionManager::class);
+    }
+
+    /**
+     * Get a value from the input flashed by the previous request.
+     *
+     * @param string|null $key The key, or null for every value.
+     * @param mixed $default The default when the key is absent.
+     *
+     * @return mixed
+     *
+     * @since 1.0.0
+     */
+    public function old(?string $key = null, $default = null)
+    {
+        return $this->session()->get_old_input($key, $default);
+    }
+
+    /**
+     * Flash this request's input so the next request can read it back.
+     *
+     * Sensitive fields and uploaded files are never flashed.
+     *
+     * @return $this
+     *
+     * @since 1.0.0
+     */
+    public function flash()
+    {
+        $this->session()->flash_input($this->flashable_input());
+
+        return $this;
+    }
+
+    /**
+     * Flash only the given input keys.
+     *
+     * @param array $keys The keys to flash.
+     *
+     * @return $this
+     *
+     * @since 1.0.0
+     */
+    public function flash_only(array $keys)
+    {
+        $input = $this->flashable_input();
+
+        $this->session()->flash_input(array_intersect_key($input, array_flip($keys)));
+
+        return $this;
+    }
+
+    /**
+     * Flash every input key except the given ones.
+     *
+     * @param array $keys The keys to exclude.
+     *
+     * @return $this
+     *
+     * @since 1.0.0
+     */
+    public function flash_except(array $keys)
+    {
+        $input = $this->flashable_input();
+
+        $this->session()->flash_input(array_diff_key($input, array_flip($keys)));
+
+        return $this;
+    }
+
+    /**
+     * Get the input that may safely be written to the session as old input.
+     *
+     * Reads the attributes only, so uploaded files are excluded by construction,
+     * then removes the fields the session is configured never to flash. Without
+     * this a failed submit would store a plaintext password in the session.
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    public function flashable_input()
+    {
+        return $this->except($this->session()->get_never_flash());
     }
 
     /**

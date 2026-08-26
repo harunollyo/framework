@@ -297,6 +297,51 @@ class Arr
     }
 
     /**
+     * Remove one or many keys from an array using dot notation.
+     *
+     * @param array $array The array to remove the keys from.
+     * @param string|array $keys The key or keys to remove.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public static function forget(&$array, $keys)
+    {
+        $original = &$array;
+        $keys = (array) $keys;
+
+        if (count($keys) === 0) {
+            return;
+        }
+
+        foreach ($keys as $key) {
+            if (static::exists($array, $key)) {
+                unset($array[$key]);
+
+                continue;
+            }
+
+            $parts = explode('.', $key);
+            $array = &$original;
+
+            while (count($parts) > 1) {
+                $part = array_shift($parts);
+
+                if (isset($array[$part]) && is_array($array[$part])) {
+                    $array = &$array[$part];
+                } else {
+                    continue 2;
+                }
+            }
+
+            unset($array[array_shift($parts)]);
+        }
+
+        $array = &$original;
+    }
+
+    /**
      * Pluck the array by a key
      *
      * @param iterable $array The array to pluck from

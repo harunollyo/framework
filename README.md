@@ -296,7 +296,7 @@ Route::get('/ping', function (Request $request) {
 
 ### Other features
 
-- **Migrations** — PHP files in `database/migrations/`. Run with `wp kirki migrate`.
+- **Migrations** — PHP files in `database/migrations/`. Run with `wp kirki migrate`. See [docs/migrations.md](docs/migrations.md).
 - **Validation** — Rules on form requests and validators provided by the framework.
 - **Container and facades** — Resolve services via `app()` and framework facades after boot.
 
@@ -319,24 +319,50 @@ Create a migration file in `database/migrations/`.
 ```bash
 wp kirki make:migration create_users_table
 wp kirki make:migration create_orders_table --prefix=wp_
+wp kirki make:migration add_slug_to_posts --table=posts
 ```
+
+The generated class is appended to `config/migrations.php` automatically.
 
 | Argument | Description |
 |----------|-------------|
 | `name` (positional) | Migration name; should start with `create_` and end with `table` |
 | `--prefix` | Optional table prefix |
+| `--table` | Existing table to alter; generates an alter migration |
+| `--create` | Table to create; generates a create migration |
 
 ### `migrate`
 
-Run all pending migrations.
+Run all pending migrations. Migrations that have already run are skipped.
 
 ```bash
 wp kirki migrate
 ```
 
+### `migrate:status`
+
+Show which migrations have run, and the batch each belongs to.
+
+```bash
+wp kirki migrate:status
+```
+
+### `migrate:rollback`
+
+Undo the migrations of the most recent batch.
+
+```bash
+wp kirki migrate:rollback
+wp kirki migrate:rollback --step=2
+```
+
+| Flag / option | Description |
+|---------------|-------------|
+| `--step` | Number of batches to roll back (default 1) |
+
 ### `migrate:fresh`
 
-Drop all plugin tables and re-run migrations.
+Drop all plugin tables, clear migration history, and re-run migrations.
 
 ```bash
 wp kirki migrate:fresh

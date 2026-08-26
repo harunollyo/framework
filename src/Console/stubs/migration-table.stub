@@ -1,0 +1,24 @@
+<?php
+
+namespace {{migrations_namespace}};
+
+use Framework\Contracts\Migration;
+use Framework\Database\Schema\Structure;
+use Framework\Supports\Facades\Schema;
+
+class {{class_name}} implements Migration
+{
+    public function up()
+    {
+        Schema::table('{{table}}', function (Structure $table) {
+            //
+        });
+    }
+
+    public function down()
+    {
+        Schema::table('{{table}}', function (Structure $table) {
+            //
+        });
+    }
+}

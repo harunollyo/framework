@@ -13,7 +13,8 @@ defined('ABSPATH') || exit;
 
 use Framework\Http\JsonResponse;
 use Framework\Http\RedirectResponse;
-use Framework\Http\Request;
+use Framework\Managers\CookieManager;
+use Framework\Managers\SessionManager;
 use Framework\Route;
 use Framework\Sanitizer;
 use Framework\SiteExceptionHandler;
@@ -319,6 +320,10 @@ class SiteRouter
     /**
      * Dispatch matched routes registered on the template_include filter.
      *
+     * The session is saved and queued cookies are emitted before the template
+     * path is handed back, because WordPress includes that file straight away
+     * and output leaves no further opportunity to send headers.
+     *
      * @param string $template Default template path from WordPress.
      * @param int $priority Hook priority being handled.
      *
@@ -338,6 +343,7 @@ class SiteRouter
         $params = $match['params'];
 
         if ($route->get_redirect() !== null) {
+            $this->flush_queued_cookies();
             $this->send_route_redirect($route, $params);
         }
 
@@ -349,6 +355,8 @@ class SiteRouter
                     new Exception('Template not found: ' . $route->get_template(), 500)
                 );
             }
+
+            $this->flush_queued_cookies();
 
             return $file;
         }
@@ -370,10 +378,14 @@ class SiteRouter
                     );
 
                     $master_layout = $result->get_master_layout();
-
                     if ($master_layout !== null) {
                         $view_context->set_active_attribute('master_layout', $master_layout);
                     }
+
+                    // WordPress includes the returned path immediately after this
+                    // filter, which starts output. This is the last point at which
+                    // the identifier cookie can still be sent.
+                    $this->flush_queued_cookies();
 
                     if ($result->uses_layout()) {
                         return $engine->layout_wrapper_path();
@@ -384,6 +396,8 @@ class SiteRouter
             }
 
             if (is_string($result) && $result !== '' && file_exists($result)) {
+                $this->flush_queued_cookies();
+
                 return $result;
             }
 
@@ -498,6 +512,7 @@ class SiteRouter
         nocache_headers();
 
         if ($route->get_redirect() !== null && $route->get_action() === null) {
+            $this->flush_queued_cookies();
             $this->send_route_redirect($route, $params);
         }
 
@@ -509,6 +524,8 @@ class SiteRouter
                     new Exception('Template not found: ' . $route->get_template(), 500)
                 );
             }
+
+            $this->flush_queued_cookies();
 
             extract($params, EXTR_SKIP);
             include $file;
@@ -548,6 +565,22 @@ class SiteRouter
     }
 
     /**
+     * Emit any queued cookies before response output begins.
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    protected function flush_queued_cookies()
+    {
+        // Saving first is required, not cosmetic: starting or changing the
+        // session queues the identifier cookie that this flush emits.
+        app(SessionManager::class)->save();
+
+        app(CookieManager::class)->flush_queued_cookies();
+    }
+
+    /**
      * Send a controller/closure return value to the browser.
      *
      * @param mixed $result The route return value.
@@ -558,6 +591,8 @@ class SiteRouter
      */
     protected function send_response($result)
     {
+        $this->flush_queued_cookies();
+
         if ($result instanceof RedirectResponse) {
             $result->send();
         }
@@ -617,6 +652,32 @@ class SiteRouter
     }
 
     /**
+     * Get the matched route by checking current endpoint and request method.
+     *
+     * @param Route $route The route to get the matched route for.
+     *
+     * @return Route
+     *
+     * @since 1.0.0
+     */
+    protected function get_matched_route(Route $route)
+    {
+        // phpcs:ignore Framework.NamingConventions.SnakeCaseVariable.NotSnakeCase
+        $request_method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
+
+        foreach ($this->routes as $route_entry) {
+            if (
+                $route_entry->get_endpoint() === $route->get_endpoint() &&
+                strtoupper($route_entry->get_method()) === $request_method
+            ) {
+                return $route_entry;
+            }
+        }
+
+        return $route;
+    }
+
+    /**
      * Find a path-matched route for the current request and hook context.
      *
      * @param string $expected_hook_name Expected dispatch hook name.
@@ -635,6 +696,7 @@ class SiteRouter
         }
 
         $route = $this->routes[$id];
+        $route = $this->get_matched_route($route);
 
         if ($route->get_match_using() !== Route::MATCH_PATH) {
             return null;
@@ -675,6 +737,7 @@ class SiteRouter
             }
 
             if ($this->resolve_page_id($route->get_endpoint()) === $current_page_id) {
+                $route = $this->get_matched_route($route);
                 return $route;
             }
         }
